@@ -69,7 +69,18 @@
 
   <ItemGroup>
     <!-- ScripterSource -->
+    <Compile Include="src\Constants.cs" />
+    <Compile Include="src\Functions.Flow.cs" />
+    <Compile Include="src\Functions.Math.cs" />
+    <Compile Include="src\Functions.OS.cs" />
+    <Compile Include="src\Interpreter.cs" />
+    <Compile Include="src\Main.cs" />
+    <Compile Include="src\Parser.cs" />
+    <Compile Include="src\ParserFunction.cs" />
     <Compile Include="src\Scripter.cs" />
+    <Compile Include="src\Utils.cs" />
+    <Compile Include="src\Utils.Parsing.cs" />
+    <Compile Include="src\Variable.cs" />
     <!-- /ScripterSource -->
   </ItemGroup>
 

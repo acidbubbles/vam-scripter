@@ -1,1 +1,12 @@
+src\Constants.cs
+src\Functions.Flow.cs
+src\Functions.Math.cs
+src\Functions.OS.cs
+src\Interpreter.cs
+src\Main.cs
+src\Parser.cs
+src\ParserFunction.cs
 src\Scripter.cs
+src\Utils.cs
+src\Utils.Parsing.cs
+src\Variable.cs
