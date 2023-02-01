@@ -42,7 +42,7 @@ public class OperatorAssignFunction : ActionFunction
             StringOperator(valueA, valueB, MAction);
         }
 
-        var varValue = new Variable(valueA);
+        var varValue = Variable.Copy(valueA);
         AddGlobalOrLocalVariable(MName, new GetVarFunction(varValue));
         return valueA;
     }

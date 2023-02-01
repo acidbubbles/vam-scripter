@@ -95,7 +95,7 @@ public class Parser
                 // If there has been a NOT sign, this is a boolean.
                 // Use XOR (true if exactly one of the arguments is true).
                 var boolRes = !((negated % 2 == 0) ^ Convert.ToBoolean(current.Value));
-                current = new Variable(Convert.ToDouble(boolRes));
+                current = Variable.CreateNumber(Convert.ToDouble(boolRes));
                 negated = 0;
             }
 
@@ -117,7 +117,7 @@ public class Parser
                 return listToMerge;
             }
 
-            var cell = new Variable(current);
+            var cell = Variable.Copy(current);
             cell.Action = action;
             listToMerge.Add(cell);
             item.Length = 0;

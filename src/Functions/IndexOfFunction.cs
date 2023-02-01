@@ -23,8 +23,8 @@ public class IndexOfFunction : ParserFunction
         var basePart = currentValue.AsString();
         var search = searchValue.AsString();
 
-        var result = basePart.IndexOf(search);
-        return new Variable(result);
+        var result = basePart.IndexOf(search, StringComparison.Ordinal);
+        return Variable.CreateNumber(result);
     }
 }
 

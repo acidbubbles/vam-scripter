@@ -133,7 +133,7 @@ public class Interpreter
         // The while condition is not true anymore: must skip the whole while
         // block before continuing with next statements.
         SkipBlock(data, ref from);
-        return new Variable();
+        return Variable.Undefined();
     }
 
     internal Variable ProcessIf(string data, ref int from)
@@ -223,7 +223,7 @@ public class Interpreter
             var excStack = CreateExceptionStack(currentStackLevel);
             ParserFunction.InvalidateStacksAfterLevel(currentStackLevel);
 
-            var excFunc = new GetVarFunction(new Variable(exception.Message + excStack));
+            var excFunc = new GetVarFunction(Variable.CreateString(exception.Message + excStack));
             ParserFunction.AddGlobalOrLocalVariable(exceptionName, excFunc);
 
             result = ProcessBlock(data, ref from);
@@ -276,7 +276,7 @@ public class Interpreter
             var endGroupRead = Utils.GoToNextStatement(data, ref from);
             if (endGroupRead > 0)
             {
-                return result ?? new Variable();
+                return result ?? Variable.Undefined();
             }
 
             if (from >= data.Length)

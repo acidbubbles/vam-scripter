@@ -2,6 +2,6 @@
 {
     protected override Variable Evaluate(string data, ref int from)
     {
-        return new Variable(Variable.VarType.Break);
+        return Variable.OfType(Variable.VarType.Break);
     }
 }

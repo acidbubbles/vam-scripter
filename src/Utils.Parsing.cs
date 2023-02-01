@@ -14,7 +14,7 @@ public partial class Utils
             throw new ArgumentException("Incomplete function definition");
         }
 
-        var value = new Variable();
+        var value = Variable.Undefined();
 
         if (data[from] == Constants.Quote)
         {
@@ -46,7 +46,8 @@ public partial class Utils
         {
             // A variable, a function, or a number.
             var var = Parser.LoadAndCalculate(data, ref from, Constants.NextOrEndArray);
-            value.Copy(var);
+            #warning Useful to copy?
+            value = Variable.Copy(var);
         }
 
         MoveForwardIf(data, ref from, Constants.EndArg, Constants.Space);

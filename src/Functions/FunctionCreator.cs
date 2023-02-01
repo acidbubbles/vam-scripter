@@ -22,7 +22,7 @@
         var customFunc = new CustomFunction(funcName, body, args);
         AddGlobal(funcName, customFunc);
 
-        return new Variable(funcName);
+        return Variable.CreateString(funcName);
     }
 
     private readonly Interpreter _mInterpreter;

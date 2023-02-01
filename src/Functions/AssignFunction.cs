@@ -34,7 +34,7 @@ public class AssignFunction : ActionFunction
         }
         else
         {
-            currentValue = new Variable();
+            currentValue = Variable.Undefined();
         }
 
         var tuple = currentValue.Tuple ?? new List<Variable>();

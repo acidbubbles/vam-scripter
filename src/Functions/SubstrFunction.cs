@@ -42,7 +42,7 @@ public class SubstrFunction : ParserFunction
             substring = arg.Substring((int)init.Value);
         }
 
-        var newValue = new Variable(substring);
+        var newValue = Variable.CreateString(substring);
 
         return newValue;
     }

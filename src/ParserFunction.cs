@@ -235,7 +235,7 @@ public class ParserFunction
     protected virtual Variable Evaluate(string data, ref int from)
     {
         // The real implementation will be in the derived classes.
-        return new Variable();
+        return Variable.Undefined();
     }
 
     public virtual ParserFunction NewInstance()

@@ -19,7 +19,7 @@ public class ToUpperFunction : ParserFunction
         // or the numerical part converted to a string otherwise.
         var arg = currentValue.AsString();
 
-        var newValue = new Variable(arg.ToUpper());
+        var newValue = Variable.CreateString(arg.ToUpper());
         return newValue;
     }
 }

@@ -9,7 +9,7 @@ public class StringOrNumberFunction : ParserFunction
             Item[0] == Constants.Quote &&
             Item[Item.Length - 1] == Constants.Quote)
         {
-            return new Variable(Item.Substring(1, Item.Length - 2));
+            return Variable.CreateString(Item.Substring(1, Item.Length - 2));
         }
 
 
@@ -20,7 +20,7 @@ public class StringOrNumberFunction : ParserFunction
             throw new ArgumentException($"Couldn't parse token [{Item}]");
         }
 
-        return new Variable(num);
+        return Variable.CreateNumber(num);
     }
 
     public string Item { private get; set; }

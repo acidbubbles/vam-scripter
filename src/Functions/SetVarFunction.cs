@@ -36,7 +36,7 @@ public class SetVarFunction : ParserFunction
                 tuple.Add(varValue);
             }
 
-            varValue = new Variable(tuple);
+            varValue = Variable.CreateTuple(tuple);
         }
 
         AddGlobalOrLocalVariable(varName, new GetVarFunction(varValue));

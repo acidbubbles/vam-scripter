@@ -19,7 +19,7 @@ public class ToLowerFunction : ParserFunction
         // or the numerical part converted to a string otherwise.
         var arg = currentValue.AsString();
 
-        var newValue = new Variable(arg.ToLower());
+        var newValue = Variable.CreateString(arg.ToLower());
         return newValue;
     }
 }

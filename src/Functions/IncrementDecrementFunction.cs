@@ -46,7 +46,7 @@ public class IncrementDecrementFunction : ActionFunction
             currentValue.Value += valueDelta;
         }
 
-        var varValue = new Variable(newValue);
+        var varValue = Variable.CreateNumber(newValue);
         AddGlobalOrLocalVariable(MName, new GetVarFunction(currentValue));
 
         return varValue;

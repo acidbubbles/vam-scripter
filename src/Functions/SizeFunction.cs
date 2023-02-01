@@ -23,7 +23,7 @@ public class SizeFunction : ParserFunction
 
         Utils.MoveForwardIf(data, ref from, Constants.EndArg, Constants.Space);
 
-        var newValue = new Variable(size);
+        var newValue = Variable.CreateNumber(size);
         return newValue;
     }
 }

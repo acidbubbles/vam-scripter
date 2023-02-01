@@ -14,64 +14,80 @@ public class Variable
         public const int Continue = 6;
     };
 
-    public Variable()
-
+    private Variable()
     {
-        Reset();
     }
 
-    public Variable(int type)
+    public static Variable OfType(int type)
     {
-        Type = type;
-    }
-
-    public Variable(double d)
-    {
-        Value = d;
-    }
-
-    public Variable(string s)
-    {
-        String = s;
-    }
-
-    public Variable(List<Variable> a)
-    {
-        Tuple = a;
-    }
-
-    public Variable(Variable other)
-    {
-        Copy(other);
-    }
-
-    public void Copy(Variable other)
-    {
-        Reset();
-        Action = other.Action;
-        Type = other.Type;
-
-        switch (other.Type)
+        return new Variable
         {
-            case VarType.Number:
-                Value = other.Value;
-                break;
-            case VarType.String:
-                String = other.String;
-                break;
-            case VarType.Array:
-                Tuple = other.Tuple;
-                break;
-        }
+            Type = VarType.None,
+            Value = double.NaN,
+            String = null,
+            Tuple = null,
+            Action = null,
+        };
     }
 
-    public void Reset()
+    public static Variable Undefined()
     {
-        Value = double.NaN;
-        String = null;
-        Tuple = null;
-        Action = null;
-        Type = VarType.None;
+        return new Variable
+        {
+            Type = VarType.None,
+            Value = double.NaN,
+            String = null,
+            Tuple = null,
+            Action = null,
+        };
+    }
+
+    public static Variable CreateNumber(double d)
+    {
+        return new Variable
+        {
+            Type = VarType.Number,
+            Value = d,
+            String = null,
+            Tuple = null,
+            Action = null,
+        };
+    }
+
+    public static Variable CreateString(string s)
+    {
+        return new Variable
+        {
+            Type = VarType.Number,
+            Value = double.NaN,
+            String = s,
+            Tuple = null,
+            Action = null,
+        };
+    }
+
+    public static Variable CreateTuple(List<Variable> a)
+    {
+        return new Variable
+        {
+            Type = VarType.Array,
+            Value = double.NaN,
+            String = null,
+            Tuple = a,
+            Action = null,
+        };
+    }
+
+    public static Variable Copy(Variable other)
+    {
+        return new Variable
+        {
+            Type = other.Type,
+            Value = other.Value,
+            String = other.String,
+            Tuple = other.Tuple,
+            Action = other.Action,
+        };
     }
 
     public static Variable ResetOnBreak(Variable v)
