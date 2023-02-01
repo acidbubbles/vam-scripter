@@ -1,1027 +1,1013 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace SplitAndMerge
+// Returns process info
+public class PsInfoFunction : ParserFunction
 {
-  // Returns process info
-  class PsInfoFunction : ParserFunction
-  {
     internal PsInfoFunction(Interpreter interpreter)
     {
-      m_interpreter = interpreter;
+        _mInterpreter = interpreter;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      string pattern = Utils.GetItem(data, ref from).String;
-      if (string.IsNullOrWhiteSpace(pattern))
-      {
-        throw new ArgumentException("Couldn't extract process name");
-      }
-
-      int MAX_PROC_NAME = 26;
-      m_interpreter.AppendOutput(Utils.GetLine());
-      m_interpreter.AppendOutput(String.Format("{0} {1} {2} {3} {4}",
-        "Process Id".PadRight(15), "Process Name".PadRight(MAX_PROC_NAME),
-        "Working Set".PadRight(15), "Virt Mem".PadRight(15), "Start Time".PadRight(15), "CPU Time".PadRight(25)));
-
-      Process[] processes = Process.GetProcessesByName(pattern);
-      List<Variable> results = new List<Variable>(processes.Length);
-      for (int i = 0; i < processes.Length; i++)
-      {
-        Process pr = processes[i];
-        int workingSet = (int)(((double)pr.WorkingSet64) / 1000000.0);
-        int virtMemory = (int)(((double)pr.VirtualMemorySize64) / 1000000.0);
-        string procTitle = pr.ProcessName + " " + pr.MainWindowTitle.Split(null)[0];
-        string startTime = pr.StartTime.ToString();
-        if (procTitle.Length > MAX_PROC_NAME)
+        var pattern = Utils.GetItem(data, ref from).String;
+        if (string.IsNullOrWhiteSpace(pattern))
         {
-          procTitle = procTitle.Substring(0, MAX_PROC_NAME);
+            throw new ArgumentException("Couldn't extract process name");
         }
-        string procTime = string.Empty;
-        try
+
+        var maxProcName = 26;
+        _mInterpreter.AppendOutput(Utils.GetLine());
+        _mInterpreter.AppendOutput(String.Format("{0} {1} {2} {3} {4}",
+            "Process Id".PadRight(15), "Process Name".PadRight(maxProcName),
+            "Working Set".PadRight(15), "Virt Mem".PadRight(15), "Start Time".PadRight(15), "CPU Time".PadRight(25)));
+
+        var processes = Process.GetProcessesByName(pattern);
+        var results = new List<Variable>(processes.Length);
+        for (var i = 0; i < processes.Length; i++)
         {
-          procTime = pr.TotalProcessorTime.ToString().Substring(0, 11);
+            var pr = processes[i];
+            var workingSet = (int)(pr.WorkingSet64 / 1000000.0);
+            var virtMemory = (int)(pr.VirtualMemorySize64 / 1000000.0);
+            var procTitle = pr.ProcessName + " " + pr.MainWindowTitle.Split(null)[0];
+            var startTime = pr.StartTime.ToString(CultureInfo.InvariantCulture);
+            if (procTitle.Length > maxProcName)
+            {
+                procTitle = procTitle.Substring(0, maxProcName);
+            }
+
+            var procTime = string.Empty;
+            try
+            {
+                procTime = pr.TotalProcessorTime.ToString().Substring(0, 11);
+            }
+            catch (Exception)
+            {
+            }
+
+            results.Add(new Variable(
+                string.Format("{0,15} {1," + maxProcName + "} {2,15} {3,15} {4,15} {5,25}",
+                    pr.Id, procTitle,
+                    workingSet, virtMemory, startTime, procTime)));
+            _mInterpreter.AppendOutput(results.Last().String);
         }
-        catch (Exception) { }
 
-        results.Add(new Variable(
-          string.Format("{0,15} {1," + MAX_PROC_NAME + "} {2,15} {3,15} {4,15} {5,25}",
-            pr.Id, procTitle,
-            workingSet, virtMemory, startTime, procTime)));
-        m_interpreter.AppendOutput(results.Last().String);
-      }
-      m_interpreter.AppendOutput(Utils.GetLine());
+        _mInterpreter.AppendOutput(Utils.GetLine());
 
-      if (data.Length > from && data[from] == Constants.NEXT_ARG)
-      {
-        from++; // eat end of statement semicolon
-      }
+        if (data.Length > from && data[from] == Constants.NextArg)
+        {
+            from++; // eat end of statement semicolon
+        }
 
-      return new Variable(results);
+        return new Variable(results);
     }
 
-    private Interpreter m_interpreter;
-  }
+    private readonly Interpreter _mInterpreter;
+}
 
-  // Kills a process with specified process id
-  class KillFunction : ParserFunction
-  {
+// Kills a process with specified process id
+public class KillFunction : ParserFunction
+{
     internal KillFunction(Interpreter interpreter)
     {
-      m_interpreter = interpreter;
+        _mInterpreter = interpreter;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      Variable id = Utils.GetItem(data, ref from);
-      Utils.CheckPosInt(id);
+        var id = Utils.GetItem(data, ref from);
+        Utils.CheckPosInt(id);
 
-      int processId = (int)id.Value;
-      try
-      {
-        Process process = Process.GetProcessById(processId);
-        process.Kill();
-        m_interpreter.AppendOutput("Process " + processId + " killed");
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Couldn't kill process " + processId +
-          " (" + exc.Message + ")");
-      }
+        var processId = (int)id.Value;
+        try
+        {
+            var process = Process.GetProcessById(processId);
+            process.Kill();
+            _mInterpreter.AppendOutput("Process " + processId + " killed");
+        }
+        catch (Exception exc)
+        {
+            throw new ArgumentException("Couldn't kill process " + processId +
+                                        " (" + exc.Message + ")");
+        }
 
-      return Variable.EmptyInstance;
+        return Variable.EmptyInstance;
     }
 
-    private Interpreter m_interpreter;
-  }
+    private readonly Interpreter _mInterpreter;
+}
 
-  // Starts running a new process, returning its ID
-  class RunFunction : ParserFunction
-  {
+// Starts running a new process, returning its ID
+public class RunFunction : ParserFunction
+{
     internal RunFunction(Interpreter interpreter)
     {
-      m_interpreter = interpreter;
+        _mInterpreter = interpreter;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      string processName = Utils.GetItem(data, ref from).String;
+        var processName = Utils.GetItem(data, ref from).String;
 
-      if (string.IsNullOrWhiteSpace(processName))
-      {
-        throw new ArgumentException("Couldn't extract process name");
-      }
+        if (string.IsNullOrWhiteSpace(processName))
+        {
+            throw new ArgumentException("Couldn't extract process name");
+        }
 
-      List<string> args = Utils.GetFunctionArgs(data, ref from);
-      int processId = -1;
+        var args = Utils.GetFunctionArgs(data, ref from);
+        var processId = -1;
 
-      try
-      {
-        Process pr = Process.Start(processName, string.Join("", args.ToArray()));
-        processId = pr.Id;
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Couldn't start [" + processName + "]: " + exc.Message);
-      }
+        try
+        {
+            var pr = Process.Start(processName, string.Join("", args.ToArray()));
+            processId = pr.Id;
+        }
+        catch (Exception exc)
+        {
+            throw new ArgumentException("Couldn't start [" + processName + "]: " + exc.Message);
+        }
 
-      m_interpreter.AppendOutput("Process " + processName + " started, id: " + processId);
-      return new Variable(processId);
+        _mInterpreter.AppendOutput("Process " + processName + " started, id: " + processId);
+        return new Variable(processId);
     }
 
-    private Interpreter m_interpreter;
-  }
+    private readonly Interpreter _mInterpreter;
+}
 
-  // Starts running an "echo" server
-  class ServerSocket : ParserFunction
-  {
+// Starts running an "echo" server
+public class ServerSocket : ParserFunction
+{
     internal ServerSocket(Interpreter interpreter)
     {
-      m_interpreter = interpreter;
+        _mInterpreter = interpreter;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      Variable portRes = Utils.GetItem (data, ref from);
-      Utils.CheckPosInt(portRes);
-      int port = (int)portRes.Value;
+        var portRes = Utils.GetItem(data, ref from);
+        Utils.CheckPosInt(portRes);
+        var port = (int)portRes.Value;
 
-      try {
-        IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-        IPAddress ipAddress = ipHostInfo.AddressList [0];
-        IPEndPoint localEndPoint = new IPEndPoint (ipAddress, port);
+        try
+        {
+            var ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+            var ipAddress = ipHostInfo.AddressList[0];
+            var localEndPoint = new IPEndPoint(ipAddress, port);
 
-        Socket listener = new Socket(AddressFamily.InterNetwork,
-                            SocketType.Stream, ProtocolType.Tcp);
+            var listener = new Socket(AddressFamily.InterNetwork,
+                SocketType.Stream, ProtocolType.Tcp);
 
-        listener.Bind (localEndPoint);
-        listener.Listen(10);
+            listener.Bind(localEndPoint);
+            listener.Listen(10);
 
-        Socket handler = null;
-        while (true) {
-          m_interpreter.AppendOutput("Waiting for connections on " + port + " ...");
-          handler = listener.Accept ();
+            Socket handler = null;
+            while (true)
+            {
+                _mInterpreter.AppendOutput("Waiting for connections on " + port + " ...");
+                handler = listener.Accept();
 
-          // Data buffer for incoming data.
-          byte[] bytes = new byte[1024];
-          int bytesRec = handler.Receive(bytes);
-          string received = Encoding.UTF8.GetString (bytes, 0, bytesRec);
+                // Data buffer for incoming data.
+                var bytes = new byte[1024];
+                var bytesRec = handler.Receive(bytes);
+                var received = Encoding.UTF8.GetString(bytes, 0, bytesRec);
 
-          m_interpreter.AppendOutput("Received from " + handler.RemoteEndPoint.ToString() +
-            ": [" + received + "]");
+                _mInterpreter.AppendOutput("Received from " + handler.RemoteEndPoint.ToString() +
+                                           ": [" + received + "]");
 
-          byte[] msg = Encoding.UTF8.GetBytes(received);
-          handler.Send(msg);
+                var msg = Encoding.UTF8.GetBytes(received);
+                handler.Send(msg);
 
-          if (received.Contains ("<EOF>")) {
-            break;
-          }
+                if (received.Contains("<EOF>"))
+                {
+                    break;
+                }
+            }
+
+            if (handler != null)
+            {
+                handler.Shutdown(SocketShutdown.Both);
+                handler.Close();
+            }
+        }
+        catch (Exception exc)
+        {
+            throw new ArgumentException("Couldn't start server: (" + exc.Message + ")");
         }
 
-        if (handler != null) {
-          handler.Shutdown (SocketShutdown.Both);
-          handler.Close ();
-        }
-      } catch (Exception exc) {
-        throw new ArgumentException ("Couldn't start server: (" + exc.Message + ")");
-      }
-
-      return Variable.EmptyInstance;
+        return Variable.EmptyInstance;
     }
 
-    private Interpreter m_interpreter;
-  }
+    private readonly Interpreter _mInterpreter;
+}
 
-  // Starts running an "echo" client
-  class ClientSocket : ParserFunction
-  {
+// Starts running an "echo" client
+public class ClientSocket : ParserFunction
+{
     internal ClientSocket(Interpreter interpreter)
     {
-      m_interpreter = interpreter;
+        _mInterpreter = interpreter;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      // Data buffer for incoming data.
-      byte[] bytes = new byte[1024];
+        // Data buffer for incoming data.
+        var bytes = new byte[1024];
 
-      bool isList = false;
-      List<Variable> args = Utils.GetArgs(data, ref from,
-        Constants.START_ARG, Constants.END_ARG, out isList);
+        var isList = false;
+        var args = Utils.GetArgs(data, ref from,
+            Constants.StartArg, Constants.EndArg, out isList);
 
-      Utils.CheckArgs(args.Count, 3, Constants.CONNECTSRV);
-      Utils.CheckPosInt(args [1]);
+        Utils.CheckArgs(args.Count, 3, Constants.Connectsrv);
+        Utils.CheckPosInt(args[1]);
 
-      string hostname = args[0].String;
-      int port = (int)args[1].Value;
-      string msgToSend = args[2].String;
+        var hostname = args[0].String;
+        var port = (int)args[1].Value;
+        var msgToSend = args[2].String;
 
-      if (string.IsNullOrWhiteSpace(hostname) || hostname.Equals ("localhost")) {
-        hostname = Dns.GetHostName ();
-      }
+        if (string.IsNullOrWhiteSpace(hostname) || hostname.Equals("localhost"))
+        {
+            hostname = Dns.GetHostName();
+        }
 
-      try {
-        IPHostEntry ipHostInfo = Dns.GetHostEntry(hostname);
-        IPAddress ipAddress = ipHostInfo.AddressList[0];
-        IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
+        try
+        {
+            var ipHostInfo = Dns.GetHostEntry(hostname);
+            var ipAddress = ipHostInfo.AddressList[0];
+            var remoteEp = new IPEndPoint(ipAddress, port);
 
-        // Create a TCP/IP  socket.
-        Socket sender = new Socket(AddressFamily.InterNetwork, 
-                SocketType.Stream, ProtocolType.Tcp );
+            // Create a TCP/IP  socket.
+            var sender = new Socket(AddressFamily.InterNetwork,
+                SocketType.Stream, ProtocolType.Tcp);
 
-        sender.Connect(remoteEP);
+            sender.Connect(remoteEp);
 
-        m_interpreter.AppendOutput ("Connected to [" + sender.RemoteEndPoint.ToString() + "]");
+            _mInterpreter.AppendOutput("Connected to [" + sender.RemoteEndPoint.ToString() + "]");
 
-        byte[] msg = Encoding.UTF8.GetBytes(msgToSend);
-        sender.Send(msg);
+            var msg = Encoding.UTF8.GetBytes(msgToSend);
+            sender.Send(msg);
 
-        // Receive the response from the remote device.
-        int bytesRec = sender.Receive(bytes);
-        string received = Encoding.UTF8.GetString(bytes, 0, bytesRec);
-        m_interpreter.AppendOutput ("Received [" + received + "]");
+            // Receive the response from the remote device.
+            var bytesRec = sender.Receive(bytes);
+            var received = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+            _mInterpreter.AppendOutput("Received [" + received + "]");
 
-        sender.Shutdown(SocketShutdown.Both);
-        sender.Close();
+            sender.Shutdown(SocketShutdown.Both);
+            sender.Close();
+        }
+        catch (Exception exc)
+        {
+            throw new ArgumentException("Couldn't connect to server: (" + exc.Message + ")");
+        }
 
-      } catch (Exception exc) {
-        throw new ArgumentException ("Couldn't connect to server: (" + exc.Message + ")");
-      }
-
-      return Variable.EmptyInstance;
+        return Variable.EmptyInstance;
     }
 
-    private Interpreter m_interpreter;
-  }
+    private readonly Interpreter _mInterpreter;
+}
 
-  // Returns an environment variable
-  class GetEnvFunction : ParserFunction
-  {
+// Returns an environment variable
+public class GetEnvFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      string varName = Utils.GetToken(data, ref from, Constants.END_ARG_ARRAY);
-      string res = Environment.GetEnvironmentVariable(varName);
+        var varName = Utils.GetToken(data, ref from, Constants.EndArgArray);
+        var res = Environment.GetEnvironmentVariable(varName);
 
-      return new Variable(res);
+        return new Variable(res);
     }
-  }
+}
 
-  // Sets an environment variable
-  class SetEnvFunction : ParserFunction
-  {
+// Sets an environment variable
+public class SetEnvFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      string varName = Utils.GetToken(data, ref from, Constants.NEXT_ARG_ARRAY);
-      if (from >= data.Length)
-      {
-        throw new ArgumentException("Couldn't set env variable");
-      }
+        var varName = Utils.GetToken(data, ref from, Constants.NextArgArray);
+        if (from >= data.Length)
+        {
+            throw new ArgumentException("Couldn't set env variable");
+        }
 
-      Variable varValue = Utils.GetItem(data, ref from);
-      string strValue = varValue.AsString();
-      Environment.SetEnvironmentVariable(varName, strValue);
+        var varValue = Utils.GetItem(data, ref from);
+        var strValue = varValue.AsString();
+        Environment.SetEnvironmentVariable(varName, strValue);
 
-      return new Variable(varName);
+        return new Variable(varName);
     }
-  }
+}
 
-  // Prints passed list of arguments
-  class PrintFunction : ParserFunction
-  {
+// Prints passed list of arguments
+public class PrintFunction : ParserFunction
+{
     internal PrintFunction(Interpreter interpreter, bool newLine = true)
     {
-      m_interpreter = interpreter;
-      m_newLine     = newLine;
+        _mInterpreter = interpreter;
+        _mNewLine = newLine;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      bool isList;
-      List<Variable> args = Utils.GetArgs(data, ref from,
-        Constants.START_ARG, Constants.END_ARG, out isList);
+        bool isList;
+        var args = Utils.GetArgs(data, ref from,
+            Constants.StartArg, Constants.EndArg, out isList);
 
-      string output = string.Empty;
-      for (int i = 0; i < args.Count; i++) {
-        output += args[i].AsString();
-      }
+        var output = string.Empty;
+        for (var i = 0; i < args.Count; i++)
+        {
+            output += args[i].AsString();
+        }
 
-      m_interpreter.AppendOutput(output, m_newLine);
+        _mInterpreter.AppendOutput(output, _mNewLine);
 
-      return Variable.EmptyInstance;
+        return Variable.EmptyInstance;
     }
 
-    private Interpreter m_interpreter;
-    private bool m_newLine;
-  }
+    private readonly Interpreter _mInterpreter;
+    private readonly bool _mNewLine;
+}
 
-  // Reads either a string or a number from Console
-  class ReadConsole : ParserFunction
-  {
+// Reads either a string or a number from Console
+public class ReadConsole : ParserFunction
+{
     internal ReadConsole(bool isNumber = false)
     {
-      m_isNumber = isNumber;
+        _mIsNumber = isNumber;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      from++; // Skip opening parenthesis.
-      string line = Console.ReadLine();
+        from++; // Skip opening parenthesis.
+        var line = Console.ReadLine();
 
-      double number = Double.NaN;
-      if (m_isNumber) {
-        if (!Double.TryParse(line, out number))
+        var number = Double.NaN;
+        if (_mIsNumber)
         {
-          throw new ArgumentException("Couldn't parse number [" + line + "]");
-        }
-        return new Variable(number);
-      }
+            if (!Double.TryParse(line, out number))
+            {
+                throw new ArgumentException("Couldn't parse number [" + line + "]");
+            }
 
-      return new Variable(line);
+            return new Variable(number);
+        }
+
+        return new Variable(line);
     }
 
-    private bool m_isNumber;
-  }
+    private readonly bool _mIsNumber;
+}
 
-  // Returns how much processor time has been spent on the current process
-  class ProcessorTimeFunction : ParserFunction
-  {
+// Returns how much processor time has been spent on the current process
+public class ProcessorTimeFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      Process pr = Process.GetCurrentProcess();
-      TimeSpan ts = pr.TotalProcessorTime;
+        var pr = Process.GetCurrentProcess();
+        var ts = pr.TotalProcessorTime;
 
-      return new Variable(ts.TotalMilliseconds);
+        return new Variable(ts.TotalMilliseconds);
     }
-  }
+}
 
-  // Returns current directory name
-  class PwdFunction : ParserFunction
-  {
+// Returns current directory name
+public class PwdFunction : ParserFunction
+{
     internal PwdFunction(Interpreter interpreter)
     {
-      m_interpreter = interpreter;
+        _mInterpreter = interpreter;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      string path = Directory.GetCurrentDirectory();
-      m_interpreter.AppendOutput(path);
+        var path = Directory.GetCurrentDirectory();
+        _mInterpreter.AppendOutput(path);
 
-      return new Variable(path);
+        return new Variable(path);
     }
 
-    private Interpreter m_interpreter;
-  }
+    private readonly Interpreter _mInterpreter;
+}
 
-  // Equivalent to cd.. on Windows: one directory up
-  class Cd__Function : ParserFunction
-  {
-    protected override Variable Evaluate(string data, ref int from)
-    {
-      string newDir = null;
-
-      try
-      {
-        string pwd = Directory.GetCurrentDirectory();
-        newDir = Directory.GetParent(pwd).FullName;
-        Directory.SetCurrentDirectory(newDir);
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Could not change directory: " + exc.Message);
-      }
-
-      return new Variable(newDir);
-    }
-  }
-
-  // Changes directory to the passed one
-  class CdFunction : ParserFunction
-  {
-    protected override Variable Evaluate(string data, ref int from)
-    {
-      if (data.Substring(from).StartsWith (" ..")) {
-        from++;
-      }
-      string newDir = Utils.GetStringOrVarValue(data, ref from);
-
-      try
-      {
-        if (newDir == "..") {
-          string pwd = Directory.GetCurrentDirectory();
-          newDir = Directory.GetParent(pwd).FullName;
-        }
-        if (newDir.Length == 0) {
-          newDir = Environment.GetEnvironmentVariable("HOME");
-        }
-        Directory.SetCurrentDirectory(newDir);
-
-        newDir = Directory.GetCurrentDirectory();
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Couldn't change directory: " + exc.Message);
-      }
-
-      return new Variable(newDir);
-    }
-  }
-
-  // Reads a file and returns all lines of that file as a "tuple" (list)
-  class ReadFileFunction : ParserFunction
-  {
+// Reads a file and returns all lines of that file as a "tuple" (list)
+public class ReadFileFunction : ParserFunction
+{
     internal ReadFileFunction(Interpreter interpreter)
     {
-      m_interpreter = interpreter;
+        _mInterpreter = interpreter;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      string filename = Utils.GetStringOrVarValue(data, ref from);
-      string[] lines = Utils.GetFileLines(filename);
+        var filename = Utils.GetStringOrVarValue(data, ref from);
+        var lines = Utils.GetFileLines(filename);
 
-      List<Variable> results = Utils.ConvertToResults(lines);
-      m_interpreter.AppendOutput("Read " + lines.Length + " line(s).");
+        var results = Utils.ConvertToResults(lines);
+        _mInterpreter.AppendOutput("Read " + lines.Length + " line(s).");
 
-      return new Variable(results);
+        return new Variable(results);
     }
 
-    private Interpreter m_interpreter;
-  }
+    private readonly Interpreter _mInterpreter;
+}
 
-  // View the contents of a text file
-  class MoreFunction : ParserFunction
-  {
+// View the contents of a text file
+public class MoreFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      string filename = Utils.GetStringOrVarValue(data, ref from);
-      int size = Constants.DEFAULT_FILE_LINES;
+        var filename = Utils.GetStringOrVarValue(data, ref from);
+        var size = Constants.DefaultFileLines;
 
-      bool sizeAvailable = Utils.SeparatorExists(data, from);
-      if (sizeAvailable)
-      {
-        Variable length = Utils.GetItem(data, ref from);
-        Utils.CheckPosInt(length);
-        size = (int)length.Value;
-      }
+        var sizeAvailable = Utils.SeparatorExists(data, from);
+        if (sizeAvailable)
+        {
+            var length = Utils.GetItem(data, ref from);
+            Utils.CheckPosInt(length);
+            size = (int)length.Value;
+        }
 
-      string[] lines = Utils.GetFileLines(filename, 0, size);
-      List<Variable> results = Utils.ConvertToResults(lines);
+        var lines = Utils.GetFileLines(filename, 0, size);
+        var results = Utils.ConvertToResults(lines);
 
-      return new Variable(results);
+        return new Variable(results);
     }
-  }
+}
 
-  // View the last Constants.DEFAULT_FILE_LINES lines of a file
-  class TailFunction : ParserFunction
-  {
+// View the last Constants.DEFAULT_FILE_LINES lines of a file
+public class TailFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      string filename = Utils.GetStringOrVarValue(data, ref from);
-      int size = Constants.DEFAULT_FILE_LINES;
+        var filename = Utils.GetStringOrVarValue(data, ref from);
+        var size = Constants.DefaultFileLines;
 
-      bool sizeAvailable = Utils.SeparatorExists(data, from);
-      if (sizeAvailable)
-      {
-        Variable length = Utils.GetItem(data, ref from);
-        Utils.CheckPosInt(length);
-        size = (int)length.Value;
-      }
+        var sizeAvailable = Utils.SeparatorExists(data, from);
+        if (sizeAvailable)
+        {
+            var length = Utils.GetItem(data, ref from);
+            Utils.CheckPosInt(length);
+            size = (int)length.Value;
+        }
 
-      string[] lines = Utils.GetFileLines(filename, -1, size);
-      List<Variable> results = Utils.ConvertToResults(lines);
+        var lines = Utils.GetFileLines(filename, -1, size);
+        var results = Utils.ConvertToResults(lines);
 
-      return new Variable(results);
+        return new Variable(results);
     }
-  }
+}
 
-  // Append a line to a file
-  class AppendLineFunction : ParserFunction
-  {
+// Append a line to a file
+public class AppendLineFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      string filename = Utils.GetStringOrVarValue(data, ref from);
-      Variable line = Utils.GetItem(data, ref from);
-      Utils.AppendFileText(filename, line.AsString() + Environment.NewLine);
+        var filename = Utils.GetStringOrVarValue(data, ref from);
+        var line = Utils.GetItem(data, ref from);
+        Utils.AppendFileText(filename, line.AsString() + Environment.NewLine);
 
-      return Variable.EmptyInstance;
+        return Variable.EmptyInstance;
     }
-  }
+}
 
-  // Apend a list of lines to a file
-  class AppendLinesFunction : ParserFunction
-  {
+// Apend a list of lines to a file
+public class AppendLinesFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      string filename = Utils.GetStringOrVarValue(data, ref from);
-      string lines = Utils.GetLinesFromList(data, ref from);
-      Utils.AppendFileText(filename, lines);
+        var filename = Utils.GetStringOrVarValue(data, ref from);
+        var lines = Utils.GetLinesFromList(data, ref from);
+        Utils.AppendFileText(filename, lines);
 
-      return Variable.EmptyInstance;
+        return Variable.EmptyInstance;
     }
-  }
+}
 
-  // Write a line to a file
-  class WriteLineFunction : ParserFunction
-  {
+// Write a line to a file
+public class WriteLineFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      string filename = Utils.GetStringOrVarValue(data, ref from);
-      Variable line = Utils.GetItem(data, ref from);
-      Utils.WriteFileText(filename, line.AsString() + Environment.NewLine);
+        var filename = Utils.GetStringOrVarValue(data, ref from);
+        var line = Utils.GetItem(data, ref from);
+        Utils.WriteFileText(filename, line.AsString() + Environment.NewLine);
 
-      return Variable.EmptyInstance;
+        return Variable.EmptyInstance;
     }
-  }
+}
 
-  // Write a list of lines to a file
-  class WriteLinesFunction : ParserFunction
-  {
+// Write a list of lines to a file
+public class WriteLinesFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      //string filename = Utils.ResultToString(Utils.GetItem(data, ref from));
-      string filename = Utils.GetStringOrVarValue(data, ref from);
-      string lines = Utils.GetLinesFromList(data, ref from);
-      Utils.WriteFileText(filename, lines);
+        //string filename = Utils.ResultToString(Utils.GetItem(data, ref from));
+        var filename = Utils.GetStringOrVarValue(data, ref from);
+        var lines = Utils.GetLinesFromList(data, ref from);
+        Utils.WriteFileText(filename, lines);
 
-      return Variable.EmptyInstance;
+        return Variable.EmptyInstance;
     }
-  }
+}
 
-  // Find a string in files
-  class FindstrFunction : ParserFunction
-  {
+// Find a string in files
+public class FindstrFunction : ParserFunction
+{
     internal FindstrFunction(Interpreter interpreter)
     {
-      m_interpreter = interpreter;
+        _mInterpreter = interpreter;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      string search = Utils.GetStringOrVarValue(data, ref from);
-      List<string> patterns = Utils.GetFunctionArgs(data, ref from);
+        var search = Utils.GetStringOrVarValue(data, ref from);
+        var patterns = Utils.GetFunctionArgs(data, ref from);
 
-      bool ignoreCase = true;
-      if (patterns.Count > 0 && patterns.Last().Equals("case"))
-      {
-        ignoreCase = false;
-        patterns.RemoveAt(patterns.Count - 1);
-      }
-      if (patterns.Count == 0)
-      {
-        patterns.Add("*.*");
-      }
+        var ignoreCase = true;
+        if (patterns.Count > 0 && patterns.Last().Equals("case"))
+        {
+            ignoreCase = false;
+            patterns.RemoveAt(patterns.Count - 1);
+        }
 
-      List<Variable> results = null;
-      try
-      {
-        string pwd = Directory.GetCurrentDirectory();
-        List<string> files = Utils.GetStringInFiles(pwd, search, patterns.ToArray(), ignoreCase);
+        if (patterns.Count == 0)
+        {
+            patterns.Add("*.*");
+        }
 
-        results = Utils.ConvertToResults(files.ToArray(), m_interpreter);
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Couldn't find pattern: " + exc.Message);
-      }
+        List<Variable> results = null;
+        try
+        {
+            var pwd = Directory.GetCurrentDirectory();
+            var files = Utils.GetStringInFiles(pwd, search, patterns.ToArray(), ignoreCase);
 
-      return new Variable(results);
+            results = Utils.ConvertToResults(files.ToArray(), _mInterpreter);
+        }
+        catch (Exception exc)
+        {
+            throw new ArgumentException("Couldn't find pattern: " + exc.Message);
+        }
+
+        return new Variable(results);
     }
 
-    private Interpreter m_interpreter;
-  }
+    private readonly Interpreter _mInterpreter;
+}
 
-  // Find files having a given pattern
-  class FindfilesFunction : ParserFunction
-  {
+// Find files having a given pattern
+public class FindfilesFunction : ParserFunction
+{
     internal FindfilesFunction(Interpreter interpreter)
     {
-      m_interpreter = interpreter;
+        _mInterpreter = interpreter;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      List<string> patterns = Utils.GetFunctionArgs(data, ref from);
-      if (patterns.Count == 0)
-      {
-        patterns.Add("*.*");
-      }
-
-      List<Variable> results = null;
-      try
-      {
-        string pwd = Directory.GetCurrentDirectory();
-        List<string> files = Utils.GetFiles(pwd, patterns.ToArray());
-
-        results = Utils.ConvertToResults(files.ToArray(), m_interpreter);
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Couldn't list directory: " + exc.Message);
-      }
-
-      return new Variable(results);
-    }
-
-    private Interpreter m_interpreter;
-  }
-
-  // Copy a file or a directiry
-  class CopyFunction : ParserFunction
-  {
-    protected override Variable Evaluate(string data, ref int from)
-    {
-      string source = Utils.GetStringOrVarValue(data, ref from);
-      Utils.MoveForwardIf (data, ref from, Constants.NEXT_ARG, Constants.SPACE);
-      string dest   = Utils.GetStringOrVarValue(data, ref from);
-
-      string src = Path.GetFullPath(source);
-      string dst = Path.GetFullPath(dest);
-
-      bool isFile = File.Exists(src);
-      bool isDir  = Directory.Exists(src);
-      if (!isFile && !isDir) {
-        throw new ArgumentException("[" + src + "] doesn't exist");
-      }
-
-      if (isFile && Directory.Exists (dst)) {
-        // If filename is missing in the destination file,
-        // add it from the source.
-        dst = Path.Combine(dst, Path.GetFileName(src));
-      }
-
-      try
-      {
-        if (isFile) { 
-          File.Copy(src, dst, true);
-        } else {
-          Utils.DirectoryCopy(src, dst);
+        var patterns = Utils.GetFunctionArgs(data, ref from);
+        if (patterns.Count == 0)
+        {
+            patterns.Add("*.*");
         }
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Couldn't copy: " + exc.Message);
-      }
 
-      return Variable.EmptyInstance;
-    }
-  }
+        List<Variable> results = null;
+        try
+        {
+            var pwd = Directory.GetCurrentDirectory();
+            var files = Utils.GetFiles(pwd, patterns.ToArray());
 
-  // Move a file or a directiry
-  class MoveFunction : ParserFunction
-  {
-    protected override Variable Evaluate(string data, ref int from)
-    {
-      string source = Utils.GetStringOrVarValue(data, ref from);
-      Utils.MoveForwardIf (data, ref from, Constants.NEXT_ARG, Constants.SPACE);
-      string dest   = Utils.GetStringOrVarValue(data, ref from);
-
-      string src = Path.GetFullPath(source);
-      string dst = Path.GetFullPath(dest);
-
-      bool isFile = File.Exists(src);
-      bool isDir  = Directory.Exists(src);
-      if (!isFile && !isDir) {
-        throw new ArgumentException("[" + src + "] doesn't exist");
-      }
-
-      if (isFile && Directory.Exists (dst)) {
-        // If filename is missing in the destination file,
-        // add it from the source.
-        dst = Path.Combine(dst, Path.GetFileName(src));
-      }
-
-      try
-      {
-        if (isFile) { 
-          File.Move(src, dst);
-        } else {
-          Directory.Move(src, dst);
+            results = Utils.ConvertToResults(files.ToArray(), _mInterpreter);
         }
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Couldn't copy: " + exc.Message);
-      }
-
-      return Variable.EmptyInstance;
-    }
-  }
-
-  // Make a directory
-  class MkdirFunction : ParserFunction
-  {
-    protected override Variable Evaluate(string data, ref int from)
-    {
-      string dirname = Utils.GetStringOrVarValue(data, ref from);
-      try
-      {
-        Directory.CreateDirectory(dirname);
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Couldn't create [" + dirname + "] :" + exc.Message);
-      }
-
-      return Variable.EmptyInstance;
-    }
-  }
-
-  // Delete a file or a directory
-  class DeleteFunction : ParserFunction
-  {
-    protected override Variable Evaluate(string data, ref int from)
-    {
-      string pathname = Utils.GetStringOrVarValue(data, ref from);
-
-      bool isFile = File.Exists(pathname);
-      bool isDir  = Directory.Exists(pathname);
-      if (!isFile && !isDir) {
-        throw new ArgumentException("[" + pathname + "] doesn't exist");
-      }
-      try
-      {
-        if (isFile) { 
-          File.Delete(pathname);
-        } else {
-          Directory.Delete(pathname, true);
+        catch (Exception exc)
+        {
+            throw new ArgumentException("Couldn't list directory: " + exc.Message);
         }
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Couldn't delete [" + pathname + "] :" + exc.Message);
-      }
 
-      return Variable.EmptyInstance;
+        return new Variable(results);
     }
-  }
 
-  // Checks if a directory or a file exists
-  class ExistsFunction : ParserFunction
-  {
+    private readonly Interpreter _mInterpreter;
+}
+
+// Copy a file or a directiry
+public class CopyFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      string pathname = Utils.GetStringOrVarValue(data, ref from);
+        var source = Utils.GetStringOrVarValue(data, ref from);
+        Utils.MoveForwardIf(data, ref from, Constants.NextArg, Constants.Space);
+        var dest = Utils.GetStringOrVarValue(data, ref from);
 
-      bool isFile = File.Exists(pathname);
-      bool isDir  = Directory.Exists(pathname);
-      if (!isFile && !isDir) {
-        throw new ArgumentException("[" + pathname + "] doesn't exist");
-      }
-      bool exists = false;
-      try
-      {
-        if (isFile) { 
-          exists = File.Exists(pathname);
-        } else {
-          exists = Directory.Exists(pathname);
+        var src = Path.GetFullPath(source);
+        var dst = Path.GetFullPath(dest);
+
+        var isFile = File.Exists(src);
+        var isDir = Directory.Exists(src);
+        if (!isFile && !isDir)
+        {
+            throw new ArgumentException("[" + src + "] doesn't exist");
         }
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Couldn't delete [" + pathname + "] :" + exc.Message);
-      }
 
-      return new Variable(Convert.ToDouble(exists));
+        if (isFile && Directory.Exists(dst))
+        {
+            // If filename is missing in the destination file,
+            // add it from the source.
+            dst = Path.Combine(dst, Path.GetFileName(src));
+        }
+
+        try
+        {
+            if (isFile)
+            {
+                File.Copy(src, dst, true);
+            }
+            else
+            {
+                Utils.DirectoryCopy(src, dst);
+            }
+        }
+        catch (Exception exc)
+        {
+            throw new ArgumentException("Couldn't copy: " + exc.Message);
+        }
+
+        return Variable.EmptyInstance;
     }
-  }
+}
 
-  // List files in a directory
-  class DirFunction : ParserFunction
-  {
+// Move a file or a directiry
+public class MoveFunction : ParserFunction
+{
+    protected override Variable Evaluate(string data, ref int from)
+    {
+        var source = Utils.GetStringOrVarValue(data, ref from);
+        Utils.MoveForwardIf(data, ref from, Constants.NextArg, Constants.Space);
+        var dest = Utils.GetStringOrVarValue(data, ref from);
+
+        var src = Path.GetFullPath(source);
+        var dst = Path.GetFullPath(dest);
+
+        var isFile = File.Exists(src);
+        var isDir = Directory.Exists(src);
+        if (!isFile && !isDir)
+        {
+            throw new ArgumentException("[" + src + "] doesn't exist");
+        }
+
+        if (isFile && Directory.Exists(dst))
+        {
+            // If filename is missing in the destination file,
+            // add it from the source.
+            dst = Path.Combine(dst, Path.GetFileName(src));
+        }
+
+        try
+        {
+            if (isFile)
+            {
+                File.Move(src, dst);
+            }
+            else
+            {
+                Directory.Move(src, dst);
+            }
+        }
+        catch (Exception exc)
+        {
+            throw new ArgumentException("Couldn't copy: " + exc.Message);
+        }
+
+        return Variable.EmptyInstance;
+    }
+}
+
+// Make a directory
+public class MkdirFunction : ParserFunction
+{
+    protected override Variable Evaluate(string data, ref int from)
+    {
+        var dirname = Utils.GetStringOrVarValue(data, ref from);
+        try
+        {
+            Directory.CreateDirectory(dirname);
+        }
+        catch (Exception exc)
+        {
+            throw new ArgumentException("Couldn't create [" + dirname + "] :" + exc.Message);
+        }
+
+        return Variable.EmptyInstance;
+    }
+}
+
+// Delete a file or a directory
+public class DeleteFunction : ParserFunction
+{
+    protected override Variable Evaluate(string data, ref int from)
+    {
+        var pathname = Utils.GetStringOrVarValue(data, ref from);
+
+        var isFile = File.Exists(pathname);
+        var isDir = Directory.Exists(pathname);
+        if (!isFile && !isDir)
+        {
+            throw new ArgumentException("[" + pathname + "] doesn't exist");
+        }
+
+        try
+        {
+            if (isFile)
+            {
+                File.Delete(pathname);
+            }
+            else
+            {
+                Directory.Delete(pathname, true);
+            }
+        }
+        catch (Exception exc)
+        {
+            throw new ArgumentException("Couldn't delete [" + pathname + "] :" + exc.Message);
+        }
+
+        return Variable.EmptyInstance;
+    }
+}
+
+// Checks if a directory or a file exists
+public class ExistsFunction : ParserFunction
+{
+    protected override Variable Evaluate(string data, ref int from)
+    {
+        var pathname = Utils.GetStringOrVarValue(data, ref from);
+
+        var isFile = File.Exists(pathname);
+        var isDir = Directory.Exists(pathname);
+        if (!isFile && !isDir)
+        {
+            throw new ArgumentException("[" + pathname + "] doesn't exist");
+        }
+
+        var exists = false;
+        try
+        {
+            if (isFile)
+            {
+                exists = File.Exists(pathname);
+            }
+            else
+            {
+                exists = Directory.Exists(pathname);
+            }
+        }
+        catch (Exception exc)
+        {
+            throw new ArgumentException("Couldn't delete [" + pathname + "] :" + exc.Message);
+        }
+
+        return new Variable(Convert.ToDouble(exists));
+    }
+}
+
+// List files in a directory
+public class DirFunction : ParserFunction
+{
     internal DirFunction(Interpreter interpreter)
     {
-      m_interpreter = interpreter;
+        _mInterpreter = interpreter;
     }
 
     protected override Variable Evaluate(string data, ref int from)
     {
-      string dirname = (data.Length <= from || data[from] == Constants.END_STATEMENT) ?
-        Directory.GetCurrentDirectory() :
-        Utils.GetToken(data, ref from, Constants.NEXT_OR_END_ARRAY);
+        var dirname = (data.Length <= from || data[from] == Constants.EndStatement)
+            ? Directory.GetCurrentDirectory()
+            : Utils.GetToken(data, ref from, Constants.NextOrEndArray);
 
-      string pattern = Constants.ALL_FILES;
-      List<Variable> results = new List<Variable>();
+        var pattern = Constants.AllFiles;
+        var results = new List<Variable>();
 
-      try
-      {
-        // Special dealing if there is a pattern (only * is supported at the moment)
-        int index = dirname.IndexOf('*');
-        if (index >= 0) {
-          pattern = Path.GetFileName(dirname);
-
-          if (index > 0) {
-            string prefix = dirname.Substring (0, index);
-            DirectoryInfo di = Directory.GetParent (prefix);
-            dirname = di.FullName;
-          } else {
-            dirname = ".";
-          }
-        }
-
-        string dir = Path.GetFullPath(dirname);
-
-        // First get contents of the directory (unless there is a pattern)
-        DirectoryInfo dirInfo = new DirectoryInfo(dir);
-        if (pattern == Constants.ALL_FILES) {
-          m_interpreter.AppendOutput(Utils.GetPathDetails (dirInfo, "."));
-          m_interpreter.AppendOutput(Utils.GetPathDetails (dirInfo.Parent, ".."));
-        }
-
-        // Then get contents of all of the files in the directory
-        FileInfo[] fileNames = dirInfo.GetFiles(pattern);
-        foreach (FileInfo fi in fileNames)
+        try
         {
-          m_interpreter.AppendOutput(Utils.GetPathDetails(fi, fi.Name));
-          results.Add (new Variable(fi.Name));
-        }
+            // Special dealing if there is a pattern (only * is supported at the moment)
+            var index = dirname.IndexOf('*');
+            if (index >= 0)
+            {
+                pattern = Path.GetFileName(dirname);
 
-        // Then get contents of all of the subdirs in the directory
-        DirectoryInfo[] dirInfos = dirInfo.GetDirectories(pattern);
-        foreach (DirectoryInfo di in dirInfos)
+                if (index > 0)
+                {
+                    var prefix = dirname.Substring(0, index);
+                    var di = Directory.GetParent(prefix);
+                    dirname = di.FullName;
+                }
+                else
+                {
+                    dirname = ".";
+                }
+            }
+
+            var dir = Path.GetFullPath(dirname);
+
+            // First get contents of the directory (unless there is a pattern)
+            var dirInfo = new DirectoryInfo(dir);
+            if (pattern == Constants.AllFiles)
+            {
+                _mInterpreter.AppendOutput(Utils.GetPathDetails(dirInfo, "."));
+                _mInterpreter.AppendOutput(Utils.GetPathDetails(dirInfo.Parent, ".."));
+            }
+
+            // Then get contents of all of the files in the directory
+            var fileNames = dirInfo.GetFiles(pattern);
+            foreach (var fi in fileNames)
+            {
+                _mInterpreter.AppendOutput(Utils.GetPathDetails(fi, fi.Name));
+                results.Add(new Variable(fi.Name));
+            }
+
+            // Then get contents of all of the subdirs in the directory
+            var dirInfos = dirInfo.GetDirectories(pattern);
+            foreach (var di in dirInfos)
+            {
+                _mInterpreter.AppendOutput(Utils.GetPathDetails(di, di.Name));
+                results.Add(new Variable(di.Name));
+            }
+        }
+        catch (Exception exc)
         {
-          m_interpreter.AppendOutput(Utils.GetPathDetails(di, di.Name));
-          results.Add (new Variable(di.Name));
+            throw new ArgumentException("Could not list directory: " + exc.Message);
         }
-      }
-      catch (Exception exc)
-      {
-        throw new ArgumentException("Could not list directory: " + exc.Message);
-      }
 
-      return new Variable(results);
+        return new Variable(results);
     }
 
-    private Interpreter m_interpreter;
-  }
+    private readonly Interpreter _mInterpreter;
+}
 
-  // Append a string to another string
-  class AppendFunction : ParserFunction
-  {
+// Append a string to another string
+public class AppendFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      // 1. Get the name of the variable.
-      string varName = Utils.GetToken(data, ref from, Constants.NEXT_ARG_ARRAY);
-      if (from >= data.Length)
-      {
-        throw new ArgumentException("Couldn't append variable");
-      }
-
-      // 2. Get the current value of the variable.
-      ParserFunction func = ParserFunction.GetFunction(varName);
-      Variable currentValue = func.GetValue(data, ref from);
-
-      // 3. Get the value to be added or appended.
-      Variable newValue = Utils.GetItem(data, ref from);
-
-      // 4. Take either the string part if it is defined,
-      // or the numerical part converted to a string otherwise.
-      string arg1 = currentValue.AsString();
-      string arg2 = newValue.AsString();
-
-      // 5. The variable becomes a string after adding a string to it.
-      newValue.Reset();
-      newValue.String = arg1 + arg2;
-
-      ParserFunction.AddGlobalOrLocalVariable(varName, new GetVarFunction(newValue));
-
-      return newValue;
-    }
-  }
-
-  // Convert a string to the upper case
-  class ToUpperFunction : ParserFunction
-  {
-    protected override Variable Evaluate(string data, ref int from)
-    {
-      // 1. Get the name of the variable.
-      string varName = Utils.GetToken(data, ref from, Constants.END_ARG_ARRAY);
-      if (from >= data.Length)
-      {
-        throw new ArgumentException("Couldn't get variable");
-      }
-
-      // 2. Get the current value of the variable.
-      ParserFunction func = ParserFunction.GetFunction(varName);
-      Variable currentValue = func.GetValue(data, ref from);
-
-      // 3. Take either the string part if it is defined,
-      // or the numerical part converted to a string otherwise.
-      string arg = currentValue.AsString();
-
-      Variable newValue = new Variable(arg.ToUpper());
-      return newValue;
-    }
-  }
-
-  // Convert a string to the lower case
-  class ToLowerFunction : ParserFunction
-  {
-    protected override Variable Evaluate(string data, ref int from)
-    {
-      // 1. Get the name of the variable.
-      string varName = Utils.GetToken(data, ref from, Constants.END_ARG_ARRAY);
-      if (from >= data.Length)
-      {
-        throw new ArgumentException("Couldn't get variable");
-      }
-
-      // 2. Get the current value of the variable.
-      ParserFunction func = ParserFunction.GetFunction(varName);
-      Variable currentValue = func.GetValue(data, ref from);
-
-      // 3. Take either the string part if it is defined,
-      // or the numerical part converted to a string otherwise.
-      string arg = currentValue.AsString();
-
-      Variable newValue = new Variable(arg.ToLower());
-      return newValue;
-    }
-  }
-
-  // Get a substring of a string
-  class SubstrFunction : ParserFunction
-  {
-    protected override Variable Evaluate(string data, ref int from)
-    {
-      string substring;
-
-      // 1. Get the name of the variable.
-      string varName = Utils.GetToken(data, ref from, Constants.NEXT_ARG_ARRAY);
-      if (from >= data.Length)
-      {
-        throw new ArgumentException("Couldn't get variable");
-      }
-
-      // 2. Get the current value of the variable.
-      ParserFunction func = ParserFunction.GetFunction(varName);
-      Variable currentValue = func.GetValue(data, ref from);
-
-      // 3. Take either the string part if it is defined,
-      // or the numerical part converted to a string otherwise.
-      string arg = currentValue.AsString();
-      // 4. Get the initial index of the substring.
-      Variable init = Utils.GetItem(data, ref from);
-      Utils.CheckNonNegativeInt(init);
-
-      // 5. Get the length of the substring if available.
-      bool lengthAvailable = Utils.SeparatorExists(data, from);
-      if (lengthAvailable)
-      {
-        Variable length = Utils.GetItem(data, ref from);
-        Utils.CheckPosInt(length);
-        if (init.Value + length.Value > arg.Length)
+        // 1. Get the name of the variable.
+        var varName = Utils.GetToken(data, ref from, Constants.NextArgArray);
+        if (from >= data.Length)
         {
-          throw new ArgumentException("The total substring length is larger than [" +
-            arg + "]");
+            throw new ArgumentException("Couldn't append variable");
         }
-        substring = arg.Substring((int)init.Value, (int)length.Value);
-      }
-      else
-      {
-        substring = arg.Substring((int)init.Value);
-      }
-      Variable newValue = new Variable(substring);
 
-      return newValue;
+        // 2. Get the current value of the variable.
+        var func = GetFunction(varName);
+        var currentValue = func.GetValue(data, ref from);
+
+        // 3. Get the value to be added or appended.
+        var newValue = Utils.GetItem(data, ref from);
+
+        // 4. Take either the string part if it is defined,
+        // or the numerical part converted to a string otherwise.
+        var arg1 = currentValue.AsString();
+        var arg2 = newValue.AsString();
+
+        // 5. The variable becomes a string after adding a string to it.
+        newValue.Reset();
+        newValue.String = arg1 + arg2;
+
+        AddGlobalOrLocalVariable(varName, new GetVarFunction(newValue));
+
+        return newValue;
     }
-  }
+}
 
-  // Get an index of a substring in a string. Return -1 if not found.
-  class IndexOfFunction : ParserFunction
-  {
+// Convert a string to the upper case
+public class ToUpperFunction : ParserFunction
+{
     protected override Variable Evaluate(string data, ref int from)
     {
-      // 1. Get the name of the variable.
-      string varName = Utils.GetToken(data, ref from, Constants.NEXT_ARG_ARRAY);
-      if (from >= data.Length)
-      {
-        throw new ArgumentException("Couldn't extract variable name");
-      }
+        // 1. Get the name of the variable.
+        var varName = Utils.GetToken(data, ref from, Constants.EndArgArray);
+        if (from >= data.Length)
+        {
+            throw new ArgumentException("Couldn't get variable");
+        }
 
-      // 2. Get the current value of the variable.
-      ParserFunction func = ParserFunction.GetFunction(varName);
-      Variable currentValue = func.GetValue(data, ref from);
+        // 2. Get the current value of the variable.
+        var func = GetFunction(varName);
+        var currentValue = func.GetValue(data, ref from);
 
-      // 3. Get the value to be looked for.
-      Variable searchValue = Utils.GetItem(data, ref from);
+        // 3. Take either the string part if it is defined,
+        // or the numerical part converted to a string otherwise.
+        var arg = currentValue.AsString();
 
-      // 4. Take either the string part if it is defined,
-      // or the numerical part converted to a string otherwise.
-      string basePart = currentValue.AsString();
-      string search = searchValue.AsString();
-
-      int result = basePart.IndexOf(search);
-      return new Variable(result);
+        var newValue = new Variable(arg.ToUpper());
+        return newValue;
     }
-  }
+}
+
+// Convert a string to the lower case
+public class ToLowerFunction : ParserFunction
+{
+    protected override Variable Evaluate(string data, ref int from)
+    {
+        // 1. Get the name of the variable.
+        var varName = Utils.GetToken(data, ref from, Constants.EndArgArray);
+        if (from >= data.Length)
+        {
+            throw new ArgumentException("Couldn't get variable");
+        }
+
+        // 2. Get the current value of the variable.
+        var func = GetFunction(varName);
+        var currentValue = func.GetValue(data, ref from);
+
+        // 3. Take either the string part if it is defined,
+        // or the numerical part converted to a string otherwise.
+        var arg = currentValue.AsString();
+
+        var newValue = new Variable(arg.ToLower());
+        return newValue;
+    }
+}
+
+// Get a substring of a string
+public class SubstrFunction : ParserFunction
+{
+    protected override Variable Evaluate(string data, ref int from)
+    {
+        string substring;
+
+        // 1. Get the name of the variable.
+        var varName = Utils.GetToken(data, ref from, Constants.NextArgArray);
+        if (from >= data.Length)
+        {
+            throw new ArgumentException("Couldn't get variable");
+        }
+
+        // 2. Get the current value of the variable.
+        var func = GetFunction(varName);
+        var currentValue = func.GetValue(data, ref from);
+
+        // 3. Take either the string part if it is defined,
+        // or the numerical part converted to a string otherwise.
+        var arg = currentValue.AsString();
+        // 4. Get the initial index of the substring.
+        var init = Utils.GetItem(data, ref from);
+        Utils.CheckNonNegativeInt(init);
+
+        // 5. Get the length of the substring if available.
+        var lengthAvailable = Utils.SeparatorExists(data, from);
+        if (lengthAvailable)
+        {
+            var length = Utils.GetItem(data, ref from);
+            Utils.CheckPosInt(length);
+            if (init.Value + length.Value > arg.Length)
+            {
+                throw new ArgumentException("The total substring length is larger than [" +
+                                            arg + "]");
+            }
+
+            substring = arg.Substring((int)init.Value, (int)length.Value);
+        }
+        else
+        {
+            substring = arg.Substring((int)init.Value);
+        }
+
+        var newValue = new Variable(substring);
+
+        return newValue;
+    }
+}
+
+// Get an index of a substring in a string. Return -1 if not found.
+public class IndexOfFunction : ParserFunction
+{
+    protected override Variable Evaluate(string data, ref int from)
+    {
+        // 1. Get the name of the variable.
+        var varName = Utils.GetToken(data, ref from, Constants.NextArgArray);
+        if (from >= data.Length)
+        {
+            throw new ArgumentException("Couldn't extract variable name");
+        }
+
+        // 2. Get the current value of the variable.
+        var func = GetFunction(varName);
+        var currentValue = func.GetValue(data, ref from);
+
+        // 3. Get the value to be looked for.
+        var searchValue = Utils.GetItem(data, ref from);
+
+        // 4. Take either the string part if it is defined,
+        // or the numerical part converted to a string otherwise.
+        var basePart = currentValue.AsString();
+        var search = searchValue.AsString();
+
+        var result = basePart.IndexOf(search);
+        return new Variable(result);
+    }
 }

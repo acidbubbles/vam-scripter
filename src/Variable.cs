@@ -2,158 +2,207 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SplitAndMerge
+public class Variable
 {
-  public class Variable
-  {
-    public enum VarType { NONE, NUMBER, STRING, ARRAY, BREAK, CONTINUE };
+    public enum VarType
+    {
+        None,
+        Number,
+        String,
+        Array,
+        Break,
+        Continue
+    };
 
     public Variable()
 
     {
-      Reset();
+        Reset();
     }
+
     public Variable(VarType type)
     {
-      Type = type;
+        Type = type;
     }
+
     public Variable(double d)
     {
-      Value = d;
+        Value = d;
     }
+
     public Variable(string s)
     {
-      String = s;
+        String = s;
     }
+
     public Variable(List<Variable> a)
     {
-      Tuple = a;
+        Tuple = a;
     }
 
     public Variable(Variable other)
     {
-      Copy(other);
+        Copy(other);
     }
 
     public void Copy(Variable other)
     {
-      Reset();
-      Action = other.Action;
-      Type   = other.Type;
+        Reset();
+        Action = other.Action;
+        Type = other.Type;
 
-      switch (other.Type) {
-        case VarType.NUMBER:
-          Value = other.Value;
-          break;
-        case VarType.STRING:
-          String = other.String;
-          break;
-        case VarType.ARRAY:
-          Tuple = other.Tuple;
-          break;
-      }
+        switch (other.Type)
+        {
+            case VarType.Number:
+                Value = other.Value;
+                break;
+            case VarType.String:
+                String = other.String;
+                break;
+            case VarType.Array:
+                Tuple = other.Tuple;
+                break;
+        }
     }
 
     public void Reset()
     {
-      Value  = Double.NaN;
-      String = null;
-      Tuple  = null;
-      Action = null;
-      Type   = VarType.NONE;
+        Value = Double.NaN;
+        String = null;
+        Tuple = null;
+        Action = null;
+        Type = VarType.None;
     }
 
     public static Variable ResetOnBreak(Variable v)
     {
-      if (v.Type == Variable.VarType.BREAK ||
-          v.Type == Variable.VarType.CONTINUE)
-      {
-        return v;
-      }
-      return EmptyInstance;
+        if (v.Type == VarType.Break ||
+            v.Type == VarType.Continue)
+        {
+            return v;
+        }
+
+        return EmptyInstance;
     }
 
     public bool Equals(Variable other)
     {
-      if (Type != other.Type) {
-        return false;
-      }
-      if (Double.IsNaN(Value) != Double.IsNaN (other.Value) ||
-        (!Double.IsNaN(Value) && Value != other.Value)) {
-        return false;
-      }
-      if (!String.Equals(this.String, other.String, StringComparison.Ordinal)) {
-        return false;
-      }
-      if (!String.Equals(this.Action, other.Action, StringComparison.Ordinal)) {
-        return false;
-      }
-      if ((this.Tuple == null) != (other.Tuple == null)) {
-        return false;
-      }
-      if (this.Tuple != null && !this.Tuple.Equals(other.Tuple)) {
-        return false;
-      }
-      return true;
-    }
-
-    public string AsString(bool isList   = true,
-                           bool sameLine = true)
-    {
-      if (Type == VarType.NUMBER) {
-        return Value.ToString();
-      }
-      if (Type == VarType.STRING) {
-        return String;
-      }
-
-      if (m_tuple == null) {
-        return null;
-      }
-
-      StringBuilder sb = new StringBuilder();
-
-
-      if (isList) {
-        sb.Append (Constants.START_GROUP.ToString() +
-          (sameLine ? "" : Environment.NewLine));
-      }
-      for (int i = 0; i < m_tuple.Count; i++)
-      {
-        Variable arg = m_tuple[i];
-        sb.Append(arg.AsString(isList, sameLine));
-        if (i != m_tuple.Count - 1) {
-          sb.Append(sameLine ? " " : Environment.NewLine);
+        if (Type != other.Type)
+        {
+            return false;
         }
-      }
-      if (isList) {
-        sb.Append (Constants.END_GROUP.ToString() +
-          (sameLine ? " " : Environment.NewLine));
-      }
 
-      return sb.ToString();
+        if (Double.IsNaN(Value) != Double.IsNaN(other.Value) ||
+            (!Double.IsNaN(Value) && Value != other.Value))
+        {
+            return false;
+        }
+
+        if (!String.Equals(String, other.String, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if (!String.Equals(Action, other.Action, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if ((Tuple == null) != (other.Tuple == null))
+        {
+            return false;
+        }
+
+        if (Tuple != null && !Tuple.Equals(other.Tuple))
+        {
+            return false;
+        }
+
+        return true;
     }
 
-    public double         Value  {
-      get { return m_value; }
-      set { m_value = value; Type = VarType.NUMBER; } }
-    
-    public string         String {
-      get { return m_string; }
-      set { m_string = value; Type = VarType.STRING; } }
-    
-    public List<Variable> Tuple  {
-      get { return m_tuple; }
-      set { m_tuple = value; Type = VarType.ARRAY; } }
-    
-    public string         Action { get; set; }
-    public VarType        Type   { get; set; }
+    public string AsString(bool isList = true,
+        bool sameLine = true)
+    {
+        if (Type == VarType.Number)
+        {
+            return Value.ToString();
+        }
+
+        if (Type == VarType.String)
+        {
+            return String;
+        }
+
+        if (_mTuple == null)
+        {
+            return null;
+        }
+
+        var sb = new StringBuilder();
+
+
+        if (isList)
+        {
+            sb.Append(Constants.StartGroup.ToString() +
+                      (sameLine ? "" : Environment.NewLine));
+        }
+
+        for (var i = 0; i < _mTuple.Count; i++)
+        {
+            var arg = _mTuple[i];
+            sb.Append(arg.AsString(isList, sameLine));
+            if (i != _mTuple.Count - 1)
+            {
+                sb.Append(sameLine ? " " : Environment.NewLine);
+            }
+        }
+
+        if (isList)
+        {
+            sb.Append(Constants.EndGroup.ToString() +
+                      (sameLine ? " " : Environment.NewLine));
+        }
+
+        return sb.ToString();
+    }
+
+    public double Value
+    {
+        get { return _mValue; }
+        set
+        {
+            _mValue = value;
+            Type = VarType.Number;
+        }
+    }
+
+    public string String
+    {
+        get { return _mString; }
+        set
+        {
+            _mString = value;
+            Type = VarType.String;
+        }
+    }
+
+    public List<Variable> Tuple
+    {
+        get { return _mTuple; }
+        set
+        {
+            _mTuple = value;
+            Type = VarType.Array;
+        }
+    }
+
+    public string Action { get; set; }
+    public VarType Type { get; set; }
 
     public static Variable EmptyInstance = new Variable();
 
-    private double m_value;
-    private string m_string;
-    private List<Variable> m_tuple;
-  }
+    private double _mValue;
+    private string _mString;
+    private List<Variable> _mTuple;
 }
-

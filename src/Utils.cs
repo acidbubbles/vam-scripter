@@ -2,66 +2,67 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace SplitAndMerge
+public partial class Utils
 {
-	public partial class Utils
-	{
-		public static void CheckArgs(int args, int expected, string msg)
-		{
-			if (args < expected) {
-				throw new ArgumentException ("Expecting " + expected +
-					" arguments but got " + args + " in " + msg);
-			}
-		}
+    public static void CheckArgs(int args, int expected, string msg)
+    {
+        if (args < expected)
+        {
+            throw new ArgumentException("Expecting " + expected +
+                                        " arguments but got " + args + " in " + msg);
+        }
+    }
 
-		public static void CheckPosInt(Variable variable)
-		{
-			CheckInteger (variable);
-			if (variable.Value <= 0) {
-				throw new ArgumentException ("Expecting a positive integer instead of [" +
-					variable.Value + "]");
-			}
-		}
+    public static void CheckPosInt(Variable variable)
+    {
+        CheckInteger(variable);
+        if (variable.Value <= 0)
+        {
+            throw new ArgumentException("Expecting a positive integer instead of [" +
+                                        variable.Value + "]");
+        }
+    }
 
-		public static void CheckNonNegativeInt(Variable variable)
-		{
-			CheckInteger (variable);
-			if (variable.Value < 0) {
-				throw new ArgumentException ("Expecting a non  negative integer instead of [" +
-					variable.Value + "]");
-			}
-		}
+    public static void CheckNonNegativeInt(Variable variable)
+    {
+        CheckInteger(variable);
+        if (variable.Value < 0)
+        {
+            throw new ArgumentException("Expecting a non  negative integer instead of [" +
+                                        variable.Value + "]");
+        }
+    }
 
-		public static void CheckInteger(Variable variable)
-		{
-			CheckNumber (variable);
-			if (variable.Value % 1 != 0) {
-				throw new ArgumentException ("Expecting an integer instead of [" +
-					variable.Value + "]");
-			}
-		}
+    public static void CheckInteger(Variable variable)
+    {
+        CheckNumber(variable);
+        if (variable.Value % 1 != 0)
+        {
+            throw new ArgumentException("Expecting an integer instead of [" +
+                                        variable.Value + "]");
+        }
+    }
 
-		public static void CheckNumber(Variable variable)
-		{
-      if (variable.Type != Variable.VarType.NUMBER) {
-			    throw new ArgumentException ("Expecting a number instead of [" +
-				                              variable.String + "]");
-			}
-		}
+    public static void CheckNumber(Variable variable)
+    {
+        if (variable.Type != Variable.VarType.Number)
+        {
+            throw new ArgumentException("Expecting a number instead of [" +
+                                        variable.String + "]");
+        }
+    }
 
-		public static string GetPathDetails(FileSystemInfo fs, string name)
-		{
-			string pathname = fs.FullName;
-			bool isDir = (fs.Attributes & FileAttributes.Directory) != 0;
+    public static string GetPathDetails(FileSystemInfo fs, string name)
+    {
+        var pathname = fs.FullName;
+        var isDir = (fs.Attributes & FileAttributes.Directory) != 0;
 
-			char d = isDir ? 'd' : '-';
-      string last  = fs.LastWriteTime.ToString("MMM dd yyyy HH:mm");
+        var d = isDir ? 'd' : '-';
+        var last = fs.LastWriteTime.ToString("MMM dd yyyy HH:mm");
 
-			#if  __MonoCS__
+#if __MonoCS__
 			Mono.Unix.UnixFileSystemInfo info;
 			if (isDir) {
 				info = new Mono.Unix.UnixDirectoryInfo(pathname);
@@ -82,7 +83,7 @@ namespace SplitAndMerge
 			string permissions = string.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}",
 				ur, uw, ux, gr, gw, gx, or, ow, ox);
 
-			string user  = info.OwnerUser.UserName;
+			string user = info.OwnerUser.UserName;
 			string group = info.OwnerGroup.GroupName;
 			string links = info.LinkCount.ToString();
 
@@ -92,263 +93,292 @@ namespace SplitAndMerge
 				d = 's';
 			}
 
-			#else
+#else
 
-			string user = string.Empty;
-			string group = string.Empty;
-			string links = null;
-			string permissions = "rwx";
+        var user = string.Empty;
+        var group = string.Empty;
+        string links = null;
+        var permissions = "rwx";
 
-			long size = 0;
+        long size = 0;
 
-			if (isDir)
-			{
-  			user = Directory.GetAccessControl(fs.FullName).GetOwner(
-          typeof(System.Security.Principal.NTAccount)).ToString();
+        if (isDir)
+        {
+            user = Directory.GetAccessControl(fs.FullName).GetOwner(
+                typeof(System.Security.Principal.NTAccount)).ToString();
 
-  			DirectoryInfo di = fs as DirectoryInfo;
-  			size = di.GetFileSystemInfos().Length;
-			}
-			else
-			{
-  			user = File.GetAccessControl(fs.FullName).GetOwner(
-          typeof(System.Security.Principal.NTAccount)).ToString();
-  			FileInfo fi = fs as FileInfo;
-  			size = fi.Length;
+            var di = fs as DirectoryInfo;
+            size = di.GetFileSystemInfos().Length;
+        }
+        else
+        {
+            user = File.GetAccessControl(fs.FullName).GetOwner(
+                typeof(System.Security.Principal.NTAccount)).ToString();
+            var fi = fs as FileInfo;
+            size = fi.Length;
 
-  			string[] execs = new string[] { "exe", "bat", "msi"};
-  			char x = execs.Contains(fi.Extension.ToLower()) ? 'x' : '-';
-  			char w = !fi.IsReadOnly ? 'w' : '-';
-  			permissions = string.Format("r{0}{1}", w, x); ;
-			}
+            var execs = new string[] { "exe", "bat", "msi" };
+            var x = execs.Contains(fi.Extension.ToLower()) ? 'x' : '-';
+            var w = !fi.IsReadOnly ? 'w' : '-';
+            permissions = string.Format("r{0}{1}", w, x);
+            ;
+        }
 
-			#endif
+#endif
 
-			string infoStr = string.Format("{0}{1} {2,4} {3,8} {4,8} {5,9} {6,23} {7}",
-				d, permissions, links, user, group, size, last, name);
+        var infoStr = string.Format("{0}{1} {2,4} {3,8} {4,8} {5,9} {6,23} {7}",
+            d, permissions, links, user, group, size, last, name);
 
-			return infoStr;
-		}
+        return infoStr;
+    }
 
-		public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs = true)
-		{
-			// Get the subdirectories for the specified directory.
-			DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+    public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs = true)
+    {
+        // Get the subdirectories for the specified directory.
+        var dir = new DirectoryInfo(sourceDirName);
 
-			if (!dir.Exists)
-			{
-				throw new DirectoryNotFoundException(
-					sourceDirName + " directory doesn't exist");
-			}
+        if (!dir.Exists)
+        {
+            throw new DirectoryNotFoundException(
+                sourceDirName + " directory doesn't exist");
+        }
 
-			DirectoryInfo[] dirs = dir.GetDirectories();
-			// If the destination directory doesn't exist, create it.
-			if (!Directory.Exists(destDirName))
-			{
-				Directory.CreateDirectory(destDirName);
-			}
+        var dirs = dir.GetDirectories();
+        // If the destination directory doesn't exist, create it.
+        if (!Directory.Exists(destDirName))
+        {
+            Directory.CreateDirectory(destDirName);
+        }
 
-			// Get the files in the directory and copy them to the new location.
-			FileInfo[] files = dir.GetFiles();
-			foreach (FileInfo file in files)
-			{
-				string temppath = Path.Combine(destDirName, file.Name);
-				file.CopyTo(temppath, true);
-			}
+        // Get the files in the directory and copy them to the new location.
+        var files = dir.GetFiles();
+        foreach (var file in files)
+        {
+            var temppath = Path.Combine(destDirName, file.Name);
+            file.CopyTo(temppath, true);
+        }
 
-			// If copying subdirectories, copy them and their contents to new location.
-			if (copySubDirs)
-			{
-				foreach (DirectoryInfo subdir in dirs)
-				{
-					string tempPath = Path.Combine(destDirName, subdir.Name);
-					DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
-				}
-			}
-		}
+        // If copying subdirectories, copy them and their contents to new location.
+        if (copySubDirs)
+        {
+            foreach (var subdir in dirs)
+            {
+                var tempPath = Path.Combine(destDirName, subdir.Name);
+                DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
+            }
+        }
+    }
 
     public static List<string> GetFiles(string path, string[] patterns, bool addDirs = true)
-		{
-      List<string> files = new List<string>();
-      GetFiles(path, patterns, ref files, addDirs);
-      return files;
-		}
+    {
+        var files = new List<string>();
+        GetFiles(path, patterns, ref files, addDirs);
+        return files;
+    }
 
     public static string GetFileEntry(string dir, int i, string startsWith)
     {
-      List<string> files = new List<string>();
-      string[] patterns = { startsWith + "*" };
-      GetFiles (dir, patterns, ref files, true, false);
+        var files = new List<string>();
+        string[] patterns = { startsWith + "*" };
+        GetFiles(dir, patterns, ref files, true, false);
 
-      if (files.Count == 0) {
-        return "";
-      }
-      i = i % files.Count;
+        if (files.Count == 0)
+        {
+            return "";
+        }
 
-      string pathname = files[i];
-      if (files.Count == 1) {
-        pathname += Directory.Exists(Path.Combine (dir, pathname)) ?
-                    Path.DirectorySeparatorChar.ToString() : " ";
-      }
-      return pathname;
+        i = i % files.Count;
+
+        var pathname = files[i];
+        if (files.Count == 1)
+        {
+            pathname += Directory.Exists(Path.Combine(dir, pathname)) ? Path.DirectorySeparatorChar.ToString() : " ";
+        }
+
+        return pathname;
     }
 
     public static void GetFiles(string path, string[] patterns, ref List<string> files,
-      bool addDirs = true, bool recursive = true)
+        bool addDirs = true, bool recursive = true)
     {
-      SearchOption option = recursive ? SearchOption.AllDirectories :
-                                        SearchOption.TopDirectoryOnly;
-      if (string.IsNullOrEmpty (path)) {
-        path = Directory.GetCurrentDirectory();
-      }
+        var option = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+        if (string.IsNullOrEmpty(path))
+        {
+            path = Directory.GetCurrentDirectory();
+        }
 
-      List<string> dirs = patterns.SelectMany(
-        i => Directory.EnumerateDirectories(path, i, option )
-      ).ToList<string>();
+        var dirs = patterns.SelectMany(
+            i => Directory.EnumerateDirectories(path, i, option)
+        ).ToList<string>();
 
-      List<string> extraFiles = patterns.SelectMany(
-        i => Directory.EnumerateFiles(path, i, option)
-      ).ToList<string>();
+        var extraFiles = patterns.SelectMany(
+            i => Directory.EnumerateFiles(path, i, option)
+        ).ToList<string>();
 
-      if (addDirs) {
-        files.AddRange (dirs);
-      }
-      files.AddRange(extraFiles);
+        if (addDirs)
+        {
+            files.AddRange(dirs);
+        }
 
-      if (!recursive) {
-        files = files.Select(p => Path.GetFileName(p)).ToList<string>();
-        files.Sort();
-        return;
-      }
-      /*foreach (string dir in dirs) {
-        GetFiles (dir, patterns, addDirs);
-      }*/
+        files.AddRange(extraFiles);
+
+        if (!recursive)
+        {
+            files = files.Select(p => Path.GetFileName(p)).ToList<string>();
+            files.Sort();
+            return;
+        }
+        /*foreach (string dir in dirs) {
+          GetFiles (dir, patterns, addDirs);
+        }*/
     }
 
     public static List<Variable> ConvertToResults(string[] items,
-			Interpreter interpreter = null)
-		{
-			List<Variable> results = new List<Variable>(items.Length);
-			foreach (string item in items)
-			{
-				results.Add(new Variable(item));
-				if (interpreter != null) {
-					interpreter.AppendOutput (item);
-				}
-			}
+        Interpreter interpreter = null)
+    {
+        var results = new List<Variable>(items.Length);
+        foreach (var item in items)
+        {
+            results.Add(new Variable(item));
+            if (interpreter != null)
+            {
+                interpreter.AppendOutput(item);
+            }
+        }
 
-			return results;
-		}
+        return results;
+    }
 
-		public static List<string> GetStringInFiles(string path, string search,
-			string[] patterns, bool ignoreCase = true)
-		{
-      List<string> allFiles = GetFiles(path, patterns, false /* no dirs */);
-			List<string> results = new List<string>();
+    public static List<string> GetStringInFiles(string path, string search,
+        string[] patterns, bool ignoreCase = true)
+    {
+        var allFiles = GetFiles(path, patterns, false /* no dirs */);
+        var results = new List<string>();
 
-			if (allFiles == null && allFiles.Count == 0)
-			{
-				return results;
-			}
+        if (allFiles == null && allFiles.Count == 0)
+        {
+            return results;
+        }
 
-			StringComparison caseSense = ignoreCase ? StringComparison.OrdinalIgnoreCase :
-				StringComparison.Ordinal;
-			Parallel.ForEach(allFiles, (currentFile) =>
-				{
-					string contents = GetFileText(currentFile);
-					if (contents.IndexOf(search, caseSense) >= 0)
-					{
-						lock (s_mutexLock) { results.Add(currentFile); }
-					}
-				});
+        var caseSense = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+        Parallel.ForEach(allFiles, (currentFile) =>
+        {
+            var contents = GetFileText(currentFile);
+            if (contents.IndexOf(search, caseSense) >= 0)
+            {
+                lock (_sMutexLock)
+                {
+                    results.Add(currentFile);
+                }
+            }
+        });
 
-			return results;
-		}
+        return results;
+    }
 
     private static void WriteBlinkingText(string text, int delay, bool visible)
     {
-      if (visible) {
-        Console.Write (text);
-      } else {
-        Console.Write (new string(' ', text.Length));
-      }
-      Console.CursorLeft -= text.Length;
-      System.Threading.Thread.Sleep(delay);
+        if (visible)
+        {
+            Console.Write(text);
+        }
+        else
+        {
+            Console.Write(new string(' ', text.Length));
+        }
+
+        Console.CursorLeft -= text.Length;
+        System.Threading.Thread.Sleep(delay);
     }
 
     public static string GetLine(int chars = 40)
-		{
-			return string.Format("-").PadRight(chars, '-');
-		}
+    {
+        return string.Format("-").PadRight(chars, '-');
+    }
 
-		public static string GetFileText(string filename)
-		{
-			string fileContents = string.Empty;
-			if (File.Exists(filename))
-			{
-				fileContents = File.ReadAllText(filename);
-			}
-			return fileContents;
-		}
+    public static string GetFileText(string filename)
+    {
+        var fileContents = string.Empty;
+        if (File.Exists(filename))
+        {
+            fileContents = File.ReadAllText(filename);
+        }
 
-		public static string[] GetFileLines(string filename)
-		{
-			try {
-				string[] lines = File.ReadAllLines(filename);
-				return lines;
-			} catch (Exception ex) {
-				throw new ArgumentException ("Couldn't read file from disk: " + ex.Message);
-			}
-		}
+        return fileContents;
+    }
 
-		public static string[] GetFileLines(string filename, int from, int count)
-		{
-			try {
-				var allLines = File.ReadLines(filename).ToArray();
-				if (allLines.Length <= count) {
-					return allLines;
-				}
+    public static string[] GetFileLines(string filename)
+    {
+        try
+        {
+            var lines = File.ReadAllLines(filename);
+            return lines;
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException("Couldn't read file from disk: " + ex.Message);
+        }
+    }
 
-				if (from < 0) {
-					// last n lines
-					from = allLines.Length - count;
-				}
+    public static string[] GetFileLines(string filename, int from, int count)
+    {
+        try
+        {
+            var allLines = File.ReadLines(filename).ToArray();
+            if (allLines.Length <= count)
+            {
+                return allLines;
+            }
 
-				string[] lines = allLines.Skip(from).Take(count).ToArray();
-				return lines;
-			} catch (Exception ex) {
-				throw new ArgumentException ("Couldn't read file from disk: " + ex.Message);
-			}
-		}
+            if (from < 0)
+            {
+                // last n lines
+                from = allLines.Length - count;
+            }
 
-		public static void WriteFileText(string filename, string text)
-		{
-			try {
-				File.WriteAllText(filename, text);
-			} catch (Exception ex) {
-				throw new ArgumentException ("Couldn't write file to disk: " + ex.Message);
-			}
-		}
+            var lines = allLines.Skip(from).Take(count).ToArray();
+            return lines;
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException("Couldn't read file from disk: " + ex.Message);
+        }
+    }
 
-		public static void AppendFileText(string filename, string text)
-		{
-			try {
-				File.AppendAllText(filename, text);
-			} catch (Exception ex) {
-				throw new ArgumentException ("Couldn't write file to disk: " + ex.Message);
-			}
-		}
+    public static void WriteFileText(string filename, string text)
+    {
+        try
+        {
+            File.WriteAllText(filename, text);
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException("Couldn't write file to disk: " + ex.Message);
+        }
+    }
 
-		public static void PrintList(List<Variable> list, int from)
-		{
-			Console.Write("Merging list:");
-			for (int i = from; i < list.Count; i++)
-			{
-				Console.Write(" ({0}, '{1}')", list[i].Value, list[i].Action);
-			}
-			Console.WriteLine();
-		}
+    public static void AppendFileText(string filename, string text)
+    {
+        try
+        {
+            File.AppendAllText(filename, text);
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException("Couldn't write file to disk: " + ex.Message);
+        }
+    }
 
-		private static readonly object s_mutexLock = new object();
-	}
+    public static void PrintList(List<Variable> list, int from)
+    {
+        Console.Write("Merging list:");
+        for (var i = from; i < list.Count; i++)
+        {
+            Console.Write(" ({0}, '{1}')", list[i].Value, list[i].Action);
+        }
+
+        Console.WriteLine();
+    }
+
+    private static readonly object _sMutexLock = new object();
 }

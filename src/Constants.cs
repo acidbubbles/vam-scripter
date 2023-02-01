@@ -1,159 +1,159 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SplitAndMerge
+public static class Constants
 {
-	public class Constants
-	{
-    public const char START_ARG     = '(';
-    public const char END_ARG       = ')';
-    public const char START_ARRAY   = '[';
-    public const char END_ARRAY     = ']';
-		public const char END_LINE      = '\n';
-		public const char NEXT_ARG      = ',';
-		public const char QUOTE         = '"';
-		public const char SPACE         = ' ';
-		public const char START_GROUP   = '{';
-		public const char END_GROUP     = '}';
-		public const char END_STATEMENT = ';';
-		public const char EMPTY         = '\0';
+    public const char StartArg = '(';
+    public const char EndArg = ')';
+    public const char StartArray = '[';
+    public const char EndArray = ']';
+    public const char EndLine = '\n';
+    public const char NextArg = ',';
+    public const char Quote = '"';
+    public const char Space = ' ';
+    public const char StartGroup = '{';
+    public const char EndGroup = '}';
+    public const char EndStatement = ';';
+    public const char Empty = '\0';
 
-		public const string ASSIGNMENT  = "=";
-		public const string AND         = "&&";
-		public const string OR          = "||";
-		public const string NOT         = "!";
-		public const string INCREMENT   = "++";
-		public const string DECREMENT   = "--";
-		public const string EQUAL       = "==";
-		public const string NOT_EQUAL   = "!=";
-		public const string LESS        = "<";
-		public const string LESS_EQ     = "<=";
-		public const string GREATER     = ">";
-		public const string GREATER_EQ  = ">=";
-		public const string ADD_ASSIGN  = "+=";
-		public const string SUBT_ASSIGN = "-=";
-		public const string MULT_ASSIGN = "*=";
-		public const string DIV_ASSIGN  = "/=";
+    public const string Assignment = "=";
+    public const string And = "&&";
+    public const string Or = "||";
+    public const string Not = "!";
+    public const string Increment = "++";
+    public const string Decrement = "--";
+    public const string Equal = "==";
+    public const string NotEqual = "!=";
+    public const string Less = "<";
+    public const string LessEq = "<=";
+    public const string Greater = ">";
+    public const string GreaterEq = ">=";
+    public const string AddAssign = "+=";
+    public const string SubtAssign = "-=";
+    public const string MultAssign = "*=";
+    public const string DivAssign = "/=";
 
-		public const string IF          = "if";
-		public const string ELSE        = "else";
-		public const string ELSE_IF     = "elif";
-		public const string WHILE       = "while";
-		public const string BREAK       = "break";
-		public const string CONTINUE    = "continue";
-		public const string FUNCTION    = "function";
-		public const string RETURN      = "return";
-		public const string INCLUDE     = "include";
-		public const string TRY         = "try";
-		public const string CATCH       = "catch";
-		public const string THROW       = "throw";
-		public const string COMMENT     = "//";
+    public const string If = "if";
+    public const string Else = "else";
+    public const string ElseIf = "elif";
+    public const string While = "while";
+    public const string Break = "break";
+    public const string Continue = "continue";
+    public const string Function = "function";
+    public const string Return = "return";
+    public const string Include = "include";
+    public const string Try = "try";
+    public const string Catch = "catch";
+    public const string Throw = "throw";
+    public const string Comment = "//";
 
-		public const string ABS         = "abs";
-		public const string ACOS        = "acos";
-		public const string APPEND      = "append";
-		public const string APPENDLINE  = "appendline";
-		public const string APPENDLINES = "appendlines";
-		public const string ASIN        = "asin";
-		public const string CD          = "cd";
-		public const string CD__        = "cd..";
-		public const string COPY        = "copy";
-		public const string CEIL        = "ceil";
-		public const string CONNECTSRV  = "connectsrv";
-		public const string COS         = "cos";
-		public const string DIR         = "dir";
-		public const string DELETE      = "del";
-		public const string ENV         = "env";
-		public const string EXISTS      = "exists";
-		public const string EXP         = "exp";
-		public const string FINDFILES   = "findfiles";
-		public const string FINDSTR     = "findstr";
-		public const string FLOOR       = "floor";
-		public const string INDEX_OF    = "indexof";
-    public const string KILL        = "kill";
-    public const string LOG         = "log";
-		public const string MKDIR       = "mkdir";
-		public const string MORE        = "more";
-		public const string MOVE        = "move";
-		public const string PI          = "pi";
-		public const string POW         = "pow";
-		public const string PSINFO      = "psinfo";
-		public const string PSTIME      = "pstime";
-		public const string PWD         = "pwd";
-    public const string READ        = "read";
-    public const string READFILE    = "readfile";
-    public const string READNUMBER  = "readnum";
-		public const string ROUND       = "round";
-		public const string RUN         = "run";
-    public const string SETENV      = "setenv";
-		public const string SET         = "set";
-		public const string SIN         = "sin";
-		public const string SIZE        = "size";
-		public const string SQRT        = "sqrt";
-		public const string STARTSRV    = "startsrv";
-		public const string SUBSTR      = "substr";
-		public const string TAIL        = "tail";
-		public const string TOLOWER     = "tolower";
-		public const string TOUPPER     = "toupper";
-    public const string WRITE       = "write";
-    public const string WRITELINE   = "writeline";
-		public const string WRITELINES  = "writelines";
-    public const string WRITENL     = "writenl";
+    public const string Abs = "abs";
+    public const string Acos = "acos";
+    public const string Append = "append";
+    public const string Appendline = "appendline";
+    public const string Appendlines = "appendlines";
+    public const string Asin = "asin";
+    public const string Copy = "copy";
+    public const string Ceil = "ceil";
+    public const string Connectsrv = "connectsrv";
+    public const string Cos = "cos";
+    public const string Dir = "dir";
+    public const string Delete = "del";
+    public const string Env = "env";
+    public const string Exists = "exists";
+    public const string Exp = "exp";
+    public const string Findfiles = "findfiles";
+    public const string Findstr = "findstr";
+    public const string Floor = "floor";
+    public const string IndexOf = "indexof";
+    public const string Kill = "kill";
+    public const string LOG = "log";
+    public const string Mkdir = "mkdir";
+    public const string More = "more";
+    public const string Move = "move";
+    public const string PI = "pi";
+    public const string Pow = "pow";
+    public const string Psinfo = "psinfo";
+    public const string Pstime = "pstime";
+    public const string Pwd = "pwd";
+    public const string Read = "read";
+    public const string Readfile = "readfile";
+    public const string Readnumber = "readnum";
+    public const string Round = "round";
+    public const string Run = "run";
+    public const string Setenv = "setenv";
+    public const string Set = "set";
+    public const string Sin = "sin";
+    public const string Size = "size";
+    public const string Sqrt = "sqrt";
+    public const string Startsrv = "startsrv";
+    public const string Substr = "substr";
+    public const string Tail = "tail";
+    public const string Tolower = "tolower";
+    public const string Toupper = "toupper";
+    public const string Write = "write";
+    public const string Writeline = "writeline";
+    public const string Writelines = "writelines";
+    public const string Writenl = "writenl";
 
-		public static string END_ARG_STR    = END_ARG.ToString();
+    public static string EndArgStr = EndArg.ToString();
 
-		public static string[] OPER_ACTIONS = { "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^="};
-		public static string[] MATH_ACTIONS = { "&&", "||", "==", "!=", "<=", ">=", "++", "--",
-			                                    "%", "*", "/", "+", "-", "^", "<", ">", "="};
+    public static string[] OperActions = { "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=" };
 
-		// Actions: always decreasing by the number of characters.
-		public static string[] ACTIONS      = (OPER_ACTIONS.Union(MATH_ACTIONS)).ToArray();
+    public static string[] MathActions =
+    {
+        "&&", "||", "==", "!=", "<=", ">=", "++", "--",
+        "%", "*", "/", "+", "-", "^", "<", ">", "="
+    };
 
-		public static char[] NEXT_ARG_ARRAY     = NEXT_ARG.ToString().ToCharArray();
-    public static char[] END_ARG_ARRAY      = END_ARG.ToString().ToCharArray();
-    public static char[] END_ARRAY_ARRAY    = END_ARRAY.ToString().ToCharArray();
-		public static char[] END_LINE_ARRAY     = END_LINE.ToString().ToCharArray();
-		public static char[] QUOTE_ARRAY        = QUOTE.ToString().ToCharArray();
+    // Actions: always decreasing by the number of characters.
+    public static string[] Actions = (OperActions.Union(MathActions)).ToArray();
 
-		public static char[] COMPARE_ARRAY      = "<>=)".ToCharArray();
-		public static char[] IF_ARG_ARRAY       = "&|)".ToCharArray();
-		public static char[] END_PARSE_ARRAY    = " ;)}\n".ToCharArray();
-		public static char[] NEXT_OR_END_ARRAY  = { NEXT_ARG, END_ARG, /*START_GROUP,*/ END_GROUP, END_STATEMENT, SPACE };
+    public static char[] NextArgArray = NextArg.ToString().ToCharArray();
+    public static char[] EndArgArray = EndArg.ToString().ToCharArray();
+    public static char[] EndArrayArray = EndArray.ToString().ToCharArray();
+    public static char[] EndLineArray = EndLine.ToString().ToCharArray();
+    public static char[] QuoteArray = Quote.ToString().ToCharArray();
 
-		public static char[] TOKEN_SEPARATION = ("<>=+-*/%&|^\t " + Environment.NewLine +
-			NOT + START_ARG + END_ARG + START_GROUP + END_GROUP + NEXT_ARG + END_STATEMENT).ToCharArray();
+    public static char[] CompareArray = "<>=)".ToCharArray();
+    public static char[] IfArgArray = "&|)".ToCharArray();
+    public static char[] EndParseArray = " ;)}\n".ToCharArray();
+    public static char[] NextOrEndArray = { NextArg, EndArg, /*START_GROUP,*/ EndGroup, EndStatement, Space };
 
-		// Functions that allow a space separator after them, on top of parentheses. The
-		// function arguments may have spaces as well, e.g. copy a.txt b.txt
-		public static List<string> FUNCT_WITH_SPACE = new List<string> {
-			APPENDLINE, CD, CONNECTSRV, COPY, DELETE, DIR, EXISTS, FINDFILES, FINDSTR,
-      FUNCTION, MKDIR, MORE, MOVE, READFILE, RUN, STARTSRV, TAIL, WRITE, WRITELINE, WRITENL
-		};
+    public static char[] TokenSeparation = ("<>=+-*/%&|^\t " + Environment.NewLine +
+                                             Not + StartArg + EndArg + StartGroup + EndGroup + NextArg + EndStatement).ToCharArray();
+
+    // Functions that allow a space separator after them, on top of parentheses. The
+    // function arguments may have spaces as well, e.g. copy a.txt b.txt
+    public static List<string> FunctWithSpace = new List<string>
+    {
+        Appendline, Connectsrv, Copy, Delete, Dir, Exists, Findfiles, Findstr,
+        Function, Mkdir, More, Move, Readfile, Run, Startsrv, Tail, Write, Writeline, Writenl
+    };
 
     // Functions that allow a space separator after them, on top of parentheses but
-		// only once, i.e. function arguments are not allowed to have spaces
-		// between them e.g. return a*b;
-		public static List<string> FUNCT_WITH_SPACE_ONCE = new List<string> {
-			RETURN
-		};
+    // only once, i.e. function arguments are not allowed to have spaces
+    // between them e.g. return a*b;
+    public static List<string> FunctWithSpaceOnce = new List<string>
+    {
+        Return
+    };
 
     // The Control Flow Functions. It doesn't make sense to merge them or
     // use in calculation of a result.
-    public static List<string> CONTROL_FLOW = new List<string> {
-      BREAK, CONTINUE, FUNCTION, IF, INCLUDE, WHILE, RETURN, THROW, TRY
+    public static List<string> ControlFlow = new List<string>
+    {
+        Break, Continue, Function, If, Include, While, Return, Throw, Try
     };
 
-    public static List<string> ELSE_LIST    = new List<string>();
-		public static List<string> ELSE_IF_LIST = new List<string>();
-		public static List<string> CATCH_LIST   = new List<string>();
+    public static List<string> ElseList = new List<string>();
+    public static List<string> ElseIfList = new List<string>();
+    public static List<string> CatchList = new List<string>();
 
-		public static int DEFAULT_FILE_LINES    = 20;
+    public static int DefaultFileLines = 20;
 
-		public static string ALL_FILES = "*.*";
+    public static string AllFiles = "*.*";
 
-    public static int MAX_ERROR_CHARS = 20;
-	}
+    public static int MaxErrorChars = 20;
 }
