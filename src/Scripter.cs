@@ -1,11 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Scripter : MVRScript
 {
+    private Interpreter _interpreter;
+
     private readonly JSONStorableString _scriptJSON;
     private readonly JSONStorableAction _executeScriptJSON;
+    private readonly List<string> _history = new List<string>();
 
     public Scripter()
     {
@@ -20,17 +25,43 @@ public class Scripter : MVRScript
 
     public override void Init()
     {
+        _interpreter = new Interpreter();
+        ParserFunction.AddGlobal(LogMessageFunction.FunctionName, new LogMessageFunction());
+
         _scriptJSON.valNoCallback = @"
+// Welcome to Scripter!
 x = 0;
 x++;
-log(""The result is: "" + x);
+if(x == 0) {
+    logMessage(""The result is: "" + x);
+}
 ".Trim();
+        _history.Add(_scriptJSON.val);
+
+        _scriptJSON.setCallbackFunction = val =>
+        {
+            _history.Add(val);
+            SuperController.LogMessage("History: " + _history.Count);
+            if (_history.Count > 100) _history.RemoveAt(0);
+        };
 
         RegisterString(_scriptJSON);
         RegisterAction(_executeScriptJSON);
 
         CreateButton("Execute").button.onClick.AddListener(_executeScriptJSON.actionCallback.Invoke);
         CreateTextInput(_scriptJSON);
+
+        // TODO: Toolbar
+        CreateButton("Undo").button.onClick.AddListener(Undo);
+    }
+
+    private void Undo()
+    {
+        // TODO: Improve this (undo should not delete history, just go back)
+        if (_history.Count == 0) return;
+        SuperController.LogMessage("Undo " + _history.Count);
+        _scriptJSON.valNoCallback = _history[_history.Count - 1];
+        _history.RemoveAt(_history.Count - 1);
     }
 
     public override void InitUI()
@@ -54,15 +85,15 @@ log(""The result is: "" + x);
         return textfield;
     }
 
-    private static void ProcessScript(string script)
+    private void ProcessScript(string script)
     {
         try
         {
-            var result = Interpreter.Instance.Process(script);
+            var result = _interpreter.Process(script);
         }
         catch (Exception exc)
         {
-            SuperController.LogError($"Scripter: There was an error executing the script.\n{exc}");
+            SuperController.LogError($"Scripter: There was an error executing the script.\n{exc.Message}");
             ParserFunction.InvalidateStacksAfterLevel(0);
         }
     }
