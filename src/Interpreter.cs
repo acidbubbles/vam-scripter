@@ -26,7 +26,7 @@ namespace SplitAndMerge
 
 		public static Interpreter Instance
 		{
-			get 
+			get
 			{
 				if (instance == null)
 				{
@@ -134,137 +134,6 @@ namespace SplitAndMerge
 			Constants.ELSE_LIST.Add(Constants.ELSE);
 			Constants.ELSE_IF_LIST.Add(Constants.ELSE_IF);
 			Constants.CATCH_LIST.Add(Constants.CATCH);
-
-			ReadConfig();
-		}
-
-		public void ReadConfig()
-		{
-			MAX_LOOPS         = ReadConfig("maxLoops", 256000);
-
-			if (ConfigurationManager.GetSection ("Languages") == null) {
-				return;
-			}
-			var languagesSection = ConfigurationManager.GetSection("Languages") as NameValueCollection;
-			if (languagesSection.Count == 0)
-			{
-				return;
-			}
-
-			string languages = languagesSection["languages"];
-			string[] supportedLanguages = languages.Split(",".ToCharArray());
-
-			foreach(string language in supportedLanguages)
-			{
-				var languageSection    = ConfigurationManager.GetSection(language) as NameValueCollection;
-
-				AddTranslation(languageSection, Constants.IF);
-				AddTranslation(languageSection, Constants.WHILE);
-				AddTranslation(languageSection, Constants.BREAK);
-				AddTranslation(languageSection, Constants.CONTINUE);
-				AddTranslation(languageSection, Constants.RETURN);
-				AddTranslation(languageSection, Constants.FUNCTION);
-				AddTranslation(languageSection, Constants.INCLUDE);
-				AddTranslation(languageSection, Constants.THROW);
-				AddTranslation(languageSection, Constants.TRY);
-
-				AddTranslation(languageSection, Constants.APPEND);
-				AddTranslation(languageSection, Constants.APPENDLINE);
-				AddTranslation(languageSection, Constants.APPENDLINES);
-				AddTranslation(languageSection, Constants.CD);
-				AddTranslation(languageSection, Constants.CD__);
-				AddTranslation(languageSection, Constants.CEIL);
-				AddTranslation(languageSection, Constants.COPY);
-				AddTranslation(languageSection, Constants.DELETE);
-				AddTranslation(languageSection, Constants.DIR);
-				AddTranslation(languageSection, Constants.ENV);
-				AddTranslation(languageSection, Constants.EXISTS);
-				AddTranslation(languageSection, Constants.FINDFILES);
-				AddTranslation(languageSection, Constants.FINDSTR);
-				AddTranslation(languageSection, Constants.FLOOR);
-				AddTranslation(languageSection, Constants.INDEX_OF);
-				AddTranslation(languageSection, Constants.KILL);
-				AddTranslation(languageSection, Constants.MKDIR);
-				AddTranslation(languageSection, Constants.MORE);
-				AddTranslation(languageSection, Constants.MOVE);
- 				AddTranslation(languageSection, Constants.PSINFO);
-				AddTranslation(languageSection, Constants.PWD);
-        AddTranslation(languageSection, Constants.READ);
-        AddTranslation(languageSection, Constants.READFILE);
-        AddTranslation(languageSection, Constants.READNUMBER);
-				AddTranslation(languageSection, Constants.ROUND);
-				AddTranslation(languageSection, Constants.RUN);
-				AddTranslation(languageSection, Constants.SET);
-				AddTranslation(languageSection, Constants.SETENV);
-				AddTranslation(languageSection, Constants.SIZE);
-				AddTranslation(languageSection, Constants.SUBSTR);
-				AddTranslation(languageSection, Constants.TAIL);
-				AddTranslation(languageSection, Constants.TOLOWER);
-				AddTranslation(languageSection, Constants.TOUPPER);
-        AddTranslation(languageSection, Constants.WRITE);
-				AddTranslation(languageSection, Constants.WRITELINE);
-				AddTranslation(languageSection, Constants.WRITELINES);
-        AddTranslation(languageSection, Constants.WRITENL);
-
-				// Special dealing for else, elif since they are not separate
-				// functions but are part of the if statement block.
-				// Same for and, or, not.
-				AddSubstatementTranslation(languageSection, Constants.ELSE,    Constants.ELSE_LIST);
-				AddSubstatementTranslation(languageSection, Constants.ELSE_IF, Constants.ELSE_IF_LIST);
-				AddSubstatementTranslation(languageSection, Constants.CATCH,   Constants.CATCH_LIST);
-			}
-		}
-
-		public int ReadConfig(string configName, int defaultValue = 0)
-		{
-			string config = ConfigurationManager.AppSettings[configName];
-			int value = defaultValue;
-			if (string.IsNullOrWhiteSpace(config) || !Int32.TryParse(config, out value))
-			{
-				return defaultValue;
-			}
-
-			return value;
-		}
-
-		public void AddTranslation(NameValueCollection languageDictionary, string originalName)
-		{
-			string translation = languageDictionary[originalName];
-			if (string.IsNullOrWhiteSpace(translation))
-			{ // The translation is not provided for this function.
-				return;
-			}
-
-			if (translation.IndexOfAny((" \t\r\n").ToCharArray()) >= 0)
-			{
-				throw new ArgumentException("Translation of [" + translation + "] contains white spaces");
-			}
-
-			ParserFunction originalFunction = ParserFunction.GetFunction(originalName);
-			ParserFunction.AddGlobal(translation, originalFunction);
-
-			// If the list of functions after which there can be a space (becides a parenthesis)
-			// contains the original function, also add the translation to the list.
-			if (Constants.FUNCT_WITH_SPACE.Contains(originalName)) {
-				Constants.FUNCT_WITH_SPACE.Add(translation);
-			}
-		}
-
-		public void AddSubstatementTranslation(NameValueCollection languageDictionary,
-			string originalName, List<string> keywordsArray)
-		{
-			string translation = languageDictionary[originalName];
-			if (string.IsNullOrWhiteSpace(translation))
-			{ // The translation is not provided for this sub statement.
-				return;
-			}
-
-			if (translation.IndexOfAny((" \t\r\n").ToCharArray()) >= 0)
-			{
-				throw new ArgumentException("Translation of [" + translation + "] contains white spaces");
-			}
-
-			keywordsArray.Add(translation);
 		}
 
 		public Variable Process(string script)
@@ -420,7 +289,7 @@ if (exception != null ||
 			} else {
 				SkipBlock (data, ref from);
 			}
-				
+
 			SkipRestBlocks(data, ref from);
 			return result;
 		}

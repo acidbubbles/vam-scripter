@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -354,7 +353,7 @@ namespace SplitAndMerge
 
         throw new ArgumentException("Can't perform action [" +
 					leftCell.Action + "] on strings");
-				
+
 			}
 		}
 
