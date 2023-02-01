@@ -9,9 +9,11 @@ public class Scripter : MVRScript
         _scriptJSON.valNoCallback = @"
 x = 0;
 x++;
+return x;
 ";
 
-        // ProcessScript(_scriptJSON.val);
+        CreateTextField(_scriptJSON);
+        ProcessScript(_scriptJSON.val);
     }
 
     private static void ProcessScript(string script)
@@ -27,24 +29,24 @@ x++;
             errorMsg = exc.Message;
             ParserFunction.InvalidateStacksAfterLevel(0);
         }
-
+        //
         var output = Interpreter.Instance.Output;
         if (!string.IsNullOrEmpty(output))
         {
-            Console.WriteLine(output);
+            SuperController.LogMessage(output);
         }
         else if (result != null)
         {
             output = result.AsString(false);
             if (!string.IsNullOrEmpty(output))
             {
-                Console.WriteLine(output);
+                SuperController.LogMessage(output);
             }
         }
-
+        //
         if (!string.IsNullOrEmpty(errorMsg))
         {
-            Console.WriteLine(errorMsg);
+            SuperController.LogMessage(errorMsg);
         }
     }
 }

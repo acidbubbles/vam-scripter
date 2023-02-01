@@ -91,7 +91,7 @@ public static class Constants
     public static char[] EndParseArray = " ;)}\n".ToCharArray();
     public static char[] NextOrEndArray = { NextArg, EndArg, /*START_GROUP,*/ EndGroup, EndStatement, Space };
 
-    public static char[] TokenSeparation = ("<>=+-*/%&|^\t " + Environment.NewLine +
+    public static char[] TokenSeparation = ("<>=+-*/%&|^\t " + "\r\n" +
                                              Not + StartArg + EndArg + StartGroup + EndGroup + NextArg + EndStatement).ToCharArray();
 
     // Functions that allow a space separator after them, on top of parentheses. The

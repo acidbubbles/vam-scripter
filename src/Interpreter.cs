@@ -50,7 +50,7 @@ public class Interpreter
         if (handler != null)
         {
             var args = new OutputAvailableEventArgs();
-            args.Output = text + (newLine ? Environment.NewLine : string.Empty);
+            args.Output = text + (newLine ? "\r\n" : string.Empty);
             handler(this, args);
         }
     }
@@ -282,7 +282,7 @@ public class Interpreter
                 continue;
             }
 
-            result += Environment.NewLine + "  " + stackLevel.Name + "()";
+            result += "\r\n" + "  " + stackLevel.Name + "()";
         }
 
         if (!string.IsNullOrEmpty(result))

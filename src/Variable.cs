@@ -4,14 +4,14 @@ using System.Text;
 
 public class Variable
 {
-    public enum VarType
+    public static class VarType
     {
-        None,
-        Number,
-        String,
-        Array,
-        Break,
-        Continue
+        public const int None = 1;
+        public const int Number = 2;
+        public const int String = 3;
+        public const int Array = 4;
+        public const int Break = 5;
+        public const int Continue = 6;
     };
 
     public Variable()
@@ -20,7 +20,7 @@ public class Variable
         Reset();
     }
 
-    public Variable(VarType type)
+    public Variable(int type)
     {
         Type = type;
     }
@@ -145,7 +145,7 @@ public class Variable
         if (isList)
         {
             sb.Append(Constants.StartGroup.ToString() +
-                      (sameLine ? "" : Environment.NewLine));
+                      (sameLine ? "" : "\r\n"));
         }
 
         for (var i = 0; i < _mTuple.Count; i++)
@@ -154,14 +154,14 @@ public class Variable
             sb.Append(arg.AsString(isList, sameLine));
             if (i != _mTuple.Count - 1)
             {
-                sb.Append(sameLine ? " " : Environment.NewLine);
+                sb.Append(sameLine ? " " : "\r\n");
             }
         }
 
         if (isList)
         {
             sb.Append(Constants.EndGroup.ToString() +
-                      (sameLine ? " " : Environment.NewLine));
+                      (sameLine ? " " : "\r\n"));
         }
 
         return sb.ToString();
@@ -198,7 +198,7 @@ public class Variable
     }
 
     public string Action { get; set; }
-    public VarType Type { get; set; }
+    public int Type { get; set; }
 
     public static Variable EmptyInstance = new Variable();
 
