@@ -72,7 +72,6 @@ public class FunctionCreator : ParserFunction
     protected override Variable Evaluate(string data, ref int from)
     {
         var funcName = Utils.GetToken(data, ref from, Constants.TokenSeparation);
-        _mInterpreter.AppendOutput("Registering function [" + funcName + "] ...");
 
         var args = Utils.GetFunctionSignature(data, ref from);
         if (args.Length == 1 && string.IsNullOrEmpty(args[0]))

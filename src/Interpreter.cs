@@ -30,31 +30,6 @@ public class Interpreter
 
     private int _maxLoops = 10000;
 
-    private readonly StringBuilder _mOutput = new StringBuilder();
-
-    public string Output
-    {
-        get
-        {
-            var output = _mOutput.ToString().Trim();
-            _mOutput.Length = 0;
-            return output;
-        }
-    }
-
-    public event EventHandler<OutputAvailableEventArgs> GetOutput;
-
-    public void AppendOutput(string text, bool newLine = true)
-    {
-        var handler = GetOutput;
-        if (handler != null)
-        {
-            var args = new OutputAvailableEventArgs();
-            args.Output = text + (newLine ? "\r\n" : string.Empty);
-            handler(this, args);
-        }
-    }
-
     public void Init()
     {
         ParserFunction.AddGlobal(Constants.If, new IfStatement(this));

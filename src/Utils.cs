@@ -51,21 +51,6 @@ public partial class Utils
         }
     }
 
-    public static List<Variable> ConvertToResults(string[] items, Interpreter interpreter = null)
-    {
-        var results = new List<Variable>(items.Length);
-        foreach (var item in items)
-        {
-            results.Add(new Variable(item));
-            if (interpreter != null)
-            {
-                interpreter.AppendOutput(item);
-            }
-        }
-
-        return results;
-    }
-
     public static void PrintList(List<Variable> list, int from)
     {
         Console.Write("Merging list:");
