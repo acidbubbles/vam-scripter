@@ -42,7 +42,6 @@ public static class Constants
     public const string Continue = "continue";
     public const string Function = "function";
     public const string Return = "return";
-    public const string Include = "include";
     public const string Try = "try";
     public const string Catch = "catch";
     public const string Throw = "throw";
@@ -50,52 +49,23 @@ public static class Constants
 
     public const string Abs = "abs";
     public const string Acos = "acos";
-    public const string Append = "append";
-    public const string Appendline = "appendline";
-    public const string Appendlines = "appendlines";
     public const string Asin = "asin";
-    public const string Copy = "copy";
     public const string Ceil = "ceil";
-    public const string Connectsrv = "connectsrv";
     public const string Cos = "cos";
-    public const string Dir = "dir";
-    public const string Delete = "del";
-    public const string Env = "env";
-    public const string Exists = "exists";
     public const string Exp = "exp";
-    public const string Findfiles = "findfiles";
-    public const string Findstr = "findstr";
     public const string Floor = "floor";
     public const string IndexOf = "indexof";
-    public const string Kill = "kill";
     public const string LOG = "log";
-    public const string Mkdir = "mkdir";
-    public const string More = "more";
-    public const string Move = "move";
     public const string PI = "pi";
     public const string Pow = "pow";
-    public const string Psinfo = "psinfo";
-    public const string Pstime = "pstime";
-    public const string Pwd = "pwd";
-    public const string Read = "read";
-    public const string Readfile = "readfile";
-    public const string Readnumber = "readnum";
     public const string Round = "round";
-    public const string Run = "run";
-    public const string Setenv = "setenv";
     public const string Set = "set";
     public const string Sin = "sin";
     public const string Size = "size";
     public const string Sqrt = "sqrt";
-    public const string Startsrv = "startsrv";
     public const string Substr = "substr";
-    public const string Tail = "tail";
     public const string Tolower = "tolower";
     public const string Toupper = "toupper";
-    public const string Write = "write";
-    public const string Writeline = "writeline";
-    public const string Writelines = "writelines";
-    public const string Writenl = "writenl";
 
     public static string EndArgStr = EndArg.ToString();
 
@@ -128,8 +98,7 @@ public static class Constants
     // function arguments may have spaces as well, e.g. copy a.txt b.txt
     public static List<string> FunctWithSpace = new List<string>
     {
-        Appendline, Connectsrv, Copy, Delete, Dir, Exists, Findfiles, Findstr,
-        Function, Mkdir, More, Move, Readfile, Run, Startsrv, Tail, Write, Writeline, Writenl
+        Function
     };
 
     // Functions that allow a space separator after them, on top of parentheses but
@@ -144,7 +113,7 @@ public static class Constants
     // use in calculation of a result.
     public static List<string> ControlFlow = new List<string>
     {
-        Break, Continue, Function, If, Include, While, Return, Throw, Try
+        Break, Continue, Function, If, While, Return, Throw, Try
     };
 
     public static List<string> ElseList = new List<string>();

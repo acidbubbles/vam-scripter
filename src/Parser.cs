@@ -121,7 +121,7 @@ public class Parser
             var cell = new Variable(current);
             cell.Action = action;
             listToMerge.Add(cell);
-            item.Clear();
+            item.Length = 0;
         } while (from < data.Length && (inQuotes || !to.Contains(data[from])));
 
         // This happens when called recursively inside of the math expression:

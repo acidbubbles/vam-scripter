@@ -28,7 +28,7 @@ public class Interpreter
         }
     }
 
-    private int _maxLoops;
+    private int _maxLoops = 10000;
 
     private readonly StringBuilder _mOutput = new StringBuilder();
 
@@ -37,7 +37,7 @@ public class Interpreter
         get
         {
             var output = _mOutput.ToString().Trim();
-            _mOutput.Clear();
+            _mOutput.Length = 0;
             return output;
         }
     }
@@ -63,58 +63,28 @@ public class Interpreter
         ParserFunction.AddGlobal(Constants.Continue, new ContinueStatement());
         ParserFunction.AddGlobal(Constants.Return, new ReturnStatement());
         ParserFunction.AddGlobal(Constants.Function, new FunctionCreator(this));
-        ParserFunction.AddGlobal(Constants.Include, new IncludeFile());
         ParserFunction.AddGlobal(Constants.Throw, new ThrowFunction());
         ParserFunction.AddGlobal(Constants.Try, new TryBlock(this));
 
         ParserFunction.AddGlobal(Constants.Abs, new AbsFunction());
         ParserFunction.AddGlobal(Constants.Acos, new AcosFunction());
-        ParserFunction.AddGlobal(Constants.Append, new AppendFunction());
-        ParserFunction.AddGlobal(Constants.Appendline, new AppendLineFunction());
-        ParserFunction.AddGlobal(Constants.Appendlines, new AppendLinesFunction());
         ParserFunction.AddGlobal(Constants.Asin, new AsinFunction());
         ParserFunction.AddGlobal(Constants.Ceil, new CeilFunction());
-        ParserFunction.AddGlobal(Constants.Connectsrv, new ClientSocket(this));
-        ParserFunction.AddGlobal(Constants.Copy, new CopyFunction());
         ParserFunction.AddGlobal(Constants.Cos, new CosFunction());
-        ParserFunction.AddGlobal(Constants.Delete, new DeleteFunction());
-        ParserFunction.AddGlobal(Constants.Dir, new DirFunction(this));
-        ParserFunction.AddGlobal(Constants.Env, new GetEnvFunction());
-        ParserFunction.AddGlobal(Constants.Exists, new ExistsFunction());
         ParserFunction.AddGlobal(Constants.Exp, new ExpFunction());
-        ParserFunction.AddGlobal(Constants.Findfiles, new FindfilesFunction(this));
-        ParserFunction.AddGlobal(Constants.Findstr, new FindstrFunction(this));
         ParserFunction.AddGlobal(Constants.Floor, new FloorFunction());
         ParserFunction.AddGlobal(Constants.IndexOf, new IndexOfFunction());
-        ParserFunction.AddGlobal(Constants.Kill, new KillFunction(this));
         ParserFunction.AddGlobal(Constants.LOG, new LogFunction());
-        ParserFunction.AddGlobal(Constants.Mkdir, new MkdirFunction());
-        ParserFunction.AddGlobal(Constants.More, new MoreFunction());
-        ParserFunction.AddGlobal(Constants.Move, new MoveFunction());
         ParserFunction.AddGlobal(Constants.PI, new PiFunction());
         ParserFunction.AddGlobal(Constants.Pow, new PowFunction());
-        ParserFunction.AddGlobal(Constants.Psinfo, new PsInfoFunction(this));
-        ParserFunction.AddGlobal(Constants.Pstime, new ProcessorTimeFunction());
-        ParserFunction.AddGlobal(Constants.Pwd, new PwdFunction(this));
-        ParserFunction.AddGlobal(Constants.Read, new ReadConsole());
-        ParserFunction.AddGlobal(Constants.Readfile, new ReadFileFunction(this));
-        ParserFunction.AddGlobal(Constants.Readnumber, new ReadConsole(true));
         ParserFunction.AddGlobal(Constants.Round, new RoundFunction());
-        ParserFunction.AddGlobal(Constants.Run, new RunFunction(this));
         ParserFunction.AddGlobal(Constants.Set, new SetVarFunction());
-        ParserFunction.AddGlobal(Constants.Setenv, new SetEnvFunction());
         ParserFunction.AddGlobal(Constants.Sin, new SinFunction());
         ParserFunction.AddGlobal(Constants.Size, new SizeFunction());
         ParserFunction.AddGlobal(Constants.Sqrt, new SqrtFunction());
-        ParserFunction.AddGlobal(Constants.Startsrv, new ServerSocket(this));
         ParserFunction.AddGlobal(Constants.Substr, new SubstrFunction());
-        ParserFunction.AddGlobal(Constants.Tail, new TailFunction());
         ParserFunction.AddGlobal(Constants.Tolower, new ToLowerFunction());
         ParserFunction.AddGlobal(Constants.Toupper, new ToUpperFunction());
-        ParserFunction.AddGlobal(Constants.Write, new PrintFunction(this, false));
-        ParserFunction.AddGlobal(Constants.Writeline, new WriteLineFunction());
-        ParserFunction.AddGlobal(Constants.Writelines, new WriteLinesFunction());
-        ParserFunction.AddGlobal(Constants.Writenl, new PrintFunction(this, true));
 
         ParserFunction.AddAction(Constants.Assignment, new AssignFunction());
         ParserFunction.AddAction(Constants.Increment, new IncrementDecrementFunction());
@@ -133,7 +103,7 @@ public class Interpreter
     public Variable Process(string script)
     {
         var data = Utils.ConvertToScript(script);
-        if (string.IsNullOrWhiteSpace(data))
+        if (string.IsNullOrEmpty(data))
         {
             return null;
         }
@@ -307,7 +277,7 @@ public class Interpreter
                 break;
             }
 
-            if (string.IsNullOrWhiteSpace(stackLevel.Name))
+            if (string.IsNullOrEmpty(stackLevel.Name))
             {
                 continue;
             }
@@ -315,7 +285,7 @@ public class Interpreter
             result += Environment.NewLine + "  " + stackLevel.Name + "()";
         }
 
-        if (!string.IsNullOrWhiteSpace(result))
+        if (!string.IsNullOrEmpty(result))
         {
             result = " at" + result;
         }

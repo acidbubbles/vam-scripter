@@ -519,7 +519,7 @@ public partial class Utils
         {
             var ch = data[from];
 
-            if (string.IsNullOrWhiteSpace(ch.ToString()) && sb.Length == 0)
+            if (string.IsNullOrEmpty(ch.ToString()) && sb.Length == 0)
             {
                 continue;
             }

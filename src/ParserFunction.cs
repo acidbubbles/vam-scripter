@@ -26,9 +26,9 @@ public class ParserFunction
 
         _mImpl = GetFunctionOrAction(item, ref action);
 
-        if (_mImpl == _sStrOrNumFunction && string.IsNullOrWhiteSpace(item))
+        if (_mImpl == _sStrOrNumFunction && string.IsNullOrEmpty(item))
         {
-            var problem = (!string.IsNullOrWhiteSpace(action) ? action : ch.ToString());
+            var problem = (!string.IsNullOrEmpty(action) ? action : ch.ToString());
             var restData = ch.ToString() +
                            data.Substring(from, Math.Min(data.Length - from - 1, Constants.MaxErrorChars));
             throw new ArgumentException("Couldn't parse [" + problem + "] in " + restData + "...");
@@ -37,7 +37,7 @@ public class ParserFunction
 
     public static ParserFunction GetArrayFunction(string name, ref int from, string action)
     {
-        if (!string.IsNullOrWhiteSpace(action))
+        if (!string.IsNullOrEmpty(action))
         {
             return null;
         }
@@ -119,7 +119,7 @@ public class ParserFunction
 
     public static ActionFunction GetAction(string action)
     {
-        if (string.IsNullOrWhiteSpace(action))
+        if (string.IsNullOrEmpty(action))
         {
             return null;
         }

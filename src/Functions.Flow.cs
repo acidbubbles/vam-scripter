@@ -75,7 +75,7 @@ public class FunctionCreator : ParserFunction
         _mInterpreter.AppendOutput("Registering function [" + funcName + "] ...");
 
         var args = Utils.GetFunctionSignature(data, ref from);
-        if (args.Length == 1 && string.IsNullOrWhiteSpace(args[0]))
+        if (args.Length == 1 && string.IsNullOrEmpty(args[0]))
         {
             args = new string[0];
         }
@@ -211,28 +211,6 @@ public class WhileStatement : ParserFunction
     private readonly Interpreter _mInterpreter;
 }
 
-public class IncludeFile : ParserFunction
-{
-    protected override Variable Evaluate(string data, ref int from)
-    {
-        var filename = Utils.GetItem(data, ref from).AsString();
-        var lines = Utils.GetFileLines(filename);
-
-        var includeFile = string.Join(Environment.NewLine, lines);
-        var includeScript = Utils.ConvertToScript(includeFile);
-
-        var filePtr = 0;
-        while (filePtr < includeScript.Length)
-        {
-            Parser.LoadAndCalculate(includeScript, ref filePtr,
-                Constants.EndLineArray);
-            Utils.GoToNextStatement(includeScript, ref filePtr);
-        }
-
-        return Variable.EmptyInstance;
-    }
-}
-
 // Get a value of a variable or of an array element
 public class GetVarFunction : ParserFunction
 {
@@ -278,7 +256,7 @@ public class IncrementDecrementFunction : ActionFunction
 {
     protected override Variable Evaluate(string data, ref int from)
     {
-        var prefix = string.IsNullOrWhiteSpace(MName);
+        var prefix = string.IsNullOrEmpty(MName);
         if (prefix) // If it is a prefix we do not have variable name yet.
         {
             MName = Utils.GetToken(data, ref from, Constants.TokenSeparation);
