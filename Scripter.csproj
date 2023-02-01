@@ -69,10 +69,41 @@
 
   <ItemGroup>
     <!-- ScripterSource -->
+    <Compile Include="src\Functions\AbsFunction.cs" />
+    <Compile Include="src\Functions\AcosFunction.cs" />
+    <Compile Include="src\Functions\AsinFunction.cs" />
+    <Compile Include="src\Functions\AssignFunction.cs" />
+    <Compile Include="src\Functions\CeilFunction.cs" />
+    <Compile Include="src\Functions\CosFunction.cs" />
+    <Compile Include="src\Functions\CustomFunction.cs" />
+    <Compile Include="src\Functions\ExpFunction.cs" />
+    <Compile Include="src\Functions\FloorFunction.cs" />
+    <Compile Include="src\Functions\FunctionCreator.cs" />
+    <Compile Include="src\Functions\GetVarFunction.cs" />
+    <Compile Include="src\Functions\IdentityFunction.cs" />
+    <Compile Include="src\Functions\IfStatement.cs" />
+    <Compile Include="src\Functions\IncrementDecrementFunction.cs" />
+    <Compile Include="src\Functions\IndexOfFunction.cs" />
+    <Compile Include="src\Functions\LogFunction.cs" />
+    <Compile Include="src\Functions\OperatorAssignFunction.cs" />
+    <Compile Include="src\Functions\PiFunction.cs" />
+    <Compile Include="src\Functions\PowFunction.cs" />
+    <Compile Include="src\Functions\RoundFunction.cs" />
+    <Compile Include="src\Functions\SetVarFunction.cs" />
+    <Compile Include="src\Functions\SinFunction.cs" />
+    <Compile Include="src\Functions\SizeFunction.cs" />
+    <Compile Include="src\Functions\SqrtFunction.cs" />
+    <Compile Include="src\Functions\StringOrNumberFunction.cs" />
+    <Compile Include="src\Functions\SubstrFunction.cs" />
+    <Compile Include="src\Functions\ThrowFunction.cs" />
+    <Compile Include="src\Functions\ToLowerFunction.cs" />
+    <Compile Include="src\Functions\ToUpperFunction.cs" />
+    <Compile Include="src\Statements\BreakStatement.cs" />
+    <Compile Include="src\Statements\ContinueStatement.cs" />
+    <Compile Include="src\Statements\ReturnStatement.cs" />
+    <Compile Include="src\Statements\TryBlock.cs" />
+    <Compile Include="src\Statements\WhileStatement.cs" />
     <Compile Include="src\Constants.cs" />
-    <Compile Include="src\Functions.Flow.cs" />
-    <Compile Include="src\Functions.Math.cs" />
-    <Compile Include="src\Functions.Strings.cs" />
     <Compile Include="src\Interpreter.cs" />
     <Compile Include="src\Parser.cs" />
     <Compile Include="src\ParserFunction.cs" />

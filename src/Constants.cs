@@ -66,36 +66,36 @@ public static class Constants
     public const string Tolower = "tolower";
     public const string Toupper = "toupper";
 
-    public static string EndArgStr = EndArg.ToString();
+    public static readonly string EndArgStr = EndArg.ToString();
 
-    public static string[] OperActions = { "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=" };
+    public static readonly string[] OperActions = { "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=" };
 
-    public static string[] MathActions =
+    public static readonly string[] MathActions =
     {
         "&&", "||", "==", "!=", "<=", ">=", "++", "--",
         "%", "*", "/", "+", "-", "^", "<", ">", "="
     };
 
     // Actions: always decreasing by the number of characters.
-    public static string[] Actions = (OperActions.Union(MathActions)).ToArray();
+    public static readonly string[] Actions = (OperActions.Union(MathActions)).ToArray();
 
-    public static char[] NextArgArray = NextArg.ToString().ToCharArray();
-    public static char[] EndArgArray = EndArg.ToString().ToCharArray();
-    public static char[] EndArrayArray = EndArray.ToString().ToCharArray();
+    public static readonly char[] NextArgArray = NextArg.ToString().ToCharArray();
+    public static readonly char[] EndArgArray = EndArg.ToString().ToCharArray();
+    public static readonly char[] EndArrayArray = EndArray.ToString().ToCharArray();
     public static char[] EndLineArray = EndLine.ToString().ToCharArray();
-    public static char[] QuoteArray = Quote.ToString().ToCharArray();
+    public static readonly char[] QuoteArray = Quote.ToString().ToCharArray();
 
     public static char[] CompareArray = "<>=)".ToCharArray();
     public static char[] IfArgArray = "&|)".ToCharArray();
-    public static char[] EndParseArray = " ;)}\n".ToCharArray();
-    public static char[] NextOrEndArray = { NextArg, EndArg, /*START_GROUP,*/ EndGroup, EndStatement, Space };
+    public static readonly char[] EndParseArray = " ;)}\n".ToCharArray();
+    public static readonly char[] NextOrEndArray = { NextArg, EndArg, /*START_GROUP,*/ EndGroup, EndStatement, Space };
 
-    public static char[] TokenSeparation = ("<>=+-*/%&|^\t " + "\r\n" +
-                                             Not + StartArg + EndArg + StartGroup + EndGroup + NextArg + EndStatement).ToCharArray();
+    public static readonly char[] TokenSeparation = ("<>=+-*/%&|^\t " + "\r\n" +
+                                                     Not + StartArg + EndArg + StartGroup + EndGroup + NextArg + EndStatement).ToCharArray();
 
     // Functions that allow a space separator after them, on top of parentheses. The
     // function arguments may have spaces as well, e.g. copy a.txt b.txt
-    public static List<string> FunctWithSpace = new List<string>
+    public static readonly List<string> FunctWithSpace = new List<string>
     {
         Function
     };
@@ -103,25 +103,21 @@ public static class Constants
     // Functions that allow a space separator after them, on top of parentheses but
     // only once, i.e. function arguments are not allowed to have spaces
     // between them e.g. return a*b;
-    public static List<string> FunctWithSpaceOnce = new List<string>
+    public static readonly List<string> FunctWithSpaceOnce = new List<string>
     {
         Return
     };
 
     // The Control Flow Functions. It doesn't make sense to merge them or
     // use in calculation of a result.
-    public static List<string> ControlFlow = new List<string>
+    public static readonly List<string> ControlFlow = new List<string>
     {
         Break, Continue, Function, If, While, Return, Throw, Try
     };
 
-    public static List<string> ElseList = new List<string>();
-    public static List<string> ElseIfList = new List<string>();
-    public static List<string> CatchList = new List<string>();
+    public static readonly List<string> ElseList = new List<string>();
+    public static readonly List<string> ElseIfList = new List<string>();
+    public static readonly List<string> CatchList = new List<string>();
 
-    public static int DefaultFileLines = 20;
-
-    public static string AllFiles = "*.*";
-
-    public static int MaxErrorChars = 20;
+    public static readonly int MaxErrorChars = 20;
 }

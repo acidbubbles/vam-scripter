@@ -31,7 +31,7 @@ public class ParserFunction
             var problem = (!string.IsNullOrEmpty(action) ? action : ch.ToString());
             var restData = ch.ToString() +
                            data.Substring(from, Math.Min(data.Length - from - 1, Constants.MaxErrorChars));
-            throw new ArgumentException("Couldn't parse [" + problem + "] in " + restData + "...");
+            throw new ArgumentException($"Couldn't parse [{problem}] in {restData}...");
         }
     }
 

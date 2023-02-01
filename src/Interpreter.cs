@@ -119,8 +119,7 @@ public class Interpreter
             // Check for an infinite loop if we are comparing same values:
             if (_maxLoops > 0 && ++cycles >= _maxLoops)
             {
-                throw new ArgumentException("Looks like an infinite loop after " +
-                                            cycles + " cycles.");
+                throw new ArgumentException($"Looks like an infinite loop after {cycles} cycles.");
             }
 
             var result = ProcessBlock(data, ref from);
@@ -213,8 +212,7 @@ public class Interpreter
         // The next token after the try block must be a catch.
         if (!Constants.CatchList.Contains(catchToken))
         {
-            throw new ArgumentException("Expecting a 'catch()' but got [" +
-                                        catchToken + "]");
+            throw new ArgumentException($"Expecting a 'catch()' but got [{catchToken}]");
         }
 
         var exceptionName = Utils.GetNextToken(data, ref from);
@@ -257,12 +255,12 @@ public class Interpreter
                 continue;
             }
 
-            result += "\r\n" + "  " + stackLevel.Name + "()";
+            result += $"\r\n  {stackLevel.Name}()";
         }
 
         if (!string.IsNullOrEmpty(result))
         {
-            result = " at" + result;
+            result = $" at{result}";
         }
 
         return result;
@@ -283,8 +281,7 @@ public class Interpreter
 
             if (from >= data.Length)
             {
-                throw new ArgumentException("Couldn't process block [" +
-                                            data.Substring(blockStart) + "]");
+                throw new ArgumentException($"Couldn't process block [{data.Substring(blockStart)}]");
             }
 
             result = Parser.LoadAndCalculate(data, ref from, Constants.EndParseArray);
@@ -309,7 +306,7 @@ public class Interpreter
         {
             if (from >= data.Length)
             {
-                throw new ArgumentException("Couldn't skip block [" + data.Substring(blockStart) + "]");
+                throw new ArgumentException($"Couldn't skip block [{data.Substring(blockStart)}]");
             }
 
             var currentChar = data[from++];

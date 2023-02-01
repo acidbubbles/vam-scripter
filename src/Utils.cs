@@ -7,8 +7,7 @@ public partial class Utils
     {
         if (args < expected)
         {
-            throw new ArgumentException("Expecting " + expected +
-                                        " arguments but got " + args + " in " + msg);
+            throw new ArgumentException($"Expecting {expected} arguments but got {args} in {msg}");
         }
     }
 
@@ -17,8 +16,7 @@ public partial class Utils
         CheckInteger(variable);
         if (variable.Value <= 0)
         {
-            throw new ArgumentException("Expecting a positive integer instead of [" +
-                                        variable.Value + "]");
+            throw new ArgumentException($"Expecting a positive integer instead of [{variable.Value}]");
         }
     }
 
@@ -27,8 +25,7 @@ public partial class Utils
         CheckInteger(variable);
         if (variable.Value < 0)
         {
-            throw new ArgumentException("Expecting a non  negative integer instead of [" +
-                                        variable.Value + "]");
+            throw new ArgumentException($"Expecting a non  negative integer instead of [{variable.Value}]");
         }
     }
 
@@ -37,8 +34,7 @@ public partial class Utils
         CheckNumber(variable);
         if (variable.Value % 1 != 0)
         {
-            throw new ArgumentException("Expecting an integer instead of [" +
-                                        variable.Value + "]");
+            throw new ArgumentException($"Expecting an integer instead of [{variable.Value}]");
         }
     }
 
@@ -46,8 +42,7 @@ public partial class Utils
     {
         if (variable.Type != Variable.VarType.Number)
         {
-            throw new ArgumentException("Expecting a number instead of [" +
-                                        variable.String + "]");
+            throw new ArgumentException($"Expecting a number instead of [{variable.String}]");
         }
     }
 

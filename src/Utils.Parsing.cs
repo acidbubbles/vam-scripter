@@ -87,7 +87,7 @@ public partial class Utils
 
         if (end < from)
         {
-            throw new ArgumentException("Couldn't extract token from " + data.Substring(from));
+            throw new ArgumentException($"Couldn't extract token from {data.Substring(from)}");
         }
 
         if (data[end - 1] == Constants.Quote)
@@ -186,7 +186,7 @@ public partial class Utils
                 return data.Substring(from++, 1);
             }
 
-            throw new ArgumentException("Couldn't extract comparison token from " + data.Substring(from));
+            throw new ArgumentException($"Couldn't extract comparison token from {data.Substring(from)}");
         }
 
         var result = data.Substring(from, 2);
@@ -497,12 +497,12 @@ public partial class Utils
 
         if (parentheses != 0)
         {
-            throw new ArgumentException("Uneven parentheses " + Constants.StartArg + Constants.EndArg);
+            throw new ArgumentException($"Uneven parentheses {Constants.StartArg}{Constants.EndArg}");
         }
 
         if (groups != 0)
         {
-            throw new ArgumentException("Uneven groups " + Constants.StartGroup + Constants.EndGroup);
+            throw new ArgumentException($"Uneven groups {Constants.StartGroup}{Constants.EndGroup}");
         }
 
         return sb.ToString();

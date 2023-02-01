@@ -14,8 +14,7 @@ public class Parser
 
         if (listToMerge.Count == 0)
         {
-            throw new ArgumentException("Couldn't parse [" +
-                                        data.Substring(from) + "]");
+            throw new ArgumentException($"Couldn't parse [{data.Substring(from)}]");
         }
 
         // If there is just one resulting cell there is no need
@@ -138,9 +137,7 @@ public class Parser
             // This can happen when the end of statement ";" is forgotten.
 
 
-            throw new ArgumentException("Token [" +
-                                        item + "] can't be part of an expression. Check \";\". Stopped at [" +
-                                        data.Substring(from - 1, Constants.MaxErrorChars) + " ...]");
+            throw new ArgumentException($"Token [{item}] can't be part of an expression. Check \";\". Stopped at [{data.Substring(from - 1, Constants.MaxErrorChars)} ...]");
         }
     }
 
@@ -166,9 +163,9 @@ public class Parser
         }
 
         // Case of a scientific notation 1.2e+5 or 1.2e-5 or 1e5:
-        if (Char.ToUpper(prev) == 'E' &&
-            (ch == '-' || ch == '+' || Char.IsDigit(ch)) &&
-            item.Length > 1 && Char.IsDigit(item[item.Length - 2]))
+        if (char.ToUpper(prev) == 'E' &&
+            (ch == '-' || ch == '+' || char.IsDigit(ch)) &&
+            item.Length > 1 && char.IsDigit(item[item.Length - 2]))
         {
             return true;
         }
@@ -284,8 +281,7 @@ public class Parser
         if (leftCell.Action != "+" &&
             rightCell.Type != Variable.VarType.Number)
         {
-            throw new ArgumentException("Can't merge a number " +
-                                        leftCell.Value + " with [" + rightCell.AsString() + "]");
+            throw new ArgumentException($"Can't merge a number {leftCell.Value} with [{rightCell.AsString()}]");
         }
 
         switch (leftCell.Action)
@@ -359,32 +355,31 @@ public class Parser
                 break;
             case "<":
                 leftCell.Value = Convert.ToDouble(
-                    string.Compare(leftCell.String, rightCell.String) < 0);
+                    string.CompareOrdinal(leftCell.String, rightCell.String) < 0);
                 break;
             case ">":
                 leftCell.Value = Convert.ToDouble(
-                    string.Compare(leftCell.String, rightCell.String) > 0);
+                    string.CompareOrdinal(leftCell.String, rightCell.String) > 0);
                 break;
             case "<=":
                 leftCell.Value = Convert.ToDouble(
-                    string.Compare(leftCell.String, rightCell.String) <= 0);
+                    string.CompareOrdinal(leftCell.String, rightCell.String) <= 0);
                 break;
             case ">=":
                 leftCell.Value = Convert.ToDouble(
-                    string.Compare(leftCell.String, rightCell.String) >= 0);
+                    string.CompareOrdinal(leftCell.String, rightCell.String) >= 0);
                 break;
             case "==":
                 leftCell.Value = Convert.ToDouble(
-                    string.Compare(leftCell.String, rightCell.String) == 0);
+                    string.CompareOrdinal(leftCell.String, rightCell.String) == 0);
                 break;
             case "!=":
                 leftCell.Value = Convert.ToDouble(
-                    string.Compare(leftCell.String, rightCell.String) != 0);
+                    string.CompareOrdinal(leftCell.String, rightCell.String) != 0);
                 break;
             default:
 
-                throw new ArgumentException("Can't perform action [" +
-                                            leftCell.Action + "] on strings");
+                throw new ArgumentException($"Can't perform action [{leftCell.Action}] on strings");
         }
     }
 

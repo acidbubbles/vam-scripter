@@ -67,7 +67,7 @@ public class Variable
 
     public void Reset()
     {
-        Value = Double.NaN;
+        Value = double.NaN;
         String = null;
         Tuple = null;
         Action = null;
@@ -92,18 +92,18 @@ public class Variable
             return false;
         }
 
-        if (Double.IsNaN(Value) != Double.IsNaN(other.Value) ||
-            (!Double.IsNaN(Value) && Value != other.Value))
+        if (double.IsNaN(Value) != double.IsNaN(other.Value) ||
+            (!double.IsNaN(Value) && Value != other.Value))
         {
             return false;
         }
 
-        if (!String.Equals(String, other.String, StringComparison.Ordinal))
+        if (!string.Equals(String, other.String, StringComparison.Ordinal))
         {
             return false;
         }
 
-        if (!String.Equals(Action, other.Action, StringComparison.Ordinal))
+        if (!string.Equals(Action, other.Action, StringComparison.Ordinal))
         {
             return false;
         }
@@ -200,7 +200,7 @@ public class Variable
     public string Action { get; set; }
     public int Type { get; set; }
 
-    public static Variable EmptyInstance = new Variable();
+    public static readonly Variable EmptyInstance = new Variable();
 
     private double _mValue;
     private string _mString;
