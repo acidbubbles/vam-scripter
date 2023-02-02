@@ -2,6 +2,7 @@
 {
     public static class TokenType
     {
+        public const int None = 0;
         public const int Number = 1;
         public const int Operator = 2;
         public const int String = 3;

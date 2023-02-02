@@ -29,32 +29,49 @@
                     {
                         return Value.CreateString(left.String + right.String);
                     }
-
-                    break;
+                    throw MakeUnsupportedOperandsException(left, right);
                 case "-":
                     if (left.Type == ValueTypes.NumberType && right.Type == ValueTypes.NumberType)
                     {
                         return Value.CreateNumber(left.Number - right.Number);
                     }
-
-                    break;
+                    throw MakeUnsupportedOperandsException(left, right);
                 case "*":
                     if (left.Type == ValueTypes.NumberType && right.Type == ValueTypes.NumberType)
                     {
                         return Value.CreateNumber(left.Number * right.Number);
                     }
-
-                    break;
+                    throw MakeUnsupportedOperandsException(left, right);
                 case "/":
                     if (left.Type == ValueTypes.NumberType && right.Type == ValueTypes.NumberType)
                     {
                         return Value.CreateNumber(left.Number / right.Number);
                     }
-
-                    break;
+                    throw MakeUnsupportedOperandsException(left, right);
+                case "&&":
+                    if (left.Type == ValueTypes.BooleanType && right.Type == ValueTypes.BooleanType)
+                    {
+                        return Value.CreateBoolean(left.AsBool && right.AsBool);
+                    }
+                    throw MakeUnsupportedOperandsException(left, right);
+                case "||":
+                    if (left.Type == ValueTypes.BooleanType && right.Type == ValueTypes.BooleanType)
+                    {
+                        return Value.CreateBoolean(left.AsBool || right.AsBool);
+                    }
+                    throw MakeUnsupportedOperandsException(left, right);
+                case "==":
+                    return Value.CreateBoolean(left.Equals(right));
+                case "!=":
+                    return Value.CreateBoolean(!left.Equals(right));
             }
 
-            throw new ScripterRuntimeException($"Operator '{Operator}' is not supported for operands of type '{ValueTypes.Name(left.Type)}' and '{ValueTypes.Name(right.Type)}'.");
+            throw MakeUnsupportedOperandsException(left, right);
+        }
+
+        private ScripterRuntimeException MakeUnsupportedOperandsException(Value left, Value right)
+        {
+            return new ScripterRuntimeException($"Operator {Operator} is not supported on operands of type {ValueTypes.Name(left.Type)} and {ValueTypes.Name(right.Type)}");
         }
     }
 }

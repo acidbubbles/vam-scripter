@@ -12,7 +12,7 @@ public class Scripter : MVRScript
     private readonly JSONStorableAction _executeScriptJSON;
     private readonly JSONStorableString _consoleJSON;
     private readonly List<string> _history = new List<string>();
-    private List<Expression> _expressions;
+    private Expression _expression;
 
     public Scripter()
     {
@@ -47,9 +47,9 @@ if(x == 0) {
             if (_history.Count > 100) _history.RemoveAt(0);
             try
             {
-                _expressions = Parser.ParseExpressions(
+                _expression = Parser.Parse(
                     Tokenizer.Tokenize(val).ToList()
-                ).ToList();
+                );
                 _consoleJSON.val = "Code parsed successfully";
             }
             catch (Exception exc)
@@ -102,7 +102,7 @@ if(x == 0) {
     {
         try
         {
-            var result = _runtime.Evaluate(_expressions);
+            var result = _runtime.Evaluate(_expression);
         }
         catch (Exception exc)
         {

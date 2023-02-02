@@ -17,6 +17,17 @@ public class TokenizerTests
     }
 
     [Test]
+    public void AssignationsDeclaration()
+    {
+        var tokens = Tokenizer.Tokenize("""
+            x = 1;
+            y = 2;
+            """);
+
+        Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "x", "=", "1", ";", "y", "=", "2", ";" }));
+    }
+
+    [Test]
     public void FunctionCall()
     {
         var tokens = Tokenizer.Tokenize("""

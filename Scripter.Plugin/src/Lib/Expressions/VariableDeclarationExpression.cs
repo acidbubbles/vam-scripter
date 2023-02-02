@@ -1,8 +1,8 @@
 ﻿namespace ScripterLang
 {
-    public class DeclareExpression : Expression
+    public class VariableDeclarationExpression : Expression
     {
-        public DeclareExpression(string name, Expression expression)
+        public VariableDeclarationExpression(string name, Expression expression)
         {
             Name = name;
             Expression = expression;

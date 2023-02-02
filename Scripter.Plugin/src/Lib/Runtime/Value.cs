@@ -9,6 +9,7 @@ namespace ScripterLang
         public int Type;
         public double Number;
         public string String;
+        public bool AsBool => Number != 0;
 
         public static Value CreateNumber(double value)
         {
@@ -25,13 +26,25 @@ namespace ScripterLang
             return new Value { Type = ValueTypes.BooleanType, Number = value ? 1 : 0 };
         }
 
+        public bool Equals(Value other)
+        {
+            if (Type != other.Type) return false;
+            switch (Type)
+            {
+                case ValueTypes.NumberType: return Number == other.Number;
+                case ValueTypes.BooleanType: return Number == other.Number;
+                case ValueTypes.StringType: return String == other.String;
+                default: return false;
+            }
+        }
+
         public override string ToString()
         {
             switch (Type)
             {
                 case ValueTypes.StringType: return String;
                 case ValueTypes.NumberType: return Number.ToString(CultureInfo.InvariantCulture);
-                case ValueTypes.BooleanType: return Number == 0 ? "false" : "true";
+                case ValueTypes.BooleanType: return AsBool ? "true" : "false";
                 default: return ValueTypes.Name(Type);
             }
         }

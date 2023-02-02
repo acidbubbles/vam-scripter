@@ -1,10 +1,8 @@
-﻿using System.Linq.Expressions;
-
 namespace ScripterLang
 {
-    public class ForExpression : Expression
+    public class WhileExpression : Expression
     {
-        public ForExpression(Expression start, Expression end, Expression increment, Expression body)
+        public WhileExpression(Expression condition, Expression body)
         {
         }
 
