@@ -18,12 +18,6 @@ if(value != "") {
 }
 ```
 
-## Credits
-
-The code is pretty much a Virt-A-Mate port of this project: https://www.codemag.com/article/1607081/How-to-Write-Your-Own-Programming-Language-in-C
-
-Original source: https://github.com/vassilych/cscs (commit `82d531f`)
-
 ## License
 
 [GNU GPLv3](LICENSE.md)

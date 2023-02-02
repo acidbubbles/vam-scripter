@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>6</LangVersion>
+        <RootNamespace>Scripter.Lang</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="..\Scripter.Plugin\src\Lib\**\*.*">
+            <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
+        </Compile>
+    </ItemGroup>
+
+</Project>

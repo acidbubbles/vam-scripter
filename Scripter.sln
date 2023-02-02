@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripter.Plugin", "Scripter.Plugin\Scripter.Plugin.csproj", "{33AD39CD-1073-4ECB-A139-F4A428A22655}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{D35F2441-B701-4736-98C9-6E527F02A359}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{8F309CCB-DCC3-41C7-8D09-AD733DEFED6E}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\package.yml = .github\workflows\package.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripter.Tests", "Scripter.Tests\Scripter.Tests.csproj", "{B8049E97-A885-4F64-9EE3-EC4A9C7D7F7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripter.Lib", "Scripter.Lib\Scripter.Lib.csproj", "{42C9599C-E7FE-4886-B4F5-F31DA93D7099}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33AD39CD-1073-4ECB-A139-F4A428A22655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33AD39CD-1073-4ECB-A139-F4A428A22655}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33AD39CD-1073-4ECB-A139-F4A428A22655}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{33AD39CD-1073-4ECB-A139-F4A428A22655}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{B8049E97-A885-4F64-9EE3-EC4A9C7D7F7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8049E97-A885-4F64-9EE3-EC4A9C7D7F7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8049E97-A885-4F64-9EE3-EC4A9C7D7F7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8049E97-A885-4F64-9EE3-EC4A9C7D7F7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42C9599C-E7FE-4886-B4F5-F31DA93D7099}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42C9599C-E7FE-4886-B4F5-F31DA93D7099}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42C9599C-E7FE-4886-B4F5-F31DA93D7099}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42C9599C-E7FE-4886-B4F5-F31DA93D7099}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8F309CCB-DCC3-41C7-8D09-AD733DEFED6E} = {D35F2441-B701-4736-98C9-6E527F02A359}
+	EndGlobalSection
+EndGlobal

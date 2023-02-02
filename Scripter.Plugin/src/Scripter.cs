@@ -1,31 +1,34 @@
 using System;
 using System.Collections.Generic;
+using ScripterLang;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Scripter : MVRScript
 {
-    private Interpreter _interpreter;
+    private Runtime _runtime;
 
     private readonly JSONStorableString _scriptJSON;
     private readonly JSONStorableAction _executeScriptJSON;
+    private readonly JSONStorableString _consoleJSON;
     private readonly List<string> _history = new List<string>();
+    private List<Expression> _expressions;
 
     public Scripter()
     {
         _scriptJSON = new JSONStorableString("Script", "");
         _executeScriptJSON = new JSONStorableAction("Execute", ExecuteScript);
+        _consoleJSON = new JSONStorableString("Console", "");
     }
 
     private void ExecuteScript()
     {
-        ProcessScript(_scriptJSON.val);
+        ProcessScript();
     }
 
     public override void Init()
     {
-        _interpreter = new Interpreter();
-        ParserFunction.AddGlobal(LogMessageFunction.FunctionName, new LogMessageFunction());
+        _runtime = new Runtime();
 
         _scriptJSON.valNoCallback = @"
 // Welcome to Scripter!
@@ -42,6 +45,17 @@ if(x == 0) {
             _history.Add(val);
             SuperController.LogMessage("History: " + _history.Count);
             if (_history.Count > 100) _history.RemoveAt(0);
+            try
+            {
+                _expressions = Parser.ParseExpressions(
+                    Tokenizer.Tokenize(val).ToList()
+                ).ToList();
+                _consoleJSON.val = "Code parsed successfully";
+            }
+            catch (Exception exc)
+            {
+                _consoleJSON.val = exc.ToString();
+            }
         };
 
         RegisterString(_scriptJSON);
@@ -84,16 +98,16 @@ if(x == 0) {
         return textfield;
     }
 
-    private void ProcessScript(string script)
+    private void ProcessScript()
     {
         try
         {
-            var result = _interpreter.Process(script);
+            var result = _runtime.Evaluate(_expressions);
         }
         catch (Exception exc)
         {
             SuperController.LogError($"Scripter: There was an error executing the script.\n{exc.Message}");
-            ParserFunction.InvalidateStacksAfterLevel(0);
+            _consoleJSON.val = exc.ToString();
         }
     }
 }

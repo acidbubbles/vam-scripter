@@ -19,11 +19,12 @@ jobs:
       id: zip
       run: |
         mkdir -p publish/Custom/Scripts/AcidBubbles/Scripter
-        cp -r src publish/Custom/Scripts/AcidBubbles/Scripter/
-        cp *.cslist publish/Custom/Scripts/AcidBubbles/Scripter/
-        cp meta.json publish/
-        sed -i 's/v0.0.0/${{ steps.get_version.outputs.VERSION }}/' publish/meta.json
+        cd Scripter.Plugin
+        cp -r src ../publish/Custom/Scripts/AcidBubbles/Scripter/
+        cp *.cslist ../publish/Custom/Scripts/AcidBubbles/Scripter/
+        cp meta.json ../publish/
         cd publish
+        sed -i 's/v0.0.0/${{ steps.get_version.outputs.VERSION }}/' meta.json
         zip -r "AcidBubbles.Scripter.${{ github.run_number }}.var" *
     - name: GitHub release
       uses: softprops/action-gh-release@v1

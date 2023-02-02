@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <TargetFramework>net45</TargetFramework>
+    <OutputType>Library</OutputType>
+    <LangVersion>6</LangVersion>
+    <DefineConstants>VAM_GT_1_20;VAM_GT_1_20_77_0</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Platform)' == 'Unity' ">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCpu' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="UnityEngine">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VRModule">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.VRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.XRModule">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.XRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>../../../../VaM_Data/Managed/Assembly-CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- ScripterSource -->
+    <Compile Include="src\Lib\Expressions\AssignmentExpression.cs" />
+    <Compile Include="src\Lib\Expressions\BinaryExpression.cs" />
+    <Compile Include="src\Lib\Expressions\BooleanExpression.cs" />
+    <Compile Include="src\Lib\Expressions\DeclareExpression.cs" />
+    <Compile Include="src\Lib\Expressions\EmptyExpression.cs" />
+    <Compile Include="src\Lib\Expressions\Expression.cs" />
+    <Compile Include="src\Lib\Expressions\ForExpression.cs" />
+    <Compile Include="src\Lib\Expressions\FunctionCallExpression.cs" />
+    <Compile Include="src\Lib\Expressions\IfExpression.cs" />
+    <Compile Include="src\Lib\Expressions\NumberExpression.cs" />
+    <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
+    <Compile Include="src\Lib\Expressions\StringExpression.cs" />
+    <Compile Include="src\Lib\Expressions\VariableExpression.cs" />
+    <Compile Include="src\Lib\Parsing\Parser.cs" />
+    <Compile Include="src\Lib\Parsing\ScripterParsingException.cs" />
+    <Compile Include="src\Lib\Parsing\Token.cs" />
+    <Compile Include="src\Lib\Parsing\Tokenizer.cs" />
+    <Compile Include="src\Lib\Parsing\TokenType.cs" />
+    <Compile Include="src\Lib\Runtime\LexicalContext.cs" />
+    <Compile Include="src\Lib\Runtime\Runtime.cs" />
+    <Compile Include="src\Lib\Runtime\ScripterParsingException.cs" />
+    <Compile Include="src\Lib\Runtime\Value.cs" />
+    <Compile Include="src\Lib\Runtime\ValueTypes.cs">
+      <Link>Runtime\ValueTypes.cs</Link>
+    </Compile>
+    <Compile Include="src\Scripter.cs" />
+    <!-- /ScripterSource -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="src\Lib" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="GenerateTargetFrameworkMonikerAttribute" />
+
+</Project>
