@@ -31,7 +31,7 @@ namespace Vam
         {
             var storable = GetStorable(args[0], args[1]);
             var param = storable.GetFloatJSONParam(args[2].StringValue);
-            return Value.CreateNumber(param.val);
+            return Value.CreateFloat(param.val);
         }
 
         private static Value SetFloatParamValue(Value[] args)

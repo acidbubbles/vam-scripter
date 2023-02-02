@@ -50,6 +50,27 @@ namespace ScripterLang
                     case '/':
                     case '%':
                     case '^':
+                        if (input[position] == '/')
+                        {
+                            if (input[position + 1] == '/')
+                            {
+                                position++;
+                                while (++position < length && input[position] != '\n')
+                                {
+                                }
+                                break;
+                            }
+
+                            if (input[position + 1] == '*')
+                            {
+                                position++;
+                                while (++position < length && input[position] != '*' && input[position + 1] != '/')
+                                {
+                                }
+                                position += 2;
+                                break;
+                            }
+                        }
                         yield return new Token(TokenType.Operator, input[position].ToString(), line);
                         position++;
                         break;

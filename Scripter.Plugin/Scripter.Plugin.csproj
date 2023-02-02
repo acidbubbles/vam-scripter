@@ -71,19 +71,19 @@
     <!-- ScripterSource -->
     <Compile Include="src\Lib\Expressions\AssignmentExpression.cs" />
     <Compile Include="src\Lib\Expressions\BinaryExpression.cs" />
-    <Compile Include="src\Lib\Expressions\CodeBlockExpression.cs" />
     <Compile Include="src\Lib\Expressions\BooleanExpression.cs" />
-    <Compile Include="src\Lib\Expressions\IntegerExpression.cs" />
-    <Compile Include="src\Lib\Expressions\VariableDeclarationExpression.cs" />
+    <Compile Include="src\Lib\Expressions\CodeBlockExpression.cs" />
     <Compile Include="src\Lib\Expressions\EmptyExpression.cs" />
     <Compile Include="src\Lib\Expressions\Expression.cs" />
+    <Compile Include="src\Lib\Expressions\FloatExpression.cs" />
     <Compile Include="src\Lib\Expressions\ForExpression.cs" />
     <Compile Include="src\Lib\Expressions\FunctionCallExpression.cs" />
     <Compile Include="src\Lib\Expressions\IfExpression.cs" />
-    <Compile Include="src\Lib\Expressions\FloatExpression.cs" />
+    <Compile Include="src\Lib\Expressions\IntegerExpression.cs" />
     <Compile Include="src\Lib\Expressions\ParenthesesExpression.cs" />
     <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
     <Compile Include="src\Lib\Expressions\StringExpression.cs" />
+    <Compile Include="src\Lib\Expressions\VariableDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableExpression.cs" />
     <Compile Include="src\Lib\Expressions\WhileExpression.cs" />
     <Compile Include="src\Lib\Parsing\Parser.cs" />
@@ -95,12 +95,10 @@
     <Compile Include="src\Lib\Runtime\Runtime.cs" />
     <Compile Include="src\Lib\Runtime\ScripterParsingException.cs" />
     <Compile Include="src\Lib\Runtime\Value.cs" />
-    <Compile Include="src\Lib\Runtime\ValueTypes.cs">
-      <Link>Runtime\ValueTypes.cs</Link>
-    </Compile>
-    <Compile Include="src\Scripter.cs" />
+    <Compile Include="src\Lib\Runtime\ValueTypes.cs" />
     <Compile Include="src\Vam\ScripterPluginException.cs" />
     <Compile Include="src\Vam\VamFunctions.cs" />
+    <Compile Include="src\Scripter.cs" />
     <!-- /ScripterSource -->
   </ItemGroup>
 

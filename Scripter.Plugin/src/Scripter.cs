@@ -34,7 +34,7 @@ public class Scripter : MVRScript
 
         _scriptJSON.valNoCallback = @"
 // Welcome to Scripter!
-var alpha = getFloatParamValue(""Cube#1"", ""CubeMat"", ""Alpha"", 0.5);
+var alpha = getFloatParamValue(""Cube"", ""CubeMat"", ""Alpha Adjust"", 0.5);
 if(alpha == 0) {
     logMessage(""The cube is fully transparent"");
 } else {
@@ -48,17 +48,7 @@ if(alpha == 0) {
             _history.Add(val);
             SuperController.LogMessage("History: " + _history.Count);
             if (_history.Count > 100) _history.RemoveAt(0);
-            try
-            {
-                _expression = Parser.Parse(
-                    Tokenizer.Tokenize(val).ToList()
-                );
-                _consoleJSON.val = "Code parsed successfully";
-            }
-            catch (Exception exc)
-            {
-                _consoleJSON.val = exc.ToString();
-            }
+            Parse(_scriptJSON.val);
         };
 
         RegisterString(_scriptJSON);
@@ -69,6 +59,25 @@ if(alpha == 0) {
 
         // TODO: Toolbar
         CreateButton("Undo").button.onClick.AddListener(Undo);
+
+        CreateTextField(_consoleJSON);
+
+        Parse(_scriptJSON.val);
+    }
+
+    private void Parse(string val)
+    {
+        try
+        {
+            _expression = Parser.Parse(
+                Tokenizer.Tokenize(val).ToList()
+            );
+            _consoleJSON.val = "Code parsed successfully";
+        }
+        catch (Exception exc)
+        {
+            _consoleJSON.val = exc.ToString();
+        }
     }
 
     private void Undo()
@@ -105,7 +114,9 @@ if(alpha == 0) {
     {
         try
         {
-            var result = _runtime.Evaluate(_expression);
+            if (_expression == null)
+                throw new ScripterPluginException("The code was not parsed. Please check the console for errors.");
+            _runtime.Evaluate(_expression);
         }
         catch (Exception exc)
         {

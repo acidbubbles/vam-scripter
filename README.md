@@ -11,10 +11,12 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 ### Example:
 
 ```c#
-if(value != "") {
-    triggerString('AtomName', 'StorableName', 'TriggerName', 'Hello ' + value);
+// Welcome to Scripter!
+var alpha = getFloatParamValue("Cube", "CubeMat", "Alpha Adjust", 0.5);
+if(alpha == 0) {
+    logMessage("The cube is fully transparent");
 } else {
-    logMessage('A name must be provided to the trigger');
+    logMessage("The cube alpha is: " + alpha);
 }
 ```
 

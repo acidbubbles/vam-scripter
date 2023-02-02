@@ -50,4 +50,19 @@ public class TokenizerTests
 
         Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "if", "(", "x", "==", "1", ")", "{", "ok", "(", ")", ";", "}", "else", "if", "(", "!", "x", ")", "{", "fail", "(", ")", ";", "}" }));
     }
+
+    [Test]
+    public void Comments()
+    {
+        var tokens = Tokenizer.Tokenize("""
+            // Comment
+            var x = 1;
+            /*
+            x = x + 1;
+            */
+            return x;
+            """);
+
+        Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "var", "x", "=", "1", ";", "return", "x", ";" }));
+    }
 }

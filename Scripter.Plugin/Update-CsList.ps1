@@ -9,10 +9,10 @@ $sourceFiles = ( `
 # Scripter.cslist
 $sourceFiles > .\Scripter.cslist
 
-# Scripter.csproj
-( Get-Content ".\Scripter.csproj" -Raw ) -Replace "(?sm)(?<=^ +<!-- ScripterSource -->`r?`n).*?(?=`r?`n +<!-- /ScripterSource -->)", `
+# Scripter.Plugin.csproj
+( Get-Content ".\Scripter.Plugin.csproj" -Raw ) -Replace "(?sm)(?<=^ +<!-- ScripterSource -->`r?`n).*?(?=`r?`n +<!-- /ScripterSource -->)", `
     [System.String]::Join("`r`n", ($sourceFiles | % { "    <Compile Include=`"$_`" />" } ) ) `
-| Set-Content ".\Scripter.csproj" -NoNewline
+| Set-Content ".\Scripter.Plugin.csproj" -NoNewline
 
 # meta.json
 ( Get-Content ".\meta.json" -Raw ) -Replace "(?sm)(?<=^  `"contentList`": \[`r?`n).*?(?=`r?`n  \],)", `
