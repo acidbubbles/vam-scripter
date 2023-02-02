@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SplitAndMerge
 {
@@ -53,7 +50,6 @@ namespace SplitAndMerge
         public const string CATCH = "catch";
         public const string CANCEL = "cancel_operation";
         public const string COMMENT = "//";
-        public const string COMPILED_FUNCTION = "cfunction";
         public const string CONTINUE = "continue";
         public const string DEFAULT = "default";
         public const string DO = "do";
@@ -61,73 +57,35 @@ namespace SplitAndMerge
         public const string ELSE_IF = "elif";
         public const string FOR = "for";
         public const string FUNCTION = "function";
-        public const string CLASS = "class";
-        public const string ENUM = "enum";
         public const string IF = "if";
-        public const string INCLUDE = "include";
-        public const string IMPORT = "import";
-        public const string IMPORT_DLL = "importDll";
-        public const string INVOKE_DLL = "invokeDll";
-        public const string NEW = "new";
         public const string QUIT = "quit";
         public const string RETURN = "return";
         public const string SWITCH = "switch";
         public const string THIS = "this";
         public const string THROW = "throw";
         public const string TRY = "try";
-        public const string TYPE = "type";
-        public const string TYPE_OF = "typeOf";
-        public const string TYPE_REF = "typeRef";
         public const string WHILE = "while";
 
         public const string TRUE = "true";
         public const string FALSE = "false";
 
         public const string ADD = "add";
-        public const string ADD_UNIQUE = "addunique";
-        public const string ADD_TO_HASH = "AddToHash";
-        public const string ADD_ALL_TO_HASH = "AddAllToHash";
-        public const string CANCEL_RUN = "CancelRun";
-        public const string CHECK_LOADER_MAIN = "LoaderMain";
         public const string CONTAINS = "contains";
-        public const string CURRENT_PATH = "CurrentPath";
-        public const string DATE_TIME = "DateTime";
-        public const string DECODE = "decode";
-        public const string DEEP_COPY = "DeepCopy";
         public const string DEFINE_LOCAL = "DefineLocal";
-        public const string ENV = "env";
-        public const string ENCODE = "encode";
-        public const string EXIT = "exit";
         public const string FIND_INDEX = "find_index";
-        public const string GET_COLUMN = "GetColumn";
-        public const string GET_PROPERTIES = "GetPropertyStrings";
-        public const string GET_PROPERTY = "GetProperty";
-        public const string GET_KEYS = "GetKeys";
-        public const string HELP = "help";
         public const string LOCK = "lock";
-        public const string MARSHAL = "marshal";
         public const string NAME_EXISTS = "NameExists";
-        public const string NAMESPACE = "Namespace";
-        public const string NOW = "Now";
         public const string ON_EXCEPTION = "OnException";
         public const string OBJECT_PROPERTIES = "Properties";
         public const string OBJECT_TYPE = "Type";
         public const string POINTER = "->";
         public const string POINTER_REF = "&";
-        public const string PRINT = "print";
         public const string PSTIME = "pstime";
         public const string REGEX = "Regex";
         public const string REMOVE = "RemoveItem";
         public const string REMOVE_AT = "RemoveAt";
         public const string RESET_VARS = "ResetVariables";
-        public const string SCHEDULE_RUN = "ScheduleRun";
-        public const string SETENV = "setenv";
-        public const string SET_PROPERTY = "SetProperty";
-        public const string SHOW = "show";
-        public const string SIGNAL = "signal";
-        public const string SINGLETON = "singleton";
         public const string SIZE = "Size";
-        public const string SLEEP = "sleep";
         public const string STR_BETWEEN = "StrBetween";
         public const string STR_BETWEEN_ANY = "StrBetweenAny";
         public const string STR_CONTAINS = "StrContains";
@@ -140,32 +98,17 @@ namespace SplitAndMerge
         public const string STR_SUBSTR = "Substring";
         public const string STR_TRIM = "StrTrim";
         public const string STR_UPPER = "StrUpper";
-        public const string THREAD = "thread";
-        public const string THREAD_ID = "threadid";
         public const string TOKENIZE_LINES = "TokenizeLines";
         public const string TOKEN_COUNTER = "CountTokens";
         public const string TO_BOOL = "bool";
-        public const string TO_BYTEARRAY = "bytearray";
         public const string TO_DECIMAL = "decimal";
         public const string TO_DOUBLE = "double";
         public const string TO_INT = "int";
         public const string TO_INTEGER = "tointeger";
         public const string TO_NUMBER = "number";
         public const string TO_STRING = "string";
-        public const string UNMARSHAL = "unmarshal";
         public const string VAR = "var";
         public const string VARIABLE_TYPE = "VariableType";
-        public const string WAIT = "wait";
-        public const string WEB_REQUEST = "WebRequest";
-        public const string JSON = "GetVariableFromJson";
-
-        public const string START_DEBUGGER = "StartDebugger";
-        public const string STOP_DEBUGGER  = "StopDebugger";
-        public const string GET_FILE_FROM_DEBUGGER = "GetFileFromDebugger";
-
-        public const string ADD_DATA     = "AddDataToCollection";
-        public const string COLLECT_DATA = "StartCollectingData";
-        public const string GET_DATA     = "GetCollectedData";
 
         // Properties, returned after the variable dot:
         public const string AT            = "At";
@@ -235,10 +178,6 @@ namespace SplitAndMerge
         public const string MATH_TANH     = "Math.Tanh";
         public const string MATH_TRUNC    = "Math.Trunc";
 
-        public const string CONSOLE_LOG   = "console.log";
-
-        public const string OBJECT_DEFPROP = "Object.defineProperty";
-
         // Special property for converting an object to a string:
         public const string PROP_TO_STRING    = "ToString";
 
@@ -277,9 +216,7 @@ namespace SplitAndMerge
 #if UNITY_EDITOR == false && UNITY_STANDALONE == false && __ANDROID__ == false && __IOS__ == false
         public static List<string> FUNCT_WITH_SPACE = new List<string>
         {
-            APPENDLINE, CD, CLASS, CONNECTSRV, COPY, DELETE, DIR, EXISTS, FINDFILES, FINDSTR,
-            FUNCTION, COMPILED_FUNCTION, CSHARP_FUNCTION, HELP, MKDIR, MORE, MOVE, NAMESPACE, NEW, PRINT, READFILE, RUN, SHOW, STARTSRV,
-            TAIL, THREAD, TRANSLATE, WRITE, WRITELINE, WRITENL
+            FUNCTION
         };
 #else
         public static List<string> FUNCT_WITH_SPACE = new List<string> {
@@ -291,21 +228,21 @@ namespace SplitAndMerge
         // between them e.g. return a*b;
         public static List<string> FUNCT_WITH_SPACE_ONCE = new List<string>
         {
-            CASE, RETURN, THROW, TYPE_OF, VAR
+            CASE, RETURN, THROW, VAR
         };
 
         // The Control Flow Functions. It doesn't make sense to merge them or
         // use in calculation of a result.
         public static List<string> CONTROL_FLOW = new List<string>
         {
-            BREAK, CATCH, CLASS, COMPILED_FUNCTION, CONTINUE, ELSE, ELSE_IF, ELSE, FOR, FUNCTION, IF, INCLUDE, NEW,
+            BREAK, CATCH, CONTINUE, ELSE, ELSE_IF, ELSE, FOR, FUNCTION, IF,
             RETURN, THROW, TRY, WHILE
         };
 
         public static List<string> RESERVED = new List<string>
         {
-            BREAK, CONTINUE, CLASS, NEW, FUNCTION, COMPILED_FUNCTION, IF, ELSE, ELSE_IF, INCLUDE, FOR, WHILE,
-            RETURN, THROW, TRY, CATCH, COMMENT, TRUE, FALSE, TYPE,
+            BREAK, CONTINUE, FUNCTION, IF, ELSE, ELSE_IF, FOR, WHILE,
+            RETURN, THROW, TRY, CATCH, COMMENT, TRUE, FALSE,
             ASSIGNMENT, AND, OR, EQUAL, NOT_EQUAL, LESS, LESS_EQ, GREATER, GREATER_EQ,
             ADD_ASSIGN, SUBT_ASSIGN, MULT_ASSIGN, DIV_ASSIGN,
             SWITCH, CASE, DEFAULT, MATH_NAN, UNDEFINED,
@@ -355,7 +292,8 @@ namespace SplitAndMerge
         public static string GetRealName(string name)
         {
             name = name.Trim().ToLower();
-            if (!s_realNames.TryGetValue(name, out string realName))
+            string realName;
+            if (!s_realNames.TryGetValue(name, out realName))
             {
                 return name;
             }
@@ -373,9 +311,6 @@ namespace SplitAndMerge
                 case Variable.VarType.ARRAY_NUM:
                 case Variable.VarType.ARRAY_INT:
                 case Variable.VarType.ARRAY:    return "ARRAY";
-                case Variable.VarType.MAP_STR:
-                case Variable.VarType.MAP_NUM:  return "MAP";
-                case Variable.VarType.OBJECT:   return "OBJECT";
                 case Variable.VarType.BREAK:    return "BREAK";
                 case Variable.VarType.CONTINUE: return "CONTINUE";
                 case Variable.VarType.UNDEFINED: return "UNDEFINED";
@@ -398,11 +333,6 @@ namespace SplitAndMerge
                 case "LIST<DOUBLE>": return Variable.VarType.ARRAY_NUM;
                 case "LIST<STRING>": return Variable.VarType.ARRAY_STR;
                 case "MAP<INT>":
-                case "MAP<STRING,INT>":
-                case "MAP<DOUBLE>":
-                case "MAP<STRING,DOUBLE>": return Variable.VarType.MAP_NUM;
-                case "MAP<STRING>":
-                case "MAP<STRING,STRING>": return Variable.VarType.MAP_STR;
                 case "TUPLE":
                 case "ARRAY": return Variable.VarType.ARRAY;
                 case "BREAK": return Variable.VarType.BREAK;

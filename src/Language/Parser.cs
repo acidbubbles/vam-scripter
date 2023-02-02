@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,31 +15,11 @@ namespace SplitAndMerge
         {
             return SplitAndMerge(script, Constants.END_PARSE_ARRAY);
         }
-        public static async Task<Variable> SplitAndMergeAsync(ParsingScript script)
-        {
-            return await SplitAndMergeAsync(script, Constants.END_PARSE_ARRAY);
-        }
 
         public static Variable SplitAndMerge(ParsingScript script, char[] to)
         {
             // First step: process passed expression by splitting it into a list of cells.
             List<Variable> listToMerge = Split(script, to);
-
-            if (listToMerge.Count == 0)
-            {
-                throw new ArgumentException("Couldn't parse [" +
-                                            script.Rest + "]");
-            }
-
-            // Second step: merge list of cells to get the result of an expression.
-            Variable result = MergeList(listToMerge, script);
-            return result;
-        }
-
-        public static async Task<Variable> SplitAndMergeAsync(ParsingScript script, char[] to)
-        {
-            // First step: process passed expression by splitting it into a list of cells.
-            List<Variable> listToMerge = await SplitAsync(script, to);
 
             if (listToMerge.Count == 0)
             {
@@ -87,51 +66,6 @@ namespace SplitAndMerge
                 // item is a function or if the next item is starting with a START_ARG '('.
                 ParserFunction func = new ParserFunction(script, token, ch, ref action);
                 Variable current = func.GetValue(script);
-
-                if (UpdateResult(script, to, listToMerge, token, negSign, ref current, ref negated, ref action))
-                {
-                    return listToMerge;
-                }
-            } while (script.StillValid() &&
-                    (inQuotes || arrayIndexDepth > 0 || !to.Contains(script.Current)));
-
-            // This happens when called recursively inside of the math expression:
-            script.MoveForwardIf(Constants.END_ARG);
-
-            return listToMerge;
-        }
-
-        static async Task<List<Variable>> SplitAsync(ParsingScript script, char[] to)
-        {
-            List<Variable> listToMerge = new List<Variable>(16);
-
-            if (!script.StillValid() || to.Contains(script.Current))
-            {
-                listToMerge.Add(Variable.EmptyInstance);
-                script.Forward();
-                return listToMerge;
-            }
-
-            int arrayIndexDepth = 0;
-            bool inQuotes = false;
-            int negated = 0;
-            char ch;
-            string action;
-
-            do
-            { // Main processing cycle of the first part.
-                string token = ExtractNextToken(script, to, ref inQuotes, ref arrayIndexDepth, ref negated, out ch, out action);
-
-                bool ternary = UpdateIfTernary(script, token, ch, listToMerge, (List<Variable> newList) => { listToMerge = newList; });
-                if (ternary)
-                {
-                    return listToMerge;
-                }
-
-                bool negSign = CheckConsistencyAndSign(script, listToMerge, action, ref token);
-
-                ParserFunction func = new ParserFunction(script, token, ch, ref action);
-                Variable current = await func.GetValueAsync(script);
 
                 if (UpdateResult(script, to, listToMerge, token, negSign, ref current, ref negated, ref action))
                 {
@@ -238,19 +172,6 @@ namespace SplitAndMerge
                 negated = 0;
             }
 
-            if (script.Current == '.')
-            {
-                bool inQuotes = false;
-                int arrayIndexDepth = 0;
-                script.Forward();
-                string property = ExtractNextToken(script, to, ref inQuotes, ref arrayIndexDepth, ref negated, out _, out action);
-
-                Variable propValue = current.Type == Variable.VarType.ENUM ?
-                     current.GetEnumProperty(property, script) :
-                     current.GetProperty(property, script);
-                current = propValue;
-            }
-
             if (action == null)
             {
                 action = UpdateAction(script, to);
@@ -277,7 +198,9 @@ namespace SplitAndMerge
                 return true;
             }
 
-            Variable cell = current.Clone();
+            #warning Check this
+            //Variable cell = current.Clone();
+            Variable cell = current;
             cell.Action = action;
 
             bool addIt = UpdateIfBool(script, cell, (Variable newCell) => { cell = newCell; }, listToMerge, (List<Variable> var) => { listToMerge = var; });
@@ -551,11 +474,6 @@ namespace SplitAndMerge
         private static Variable Merge(Variable current, ref int index, List<Variable> listToMerge,
                                       ParsingScript script, bool mergeOneOnly = false)
         {
-            if (Verbose)
-            {
-                Utils.PrintList(listToMerge, index - 1);
-            }
-
             while (index < listToMerge.Count)
             {
                 Variable next = listToMerge[index++];
@@ -597,89 +515,12 @@ namespace SplitAndMerge
             {
                 MergeNumbers(leftCell, rightCell, script);
             }
-            else if (leftCell.Type == Variable.VarType.DATETIME)
-            {
-                OperatorAssignFunction.DateOperator(leftCell, rightCell, leftCell.Action, script);
-            }
-            else if (leftCell.Type == Variable.VarType.OBJECT && rightCell.Type == Variable.VarType.OBJECT)
-            {
-                dynamic convertedObject = leftCell.Object;
-                MergeObjects(leftCell, rightCell, script, convertedObject);
-            }
             else
             {
                 MergeStrings(leftCell, rightCell, script);
             }
 
             leftCell.Action = rightCell.Action;
-        }
-
-        private static void MergeObjects<T>(Variable leftCell, Variable rightCell, ParsingScript script, T _)
-        {
-            try
-            {
-                ParameterExpression leftParameter = Expression.Parameter(typeof(T), "left");
-                ParameterExpression rightParameter = Expression.Parameter(typeof(T), "right");
-                switch (leftCell.Action)
-                {
-                    case "%":
-                        leftCell.Object = Expression.Lambda<Func<T, T, T>>(Expression.Modulo(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object);
-                        break;
-                    case "*":
-                        leftCell.Object = Expression.Lambda<Func<T, T, T>>(Expression.Multiply(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object);
-                        break;
-                    case "/":
-                        leftCell.Object = Expression.Lambda<Func<T, T, T>>(Expression.Divide(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object); 
-                        break;
-                    case "+":
-                        leftCell.Object = Expression.Lambda<Func<T, T, T>>(Expression.Add(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object); 
-                        break;
-                    case "-":
-                        leftCell.Object = Expression.Lambda<Func<T, T, T>>(Expression.Subtract(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object); 
-                        break;
-                    case "<":
-                        leftCell.Value = Expression.Lambda<Func<T, T, bool>>(Expression.LessThan(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object) ? 1 : 0;
-                        leftCell.Type = Variable.VarType.NUMBER;
-                        break;
-                    case ">":
-                        leftCell.Value = Expression.Lambda<Func<T, T, bool>>(Expression.GreaterThan(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object) ? 1 : 0;
-                        leftCell.Type = Variable.VarType.NUMBER;
-                        break;
-                    case "<=":
-                        leftCell.Value = Expression.Lambda<Func<T, T, bool>>(Expression.LessThanOrEqual(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object) ? 1 : 0;
-                        leftCell.Type = Variable.VarType.NUMBER;
-                        break;
-                    case ">=":
-                        leftCell.Value = Expression.Lambda<Func<T, T, bool>>(Expression.GreaterThanOrEqual(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object) ? 1 : 0;
-                        leftCell.Type = Variable.VarType.NUMBER;
-                        break;
-                    case "==":
-                    case "===":
-                        leftCell.Value = Expression.Lambda<Func<T, T, bool>>(Expression.Equal(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object) ? 1 : 0;
-                        leftCell.Type = Variable.VarType.NUMBER;
-                        break;
-                    case "!=":
-                    case "!==":
-                        leftCell.Value = Expression.Lambda<Func<T, T, bool>>(Expression.NotEqual(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object) ? 1 : 0;
-                        leftCell.Type = Variable.VarType.NUMBER;
-                        break;
-                    case "&&":
-                        leftCell.Value = Expression.Lambda<Func<T, T, bool>>(Expression.And(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object) ? 1 : 0;
-                        leftCell.Type = Variable.VarType.NUMBER;
-                        break;
-                    case "||":
-                        leftCell.Value = Expression.Lambda<Func<T, T, bool>>(Expression.Or(leftParameter, rightParameter), leftParameter, rightParameter).Compile()((T)leftCell.Object, (T)rightCell.Object) ? 1 : 0;
-                        leftCell.Type = Variable.VarType.NUMBER;
-                        break;
-                    default:
-                        MergeStrings(leftCell, rightCell, script);
-                        break;
-                }
-            }
-            catch (InvalidOperationException)
-            {
-                MergeStrings(leftCell, rightCell, script);
-            }
         }
 
         private static void MergeNumbers(Variable leftCell, Variable rightCell, ParsingScript script)
@@ -809,15 +650,12 @@ namespace SplitAndMerge
                     leftCell.Value = Convert.ToDouble(
                       string.Compare(leftCell.AsString(), rightCell.AsString()) != 0);
                     break;
-                case ":":
-                    leftCell.SetHashVariable(leftCell.AsString(), rightCell);
-                    break;
                 case ")":
                     break;
                 default:
                     Utils.ThrowErrorMsg("Can't process operation [" + leftCell.Action + "] on strings.",
                          script, leftCell.Action);
-                    break; 
+                    break;
             }
         }
 

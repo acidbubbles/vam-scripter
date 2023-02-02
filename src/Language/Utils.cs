@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SplitAndMerge
 {
@@ -195,13 +192,12 @@ namespace SplitAndMerge
         {
             string code = script == null || string.IsNullOrWhiteSpace(script.OriginalScript) ? "" : script.OriginalScript;
             int lineNumber = script == null ? 0 : script.OriginalLineNumber;
-            string filename = script == null || string.IsNullOrWhiteSpace(script.Filename) ? "" : script.Filename;
             int minLines = script == null || script.OriginalLine.ToLower().Contains(token.ToLower()) ? 1 : 2;
 
-            ThrowErrorMsg(msg, code, lineNumber, filename, minLines);
+            ThrowErrorMsg(msg, code, lineNumber, minLines);
         }
 
-        static void ThrowErrorMsg(string msg, string script, int lineNumber, string filename = "", int minLines = 1)
+        static void ThrowErrorMsg(string msg, string script, int lineNumber, int minLines = 1)
         {
             string[] lines = script.Split('\n');
             lineNumber = lines.Length <= lineNumber ? -1 : lineNumber;
@@ -232,7 +228,6 @@ namespace SplitAndMerge
 
             StringBuilder stack = new StringBuilder();
             stack.AppendLine("" + currentLineNumber);
-            stack.AppendLine(filename);
             stack.AppendLine(line);
 
             throw new ParsingException(msg, stack.ToString());
@@ -241,7 +236,7 @@ namespace SplitAndMerge
         static void ThrowErrorMsg(string msg, string code, int level, int lineStart, int lineEnd, string filename)
         {
             var lineNumber = level > 0 ? lineStart : lineEnd;
-            ThrowErrorMsg(msg, code, lineNumber, filename);
+            ThrowErrorMsg(msg, code, lineNumber);
         }
 
         public static bool CheckLegalName(string name, ParsingScript script = null, bool throwError = true)
@@ -269,20 +264,18 @@ namespace SplitAndMerge
         public static ParsingScript GetTempScript(Interpreter interpreter, string str, ParserFunction.StackLevel stackLevel,
             string name = "",
             ParsingScript script = null, ParsingScript parentScript = null,
-            int parentOffset = 0, CSCSClass.ClassInstance instance = null)
+            int parentOffset = 0)
         {
             ParsingScript tempScript = new ParsingScript(interpreter, str);
             tempScript.ScriptOffset = parentOffset;
             if (parentScript != null)
             {
                 tempScript.Char2Line = parentScript.Char2Line;
-                tempScript.Filename = parentScript.Filename;
                 tempScript.OriginalScript = parentScript.OriginalScript;
             }
             tempScript.ParentScript = script;
             tempScript.Context = script == null ? null : script.Context;
             tempScript.InTryBlock = script == null ? false : script.InTryBlock;
-            tempScript.ClassInstance = instance;
             tempScript.StackLevel = stackLevel;
 
             return tempScript;
@@ -303,203 +296,6 @@ namespace SplitAndMerge
                 args[i].ParamName = string.IsNullOrWhiteSpace(name) ? realArgs[i] : name;
             }
             return true;
-        }
-
-        public static string GetLine(int chars = 40)
-        {
-            return string.Format("-").PadRight(chars, '-');
-        }
-
-        public static string GetFileText(string filename)
-        {
-            string fileContents = string.Empty;
-            if (File.Exists(filename))
-            {
-                fileContents = File.ReadAllText(filename);
-            }
-            else
-            {
-                throw new ArgumentException("Couldn't read file [" + filename +
-                                            "] from disk.");
-            }
-            return fileContents;
-        }
-
-        public static void PrintScript(string script, ParsingScript parentScript)
-        {
-            StringBuilder item = new StringBuilder();
-
-            bool inQuotes = false;
-
-            for (int i = 0; i < script.Length; i++)
-            {
-                char ch = script[i];
-                inQuotes = ch == Constants.QUOTE ? !inQuotes : inQuotes;
-
-                if (inQuotes)
-                {
-                    parentScript.InterpreterInstance.AppendOutput(ch.ToString());
-                    continue;
-                }
-                if (!Constants.TOKEN_SEPARATION.Contains(ch))
-                {
-                    item.Append(ch);
-                    continue;
-                }
-                if (item.Length > 0)
-                {
-                    string token = item.ToString();
-                    parentScript.InterpreterInstance.AppendOutput(token);
-                    item.Clear();
-                }
-                parentScript.InterpreterInstance.AppendOutput(ch.ToString());
-            }
-        }
-
-        public static string[] GetFileLines(string filename)
-        {
-            try
-            {
-                if (GetFileContentsDelegate != null)
-                {
-                    var contents = GetFileContentsDelegate.Invoke(filename);
-                    return contents.Split('\n');
-                }
-
-                string[] lines = File.ReadAllLines(filename);
-                return lines;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("Couldn't read file [" + filename +
-                                            "] from disk: " + ex.Message, ex);
-            }
-        }
-
-        public static string[] GetFileLines(string filename, int from, int count)
-        {
-            try
-            {
-                var allLines = File.ReadLines(filename).ToArray();
-                if (allLines.Length <= count)
-                {
-                    return allLines;
-                }
-
-                if (from < 0)
-                {
-                    // last n lines
-                    from = allLines.Length - count;
-                }
-
-                string[] lines = allLines.Skip(from).Take(count).ToArray();
-                return lines;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("Couldn't read file from disk: " + ex.Message, ex);
-            }
-        }
-
-        public static void WriteFileText(string filename, string text)
-        {
-            try
-            {
-                File.WriteAllText(filename, text);
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("Couldn't write file to disk: " + ex.Message, ex);
-            }
-        }
-
-        public static GetVarFunction ExtractArrayElement(Interpreter interpreter, string token)
-        {
-            if (!token.Contains(Constants.START_ARRAY))
-            {
-                return null;
-            }
-
-            ParsingScript tempScript = new ParsingScript(interpreter, token);
-            Variable result = tempScript.Execute();
-            return new GetVarFunction(result);
-        }
-
-        public static void AppendFileText(string filename, string text)
-        {
-            try
-            {
-                File.AppendAllText(filename, text);
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("Couldn't write file to disk: " + ex.Message, ex);
-            }
-        }
-
-        public static void ThrowException(ParsingScript script, string excName1,
-                                          string errorToken = "", string excName2 = "")
-        {
-#if UNITY_EDITOR == false && UNITY_STANDALONE == false && __ANDROID__ == false && __IOS__ == false
-            string msg = script.InterpreterInstance.Translation.GetErrorString(excName1);
-#else
-            string msg = excName1;
-#endif
-            if (!string.IsNullOrWhiteSpace(errorToken))
-            {
-                msg = string.Format(msg, errorToken);
-#if UNITY_EDITOR == false && UNITY_STANDALONE == false && __ANDROID__ == false && __IOS__ == false
-                string candidate = script.InterpreterInstance.Translation.TryFindError(errorToken, script);
-#else
-                string candidate = null;
-#endif
-
-
-                if (!string.IsNullOrWhiteSpace(candidate) &&
-                    !string.IsNullOrWhiteSpace(excName2))
-                {
-#if UNITY_EDITOR == false && UNITY_STANDALONE == false && __ANDROID__ == false && __IOS__ == false
-                    string extra = script.InterpreterInstance.Translation.GetErrorString(excName2);
-#else
-                    string extra = excName2;
-#endif
-                    msg += " " + string.Format(extra, candidate);
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(script.Filename))
-            {
-#if UNITY_EDITOR == false && UNITY_STANDALONE == false && __ANDROID__ == false && __IOS__ == false
-                string fileMsg = script.InterpreterInstance.Translation.GetErrorString("errorFile");
-#else
-                string fileMsg = "File: {0}.";
-#endif
-                msg += Environment.NewLine + string.Format(fileMsg, script.Filename);
-            }
-
-            int lineNumber = -1;
-            string line = script.GetOriginalLine(out lineNumber);
-            if (lineNumber >= 0)
-            {
-#if UNITY_EDITOR == false && UNITY_STANDALONE == false && __ANDROID__ == false && __IOS__ == false
-                string lineMsg = script.InterpreterInstance.Translation.GetErrorString("errorLine");
-#else
-                string lineMsg = "Line {0}: [{1}]";
-#endif
-                msg += string.IsNullOrWhiteSpace(script.Filename) ? Environment.NewLine : " ";
-                msg += string.Format(lineMsg, lineNumber + 1, line.Trim());
-            }
-            throw new ArgumentException(msg);
-        }
-
-        public static void PrintList(List<Variable> list, int from)
-        {
-            Console.Write("Merging list:");
-            for (int i = from; i < list.Count; i++)
-            {
-                Console.Write(" ({0}, '{1}')", list[i].Value, list[i].Action);
-            }
-            Console.WriteLine();
         }
 
         public static int GetSafeInt(List<Variable> args, int index, int defaultValue = 0)
@@ -590,19 +386,6 @@ namespace SplitAndMerge
             }
             Utils.CheckNotNull(varName, func, script);
             Variable varValue = func.GetValue(script);
-            Utils.CheckNotNull(varValue, varName, script);
-            return varValue;
-        }
-
-        public static async Task<Variable> GetVariableAsync(string varName, ParsingScript script, bool testNull = true)
-        {
-            ParserFunction func = script.InterpreterInstance.GetVariable(varName, script);
-            if (!testNull && func == null)
-            {
-                return null;
-            }
-            Utils.CheckNotNull(varName, func, script);
-            Variable varValue = await func.GetValueAsync(script);
             Utils.CheckNotNull(varValue, varName, script);
             return varValue;
         }
@@ -740,23 +523,6 @@ namespace SplitAndMerge
                 val3 = val2 = val1;
             }
         }
-        public static string GetFileContents(string filename)
-        {
-            if (string.IsNullOrWhiteSpace(filename))
-            {
-                return "";
-            }
-            try
-            {
-                string[] readText = Utils.GetFileLines(filename);
-                return string.Join("\n", readText);
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine(exc.Message);
-                return "";
-            }
-        }
 
         public static string RemovePrefix(string text)
         {
@@ -789,53 +555,6 @@ namespace SplitAndMerge
             return candidate;
         }
 
-        public static string GetFullPath(string path)
-        {
-            if (string.IsNullOrWhiteSpace(path) || Path.IsPathRooted(path))
-            {
-                return path;
-            }
-            try
-            {
-                path = Path.GetFullPath(path);
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine("Exception converting path {0}: {1}", path, exc.Message);
-            }
-            return path;
-        }
-
-        public static string GetDirectoryName(string path)
-        {
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                return GetCurrentDirectory();
-            }
-            try
-            {
-                return Path.GetDirectoryName(path);
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine("Exception getting directory name {0}: {1}", path, exc.Message);
-            }
-            return GetCurrentDirectory();
-        }
-
-        public static string GetCurrentDirectory()
-        {
-            try
-            {
-                return Directory.GetCurrentDirectory();
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine("Exception getting current directory: {0}", exc.Message);
-            }
-            return "";
-        }
-
         public static void ExtendArrayIfNeeded<T>(List<T> array, int count, T defaultValue)
         {
             if (array.Count <= count)
@@ -858,189 +577,6 @@ namespace SplitAndMerge
             byte[] newArray = new byte[i + 1];
             Array.Copy(array, newArray, i + 1);
             return newArray;
-        }
-
-
-        static string pass = "mi_900.";
-        static string keySalt = "poo12.";
-        static string ivSalt = "puu14T";
-
-        static public string EncryptString(string plainText, string password = "")
-        {
-            if (password == "plain")
-            {
-                return plainText;
-            }
-            if (string.IsNullOrEmpty(plainText))
-            {
-                return "";
-            }
-            var byteArray =  EncryptStringToBytes(plainText, password);
-            var encoded = Convert.ToBase64String(byteArray);
-            return encoded;
-        }
-
-        static public string DecryptString(string encrypted, string password = "")
-        {
-            if (password == "plain")
-            {
-                return encrypted;
-            }
-            if (string.IsNullOrWhiteSpace(encrypted) || encrypted.Length <= 8 ||
-                encrypted.Contains(" "))
-            {
-                return encrypted;
-            }
-            try
-            {
-                var byteArray = Convert.FromBase64String(encrypted);
-                string decrypted = encrypted;
-
-                var t = Task.Run(() => {
-                    decrypted = DecryptStringFromBytes(byteArray, password);
-                });
-                //await Task.WhenAny();
-                bool completed = t.Wait(4000);
-
-                return decrypted;
-            }
-            catch (Exception exc)
-            {
-                return encrypted;
-            }
-        }
-
-        public static bool CheckIfDecrypted(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                return true;
-            }
-            for (int i = 0; i < text.Length; i++)
-            {
-                var ch = (int)text[i];
-                if (ch == 65533)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        static public byte[] EncryptStringToBytes(string plainText, string password = "")
-        {
-            string keyStr = keySalt + pass + password;
-            string saltStr = ivSalt + pass + password;
-
-            byte[] key = SHA256.Create().ComputeHash(Encoding.Unicode.GetBytes(keyStr));
-            byte[] iv = SHA256.Create().ComputeHash(Encoding.Unicode.GetBytes(saltStr)).Take(16).ToArray();
-
-            return EncryptStringToBytes(plainText, key, iv);
-        }
-
-
-        static public string DecryptStringFromBytes(byte[] cipherText, string password = "")
-        {
-            string keyStr = keySalt + pass + password;
-            string saltStr = ivSalt + pass + password;
-
-            byte[] key = SHA256.Create().ComputeHash(Encoding.Unicode.GetBytes(keyStr));
-            byte[] iv = SHA256.Create().ComputeHash(Encoding.Unicode.GetBytes(saltStr)).Take(16).ToArray();
-
-            var result = DecryptStringFromBytes(cipherText, key, iv);
-            return result.Trim('\0');
-        }
-
-        static public byte[] EncryptStringToBytes(string plainText, byte[] Key, byte[] IV)
-        {
-            // Check arguments.
-            if (plainText == null || plainText.Length <= 0)
-                throw new ArgumentNullException("plainText");
-            if (Key == null || Key.Length <= 0)
-                throw new ArgumentNullException("Key");
-            if (IV == null || IV.Length <= 0)
-                throw new ArgumentNullException("IV");
-            byte[] encrypted;
-            // Create an RijndaelManaged object
-            // with the specified key and IV.
-            using (RijndaelManaged rijAlg = new RijndaelManaged())
-            {
-                rijAlg.Key = Key;
-                rijAlg.IV = IV;
-                rijAlg.Padding = PaddingMode.Zeros;
-
-                // Create an encryptor to perform the stream transform.
-                ICryptoTransform encryptor = rijAlg.CreateEncryptor(rijAlg.Key, rijAlg.IV);
-
-                // Create the streams used for encryption.
-                using (MemoryStream msEncrypt = new MemoryStream())
-                {
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                        {
-
-                            //Write all data to the stream.
-                            swEncrypt.Write(plainText);
-                        }
-                        encrypted = msEncrypt.ToArray();
-                    }
-                }
-            }
-
-            // Return the encrypted bytes from the memory stream.
-            return encrypted;
-
-        }
-
-        static public string DecryptStringFromBytes(byte[] cipherText, byte[] Key, byte[] IV)
-        {
-            // Check arguments.
-            if (cipherText == null || cipherText.Length <= 0)
-                throw new ArgumentNullException("cipherText");
-            if (Key == null || Key.Length <= 0)
-                throw new ArgumentNullException("Key");
-            if (IV == null || IV.Length <= 0)
-                throw new ArgumentNullException("IV");
-
-            // Declare the string used to hold
-            // the decrypted text.
-            string plaintext = null;
-            try
-            {
-                // Create an RijndaelManaged object
-                // with the specified key and IV.
-                using (RijndaelManaged rijAlg = new RijndaelManaged())
-                {
-                    rijAlg.Key = Key;
-                    rijAlg.IV = IV;
-                    rijAlg.Padding = PaddingMode.Zeros;
-
-                    // Create a decryptor to perform the stream transform.
-                    ICryptoTransform decryptor = rijAlg.CreateDecryptor(rijAlg.Key, rijAlg.IV);
-
-                    // Create the streams used for decryption.
-                    using (MemoryStream msDecrypt = new MemoryStream(cipherText))
-                    {
-                        using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                        {
-                            using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-                            {
-                                // Read the decrypted bytes from the decrypting stream
-                                // and place them in a string.
-                                plaintext = srDecrypt.ReadToEnd();
-                            }
-                        }
-                    }
-
-                }
-            }
-            catch (Exception exc)
-            {
-                plaintext = Encoding.Unicode.GetString(cipherText, 0, Math.Min(cipherText.Length, 255)).Trim();
-            }
-
-            return plaintext.Trim();
         }
     }
 }

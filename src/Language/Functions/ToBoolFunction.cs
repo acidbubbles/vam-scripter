@@ -1,0 +1,17 @@
+﻿using System.Collections.Generic;
+
+namespace SplitAndMerge
+{
+    class ToBoolFunction : ParserFunction, INumericFunction
+    {
+        protected override Variable Evaluate(ParsingScript script)
+        {
+            List<Variable> args = script.GetFunctionArgs();
+            Utils.CheckArgs(args.Count, 1, m_name, true);
+            Variable arg = args[0];
+
+            double result = Utils.ConvertToBool(arg.AsString()) ? 1 : 0;
+            return new Variable(result);
+        }
+    }
+}

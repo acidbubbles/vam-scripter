@@ -11,7 +11,6 @@ namespace SplitAndMerge
     {
         private string m_data;          // contains the whole script
         private int m_from;             // a pointer to the script
-        private string m_filename;      // filename containing the script
         private string m_originalScript;// original raw script
         private int m_scriptOffset = 0; // used in functions defined in bigger scripts
         private Dictionary<int, int> m_char2Line = null; // pointers to the original lines
@@ -56,21 +55,6 @@ namespace SplitAndMerge
             get { return m_scriptOffset; }
             set { m_scriptOffset = value; }
         }
-        public string Filename
-        {
-            get { return m_filename; }
-            set
-            {
-                m_filename = Utils.GetFullPath(value);
-            }
-        }
-        public string PWD
-        {
-            get
-            {
-                return Utils.GetDirectoryName(m_filename);
-            }
-        }
         public string OriginalScript
         {
             get { return m_originalScript; }
@@ -78,12 +62,6 @@ namespace SplitAndMerge
         }
 
         public string CurrentAssign { get; set; }
-
-        public Debugger Debugger
-        {
-            get;
-            set;
-        }
 
         public string CurrentModule { get; set; }
 
@@ -120,9 +98,6 @@ namespace SplitAndMerge
 
         public ParsingScript ParentScript;
 
-        public CSCSClass CurrentClass { get; set; }
-        public CSCSClass.ClassInstance ClassInstance { get; set; }
-
         public Interpreter InterpreterInstance { get; private set; }
 
         public static ParsingScript Default(object context = null)
@@ -147,13 +122,9 @@ namespace SplitAndMerge
             m_data = other.String;
             m_from = other.Pointer;
             m_char2Line = other.Char2Line;
-            m_filename = other.Filename;
             m_originalScript = other.OriginalScript;
             StackLevel = other.StackLevel;
-            CurrentClass = other.CurrentClass;
-            ClassInstance = other.ClassInstance;
             ScriptOffset = other.ScriptOffset;
-            Debugger = other.Debugger;
             InTryBlock = other.InTryBlock;
             AllLabels = other.AllLabels;
             LabelToFile = other.LabelToFile;
@@ -171,24 +142,6 @@ namespace SplitAndMerge
         public bool StillValid() { return m_from < m_data.Length; }
 
         public void SetDone() { m_from = m_data.Length; }
-
-        public string GetFilePath(string path)
-        {
-            if (!Path.IsPathRooted(path))
-            {
-                string pathname = Path.Combine(PWD, path);
-                if (File.Exists(pathname))
-                {
-                    return pathname;
-                }
-                pathname = Path.GetFullPath(path);
-                if (File.Exists(pathname))
-                {
-                    return pathname;
-                }
-            }
-            return path;
-        }
 
         public bool StartsWith(string str, bool caseSensitive = true)
         {
@@ -247,14 +200,7 @@ namespace SplitAndMerge
             {
                 int pointer = script == this ? script.Pointer + firstOffset : script.Pointer;
                 int lineNumber = script.GetOriginalLineNumber(pointer);
-                string filename = string.IsNullOrWhiteSpace(script.Filename) ? "" :
-                                  Utils.GetFullPath(script.Filename);
-                string line = string.IsNullOrWhiteSpace(filename) || !File.Exists(filename) ? "" :
-                              File.ReadLines(filename).Skip(lineNumber).Take(1).First();
-
-                result.AppendLine("" + lineNumber);
-                result.AppendLine(filename);
-                result.AppendLine(line.Trim());
+                result.AppendLine("script:" + lineNumber);
 
                 script = script.ParentScript;
             }
@@ -451,14 +397,6 @@ namespace SplitAndMerge
                                                 start, end, (outList) => { isList = outList; } );
             return args;
         }
-        public async Task<List<Variable>> GetFunctionArgsAsync(char start = Constants.START_ARG,
-                                      char end = Constants.END_ARG)
-        {
-            bool isList;
-            List<Variable> args = await Utils.GetArgsAsync(this,
-                                                start, end, (outList) => { isList = outList; });
-            return args;
-        }
 
         public bool IsProcessingFunctionCall()
         {
@@ -513,16 +451,6 @@ namespace SplitAndMerge
 
             Variable result = null;
 
-            bool handleByDebugger = Debugger != null && DebuggerServer.DebuggerAttached && !Debugger.Executing;
-            if (handleByDebugger)
-            {
-                result = Debugger.CheckBreakpoints(this).Result;
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-
             if (InTryBlock)
             {
                 result = Parser.SplitAndMerge(this, toArray);
@@ -533,74 +461,9 @@ namespace SplitAndMerge
                 {
                     result = Parser.SplitAndMerge(this, toArray);
                 }
-                catch (ParsingException parseExc)
-                {
-                    if (handleByDebugger)
-                    {
-                        Debugger.ProcessException(this, parseExc);
-                    }
-                    throw;
-                }
                 catch (Exception exc)
                 {
                     ParsingException parseExc = new ParsingException(exc.Message, this, exc);
-                    if (handleByDebugger)
-                    {
-                        Debugger.ProcessException(this, parseExc);
-                    }
-                    throw parseExc;
-                }
-            }
-            return result;
-        }
-
-        public async Task<Variable> ExecuteAsync(char[] toArray = null, int from = -1)
-        {
-            toArray = toArray == null ? Constants.END_PARSE_ARRAY : toArray;
-            Pointer = from < 0 ? Pointer : from;
-
-            if (!m_data.EndsWith(Constants.END_STATEMENT.ToString()))
-            {
-                m_data += Constants.END_STATEMENT;
-            }
-
-            Variable result = null;
-
-            bool handleByDebugger = Debugger != null && DebuggerServer.DebuggerAttached && !Debugger.Executing;
-            if (handleByDebugger)
-            {
-                result = await Debugger.CheckBreakpoints(this);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-
-            if (InTryBlock)
-            {
-                result = await Parser.SplitAndMergeAsync(this, toArray);
-            }
-            else
-            {
-                try
-                {
-                    result = await Parser.SplitAndMergeAsync(this, toArray);
-                }
-                catch (ParsingException parseExc)
-                {
-                    if (handleByDebugger)
-                    {
-                        Debugger.ProcessException(this, parseExc);
-                    }
-                    throw;
-                }
-                catch (Exception exc)
-                {
-                    ParsingException parseExc = new ParsingException(exc.Message, this, exc);
-                    if (handleByDebugger)
-                    {
-                        Debugger.ProcessException(this, parseExc);
-                    }
                     throw parseExc;
                 }
             }
@@ -632,7 +495,6 @@ namespace SplitAndMerge
         public ParsingScript GetTempScript(string str, int startIndex = 0)
         {
             ParsingScript tempScript  = new ParsingScript(InterpreterInstance, str, startIndex);
-            tempScript.Filename       = this.Filename;
             tempScript.InTryBlock     = this.InTryBlock;
             tempScript.ParentScript   = this;
             tempScript.Char2Line      = this.Char2Line;
@@ -641,52 +503,11 @@ namespace SplitAndMerge
             tempScript.StackLevel     = this.StackLevel;
             tempScript.AllLabels      = this.AllLabels;
             tempScript.LabelToFile    = this.LabelToFile;
-            tempScript.FunctionName   = this.FunctionName;            
+            tempScript.FunctionName   = this.FunctionName;
 
             //tempScript.Debugger       = this.Debugger;
 
             return tempScript;
-        }
-
-        public ParsingScript GetIncludeFileScript(string filename)
-        {
-            string pathname = GetFilePath(filename);
-            string[] lines = Utils.GetFileLines(pathname);
-
-            string includeFile = string.Join(Environment.NewLine, lines);
-            Dictionary<int, int> char2Line;
-            var includeScript = Utils.ConvertToScript(InterpreterInstance, includeFile, out char2Line, pathname);
-            ParsingScript tempScript = new ParsingScript(InterpreterInstance, includeScript, 0, char2Line);
-            tempScript.Filename = pathname;
-            tempScript.OriginalScript = string.Join(Constants.END_LINE.ToString(), lines);
-            tempScript.ParentScript = this;
-            tempScript.InTryBlock = InTryBlock;
-
-            return tempScript;
-        }
-    }
-
-    public class ParsingException : Exception
-    {
-        public ParsingScript ExceptionScript { get; private set; }
-        public string ExceptionStack { get; private set; } = "";
-
-        public ParsingException(string message, string excStack = "")
-            : base(message)
-        {
-            ExceptionStack = excStack.Trim();
-        }
-        public ParsingException(string message, ParsingScript script)
-            : base(message)
-        {
-            ExceptionScript = script;
-            ExceptionStack = script.GetStack(-1);
-        }
-        public ParsingException(string message, ParsingScript script, Exception inner)
-            : base(message, inner)
-        {
-            ExceptionScript = script;
-            ExceptionStack = script.GetStack(-1);
         }
     }
 }

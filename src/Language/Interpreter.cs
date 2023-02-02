@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,59 +9,11 @@ using System.IO;
 
 namespace SplitAndMerge
 {
-    public class OutputAvailableEventArgs : EventArgs
-    {
-        public OutputAvailableEventArgs(string output)
-        {
-            Output = output;
-        }
-        public string Output { get; set; }
-    }
-
     public partial class Interpreter
     {
         #region Original Interpreter code (tweaked in some places)
 
-        public TranslationManager Translation { get; private set; }
-
-        private static Interpreter firstInstance;
-        private static Interpreter lastInstance;
         private static bool m_bHasBeenInitialized = false;
-
-        public static Interpreter FirstInstance
-        {
-            get
-            {
-                if (firstInstance == null)
-                {
-                    firstInstance = lastInstance;
-                    if (firstInstance == null)
-                    {
-                        firstInstance = lastInstance = new Interpreter();
-                    }
-                }
-                return firstInstance;
-            }
-        }
-        public static Interpreter LastInstance
-        {
-            get
-            {
-                if (lastInstance == null)
-                {
-                    lastInstance = firstInstance;
-                    if (lastInstance == null)
-                    {
-                        firstInstance = lastInstance = new Interpreter();
-                    }
-                }
-                return lastInstance;
-            }
-            set
-            {
-                lastInstance = value;
-            }
-        }
 
         // Global functions:
 
@@ -72,11 +23,6 @@ namespace SplitAndMerge
         {
             Id = id;
             Init();
-            if (firstInstance == null)
-            {
-                firstInstance = this;
-            }
-            lastInstance = this;
         }
 
         public int Id { get; set; }
@@ -94,44 +40,11 @@ namespace SplitAndMerge
             }
         }
 
-        public event EventHandler<OutputAvailableEventArgs> OnOutput;
-        public event EventHandler<OutputAvailableEventArgs> OnData;
-
-        public void AppendOutput(string text, bool newLine = false)
-        {
-            EventHandler<OutputAvailableEventArgs> handler = OnOutput;
-            if (handler != null)
-            {
-                OutputAvailableEventArgs args = new OutputAvailableEventArgs(text +
-                                     (newLine ? Environment.NewLine : string.Empty));
-                handler(this, args);
-            }
-            else
-            {
-                Console.WriteLine(text);
-            }
-        }
-
-        public bool AppendData(string text, bool newLine = false)
-        {
-            EventHandler<OutputAvailableEventArgs> handler = OnData;
-            if (handler != null)
-            {
-                OutputAvailableEventArgs args = new OutputAvailableEventArgs(text +
-                                     (newLine ? Environment.NewLine : string.Empty));
-                handler(this, args);
-                return true;
-            }
-            return false;
-        }
-
         public bool IsRunning { get; set; } = true;
         public int ExitCode { get; set; }
 
         private void Init()
         {
-            Translation = new TranslationManager(this);
-
             RegisterFunctions();
             RegisterEnums();
             RegisterActions();
@@ -153,70 +66,30 @@ namespace SplitAndMerge
             RegisterFunction(Constants.DEFAULT, new CaseStatement());
             RegisterFunction(Constants.FOR, new ForStatement());
             RegisterFunction(Constants.BREAK, new BreakStatement());
-            RegisterFunction(Constants.COMPILED_FUNCTION, new CompiledFunctionCreator(false));
             RegisterFunction(Constants.CONTINUE, new ContinueStatement());
-            RegisterFunction(Constants.CLASS, new ClassCreator());
-            RegisterFunction(Constants.ENUM, new EnumFunction());
-            RegisterFunction(Constants.NEW, new NewObjectFunction());
             RegisterFunction(Constants.NULL, new NullFunction());
             RegisterFunction(Constants.RETURN, new ReturnStatement());
             RegisterFunction(Constants.FUNCTION, new FunctionCreator());
-            RegisterFunction(Constants.GET_PROPERTIES, new GetPropertiesFunction());
-            RegisterFunction(Constants.GET_PROPERTY, new GetPropertyFunction());
-            RegisterFunction(Constants.INCLUDE, new IncludeFile());
-            RegisterFunction(Constants.MARSHAL, new MarshalFunction(true));
             RegisterFunction(Constants.QUIT, new QuitFunction());
-            RegisterFunction(Constants.SET_PROPERTY, new SetPropertyFunction());
             RegisterFunction(Constants.TRY, new TryBlock());
             RegisterFunction(Constants.THROW, new ThrowFunction());
-            RegisterFunction(Constants.TYPE, new TypeFunction());
-            RegisterFunction(Constants.TYPE_OF, new TypeOfFunction());
-            RegisterFunction(Constants.TYPE_REF, new TypeRefFunction());
             RegisterFunction(Constants.TRUE, new BoolFunction(true));
             RegisterFunction(Constants.FALSE, new BoolFunction(false));
             RegisterFunction(Constants.UNDEFINED, new UndefinedFunction());
-            RegisterFunction(Constants.UNMARSHAL, new MarshalFunction(false));
 
             RegisterFunction(Constants.ADD, new AddFunction());
-            RegisterFunction(Constants.ADD_TO_HASH, new AddVariableToHashFunction());
-            RegisterFunction(Constants.ADD_ALL_TO_HASH, new AddVariablesToHashFunction());
             RegisterFunction(Constants.CANCEL, new CancelFunction());
-            RegisterFunction(Constants.CANCEL_RUN, new ScheduleRunFunction(false));
-            RegisterFunction(Constants.CHECK_LOADER_MAIN, new CheckLoaderMainFunction());
             RegisterFunction(Constants.CONTAINS, new ContainsFunction());
-            RegisterFunction(Constants.CURRENT_PATH, new CurrentPathFunction());
-            RegisterFunction(Constants.DATE_TIME, new DateTimeFunction(false));
-            RegisterFunction(Constants.DECODE, new EncodeDecodeFunction(false));
-            RegisterFunction(Constants.DEEP_COPY, new DeepCopyFunction());
             RegisterFunction(Constants.DEFINE_LOCAL, new DefineLocalFunction());
-            RegisterFunction(Constants.ENCODE, new EncodeDecodeFunction(true));
-            RegisterFunction(Constants.ENV, new GetEnvFunction());
             RegisterFunction(Constants.FIND_INDEX, new FindIndexFunction());
-            RegisterFunction(Constants.GET_COLUMN, new GetColumnFunction());
-            RegisterFunction(Constants.GET_FILE_FROM_DEBUGGER, new GetFileFromDebugger());
-            RegisterFunction(Constants.GET_KEYS, new GetAllKeysFunction());
-            RegisterFunction(Constants.HELP, new HelpFunction());
-            RegisterFunction(Constants.INCLUDE_SECURE, new IncludeFileSecure());
-            RegisterFunction(Constants.JSON, new GetVariableFromJSONFunction());
             RegisterFunction(Constants.LOCK, new LockFunction());
-            RegisterFunction(Constants.NAMESPACE, new NamespaceFunction());
             RegisterFunction(Constants.NAME_EXISTS, new NameExistsFunction());
-            RegisterFunction(Constants.NOW, new DateTimeFunction());
-            RegisterFunction(Constants.PRINT, new PrintFunction());
             RegisterFunction(Constants.PSTIME, new ProcessorTimeFunction());
             RegisterFunction(Constants.REGEX, new RegexFunction());
             RegisterFunction(Constants.REMOVE, new RemoveFunction());
             RegisterFunction(Constants.REMOVE_AT, new RemoveAtFunction());
             RegisterFunction(Constants.RESET_VARS, new ResetVariablesFunction());
-            RegisterFunction(Constants.SCHEDULE_RUN, new ScheduleRunFunction(true));
-            RegisterFunction(Constants.SHOW, new ShowFunction());
-            RegisterFunction(Constants.SETENV, new SetEnvFunction());
-            RegisterFunction(Constants.SIGNAL, new SignalWaitFunction(true));
-            RegisterFunction(Constants.SINGLETON, new SingletonFunction());
             RegisterFunction(Constants.SIZE, new SizeFunction());
-            RegisterFunction(Constants.SLEEP, new SleepFunction());
-            RegisterFunction(Constants.START_DEBUGGER, new DebuggerFunction(true));
-            RegisterFunction(Constants.STOP_DEBUGGER, new DebuggerFunction(false));
             RegisterFunction(Constants.STR_BETWEEN, new StringManipulationFunction(StringManipulationFunction.Mode.BEETWEEN));
             RegisterFunction(Constants.STR_BETWEEN_ANY, new StringManipulationFunction(StringManipulationFunction.Mode.BEETWEEN_ANY));
             RegisterFunction(Constants.STR_CONTAINS, new StringManipulationFunction(StringManipulationFunction.Mode.CONTAINS));
@@ -229,12 +102,9 @@ namespace SplitAndMerge
             RegisterFunction(Constants.STR_SUBSTR, new StringManipulationFunction(StringManipulationFunction.Mode.SUBSTRING));
             RegisterFunction(Constants.STR_TRIM, new StringManipulationFunction(StringManipulationFunction.Mode.TRIM));
             RegisterFunction(Constants.STR_UPPER, new StringManipulationFunction(StringManipulationFunction.Mode.UPPER));
-            RegisterFunction(Constants.THREAD, new ThreadFunction());
-            RegisterFunction(Constants.THREAD_ID, new ThreadIDFunction());
             RegisterFunction(Constants.TOKENIZE, new TokenizeFunction());
             RegisterFunction(Constants.TOKENIZE_LINES, new TokenizeLinesFunction());
             RegisterFunction(Constants.TOKEN_COUNTER, new TokenCounterFunction());
-            RegisterFunction(Constants.TO_BYTEARRAY, new ToByteArrayFunction());
             RegisterFunction(Constants.TO_BOOL, new ToBoolFunction());
             RegisterFunction(Constants.TO_DECIMAL, new ToDecimalFunction());
             RegisterFunction(Constants.TO_DOUBLE, new ToDoubleFunction());
@@ -243,17 +113,6 @@ namespace SplitAndMerge
             RegisterFunction(Constants.TO_NUMBER, new ToDoubleFunction());
             RegisterFunction(Constants.TO_STRING, new ToStringFunction());
             RegisterFunction(Constants.VAR, new VarFunction());
-            RegisterFunction(Constants.WAIT, new SignalWaitFunction(false));
-            RegisterFunction(Constants.WEB_REQUEST, new WebRequestFunction());
-
-            RegisterFunction(Constants.ADD_DATA, new DataFunction(DataFunction.DataMode.ADD));
-            RegisterFunction(Constants.COLLECT_DATA, new DataFunction(DataFunction.DataMode.SUBSCRIBE));
-            RegisterFunction(Constants.GET_DATA, new DataFunction(DataFunction.DataMode.SEND));
-
-            RegisterFunction(Constants.CONSOLE_LOG, new PrintFunction());
-
-
-            RegisterFunction(Constants.OBJECT_DEFPROP, new ObjectPropsFunction());
         }
 
         public void RegisterEnums()
@@ -273,19 +132,6 @@ namespace SplitAndMerge
             }
         }
 
-        public Variable ProcessFile(string filename, bool mainFile = false)
-        {
-            string script = Utils.GetFileContents(filename);
-            return Process(script, filename, mainFile);
-        }
-
-        public async Task<Variable> ProcessFileAsync(string filename, bool mainFile = false, object context = null)
-        {
-            string script = Utils.GetFileContents(filename);
-            Variable result = await ProcessAsync(script, filename, mainFile, context);
-            return result;
-        }
-
         public Variable Process(string script, string filename = "", bool mainFile = false, object context = null)
         {
             Dictionary<int, int> char2Line;
@@ -297,56 +143,13 @@ namespace SplitAndMerge
 
             ParsingScript toParse = new ParsingScript(this, data, 0, char2Line);
             toParse.OriginalScript = script;
-            toParse.Filename = filename;
             toParse.Context = context;
-
-            if (mainFile)
-            {
-                toParse.MainFilename = toParse.Filename;
-            }
 
             Variable result = null;
 
             while (toParse.Pointer < data.Length)
             {
                 result = toParse.Execute();
-                if (result.Type == Variable.VarType.QUIT)
-                {
-                    return result;
-                }
-                toParse.GoToNextStatement();
-            }
-
-            return result;
-        }
-        public async Task<Variable> ProcessAsync(string script, string filename = "", bool mainFile = false, object context = null)
-        {
-            Dictionary<int, int> char2Line;
-            string data = Utils.ConvertToScript(this, script, out char2Line, filename);
-            if (string.IsNullOrWhiteSpace(data))
-            {
-                return null;
-            }
-
-            ParsingScript toParse = new ParsingScript(this, data, 0, char2Line);
-            toParse.OriginalScript = script;
-            toParse.Filename = filename;
-            toParse.Context = context;
-
-            if (mainFile)
-            {
-                toParse.MainFilename = toParse.Filename;
-            }
-
-            Variable result = null;
-
-            while (toParse.Pointer < data.Length)
-            {
-                result = await toParse.ExecuteAsync();
-                if (result.Type == Variable.VarType.QUIT)
-                {
-                    return result;
-                }
                 toParse.GoToNextStatement();
             }
 
@@ -370,23 +173,6 @@ namespace SplitAndMerge
 
             return Variable.EmptyInstance;
         }
-        internal async Task<Variable> ProcessForAsync(ParsingScript script)
-        {
-            string forString = Utils.GetBodyBetween(script, Constants.START_ARG, Constants.END_ARG);
-            script.Forward();
-            if (forString.Contains(Constants.END_STATEMENT.ToString()))
-            {
-                // Looks like: "for(i = 0; i < 10; i++)".
-                await ProcessCanonicalForAsync(script, forString);
-            }
-            else
-            {
-                // Otherwise looks like: "for(item : array)"
-                await ProcessArrayForAsync(script, forString);
-            }
-
-            return Variable.EmptyInstance;
-        }
 
         void ProcessArrayFor(ParsingScript script, string forString)
         {
@@ -406,120 +192,31 @@ namespace SplitAndMerge
             }
 
             ParsingScript forScript = script.GetTempScript(forString, varName.Length + sep.Length + 1);
-            forScript.Debugger = script.Debugger;
 
             Variable arrayValue = Utils.GetItem(forScript);
 
             int startForCondition = script.Pointer;
 
-            if ((arrayValue.Type == Variable.VarType.OBJECT) && (arrayValue.Object is IEnumerable ienum))
+            if (arrayValue.Type == Variable.VarType.STRING)
             {
-                foreach (object item in ienum)
-                {
-                    // We're using IEnumerable, which is typeless.
-                    // But it may be important to make the correct type.
-                    // TODO: Determine what type this is supposed to be (not sure how right now)
-                    // and set the type in the Variable
-                    Variable current = new Variable(item);
-
-                    script.Pointer = startForCondition;
-                    AddGlobalOrLocalVariable(varName, new GetVarFunction(current));
-                    Variable result = ProcessBlock(script);
-                    if (result.IsReturn || result.Type == Variable.VarType.BREAK)
-                    {
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                if (arrayValue.Type == Variable.VarType.STRING)
-                {
-                    arrayValue = new Variable(new List<string>(arrayValue.ToString().ToCharArray().Select(c => c.ToString())));
-                }
-
-                int cycles = arrayValue.Count;
-
-                for (int i = 0; i < cycles; i++)
-                {
-                    Variable current = arrayValue.GetValue(i);
-
-                    script.Pointer = startForCondition;
-                    AddGlobalOrLocalVariable(varName, new GetVarFunction(current));
-                    Variable result = ProcessBlock(script);
-                    if (result.IsReturn || result.Type == Variable.VarType.BREAK)
-                    {
-                        break;
-                    }
-                }
-            }
-            script.Pointer = startForCondition;
-            SkipBlock(script);
-        }
-
-        async Task ProcessArrayForAsync(ParsingScript script, string forString)
-        {
-            var tokens = forString.Split(' ');
-            var sep = tokens.Length > 2 ? tokens[1] : "";
-            string varName = tokens[0];
-
-            if (sep != Constants.FOR_EACH && sep != Constants.FOR_IN && sep != Constants.FOR_OF)
-            {
-                int index = forString.IndexOf(Constants.FOR_EACH);
-                if (index <= 0 || index == forString.Length - 1)
-                {
-                    Utils.ThrowErrorMsg("Expecting: for(item :/in/of array)",
-                                     script, Constants.FOR);
-                }
-                varName = forString.Substring(0, index);
+                arrayValue = new Variable(new List<string>(arrayValue.ToString().ToCharArray().Select(c => c.ToString())));
             }
 
-            ParsingScript forScript = script.GetTempScript(forString, varName.Length + sep.Length + 1);
-            forScript.Debugger = script.Debugger;
+            int cycles = arrayValue.Count;
 
-            Variable arrayValue = await Utils.GetItemAsync(forScript);
-
-            int startForCondition = script.Pointer;
-            if ((arrayValue.Type == Variable.VarType.OBJECT) && (arrayValue.Object is IEnumerable ienum))
+            for (int i = 0; i < cycles; i++)
             {
-                foreach (object item in ienum)
+                Variable current = arrayValue.GetValue(i);
+
+                script.Pointer = startForCondition;
+                AddGlobalOrLocalVariable(varName, new GetVarFunction(current));
+                Variable result = ProcessBlock(script);
+                if (result.IsReturn || result.Type == Variable.VarType.BREAK)
                 {
-                    // We're using IEnumerable, which is typeless.
-                    // But it may be important to make the correct type.
-                    // TODO: Determine what type this is supposed to be (not sure how right now)
-                    // and set the type in the Variable
-                    Variable current = new Variable(item);
-                    script.Pointer = startForCondition;
-                    AddGlobalOrLocalVariable(varName, new GetVarFunction(current));
-                    Variable result = ProcessBlock(script);
-                    if (result.IsReturn || result.Type == Variable.VarType.BREAK)
-                    {
-                        break;
-                    }
+                    break;
                 }
             }
-            else
-            {
-                if (arrayValue.Type == Variable.VarType.STRING)
-                {
-                    arrayValue = new Variable(new List<string>(arrayValue.ToString().ToCharArray().Select(c => c.ToString())));
-                }
 
-                int cycles = arrayValue.Count;
-
-                for (int i = 0; i < cycles; i++)
-                {
-                    Variable current = arrayValue.GetValue(i);
-
-                    script.Pointer = startForCondition;
-                    AddGlobalOrLocalVariable(varName, new GetVarFunction(current));
-                    Variable result = await ProcessBlockAsync(script);
-                    if (result.IsReturn || result.Type == Variable.VarType.BREAK)
-                    {
-                        break;
-                    }
-                }
-            }
             script.Pointer = startForCondition;
             SkipBlock(script);
         }
@@ -573,55 +270,6 @@ namespace SplitAndMerge
             script.Pointer = startForCondition;
             SkipBlock(script);
         }
-        async Task ProcessCanonicalForAsync(ParsingScript script, string forString)
-        {
-            string[] forTokens = forString.Split(Constants.END_STATEMENT);
-            if (forTokens.Length != 3)
-            {
-                throw new ArgumentException("Expecting: for(init; condition; loopStatement)");
-            }
-
-            int startForCondition = script.Pointer;
-
-            ParsingScript initScript = script.GetTempScript(forTokens[0] + Constants.END_STATEMENT);
-            ParsingScript condScript = script.GetTempScript(forTokens[1] + Constants.END_STATEMENT);
-            ParsingScript loopScript = script.GetTempScript(forTokens[2] + Constants.END_STATEMENT);
-
-            await initScript.ExecuteAsync(null, 0);
-
-            int cycles = 0;
-            bool stillValid = true;
-
-            while (stillValid)
-            {
-                Variable condResult = await condScript.ExecuteAsync(null, 0);
-                stillValid = Convert.ToBoolean(condResult.Value);
-                if (!stillValid)
-                {
-                    break;
-                }
-
-                if (MAX_LOOPS > 0 && ++cycles >= MAX_LOOPS)
-                {
-                    throw new ArgumentException("Looks like an infinite loop after " +
-                                                  cycles + " cycles.");
-                }
-
-                script.Pointer = startForCondition;
-                Variable result = await ProcessBlockAsync(script);
-                if (result.IsReturn || result.Type == Variable.VarType.BREAK)
-                {
-                    //script.Pointer = startForCondition;
-                    //SkipBlock(script);
-                    //return;
-                    break;
-                }
-                await loopScript.ExecuteAsync(null, 0);
-            }
-
-            script.Pointer = startForCondition;
-            SkipBlock(script);
-        }
 
         internal Variable ProcessWhile(ParsingScript script)
         {
@@ -652,48 +300,6 @@ namespace SplitAndMerge
                 }
 
                 result = ProcessBlock(script);
-                if (result.IsReturn || result.Type == Variable.VarType.BREAK)
-                {
-                    script.Pointer = startWhileCondition;
-                    break;
-                }
-            }
-
-            // The while condition is not true anymore: must skip the whole while
-            // block before continuing with next statements.
-            SkipBlock(script);
-            return result.IsReturn ? result : Variable.EmptyInstance;
-        }
-
-        internal async Task<Variable> ProcessWhileAsync(ParsingScript script)
-        {
-            int startWhileCondition = script.Pointer;
-
-            // A check against an infinite loop.
-            int cycles = 0;
-            bool stillValid = true;
-            Variable result = Variable.EmptyInstance;
-
-            while (stillValid)
-            {
-                script.Pointer = startWhileCondition;
-
-                //int startSkipOnBreakChar = from;
-                Variable condResult = await script.ExecuteAsync(Constants.END_ARG_ARRAY);
-                stillValid = Convert.ToBoolean(condResult.Value);
-                if (!stillValid)
-                {
-                    break;
-                }
-
-                // Check for an infinite loop if we are comparing same values:
-                if (MAX_LOOPS > 0 && ++cycles >= MAX_LOOPS)
-                {
-                    throw new ArgumentException("Looks like an infinite loop after " +
-                        cycles + " cycles.");
-                }
-
-                result = await ProcessBlockAsync(script);
                 if (result.IsReturn || result.Type == Variable.VarType.BREAK)
                 {
                     script.Pointer = startWhileCondition;
@@ -846,57 +452,6 @@ namespace SplitAndMerge
                    result.Type == Variable.VarType.CONTINUE ? result : Variable.EmptyInstance;
         }
 
-        internal async Task<Variable> ProcessIfAsync(ParsingScript script)
-        {
-            int startIfCondition = script.Pointer;
-
-            Variable result = await script.ExecuteAsync(Constants.END_ARG_ARRAY);
-            bool isTrue = Convert.ToBoolean(result.Value);
-
-            if (isTrue)
-            {
-                result = await ProcessBlockAsync(script);
-
-                if (result.IsReturn ||
-                    result.Type == Variable.VarType.BREAK ||
-                    result.Type == Variable.VarType.CONTINUE)
-                {
-                    // We are here from the middle of the if-block. Skip it.
-                    script.Pointer = startIfCondition;
-                    SkipBlock(script);
-                }
-                SkipRestBlocks(script);
-
-                //return result;
-                return result.IsReturn ||
-                       result.Type == Variable.VarType.BREAK ||
-                       result.Type == Variable.VarType.CONTINUE ? result : Variable.EmptyInstance;
-            }
-
-            // We are in Else. Skip everything in the If statement.
-            SkipBlock(script);
-
-            ParsingScript nextData = new ParsingScript(script);
-            nextData.ParentScript = script;
-
-            string nextToken = Utils.GetNextToken(nextData);
-
-            if (Constants.ELSE_IF == nextToken)
-            {
-                script.Pointer = nextData.Pointer + 1;
-                result = await ProcessIfAsync(script);
-            }
-            else if (Constants.ELSE == nextToken)
-            {
-                script.Pointer = nextData.Pointer + 1;
-                result = await ProcessBlockAsync(script);
-            }
-
-            return result.IsReturn ||
-                   result.Type == Variable.VarType.BREAK ||
-                   result.Type == Variable.VarType.CONTINUE ? result : Variable.EmptyInstance;
-        }
-
         internal Variable ProcessTry(ParsingScript script)
         {
             int startTryCondition = script.Pointer - 1;
@@ -963,72 +518,6 @@ namespace SplitAndMerge
             SkipRestBlocks(script);
             return result;
         }
-        internal async Task<Variable> ProcessTryAsync(ParsingScript script)
-        {
-            int startTryCondition = script.Pointer - 1;
-            int currentStackLevel = GetCurrentStackLevel();
-            Exception exception = null;
-
-            Variable result = null;
-
-            bool alreadyInTryBlock = script.InTryBlock;
-            script.InTryBlock = true;
-            try
-            {
-                result = await ProcessBlockAsync(script);
-            }
-            catch (Exception exc)
-            {
-                exception = exc;
-            }
-            finally
-            {
-                script.InTryBlock = alreadyInTryBlock;
-            }
-
-            if (exception != null || result.IsReturn ||
-                result.Type == Variable.VarType.BREAK ||
-                result.Type == Variable.VarType.CONTINUE)
-            {
-                // We are here from the middle of the try-block either because
-                // an exception was thrown or because of a Break/Continue. Skip it.
-                script.Pointer = startTryCondition;
-                SkipBlock(script);
-            }
-
-            string catchToken = Utils.GetNextToken(script);
-            script.Forward(); // skip opening parenthesis
-                              // The next token after the try block must be a catch.
-            if (Constants.CATCH != catchToken)
-            {
-                throw new ArgumentException("Expecting a 'catch()' but got [" +
-                    catchToken + "]");
-            }
-
-            string exceptionName = Utils.GetNextToken(script);
-            script.Forward(); // skip closing parenthesis
-
-            if (exception != null)
-            {
-                string excStack = CreateExceptionStack(exceptionName, currentStackLevel);
-                InvalidateStacksAfterLevel(currentStackLevel);
-
-                GetVarFunction excMsgFunc = new GetVarFunction(new Variable(exception.Message));
-                AddGlobalOrLocalVariable(exceptionName, excMsgFunc);
-                GetVarFunction excStackFunc = new GetVarFunction(new Variable(excStack));
-                AddGlobalOrLocalVariable(exceptionName + ".Stack", excStackFunc);
-
-                result = await ProcessBlockAsync(script);
-                PopLocalVariable(exceptionName);
-            }
-            else
-            {
-                SkipBlock(script);
-            }
-
-            SkipRestBlocks(script);
-            return result;
-        }
 
         private string CreateExceptionStack(string exceptionName, int lowestStackLevel)
         {
@@ -1082,15 +571,6 @@ namespace SplitAndMerge
             int blockStart = script.Pointer;
             Variable result = null;
 
-            if (script.Debugger != null)
-            {
-                bool done = false;
-                result = script.Debugger.DebugBlockIfNeeded(script, done, (newDone) => { done = newDone; }).Result;
-                if (done)
-                {
-                    return result;
-                }
-            }
             while (script.StillValid())
             {
                 int endGroupRead = script.GoToNextStatement();
@@ -1100,40 +580,6 @@ namespace SplitAndMerge
                 }
 
                 result = script.Execute();
-
-                if (result.IsReturn ||
-                    result.Type == Variable.VarType.BREAK ||
-                    result.Type == Variable.VarType.CONTINUE)
-                {
-                    return result;
-                }
-            }
-            return result;
-        }
-
-        internal async Task<Variable> ProcessBlockAsync(ParsingScript script)
-        {
-            int blockStart = script.Pointer;
-            Variable result = null;
-
-            if (script.Debugger != null)
-            {
-                bool done = false;
-                result = await script.Debugger.DebugBlockIfNeeded(script, done, (newDone) => { done = newDone; });
-                if (done)
-                {
-                    return result;
-                }
-            }
-            while (script.StillValid())
-            {
-                int endGroupRead = script.GoToNextStatement();
-                if (endGroupRead > 0 || !script.StillValid())
-                {
-                    return result != null ? result : new Variable();
-                }
-
-                result = await script.ExecuteAsync();
 
                 if (result.IsReturn ||
                     result.Type == Variable.VarType.BREAK ||
@@ -1219,41 +665,41 @@ namespace SplitAndMerge
 
         public Variable Run(string functionName, Variable arg1 = null, Variable arg2 = null, Variable arg3 = null, ParsingScript script = null)
         {
-            Task<Variable> task;
+            Variable variable;
             try
             {
-                task = CustomFunction.Run(this, functionName, arg1, arg2, arg3, script);
+                variable = CustomFunction.Run(this, functionName, arg1, arg2, arg3, script);
             }
             catch (Exception exc)
             {
-                task = CustomFunction.Run(this, Constants.ON_EXCEPTION, new Variable(functionName),
+                variable = CustomFunction.Run(this, Constants.ON_EXCEPTION, new Variable(functionName),
                                           new Variable(exc.Message), arg2, script);
-                if (task == null)
+                if (variable == null)
                 {
                     throw;
                 }
             }
-            return task == null ? Variable.EmptyInstance : task.Result;
+            return variable == null ? Variable.EmptyInstance : variable;
         }
 
 
         public Variable Run(string functionName, List<Variable> args, ParsingScript script = null)
         {
-            Task<Variable> task = null;
+            Variable variable = null;
             try
             {
-                task = CustomFunction.Run(this, functionName, args, script);
+                variable = CustomFunction.Run(this, functionName, args, script);
             }
             catch (Exception exc)
             {
-                task = CustomFunction.Run(this, Constants.ON_EXCEPTION, new Variable(functionName),
+                variable = CustomFunction.Run(this, Constants.ON_EXCEPTION, new Variable(functionName),
                                           new Variable(exc.Message), args.Count > 0 ? args[0] : Variable.EmptyInstance, script);
-                if (task == null)
+                if (variable == null)
                 {
                     throw;
                 }
             }
-            return task == null ? Variable.EmptyInstance : task.Result;
+            return variable == null ? Variable.EmptyInstance : variable;
         }
 
         public Variable Run(CustomFunction function, List<Variable> args, ParsingScript script = null)
@@ -1265,13 +711,13 @@ namespace SplitAndMerge
             }
             catch (Exception exc)
             {
-                var task = CustomFunction.Run(this, Constants.ON_EXCEPTION, new Variable(function.Name),
+                var variable2 = CustomFunction.Run(this, Constants.ON_EXCEPTION, new Variable(function.Name),
                                           new Variable(exc.Message), args.Count > 0 ? args[0] : Variable.EmptyInstance, script);
-                if (task == null)
+                if (variable2 == null)
                 {
                     throw;
                 }
-                result = task.Result;
+                result = variable2;
             }
             return result;
         }
@@ -1333,20 +779,6 @@ namespace SplitAndMerge
 
         public string GetCurrentNamespace { get { return s_namespace; } }
 
-        public Dictionary<string, CSCSClass> s_allClasses = new Dictionary<string, CSCSClass>();
-
-        private DataFunctionData _dataFunctionData;
-        public DataFunctionData DataFunctionData
-        {
-            get
-            {
-                if (_dataFunctionData == null)
-                    _dataFunctionData = new DataFunctionData(this);
-                return _dataFunctionData;
-            }
-        }
-
-
         public ParserFunction GetFromNamespace(string name)
         {
             ParserFunction result = GetFromNamespace(name, s_namespace);
@@ -1390,10 +822,6 @@ namespace SplitAndMerge
                 return null;
             }
 
-            if (!string.IsNullOrWhiteSpace(prop) && impl is GetVarFunction getVarFunction)
-            {
-                getVarFunction.PropertyName = prop;
-            }
             return impl;
         }
 

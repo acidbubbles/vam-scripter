@@ -1,19 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SplitAndMerge
 {
-    public interface INumericFunction { }
-    public interface IArrayFunction { }
-    public interface IStringFunction { }
-
     public class ParserFunction
     {
         public Interpreter InterpreterInstance { get; set; }
@@ -69,12 +59,6 @@ namespace SplitAndMerge
                 return;
             }
 
-            m_impl = ImportDLLFunction.GetDllFunction(item);
-            if (m_impl != null)
-            {
-                return;
-            }
-
             if (m_impl == s_strOrNumFunction && string.IsNullOrWhiteSpace(item))
             {
                 string problem = (!string.IsNullOrWhiteSpace(action) ? action : ch.ToString());
@@ -110,21 +94,10 @@ namespace SplitAndMerge
             return m_impl.Evaluate(script);
         }
 
-        public async Task<Variable> GetValueAsync(ParsingScript script)
-        {
-            return await m_impl.EvaluateAsync(script);
-        }
-
         protected virtual Variable Evaluate(ParsingScript script)
         {
             // The real implementation will be in the derived classes.
             return new Variable();
-        }
-
-        protected virtual Task<Variable> EvaluateAsync(ParsingScript script)
-        {
-            // If not overriden, the non-sync version will be called.
-            return Task.FromResult( Evaluate(script) );
         }
 
         // Derived classes may want to return a new instance in order to
@@ -189,11 +162,5 @@ namespace SplitAndMerge
           new IdentityFunction();
 
         public static int StackLevelDelta { get; set; }
-    }
-
-    public abstract class ActionFunction : ParserFunction
-    {
-        protected string m_action;
-        public string Action { set { m_action = value; } }
     }
 }

@@ -42,40 +42,6 @@ namespace SplitAndMerge
             return var;
         }
 
-        public static async Task<Variable> GetItemAsync(ParsingScript script, bool eatLast = true)
-        {
-            script.MoveForwardIf(Constants.NEXT_ARG, Constants.SPACE);
-            Utils.CheckNotEnd(script);
-
-            bool inQuotes  = script.Current == Constants.QUOTE;
-            bool inQuotes1 = script.Current == Constants.QUOTE1;
-
-            bool isList = script.Current == Constants.START_GROUP || script.Current == Constants.START_ARRAY;
-            if (isList)
-            {
-                return ProcessArrayMap(script);
-            }
-
-            var sep = script.ProcessingList ? Constants.NEXT_OR_END_ARRAY_EXT : Constants.NEXT_OR_END_ARRAY;
-            // A variable, a function, or a number.
-            Variable var = await script.ExecuteAsync(sep);
-            //value = var.Clone();
-
-            if (inQuotes)
-            {
-                script.MoveForwardIf(Constants.QUOTE);
-            }
-            else if (inQuotes1)
-            {
-                script.MoveForwardIf(Constants.QUOTE1);
-            }
-            if (eatLast)
-            {
-                script.MoveForwardIf(Constants.END_ARG, Constants.SPACE);
-            }
-            return var;
-        }
-
         public static Variable ProcessArrayMap(ParsingScript script)
         {
             bool isList = true;
@@ -229,8 +195,7 @@ namespace SplitAndMerge
                 string body = Utils.GetBodyBetween(script, '{', '}');
                 script.MoveForwardIf('}');
 
-                int parentOffset = script.Pointer +
-                    (script.CurrentClass != null ? script.CurrentClass.ParentOffset : 0);
+                int parentOffset = script.Pointer;
                 customFunc = new CustomFunction(funcName, body, args, script);
                 customFunc.ParentScript = script;
                 customFunc.ParentOffset = parentOffset;
@@ -248,34 +213,19 @@ namespace SplitAndMerge
             }
             if (customFunc != null)
             {
-                if (funcName == "set")
-                {
-                    result.CustomFunctionSet = customFunc;
-                }
-                else
-                {
-                    result.CustomFunctionGet = customFunc;
-                }
                 return;
             }
             if (token[0] == '"')
             {
                 result.String = token.Substring(1, token.Length - 2);
+                return;
             }
-            else if (CanConvertToDouble(token.ToLower(), out double num))
+
+            double num;
+            if (CanConvertToDouble(token.ToLower(), out num))
             {
                 result.Value = num;
-            }
-            else
-            {
-                if (funcName == "set")
-                {
-                    result.CustomSet = token;
-                }
-                else
-                {
-                    result.CustomGet = token;
-                }
+                return;
             }
         }
         public static Variable GetProperties(ParsingScript script)
@@ -477,19 +427,6 @@ namespace SplitAndMerge
             }
             return result;
         }
-        public static async Task<List<string>> GetFunctionArgsAsync(ParsingScript script)
-        {
-            bool isList;
-            List<Variable> args = await Utils.GetArgsAsync(script,
-                Constants.START_ARG, Constants.END_ARG, (outList) => { isList = outList; });
-
-            List<string> result = new List<string>();
-            for (int i = 0; i < args.Count; i++)
-            {
-                result.Add(args[i].AsString());
-            }
-            return result;
-        }
 
         public static List<Variable> GetArgs(ParsingScript script,
             char start, char end, Action<bool> outList)
@@ -515,7 +452,7 @@ namespace SplitAndMerge
             string body = Utils.GetBodyBetween(tempScript, start, end);
 #pragma warning restore 219
             // After the statement above tempScript.Parent will point to the last
-            // character belonging to the body between start and end characters. 
+            // character belonging to the body between start and end characters.
 
             while (script.Pointer < tempScript.Pointer)
             {
@@ -535,62 +472,7 @@ namespace SplitAndMerge
             if (script.Pointer <= tempScript.Pointer)
             {
                 // Eat closing parenthesis, if there is one, but only if it closes
-                // the current argument list, not one after it. 
-                script.MoveForwardIf(Constants.END_ARG, end);
-            }
-
-            script.MoveForwardIf(Constants.SPACE);
-            //script.MoveForwardIf(Constants.SPACE, Constants.END_STATEMENT);
-            outList(isList);
-            return args;
-        }
-
-        public static async Task<List<Variable>> GetArgsAsync(ParsingScript script,
-            char start, char end, Action<bool> outList)
-        {
-            List<Variable> args = new List<Variable>();
-            bool isList = script.StillValid() && script.Current == Constants.START_GROUP;
-
-            if (!script.StillValid() || script.Current == Constants.END_STATEMENT)
-            {
-                return args;
-            }
-
-            ParsingScript tempScript = script.GetTempScript(script.String, script.Pointer);
-
-            if (script.Current != start && script.TryPrev() != start &&
-               (script.Current == ' ' || script.TryPrev() == ' '))
-            { // Allow functions with space separated arguments
-                start = ' ';
-                end = Constants.END_STATEMENT;
-            }
-
-            // ScriptingEngine - body is unsed (used in Debugging) but GetBodyBetween has sideeffects			
-#pragma warning disable 219
-            string body = Utils.GetBodyBetween(tempScript, start, end);
-#pragma warning restore 219
-            // After the statement above tempScript.Parent will point to the last
-            // character belonging to the body between start and end characters. 
-
-            while (script.Pointer < tempScript.Pointer)
-            {
-                Variable item = await Utils.GetItemAsync(script, false);
-                args.Add(item);
-                if (script.Pointer < tempScript.Pointer)
-                {
-                    script.MoveForwardIf(Constants.END_GROUP);
-                    script.MoveForwardIf(Constants.NEXT_ARG);
-                }
-                if (script.Pointer == tempScript.Pointer - 1)
-                {
-                    script.MoveForwardIf(Constants.END_ARG, Constants.END_GROUP);
-                }
-            }
-
-            if (script.Pointer <= tempScript.Pointer)
-            {
-                // Eat closing parenthesis, if there is one, but only if it closes
-                // the current argument list, not one after it. 
+                // the current argument list, not one after it.
                 script.MoveForwardIf(Constants.END_ARG, end);
             }
 
@@ -611,7 +493,7 @@ namespace SplitAndMerge
 
             return args;
         }
-    
+
         public static string[] GetFunctionSignature(ParsingScript script)
         {
             script.MoveForwardIf(Constants.START_ARG, Constants.SPACE);
@@ -963,7 +845,7 @@ namespace SplitAndMerge
 
                 if (string.IsNullOrWhiteSpace(ch.ToString()))
                 {
-                    precompiledPart = precompiledPart || 
+                    precompiledPart = precompiledPart ||
                         lastToken.ToString().Equals(Constants.COMPILED_FUNCTION, StringComparison.OrdinalIgnoreCase);
                     lastToken.Clear();
                 }
@@ -1243,7 +1125,7 @@ namespace SplitAndMerge
 
         public static string ReplaceSpaces(ParsingScript script, char replaceChar = ',', char end = Constants.END_STATEMENT)
         {
-            StringBuilder sb = new StringBuilder(); 
+            StringBuilder sb = new StringBuilder();
             while (script.StillValid() && script.TryCurrent() != end)
             {
                 var token = GetBodyBetween(script, '\0', ' ', end);
@@ -1445,11 +1327,6 @@ namespace SplitAndMerge
             int end = 0;
             return GetArrayIndices(script, varName, end, (string str, int i) => { updateVarName(str); end = i; });
         }
-        public static async Task<List<Variable>> GetArrayIndicesAsync(ParsingScript script, string varName, Action<string> updateVarName)
-        {
-            int end = 0;
-            return await GetArrayIndicesAsync(script, varName, end, (string str, int i) => { updateVarName(str); end = i; });
-        }
 
         public static List<Variable> GetArrayIndices(ParsingScript script, string varName, int end, Action<string, int> updateVals)
         {
@@ -1489,48 +1366,10 @@ namespace SplitAndMerge
             updateVals(varName, end);
             return indices;
         }
-        public static async Task<List<Variable>> GetArrayIndicesAsync(ParsingScript script, string varName, int end, Action<string, int> updateVals)
-        {
-            List<Variable> indices = new List<Variable>();
-
-            int argStart = varName.IndexOf(Constants.START_ARRAY);
-            if (argStart < 0)
-            {
-                return indices;
-            }
-            int firstIndexStart = argStart;
-
-            while (argStart < varName.Length &&
-                   varName[argStart] == Constants.START_ARRAY)
-            {
-                int argEnd = varName.IndexOf(Constants.END_ARRAY, argStart + 1);
-                if (argEnd == -1 || argEnd <= argStart + 1)
-                {
-                    break;
-                }
-
-                ParsingScript tempScript = script.GetTempScript(varName, argStart);
-                tempScript.MoveForwardIf(Constants.START_ARG, Constants.START_ARRAY);
-
-                Variable index = await tempScript.ExecuteAsync(Constants.END_ARRAY_ARRAY);
-
-                indices.Add(index);
-                argStart = argEnd + 1;
-            }
-
-            if (indices.Count > 0)
-            {
-                varName = varName.Substring(0, firstIndexStart);
-                end = argStart - 1;
-            }
-
-            updateVals(varName, end);
-            return indices;
-        }
 
         public static List<string> ExtractTokens(ParsingScript script)
         {
-            List<string> tokens = new List<string>(); 
+            List<string> tokens = new List<string>();
             script.MoveForwardIf(Constants.START_ARG);
             while (script.TryCurrent() != Constants.END_GROUP)
             {
@@ -1588,7 +1427,7 @@ namespace SplitAndMerge
 
             return text;
         }
-        public static async Task<Variable> GetVar(string paramName, ParsingScript script)
+        public static Variable GetVar(string paramName, ParsingScript script)
         {
             if (script == null)
             {
@@ -1599,17 +1438,17 @@ namespace SplitAndMerge
             {
                 throw new ArgumentException("Variable [" + paramName + "] not found.");
             }
-            Variable result = await function.GetValueAsync(script);
+            Variable result = function.GetValue(script);
             return result;
         }
-        public static async Task<string> GetString(string paramName, ParsingScript script = null)
+        public static string GetString(string paramName, ParsingScript script = null)
         {
-            Variable result = await GetVar(paramName, script);
+            Variable result = GetVar(paramName, script);
             return result.AsString();
         }
-        public static async Task<double> GetDouble(string paramName, ParsingScript script = null)
+        public static double GetDouble(string paramName, ParsingScript script = null)
         {
-            Variable result = await GetVar(paramName, script);
+            Variable result = GetVar(paramName, script);
             return result.AsDouble();
         }
         public static string PrepareArgs(string argsStr, bool validateQuotes = false)
