@@ -212,8 +212,10 @@ namespace ScripterLang
             var token = Consume();
             switch (token.Type)
             {
-                case TokenType.Number:
-                    return new NumberExpression(double.Parse(token.Value));
+                case TokenType.Float:
+                    return new FloatExpression(float.Parse(token.Value));
+                case TokenType.Integer:
+                    return new FloatExpression(float.Parse(token.Value));
                 case TokenType.String:
                     return new StringExpression(token.Value);
                 case TokenType.Boolean:

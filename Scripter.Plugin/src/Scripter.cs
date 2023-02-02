@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ScripterLang;
 using UnityEngine;
 using UnityEngine.UI;
+using Vam;
 
 public class Scripter : MVRScript
 {
@@ -29,13 +30,15 @@ public class Scripter : MVRScript
     public override void Init()
     {
         _runtime = new Runtime();
+        VamFunctions.Register(_runtime.GlobalLexicalContext);
 
         _scriptJSON.valNoCallback = @"
 // Welcome to Scripter!
-x = 0;
-x++;
-if(x == 0) {
-    logMessage(""The result is: "" + x);
+var alpha = getFloatParamValue(""Cube#1"", ""CubeMat"", ""Alpha"", 0.5);
+if(alpha == 0) {
+    logMessage(""The cube is fully transparent"");
+} else {
+    logMessage(""The cube alpha is: "" + alpha);
 }
 ".Trim();
         _history.Add(_scriptJSON.val);

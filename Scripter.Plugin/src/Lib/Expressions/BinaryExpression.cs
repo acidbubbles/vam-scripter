@@ -21,31 +21,63 @@
             switch (Operator)
             {
                 case "+":
-                    if (left.Type == ValueTypes.NumberType && right.Type == ValueTypes.NumberType)
+                    if (left.Type == ValueTypes.FloatType && right.Type == ValueTypes.FloatType)
                     {
-                        return Value.CreateNumber(left.Number + right.Number);
+                        return Value.CreateFloat(left.FloatValue + right.FloatValue);
+                    }
+                    if (left.Type == ValueTypes.FloatType || right.Type == ValueTypes.FloatType)
+                    {
+                        return Value.CreateFloat(left.AsFloat + right.AsFloat);
+                    }
+                    if (left.Type == ValueTypes.IntegerType && right.Type == ValueTypes.IntegerType)
+                    {
+                        return Value.CreateInteger(left.IntValue + right.IntValue);
                     }
                     if (left.Type == ValueTypes.StringType && right.Type == ValueTypes.StringType)
                     {
-                        return Value.CreateString(left.String + right.String);
+                        return Value.CreateString(left.StringValue + right.StringValue);
                     }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "-":
-                    if (left.Type == ValueTypes.NumberType && right.Type == ValueTypes.NumberType)
+                    if (left.Type == ValueTypes.FloatType && right.Type == ValueTypes.FloatType)
                     {
-                        return Value.CreateNumber(left.Number - right.Number);
+                        return Value.CreateFloat(left.FloatValue - right.FloatValue);
+                    }
+                    if (left.Type == ValueTypes.FloatType || right.Type == ValueTypes.FloatType)
+                    {
+                        return Value.CreateFloat(left.AsFloat - right.AsFloat);
+                    }
+                    if (left.Type == ValueTypes.IntegerType && right.Type == ValueTypes.IntegerType)
+                    {
+                        return Value.CreateInteger(left.IntValue - right.IntValue);
                     }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "*":
-                    if (left.Type == ValueTypes.NumberType && right.Type == ValueTypes.NumberType)
+                    if (left.Type == ValueTypes.FloatType && right.Type == ValueTypes.FloatType)
                     {
-                        return Value.CreateNumber(left.Number * right.Number);
+                        return Value.CreateFloat(left.FloatValue * right.FloatValue);
+                    }
+                    if (left.Type == ValueTypes.FloatType || right.Type == ValueTypes.FloatType)
+                    {
+                        return Value.CreateFloat(left.AsFloat * right.AsFloat);
+                    }
+                    if (left.Type == ValueTypes.IntegerType && right.Type == ValueTypes.IntegerType)
+                    {
+                        return Value.CreateInteger(left.IntValue * right.IntValue);
                     }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "/":
-                    if (left.Type == ValueTypes.NumberType && right.Type == ValueTypes.NumberType)
+                    if (left.Type == ValueTypes.FloatType && right.Type == ValueTypes.FloatType)
                     {
-                        return Value.CreateNumber(left.Number / right.Number);
+                        return Value.CreateFloat(left.FloatValue / right.FloatValue);
+                    }
+                    if (left.Type == ValueTypes.FloatType || right.Type == ValueTypes.FloatType)
+                    {
+                        return Value.CreateFloat(left.AsFloat / right.AsFloat);
+                    }
+                    if (left.Type == ValueTypes.IntegerType && right.Type == ValueTypes.IntegerType)
+                    {
+                        return Value.CreateInteger(left.IntValue / right.IntValue);
                     }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "&&":

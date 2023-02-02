@@ -10,10 +10,10 @@ public class TokenizerTests
     public void VariableDeclaration()
     {
         var tokens = Tokenizer.Tokenize("""
-            var x = 12;
+            var x = 12.34;
             """);
 
-        Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "var", "x", "=", "12", ";" }));
+        Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "var", "x", "=", "12.34", ";" }));
     }
 
     [Test]

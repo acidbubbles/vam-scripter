@@ -30,11 +30,19 @@ namespace ScripterLang
                     case '8':
                     case '9':
                         var start = position;
-                        while (++position < length && char.IsDigit(input[position]))
+                        var isFloat = false;
+                        while (++position < length)
                         {
+                            if (char.IsDigit(input[position])) continue;
+                            if (input[position] == '.')
+                            {
+                                isFloat = true;
+                                continue;
+                            }
+                            break;
                         }
 
-                        yield return new Token(TokenType.Number, new string(input, start, position - start), line);
+                        yield return new Token(isFloat ? TokenType.Float : TokenType.Integer, new string(input, start, position - start), line);
                         break;
                     case '+':
                     case '-':

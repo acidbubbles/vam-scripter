@@ -2,17 +2,19 @@
 {
     public static class ValueTypes
     {
-        public const int UndefinedType = 0;
-        public const int NumberType = 1;
-        public const int StringType = 2;
-        public const int BooleanType = 3;
+        public const int UndefinedType = TokenType.None;
+        public const int IntegerType = TokenType.Integer;
+        public const int FloatType = TokenType.Float;
+        public const int StringType = TokenType.String;
+        public const int BooleanType = TokenType.Boolean;
 
         public static string Name(int type)
         {
             switch (type)
             {
                 case UndefinedType: return "undefined";
-                case NumberType: return "number";
+                case IntegerType: return "int";
+                case FloatType: return "float";
                 case StringType: return "string";
                 case BooleanType: return "boolean";
                 default: return "unknown";

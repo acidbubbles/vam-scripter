@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace ScripterLang
 {
@@ -7,23 +8,30 @@ namespace ScripterLang
         public static readonly Value Undefined = new Value { Type = ValueTypes.UndefinedType };
 
         public int Type;
-        public double Number;
-        public string String;
-        public bool AsBool => Number != 0;
+        public float FloatValue;
+        public int IntValue;
+        public string StringValue;
+        public bool AsBool => IntValue != 0;
+        public float AsFloat => Type == ValueTypes.FloatType ? FloatValue : IntValue;
 
-        public static Value CreateNumber(double value)
+        public static Value CreateFloat(float value)
         {
-            return new Value { Type = ValueTypes.NumberType, Number = value };
+            return new Value { Type = ValueTypes.FloatType, FloatValue = value };
+        }
+
+        public static Value CreateInteger(int value)
+        {
+            return new Value { Type = ValueTypes.IntegerType, FloatValue = value };
         }
 
         public static Value CreateString(string value)
         {
-            return new Value { Type = ValueTypes.StringType, String = value };
+            return new Value { Type = ValueTypes.StringType, StringValue = value };
         }
 
         public static Value CreateBoolean(bool value)
         {
-            return new Value { Type = ValueTypes.BooleanType, Number = value ? 1 : 0 };
+            return new Value { Type = ValueTypes.BooleanType, IntValue = value ? 1 : 0 };
         }
 
         public bool Equals(Value other)
@@ -31,9 +39,10 @@ namespace ScripterLang
             if (Type != other.Type) return false;
             switch (Type)
             {
-                case ValueTypes.NumberType: return Number == other.Number;
-                case ValueTypes.BooleanType: return Number == other.Number;
-                case ValueTypes.StringType: return String == other.String;
+                case ValueTypes.FloatType: return Math.Abs(FloatValue - other.FloatValue) < float.Epsilon;
+                case ValueTypes.IntegerType: return IntValue == other.IntValue;
+                case ValueTypes.BooleanType: return IntValue == other.IntValue;
+                case ValueTypes.StringType: return StringValue == other.StringValue;
                 default: return false;
             }
         }
@@ -42,8 +51,9 @@ namespace ScripterLang
         {
             switch (Type)
             {
-                case ValueTypes.StringType: return String;
-                case ValueTypes.NumberType: return Number.ToString(CultureInfo.InvariantCulture);
+                case ValueTypes.StringType: return StringValue;
+                case ValueTypes.FloatType: return FloatValue.ToString(CultureInfo.InvariantCulture);
+                case ValueTypes.IntegerType: return IntValue.ToString();
                 case ValueTypes.BooleanType: return AsBool ? "true" : "false";
                 default: return ValueTypes.Name(Type);
             }

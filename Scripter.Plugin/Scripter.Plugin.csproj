@@ -73,13 +73,14 @@
     <Compile Include="src\Lib\Expressions\BinaryExpression.cs" />
     <Compile Include="src\Lib\Expressions\CodeBlockExpression.cs" />
     <Compile Include="src\Lib\Expressions\BooleanExpression.cs" />
+    <Compile Include="src\Lib\Expressions\IntegerExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\EmptyExpression.cs" />
     <Compile Include="src\Lib\Expressions\Expression.cs" />
     <Compile Include="src\Lib\Expressions\ForExpression.cs" />
     <Compile Include="src\Lib\Expressions\FunctionCallExpression.cs" />
     <Compile Include="src\Lib\Expressions\IfExpression.cs" />
-    <Compile Include="src\Lib\Expressions\NumberExpression.cs" />
+    <Compile Include="src\Lib\Expressions\FloatExpression.cs" />
     <Compile Include="src\Lib\Expressions\ParenthesesExpression.cs" />
     <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
     <Compile Include="src\Lib\Expressions\StringExpression.cs" />
@@ -98,6 +99,8 @@
       <Link>Runtime\ValueTypes.cs</Link>
     </Compile>
     <Compile Include="src\Scripter.cs" />
+    <Compile Include="src\Vam\ScripterPluginException.cs" />
+    <Compile Include="src\Vam\VamFunctions.cs" />
     <!-- /ScripterSource -->
   </ItemGroup>
 
