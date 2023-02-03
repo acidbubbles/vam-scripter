@@ -2,13 +2,35 @@
 
 A scripting engine to write some code inside Virt-A-Mate without having to write a new plugin.
 
-### Features:
+## Language Features
 
-- [ ] Maths (`+`, `-`, `*`, `/`)
-- [ ] String concatenation (`+`)
-- [ ] Invoking Virt-A-Mate triggers (`trigger()`)
+- Types (`string`, `float`, `int`, `bool`)
+- Boolean operators (`||`, `&&`, `==`, `!=`, `<`, `>`, `<=`, `>=`)
+- Math operators (`+`, `-`, `*`, `/`)
+- String concatenation (`+`)
+- Increment operators (`++`, `--`)
+- Comments (`//`, `/* */`)
+- Keywords (`var`, `if`, `else`, `for`, `while`, `true`, `false`, `throw`)
+- Code blocks (`{`, `}`)
+- Lexical scope (scoped variables)
 
-### Example:
+## Notable Omissions
+
+- Objects
+- Custom functions
+- Order of precedence
+
+## Virt-A-Mate Functions
+
+- `getDateTime(format)`
+- `logMessage(message)`
+- `logError(message)`
+- `getFloatParamValue(atomName, storableName, paramName)`
+- `setFloatParamValue(atomName, storableName, paramName, value)`
+- `invokeTrigger(atomName, storableName, paramName)`
+- `invokeKeybinding(bindingName)`
+
+## Example
 
 ```c#
 // Welcome to Scripter!
@@ -20,6 +42,6 @@ if(alpha == 0) {
 }
 ```
 
-## License
+# License
 
 [GNU GPLv3](LICENSE.md)
