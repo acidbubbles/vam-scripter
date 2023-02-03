@@ -8,10 +8,12 @@ src\Lib\Expressions\FloatExpression.cs
 src\Lib\Expressions\ForExpression.cs
 src\Lib\Expressions\FunctionCallExpression.cs
 src\Lib\Expressions\IfExpression.cs
+src\Lib\Expressions\IncrementDecrementExpression.cs
 src\Lib\Expressions\IntegerExpression.cs
 src\Lib\Expressions\ParenthesesExpression.cs
 src\Lib\Expressions\ReturnExpression.cs
 src\Lib\Expressions\StringExpression.cs
+src\Lib\Expressions\ThrowExpression.cs
 src\Lib\Expressions\VariableDeclarationExpression.cs
 src\Lib\Expressions\VariableExpression.cs
 src\Lib\Expressions\WhileExpression.cs

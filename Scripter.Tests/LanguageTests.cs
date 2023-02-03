@@ -90,6 +90,19 @@ public class Tests
     }
 
     [Test]
+    public void Strings()
+    {
+        const string source = """
+            return "a" + 2 + true;
+            ;
+            """;
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var result = expression.Evaluate(_domain);
+
+        Assert.That(result.ToString(), Is.EqualTo("a2true"));
+    }
+
+    [Test]
     public void MultipleRuns()
     {
         const string source = """

@@ -12,8 +12,13 @@ namespace ScripterLang
         public float FloatValue;
         public int IntValue;
         public string StringValue;
+        public bool IsBool => Type == ValueTypes.BooleanType;
         public bool AsBool => IntValue != 0;
+        public bool IsNumber => Type == ValueTypes.FloatType || Type == ValueTypes.IntegerType;
+        public bool IsInt => Type == ValueTypes.IntegerType;
+        public bool IsFloat => Type == ValueTypes.FloatType;
         public float AsFloat => Type == ValueTypes.FloatType ? FloatValue : IntValue;
+        public bool IsString => Type == ValueTypes.StringType;
 
         public static Value CreateFloat(float value)
         {
@@ -44,6 +49,7 @@ namespace ScripterLang
                 case ValueTypes.IntegerType: return IntValue == other.IntValue;
                 case ValueTypes.BooleanType: return IntValue == other.IntValue;
                 case ValueTypes.StringType: return StringValue == other.StringValue;
+                case ValueTypes.UndefinedType: return true;
                 default: return false;
             }
         }
