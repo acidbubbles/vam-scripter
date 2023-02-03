@@ -73,8 +73,20 @@ public class Tests
         Assert.That(exc!.Message, Is.EqualTo("Error!"));
     }
 
+    [Test]
+    public void Maths()
+    {
+        const string source = """
+            var x = 1;
+            var y = ++x;
+            x = (x + y) * 2;
+            return x++;
+            ;
+            """;
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var result = expression.Evaluate(_domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("ok"));
+        Assert.That(result.ToString(), Is.EqualTo("8"));
     }
 
     [Test]

@@ -44,33 +44,46 @@ namespace ScripterLang
 
                         yield return new Token(isFloat ? TokenType.Float : TokenType.Integer, new string(input, start, position - start), line);
                         break;
-                    case '+':
-                    case '-':
-                    case '*':
                     case '/':
-                    case '%':
-                    case '^':
-                        if (input[position] == '/')
+                        if (input[position + 1] == '/')
                         {
-                            if (input[position + 1] == '/')
+                            position++;
+                            while (++position < length && input[position] != '\n')
                             {
-                                position++;
-                                while (++position < length && input[position] != '\n')
-                                {
-                                }
-                                break;
                             }
 
-                            if (input[position + 1] == '*')
-                            {
-                                position++;
-                                while (++position < length && input[position] != '*' && input[position + 1] != '/')
-                                {
-                                }
-                                position += 2;
-                                break;
-                            }
+                            break;
                         }
+
+                        if (input[position + 1] == '*')
+                        {
+                            position++;
+                            while (++position < length && input[position] != '*' && input[position + 1] != '/')
+                            {
+                            }
+
+                            position += 2;
+                            break;
+                        }
+
+                        yield return new Token(TokenType.Operator, input[position].ToString(), line);
+                        position++;
+                        break;
+                    case '+':
+                    case '-':
+                        if (input[position] == input[position + 1])
+                        {
+                            yield return new Token(TokenType.IncrementDecrement, new string(input, position, 2), line);
+                            position += 2;
+                            break;
+                        }
+
+                        yield return new Token(TokenType.Operator, input[position].ToString(), line);
+                        position++;
+                        break;
+                    case '*':
+                    case '%':
+                    case '^':
                         yield return new Token(TokenType.Operator, input[position].ToString(), line);
                         position++;
                         break;

@@ -107,7 +107,7 @@ namespace ScripterLang
         private Expression ParseThrowDeclaration(ScopeLexicalContext lexicalContext)
         {
             MoveNext();
-            var message = ParseValueExpression(lexicalContext);
+            var message = ParseValueStatementExpression(lexicalContext);
             return new ThrowExpression(message);
         }
 
@@ -146,7 +146,7 @@ namespace ScripterLang
         {
             MoveNext();
             Consume().Expect(TokenType.LeftParenthesis);
-            var condition = ParseValueExpression(lexicalContext);
+            var condition = ParseValueStatementExpression(lexicalContext);
             Consume().Expect(TokenType.RightParenthesis);
             var body = ParseCodeBlock(lexicalContext);
 
@@ -188,7 +188,9 @@ namespace ScripterLang
             var nameToken = Consume();
             nameToken.Expect(TokenType.Identifier);
 
-            if (Peek().Match(TokenType.Assignment))
+            var nextToken = Peek();
+
+            if (nextToken.Match(TokenType.Assignment))
             {
                 MoveNext();
                 var right = ParseValueStatementExpression(lexicalContext);
@@ -196,7 +198,11 @@ namespace ScripterLang
                 return new AssignmentExpression(nameToken.Value, right);
             }
 
-            // TODO: ++, --
+            if (nextToken.Match(TokenType.IncrementDecrement))
+            {
+                MoveNext();
+                return new IncrementDecrementExpression(nameToken.Value, nextToken.Value, true);
+            }
 
             MoveNext();
             return new VariableExpression(nameToken.Value);
@@ -237,19 +243,39 @@ namespace ScripterLang
                     return new StringExpression(token.Value);
                 case TokenType.Boolean:
                     return new BooleanExpression(bool.Parse(token.Value));
+                case TokenType.IncrementDecrement:
+                {
+                    var op = token.Value;
+                    var name = Consume().Value;
+                    return new IncrementDecrementExpression(name, op, false);
+                }
+                case TokenType.LeftParenthesis:
+                {
+                    var expression = ParseValueStatementExpression(lexicalContext);
+                    Consume().Expect(TokenType.RightParenthesis);
+                    return new ParenthesesExpression(expression);
+                }
                 case TokenType.Identifier:
+                {
                     var name = token.Value;
-                    if (Peek().Match(TokenType.LeftParenthesis))
+                    var next = Peek();
+                    if (next.Match(TokenType.LeftParenthesis))
                     {
                         MoveNext();
                         var arguments = ParseArgumentList(lexicalContext);
                         Consume().Expect(TokenType.RightParenthesis);
                         return new FunctionCallExpression(name, arguments, lexicalContext);
                     }
+                    else if (next.Match(TokenType.IncrementDecrement))
+                    {
+                        MoveNext();
+                        return new IncrementDecrementExpression(name, next.Value, true);
+                    }
                     else
                     {
                         return new VariableExpression(name);
                     }
+                }
                 default:
                     throw new ScripterParsingException("Unexpected token " + token.Value);
             }

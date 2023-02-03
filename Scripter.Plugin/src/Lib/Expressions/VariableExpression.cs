@@ -2,16 +2,16 @@
 {
     public class VariableExpression : Expression
     {
+        private readonly string _name;
+
         public VariableExpression(string name)
         {
-            Name = name;
+            _name = name;
         }
-
-        public string Name { get; }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            return domain.Variables[Name];
+            return domain.Variables[_name];
         }
     }
 }
