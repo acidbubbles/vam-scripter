@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace ScripterLang
 {
@@ -134,8 +135,13 @@ namespace ScripterLang
         {
             MoveNext();
             Consume().Expect(TokenType.LeftParenthesis);
-            var initializer = ParseValueStatementExpression(lexicalContext);
+            Expression initializer;
+            if (Peek().Match(TokenType.Keyword, "var"))
+                initializer = ParseVariableDeclaration(lexicalContext);
+            else
+                initializer = ParseValueStatementExpression(lexicalContext);
             var condition = ParseValueStatementExpression(lexicalContext);
+            Consume().Expect(TokenType.SemiColon);
             var increment = ParseValueStatementExpression(lexicalContext);
             Consume().Expect(TokenType.RightParenthesis);
             var body = ParseCodeBlock(lexicalContext);

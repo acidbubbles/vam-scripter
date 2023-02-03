@@ -25,7 +25,7 @@ namespace ScripterLang
             _input = input;
             _length = _input.Length;
             _line = 1;
-            _position = -1;
+            _position = 0;
         }
         private char Current => _input[_position];
         private char Peek(int c = 1) => _input[_position + c];
@@ -45,7 +45,7 @@ namespace ScripterLang
 
         private IEnumerable<Token> Tokenize()
         {
-            while (MoveNext())
+            while (!IsAtEnd())
             {
                 switch (Current)
                 {
@@ -118,8 +118,7 @@ namespace ScripterLang
                         MoveNext();
                         break;
                     case '&':
-                        MoveNext();
-                        if (IsAtEnd() && Current == '&')
+                        if (MoveNext() && Current == '&')
                         {
                             yield return new Token(TokenType.Operator, "&&", Location);
                             MoveNext();
@@ -130,8 +129,7 @@ namespace ScripterLang
                         }
                         break;
                     case '|':
-                        MoveNext();
-                        if (IsAtEnd() && Current == '|')
+                        if (MoveNext() && Current == '|')
                         {
                             yield return new Token(TokenType.Operator, "||", Location);
                             MoveNext();
@@ -142,8 +140,7 @@ namespace ScripterLang
                         }
                         break;
                     case '<':
-                        MoveNext();
-                        if (IsAtEnd() && Current == '=')
+                        if (MoveNext() && Current == '=')
                         {
                             yield return new Token(TokenType.Operator, "<=", Location);
                             MoveNext();
@@ -155,8 +152,7 @@ namespace ScripterLang
 
                         break;
                     case '>':
-                        MoveNext();
-                        if (IsAtEnd() && Current == '=')
+                        if (MoveNext() && Current == '=')
                         {
                             yield return new Token(TokenType.Operator, ">=", Location);
                             MoveNext();
@@ -168,8 +164,7 @@ namespace ScripterLang
 
                         break;
                     case '=':
-                        MoveNext();
-                        if (IsAtEnd() && Current == '=')
+                        if (MoveNext() && Current == '=')
                         {
                             yield return new Token(TokenType.Operator, "==", Location);
                             MoveNext();
@@ -181,8 +176,7 @@ namespace ScripterLang
 
                         break;
                     case '!':
-                        MoveNext();
-                        if (IsAtEnd() && Current == '=')
+                        if (MoveNext() && Current == '=')
                         {
                             yield return new Token(TokenType.Operator, "!=", Location);
                             MoveNext();
@@ -238,7 +232,7 @@ namespace ScripterLang
                         if (char.IsLetter(Current))
                         {
                             var nameStart = _position;
-                            while (IsAtEnd() && char.IsLetterOrDigit(Current))
+                            while (!IsAtEnd() && char.IsLetterOrDigit(Current))
                             {
                                 MoveNext();
                             }
@@ -252,6 +246,7 @@ namespace ScripterLang
                                     break;
                                 case "var":
                                 case "for":
+                                case "while":
                                 case "if":
                                 case "else":
                                 case "return":

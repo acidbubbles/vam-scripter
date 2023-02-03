@@ -1,4 +1,6 @@
-﻿namespace ScripterLang
+﻿using System;
+
+namespace ScripterLang
 {
     public class BinaryExpression : Expression
     {
@@ -62,6 +64,30 @@
                     if (left.IsNumber && right.IsNumber)
                     {
                         return Value.CreateFloat(left.AsFloat / right.AsFloat);
+                    }
+                    throw MakeUnsupportedOperandsException(left, right);
+                case "<":
+                    if (left.IsNumber && right.IsNumber)
+                    {
+                        return Value.CreateBoolean(left.AsFloat < right.AsFloat);
+                    }
+                    throw MakeUnsupportedOperandsException(left, right);
+                case "<=":
+                    if (left.IsNumber && right.IsNumber)
+                    {
+                        return Value.CreateBoolean(left.AsFloat <= right.AsFloat);
+                    }
+                    throw MakeUnsupportedOperandsException(left, right);
+                case ">":
+                    if (left.IsNumber && right.IsNumber)
+                    {
+                        return Value.CreateBoolean(left.AsFloat > right.AsFloat);
+                    }
+                    throw MakeUnsupportedOperandsException(left, right);
+                case ">=":
+                    if (left.IsNumber && right.IsNumber)
+                    {
+                        return Value.CreateBoolean(left.AsFloat >= right.AsFloat);
                     }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "&&":
