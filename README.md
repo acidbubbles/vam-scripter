@@ -10,7 +10,7 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 - String concatenation (`+`)
 - Increment operators (`++`, `--`)
 - Comments (`//`, `/* */`)
-- Keywords (`var`, `if`, `else`, `for`, `while`, `true`, `false`, `throw`)
+- Keywords (`var`, `if`, `else`, `for`, `while`, `true`, `false`, `throw`, `static`)
 - Code blocks (`{`, `}`)
 - Lexical scope (scoped variables)
 
@@ -30,7 +30,9 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 - `invokeTrigger(atomName, storableName, paramName)`
 - `invokeKeybinding(bindingName)`
 
-## Example
+## Examples
+
+Here is a simple example to get you started with the kind of code you can write:
 
 ```c#
 // Welcome to Scripter!
@@ -40,6 +42,18 @@ if(alpha == 0) {
 } else {
     logMessage("The cube alpha is: " + alpha);
 }
+```
+
+You can use static values:
+
+```c#
+static var initialized = false;
+static var counter = 0;
+if(!initialized) {
+    // Do some work
+}
+counter++;
+logMessage("Called " + counter + " times");
 ```
 
 # License

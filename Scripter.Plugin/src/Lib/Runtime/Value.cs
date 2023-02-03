@@ -12,6 +12,7 @@ namespace ScripterLang
         public float FloatValue;
         public int IntValue;
         public string StringValue;
+
         public bool IsBool => Type == ValueTypes.BooleanType;
         public bool AsBool => IntValue != 0;
         public bool IsNumber => Type == ValueTypes.FloatType || Type == ValueTypes.IntegerType;
@@ -27,7 +28,7 @@ namespace ScripterLang
 
         public static Value CreateInteger(int value)
         {
-            return new Value { Type = ValueTypes.IntegerType, FloatValue = value };
+            return new Value { Type = ValueTypes.IntegerType, IntValue = value };
         }
 
         public static Value CreateString(string value)

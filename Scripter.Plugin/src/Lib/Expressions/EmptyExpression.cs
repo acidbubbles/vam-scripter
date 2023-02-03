@@ -2,9 +2,7 @@
 {
     public class EmptyExpression : Expression
     {
-        public EmptyExpression()
-        {
-        }
+        public static EmptyExpression Instance = new EmptyExpression();
 
         public override Value Evaluate(RuntimeDomain domain)
         {

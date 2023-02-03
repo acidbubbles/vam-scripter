@@ -4,10 +4,11 @@
     {
         public const int None = 0;
 
-        public const int Integer = 10;
-        public const int Float = 11;
-        public const int String = 12;
-        public const int Boolean = 13;
+        public const int Undefined = 10;
+        public const int Integer = 11;
+        public const int Float = 12;
+        public const int String = 13;
+        public const int Boolean = 14;
         public const int Identifier = 19;
 
         public const int Comma = 20;

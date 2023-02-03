@@ -4,24 +4,24 @@ namespace ScripterLang
 {
     public class ScopeLexicalContext : LexicalContext
     {
-        private readonly GlobalLexicalContext _root;
+        public readonly GlobalLexicalContext Root;
         private readonly LexicalContext _parent;
 
         public ScopeLexicalContext(GlobalLexicalContext parent)
         {
-            _root = parent;
+            Root = parent;
             _parent = parent;
         }
 
         public ScopeLexicalContext(ScopeLexicalContext parent)
         {
-            _root = parent._root;
+            Root = parent.Root;
             _parent = parent;
         }
 
         public override Func<Value[], Value> GetFunction(string name)
         {
-            return _root.GetFunction(name);
+            return Root.GetFunction(name);
         }
     }
 }

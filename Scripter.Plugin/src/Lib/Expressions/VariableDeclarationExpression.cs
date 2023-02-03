@@ -14,7 +14,7 @@
         public override Value Evaluate(RuntimeDomain domain)
         {
             var rightValue = Expression.Evaluate(domain);
-            domain.Variables[Name] = rightValue;
+            domain.CreateVariable(Name, rightValue);
             return rightValue;
         }
     }

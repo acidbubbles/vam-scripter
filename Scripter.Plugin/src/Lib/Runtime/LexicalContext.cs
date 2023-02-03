@@ -5,7 +5,7 @@ namespace ScripterLang
 {
     public abstract class LexicalContext
     {
-        public readonly Dictionary<string, Value> Declarations = new Dictionary<string, Value>();
+        public List<string> Declarations = new List<string>();
 
         public abstract Func<Value[], Value> GetFunction(string name);
     }

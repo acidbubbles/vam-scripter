@@ -74,6 +74,7 @@ namespace ScripterLang
                 if (token.Value == "for") return ParseForStatement(lexicalContext);
                 if (token.Value == "while") return ParseWhileStatement(lexicalContext);
                 if (token.Value == "return") return ParseReturnStatement(lexicalContext);
+                if (token.Value == "static") return ParseStaticDeclaration(lexicalContext);
                 if (token.Value == "var") return ParseVariableDeclaration(lexicalContext);
                 if (token.Value == "throw") return ParseThrowDeclaration(lexicalContext);
                 throw new ScripterParsingException($"Unexpected keyword: {token.Value}");
@@ -98,7 +99,7 @@ namespace ScripterLang
             if (token.Match(TokenType.SemiColon))
             {
                 Consume();
-                return new EmptyExpression();
+                return EmptyExpression.Instance;
             }
             if (token.Match(TokenType.LeftBrace)) return ParseCodeBlock(lexicalContext);
             throw new ScripterParsingException($"Unexpected token: '{token.Value}'");
@@ -166,9 +167,9 @@ namespace ScripterLang
             MoveNext();
             var nameToken = Consume();
             nameToken.Expect(TokenType.Identifier);
-            if (lexicalContext.Declarations.ContainsKey(nameToken.Value))
+            if (lexicalContext.Declarations.Contains(nameToken.Value))
                 throw new ScripterRuntimeException($"Variable '{nameToken.Value}' was already declared");
-            lexicalContext.Declarations.Add(nameToken.Value, Value.Uninitialized);
+            lexicalContext.Declarations.Add(nameToken.Value);
             if (Peek().Match(TokenType.Assignment))
             {
                 MoveNext();
@@ -179,14 +180,46 @@ namespace ScripterLang
             else
             {
                 Consume().Expect(TokenType.SemiColon);
-                return new VariableDeclarationExpression(nameToken.Value, new EmptyExpression());
+                return new VariableDeclarationExpression(nameToken.Value, EmptyExpression.Instance);
             }
+        }
+
+        private Expression ParseStaticDeclaration(ScopeLexicalContext lexicalContext)
+        {
+            MoveNext();
+            Consume().Expect(TokenType.Keyword, "var");
+            var nameToken = Consume().Expect(TokenType.Identifier);
+            Consume().Expect(TokenType.Assignment);
+            var initialValueToken = Consume();
+            Value initialValue;
+            switch (initialValueToken.Type)
+            {
+                case TokenType.Float:
+                    initialValue = float.Parse(initialValueToken.Value);
+                    break;
+                case TokenType.Integer:
+                    initialValue = int.Parse(initialValueToken.Value);
+                    break;
+                case TokenType.String:
+                    initialValue = initialValueToken.Value;
+                    break;
+                case TokenType.Boolean:
+                    initialValue = bool.Parse(initialValueToken.Value);
+                    break;
+                default:
+                    throw new ScripterParsingException("Static declarations must be a value (float, integer, string or boolean)");
+            }
+            Consume().Expect(TokenType.SemiColon);
+
+            if (!lexicalContext.Root.StaticDeclarations.ContainsKey(nameToken.Value))
+                lexicalContext.Root.StaticDeclarations.Add(nameToken.Value, initialValue);
+
+            return EmptyExpression.Instance;
         }
 
         private Expression ParseAssignmentExpression(LexicalContext lexicalContext)
         {
-            var nameToken = Consume();
-            nameToken.Expect(TokenType.Identifier);
+            var nameToken = Consume().Expect(TokenType.Identifier);
 
             var nextToken = Peek();
 
@@ -238,7 +271,7 @@ namespace ScripterLang
                 case TokenType.Float:
                     return new FloatExpression(float.Parse(token.Value));
                 case TokenType.Integer:
-                    return new FloatExpression(float.Parse(token.Value));
+                    return new IntegerExpression(int.Parse(token.Value));
                 case TokenType.String:
                     return new StringExpression(token.Value);
                 case TokenType.Boolean:

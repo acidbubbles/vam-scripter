@@ -31,8 +31,7 @@ public class Scripter : MVRScript
     public override void Init()
     {
         _globalLexicalContext = new GlobalLexicalContext();
-        VamFunctions.Register(_globalLexicalContext);
-        _domain = new RuntimeDomain();
+        VamFunctions.Register(_globalLexicalContext);;
 
         _scriptJSON.valNoCallback = @"
 // Welcome to Scripter!
@@ -71,10 +70,13 @@ if(alpha == 0) {
         try
         {
             _expression = Parser.Parse(val, _globalLexicalContext);
+            _domain = new RuntimeDomain(_globalLexicalContext);
             _consoleJSON.val = "Code parsed successfully";
         }
         catch (Exception exc)
         {
+            _expression = null;
+            _domain = null;
             _consoleJSON.val = exc.ToString();
         }
     }

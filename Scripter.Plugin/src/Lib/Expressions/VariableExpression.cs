@@ -11,7 +11,7 @@
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            return domain.Variables[_name];
+            return domain.GetVariableValue(_name);
         }
     }
 }

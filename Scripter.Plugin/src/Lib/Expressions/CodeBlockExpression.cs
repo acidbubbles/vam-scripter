@@ -16,16 +16,24 @@ namespace ScripterLang
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            #warning Handle return;
-            #warning Handle child lexical context
-            foreach (var expression in Expressions)
+            try
             {
-                var result = expression.Evaluate(domain);
-                if (expression is ReturnExpression)
-                    return result;
-            }
+                foreach (var expression in Expressions)
+                {
+                    var result = expression.Evaluate(domain);
+                    if (expression is ReturnExpression)
+                        return result;
+                }
 
-            return Value.Undefined;
+                return Value.Undefined;
+            }
+            finally
+            {
+                for (var i = 0; i < _lexicalContext.Declarations.Count; i++)
+                {
+                    domain.ClearVariable(_lexicalContext.Declarations[i]);
+                }
+            }
         }
     }
 }

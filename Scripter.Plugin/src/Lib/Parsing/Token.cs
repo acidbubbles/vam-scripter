@@ -25,16 +25,18 @@
             return Type == type && Value == value;
         }
 
-        public void Expect(int type)
+        public Token Expect(int type)
         {
             if (Type != type)
                 throw new ScripterParsingException($"Unexpected token '{Value}'");
+            return this;
         }
 
-        public void Expect(int type, string value)
+        public Token Expect(int type, string value)
         {
             if (Type != type && value != Value)
                 throw new ScripterParsingException($"Unexpected token '{Value}'; expected {value}");
+            return this;
         }
 
         public override string ToString()
