@@ -65,5 +65,10 @@ namespace ScripterLang
                 default: return ValueTypes.Name(Type);
             }
         }
+
+        public static implicit operator Value(string value) => CreateString(value);
+        public static implicit operator Value(int value) => CreateInteger(value);
+        public static implicit operator Value(float value) => CreateFloat(value);
+        public static implicit operator Value(bool value) => CreateBoolean(value);
     }
 }

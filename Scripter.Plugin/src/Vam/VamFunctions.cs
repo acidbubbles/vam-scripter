@@ -7,12 +7,22 @@ namespace Vam
     {
         public static void Register(GlobalLexicalContext lexicalContext)
         {
+            lexicalContext.Functions.Add("getDateTime", GetDateTime);
             lexicalContext.Functions.Add("logMessage", LogMessage);
             lexicalContext.Functions.Add("logError", LogError);
             lexicalContext.Functions.Add("getFloatParamValue", GetFloatParamValue);
             lexicalContext.Functions.Add("setFloatParamValue", SetFloatParamValue);
             lexicalContext.Functions.Add("invokeTrigger", InvokeTrigger);
             lexicalContext.Functions.Add("invokeKeybinding", InvokeKeybinding);
+        }
+
+        private static Value GetDateTime(Value[] args)
+        {
+            var now = DateTime.Now;
+            if (args.Length == 0)
+                return now.ToString("s");
+            else
+                return now.ToString(args[0].StringValue);
         }
 
         private static Value LogMessage(Value[] args)
