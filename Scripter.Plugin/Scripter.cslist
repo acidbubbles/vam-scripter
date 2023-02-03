@@ -22,8 +22,7 @@ src\Lib\Parsing\Tokenizer.cs
 src\Lib\Parsing\TokenType.cs
 src\Lib\Runtime\GlobalLexicalContext.cs
 src\Lib\Runtime\LexicalContext.cs
-src\Lib\Runtime\Runtime.cs
-src\Lib\Runtime\RuntimeLexicalContext.cs
+src\Lib\Runtime\RuntimeDomain.cs
 src\Lib\Runtime\ScopeLexicalContext.cs
 src\Lib\Runtime\ScripterParsingException.cs
 src\Lib\Runtime\Value.cs

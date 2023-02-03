@@ -11,10 +11,10 @@
         public string Name { get; }
         public Expression Expression { get; }
 
-        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeDomain domain)
         {
-            var right = Expression.Evaluate(lexicalContext);
-            lexicalContext.Declarations[Name] = right;
+            var right = Expression.Evaluate(domain);
+            domain.Variables[Name] = right;
             return right;
         }
     }

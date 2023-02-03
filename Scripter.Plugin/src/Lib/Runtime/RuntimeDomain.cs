@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ScripterLang
 {
-    public class RuntimeLexicalContext
+    public class RuntimeDomain
     {
         public readonly Dictionary<string, Value> Variables = new Dictionary<string, Value>();
 

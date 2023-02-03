@@ -13,12 +13,12 @@
             _falseBranch = falseBranch;
         }
 
-        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeDomain domain)
         {
-            var condition = _condition.Evaluate(lexicalContext);
+            var condition = _condition.Evaluate(domain);
             return condition.AsBool
-                ? _trueBranch.Evaluate(lexicalContext)
-                : _falseBranch.Evaluate(lexicalContext);
+                ? _trueBranch.Evaluate(domain)
+                : _falseBranch.Evaluate(domain);
         }
     }
 }

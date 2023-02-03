@@ -214,6 +214,7 @@ namespace ScripterLang
                                 case "if":
                                 case "else":
                                 case "return":
+                                case "throw":
                                     yield return new Token(TokenType.Keyword, name, line);
                                     break;
                                 default:

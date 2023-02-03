@@ -17,7 +17,7 @@ namespace Vam
 
         private static Value LogMessage(Value[] args)
         {
-            SuperController.LogMessage(args[0].ToString());
+            SuperController.LogMessage("Scripter: " + args[0]);
             return Value.Undefined;
         }
 

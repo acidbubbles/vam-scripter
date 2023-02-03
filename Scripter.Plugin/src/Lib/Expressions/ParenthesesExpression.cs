@@ -9,9 +9,9 @@
 
         public Expression Expression { get; }
 
-        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeDomain domain)
         {
-            return Expression.Evaluate(lexicalContext);
+            return Expression.Evaluate(domain);
         }
     }
 }

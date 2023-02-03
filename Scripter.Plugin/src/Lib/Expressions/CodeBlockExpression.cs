@@ -14,13 +14,13 @@ namespace ScripterLang
 
         public List<Expression> Expressions { get; }
 
-        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeDomain domain)
         {
             #warning Handle return;
             #warning Handle child lexical context
             foreach (var expression in Expressions)
             {
-                var result = expression.Evaluate(lexicalContext);
+                var result = expression.Evaluate(domain);
                 if (expression is ReturnExpression)
                     return result;
             }

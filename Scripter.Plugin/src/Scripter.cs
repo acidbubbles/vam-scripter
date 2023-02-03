@@ -8,7 +8,7 @@ using Vam;
 public class Scripter : MVRScript
 {
     private GlobalLexicalContext _globalLexicalContext;
-    private Runtime _runtime;
+    private RuntimeDomain _domain;
     private Expression _expression;
 
     private readonly JSONStorableString _scriptJSON;
@@ -32,7 +32,7 @@ public class Scripter : MVRScript
     {
         _globalLexicalContext = new GlobalLexicalContext();
         VamFunctions.Register(_globalLexicalContext);
-        _runtime = new Runtime(_globalLexicalContext);
+        _domain = new RuntimeDomain();
 
         _scriptJSON.valNoCallback = @"
 // Welcome to Scripter!
@@ -48,7 +48,6 @@ if(alpha == 0) {
         _scriptJSON.setCallbackFunction = val =>
         {
             _history.Add(val);
-            SuperController.LogMessage("History: " + _history.Count);
             if (_history.Count > 100) _history.RemoveAt(0);
             Parse(_scriptJSON.val);
         };
@@ -84,7 +83,6 @@ if(alpha == 0) {
     {
         // TODO: Improve this (undo should not delete history, just go back)
         if (_history.Count == 0) return;
-        SuperController.LogMessage("Undo " + _history.Count);
         _scriptJSON.valNoCallback = _history[_history.Count - 1];
         _history.RemoveAt(_history.Count - 1);
     }
@@ -116,7 +114,7 @@ if(alpha == 0) {
         {
             if (_expression == null)
                 throw new ScripterPluginException("The code was not parsed. Please check the console for errors.");
-            _runtime.Evaluate(_expression);
+            _expression.Evaluate(_domain);
         }
         catch (Exception exc)
         {

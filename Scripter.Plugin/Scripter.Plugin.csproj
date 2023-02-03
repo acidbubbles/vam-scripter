@@ -83,6 +83,7 @@
     <Compile Include="src\Lib\Expressions\ParenthesesExpression.cs" />
     <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
     <Compile Include="src\Lib\Expressions\StringExpression.cs" />
+    <Compile Include="src\Lib\Expressions\ThrowExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableExpression.cs" />
     <Compile Include="src\Lib\Expressions\WhileExpression.cs" />
@@ -93,8 +94,7 @@
     <Compile Include="src\Lib\Parsing\TokenType.cs" />
     <Compile Include="src\Lib\Runtime\GlobalLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\LexicalContext.cs" />
-    <Compile Include="src\Lib\Runtime\Runtime.cs" />
-    <Compile Include="src\Lib\Runtime\RuntimeLexicalContext.cs" />
+    <Compile Include="src\Lib\Runtime\RuntimeDomain.cs" />
     <Compile Include="src\Lib\Runtime\ScopeLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\ScripterParsingException.cs" />
     <Compile Include="src\Lib\Runtime\Value.cs" />

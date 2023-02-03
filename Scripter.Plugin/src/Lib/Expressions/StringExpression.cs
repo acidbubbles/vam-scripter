@@ -9,7 +9,7 @@
 
         public string Value { get; }
 
-        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeDomain domain)
         {
             return ScripterLang.Value.CreateString(Value);
         }

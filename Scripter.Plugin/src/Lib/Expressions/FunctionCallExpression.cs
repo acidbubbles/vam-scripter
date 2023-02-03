@@ -5,19 +5,22 @@ namespace ScripterLang
 {
     public class FunctionCallExpression : Expression
     {
-        public FunctionCallExpression(string name, IEnumerable<Expression> arguments)
+        private readonly LexicalContext _lexicalContext;
+        private readonly string _name;
+        private readonly Expression[] _arguments;
+
+        public FunctionCallExpression(string name, IEnumerable<Expression> arguments, LexicalContext lexicalContext)
         {
-            Name = name;
-            Arguments = arguments.ToArray();
+            _name = name;
+            _arguments = arguments.ToArray();
+
+            _lexicalContext = lexicalContext;
         }
 
-        public string Name { get; }
-        public Expression[] Arguments { get; }
-
-        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeDomain domain)
         {
-            var args = Arguments.Select(arg => arg.Evaluate(lexicalContext)).ToArray();
-            var func = lexicalContext.GetFunction(Name);
+            var args = _arguments.Select(arg => arg.Evaluate(domain)).ToArray();
+            var func = domain.GetFunction(_lexicalContext, _name);
             return func(args);
         }
     }

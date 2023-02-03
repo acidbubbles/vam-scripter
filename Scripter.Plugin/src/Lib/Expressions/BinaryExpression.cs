@@ -13,10 +13,10 @@
         public string Operator { get; }
         public Expression Right { get; }
 
-        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeDomain domain)
         {
-            var left = Left.Evaluate(lexicalContext);
-            var right = Right.Evaluate(lexicalContext);
+            var left = Left.Evaluate(domain);
+            var right = Right.Evaluate(domain);
 
             switch (Operator)
             {

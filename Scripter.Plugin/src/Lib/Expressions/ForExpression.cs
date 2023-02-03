@@ -6,7 +6,7 @@
         {
         }
 
-        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeDomain domain)
         {
             throw new System.NotImplementedException();
         }
