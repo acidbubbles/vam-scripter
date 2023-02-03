@@ -2,23 +2,23 @@
 {
     public class BinaryExpression : Expression
     {
+        private readonly Expression _left;
+        private readonly string _operator;
+        private readonly Expression _right;
+
         public BinaryExpression(Expression left, string @operator, Expression right)
         {
-            Left = left;
-            Operator = @operator;
-            Right = right;
+            _left = left;
+            _operator = @operator;
+            _right = right;
         }
-
-        public Expression Left { get; }
-        public string Operator { get; }
-        public Expression Right { get; }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            var left = Left.Evaluate(domain);
-            var right = Right.Evaluate(domain);
+            var left = _left.Evaluate(domain);
+            var right = _right.Evaluate(domain);
 
-            switch (Operator)
+            switch (_operator)
             {
                 case "+":
                     if (left.IsInt && right.IsInt)
@@ -87,7 +87,7 @@
 
         private ScripterRuntimeException MakeUnsupportedOperandsException(Value left, Value right)
         {
-            return new ScripterRuntimeException($"Operator {Operator} is not supported on operands of type {ValueTypes.Name(left.Type)} and {ValueTypes.Name(right.Type)}");
+            return new ScripterRuntimeException($"Operator {_operator} is not supported on operands of type {ValueTypes.Name(left.Type)} and {ValueTypes.Name(right.Type)}");
         }
     }
 }

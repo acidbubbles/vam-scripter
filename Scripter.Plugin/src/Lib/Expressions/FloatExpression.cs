@@ -2,16 +2,16 @@
 {
     public class FloatExpression : Expression
     {
+        private readonly float _value;
+
         public FloatExpression(float value)
         {
-            Value = value;
+            _value = value;
         }
-
-        public float Value { get; }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            return ScripterLang.Value.CreateFloat(Value);
+            return Value.CreateFloat(_value);
         }
     }
 }

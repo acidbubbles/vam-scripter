@@ -16,9 +16,11 @@
         public override Value Evaluate(RuntimeDomain domain)
         {
             var condition = _condition.Evaluate(domain);
-            return condition.AsBool
-                ? _trueBranch.Evaluate(domain)
-                : _falseBranch.Evaluate(domain);
+            if (condition.AsBool)
+                return _trueBranch.Evaluate(domain);
+            if (_falseBranch != null)
+                return _falseBranch.Evaluate(domain);
+            return Value.Undefined;
         }
     }
 }

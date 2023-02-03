@@ -77,7 +77,7 @@ namespace ScripterLang
                 if (token.Value == "static") return ParseStaticDeclaration(lexicalContext);
                 if (token.Value == "var") return ParseVariableDeclaration(lexicalContext);
                 if (token.Value == "throw") return ParseThrowDeclaration(lexicalContext);
-                throw new ScripterParsingException($"Unexpected keyword: {token.Value}");
+                throw new ScripterParsingException($"Unexpected keyword: {token.Value}", token.Location);
             }
 
             if (token.Match(TokenType.Identifier))
@@ -102,7 +102,7 @@ namespace ScripterLang
                 return EmptyExpression.Instance;
             }
             if (token.Match(TokenType.LeftBrace)) return ParseCodeBlock(lexicalContext);
-            throw new ScripterParsingException($"Unexpected token: '{token.Value}'");
+            throw new ScripterParsingException($"Unexpected token: '{token.Value}'", token.Location);
         }
 
         private Expression ParseThrowDeclaration(ScopeLexicalContext lexicalContext)
@@ -207,7 +207,7 @@ namespace ScripterLang
                     initialValue = bool.Parse(initialValueToken.Value);
                     break;
                 default:
-                    throw new ScripterParsingException("Static declarations must be a value (float, integer, string or boolean)");
+                    throw new ScripterParsingException("Static declarations must be a value (float, integer, string or boolean)", initialValueToken.Location);
             }
             Consume().Expect(TokenType.SemiColon);
 
@@ -258,7 +258,7 @@ namespace ScripterLang
                     continue;
                 }
 
-                throw new ScripterParsingException($"Unexpected token in value statement: {token.Value}");
+                throw new ScripterParsingException($"Unexpected token in value statement: {token.Value}", token.Location);
             }
             return left;
         }
@@ -276,6 +276,8 @@ namespace ScripterLang
                     return new StringExpression(token.Value);
                 case TokenType.Boolean:
                     return new BooleanExpression(bool.Parse(token.Value));
+                case TokenType.Negation:
+                    return new NegateExpression(ParseValueExpression(lexicalContext));
                 case TokenType.IncrementDecrement:
                 {
                     var op = token.Value;
@@ -310,7 +312,7 @@ namespace ScripterLang
                     }
                 }
                 default:
-                    throw new ScripterParsingException("Unexpected token " + token.Value);
+                    throw new ScripterParsingException("Unexpected token " + token.Value, token.Location);
             }
         }
 

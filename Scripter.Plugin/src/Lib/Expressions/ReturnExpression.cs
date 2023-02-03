@@ -2,16 +2,16 @@
 {
     public class ReturnExpression : Expression
     {
+        private readonly Expression _expression;
+
         public ReturnExpression(Expression expression)
         {
-            Expression = expression;
+            _expression = expression;
         }
-
-        public Expression Expression { get; }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            return Expression.Evaluate(domain);
+            return _expression.Evaluate(domain);
         }
     }
 }

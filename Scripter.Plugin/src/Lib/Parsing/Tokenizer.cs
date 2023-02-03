@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ScripterLang
 {
-    public static class Tokenizer
+    public class Tokenizer
     {
         public static IEnumerable<Token> Tokenize(string input)
         {
@@ -12,12 +12,42 @@ namespace ScripterLang
 
         private static IEnumerable<Token> Tokenize(char[] input)
         {
-            var length = input.Length;
-            var position = 0;
-            var line = 1;
-            while (position < length)
+            return new Tokenizer(input).Tokenize();
+        }
+
+        private readonly char[] _input;
+        private readonly int _length;
+        private int _line;
+        private int _position;
+
+        private Tokenizer(char[] input)
+        {
+            _input = input;
+            _length = _input.Length;
+            _line = 1;
+            _position = -1;
+        }
+        private char Current => _input[_position];
+        private char Peek(int c = 1) => _input[_position + c];
+        private Location Location => new Location { Line = _line };
+        private bool IsAtEnd() => _position == _length;
+
+        private bool MoveNext(int c = 1)
+        {
+            _position += c;
+            return _position < _length;
+        }
+
+        private string Substr(int start, int length)
+        {
+            return new string(_input, start, length);
+        }
+
+        private IEnumerable<Token> Tokenize()
+        {
+            while (MoveNext())
             {
-                switch (input[position])
+                switch (Current)
                 {
                     case '0':
                     case '1':
@@ -29,12 +59,12 @@ namespace ScripterLang
                     case '7':
                     case '8':
                     case '9':
-                        var start = position;
+                        var start = _position;
                         var isFloat = false;
-                        while (++position < length)
+                        while (MoveNext())
                         {
-                            if (char.IsDigit(input[position])) continue;
-                            if (input[position] == '.')
+                            if (char.IsDigit(Current)) continue;
+                            if (Current == '.')
                             {
                                 isFloat = true;
                                 continue;
@@ -42,185 +72,183 @@ namespace ScripterLang
                             break;
                         }
 
-                        yield return new Token(isFloat ? TokenType.Float : TokenType.Integer, new string(input, start, position - start), line);
+                        yield return new Token(isFloat ? TokenType.Float : TokenType.Integer, Substr(start, _position - start), Location);
                         break;
                     case '/':
-                        if (input[position + 1] == '/')
+                        if (Peek() == '/')
                         {
-                            position++;
-                            while (++position < length && input[position] != '\n')
+                            MoveNext();
+                            while (MoveNext() && Current != '\n')
                             {
                             }
 
                             break;
                         }
 
-                        if (input[position + 1] == '*')
+                        if (Peek() == '*')
                         {
-                            position++;
-                            while (++position < length && input[position] != '*' && input[position + 1] != '/')
+                            MoveNext();
+                            while (MoveNext() && Current != '*' && Peek() != '/')
                             {
                             }
 
-                            position += 2;
+                            MoveNext(2);
                             break;
                         }
 
-                        yield return new Token(TokenType.Operator, input[position].ToString(), line);
-                        position++;
+                        yield return new Token(TokenType.Operator, Current.ToString(), Location);
+                        MoveNext();
                         break;
                     case '+':
                     case '-':
-                        if (input[position] == input[position + 1])
+                        if (Current == Peek())
                         {
-                            yield return new Token(TokenType.IncrementDecrement, new string(input, position, 2), line);
-                            position += 2;
+                            yield return new Token(TokenType.IncrementDecrement, Substr(_position, 2), Location);
+                            MoveNext(2);
                             break;
                         }
 
-                        yield return new Token(TokenType.Operator, input[position].ToString(), line);
-                        position++;
+                        yield return new Token(TokenType.Operator, Current.ToString(), Location);
+                        MoveNext();
                         break;
                     case '*':
                     case '%':
                     case '^':
-                        yield return new Token(TokenType.Operator, input[position].ToString(), line);
-                        position++;
+                        yield return new Token(TokenType.Operator, Current.ToString(), Location);
+                        MoveNext();
                         break;
                     case '&':
-                        position++;
-                        if (position < length && input[position] == '&')
+                        MoveNext();
+                        if (IsAtEnd() && Current == '&')
                         {
-                            yield return new Token(TokenType.Operator, "&&", line);
-                            position++;
+                            yield return new Token(TokenType.Operator, "&&", Location);
+                            MoveNext();
                         }
                         else
                         {
-                            yield return new Token(TokenType.Operator, "&", line);
+                            yield return new Token(TokenType.Operator, "&", Location);
                         }
                         break;
                     case '|':
-                        position++;
-                        if (position < length && input[position] == '|')
+                        MoveNext();
+                        if (IsAtEnd() && Current == '|')
                         {
-                            yield return new Token(TokenType.Operator, "||", line);
-                            position++;
+                            yield return new Token(TokenType.Operator, "||", Location);
+                            MoveNext();
                         }
                         else
                         {
-                            yield return new Token(TokenType.Operator, "|", line);
+                            yield return new Token(TokenType.Operator, "|", Location);
                         }
                         break;
                     case '<':
-                        position++;
-                        if (position < length && input[position] == '=')
+                        MoveNext();
+                        if (IsAtEnd() && Current == '=')
                         {
-                            yield return new Token(TokenType.Operator, "<=", line);
-                            position++;
+                            yield return new Token(TokenType.Operator, "<=", Location);
+                            MoveNext();
                         }
                         else
                         {
-                            yield return new Token(TokenType.Operator, "<", line);
+                            yield return new Token(TokenType.Operator, "<", Location);
                         }
 
                         break;
                     case '>':
-                        position++;
-                        if (position < length && input[position] == '=')
+                        MoveNext();
+                        if (IsAtEnd() && Current == '=')
                         {
-                            yield return new Token(TokenType.Operator, ">=", line);
-                            position++;
+                            yield return new Token(TokenType.Operator, ">=", Location);
+                            MoveNext();
                         }
                         else
                         {
-                            yield return new Token(TokenType.Operator, ">", line);
+                            yield return new Token(TokenType.Operator, ">", Location);
                         }
 
                         break;
                     case '=':
-                        position++;
-                        if (position < length && input[position] == '=')
+                        MoveNext();
+                        if (IsAtEnd() && Current == '=')
                         {
-                            yield return new Token(TokenType.Operator, "==", line);
-                            position++;
+                            yield return new Token(TokenType.Operator, "==", Location);
+                            MoveNext();
                         }
                         else
                         {
-                            yield return new Token(TokenType.Assignment, "=", line);
+                            yield return new Token(TokenType.Assignment, "=", Location);
                         }
 
                         break;
                     case '!':
-                        position++;
-                        if (position < length && input[position] == '=')
+                        MoveNext();
+                        if (IsAtEnd() && Current == '=')
                         {
-                            yield return new Token(TokenType.Operator, "!=", line);
-                            position++;
+                            yield return new Token(TokenType.Operator, "!=", Location);
+                            MoveNext();
                         }
                         else
                         {
-                            yield return new Token(TokenType.Negation, "!", line);
+                            yield return new Token(TokenType.Negation, "!", Location);
                         }
 
                         break;
                     case '"':
-                        var end = Array.IndexOf(input, '"', position + 1);
+                        var end = Array.IndexOf(_input, '"', _position + 1);
                         if (end == -1)
-                        {
-                            throw new InvalidOperationException("Unterminated string");
-                        }
+                            throw new ScripterParsingException("Unterminated string");
 
-                        yield return new Token(TokenType.String, new string(input, position + 1, end - position - 1), line);
-                        position = end + 1;
+                        yield return new Token(TokenType.String, Substr(_position + 1, end - _position - 1), Location);
+                        _position = end + 1;
                         break;
                     case '(':
-                        yield return new Token(TokenType.LeftParenthesis, "(", line);
-                        position++;
+                        yield return new Token(TokenType.LeftParenthesis, "(", Location);
+                        MoveNext();
                         break;
                     case ')':
-                        yield return new Token(TokenType.RightParenthesis, ")", line);
-                        position++;
+                        yield return new Token(TokenType.RightParenthesis, ")", Location);
+                        MoveNext();
                         break;
                     case ',':
-                        yield return new Token(TokenType.Comma, ",", line);
-                        position++;
+                        yield return new Token(TokenType.Comma, ",", Location);
+                        MoveNext();
                         break;
                     case ';':
-                        yield return new Token(TokenType.SemiColon, ";", line);
-                        position++;
+                        yield return new Token(TokenType.SemiColon, ";", Location);
+                        MoveNext();
                         break;
                     case '{':
-                        yield return new Token(TokenType.LeftBrace, "{", line);
-                        position++;
+                        yield return new Token(TokenType.LeftBrace, "{", Location);
+                        MoveNext();
                         break;
                     case '}':
-                        yield return new Token(TokenType.RightBrace, "}", line);
-                        position++;
+                        yield return new Token(TokenType.RightBrace, "}", Location);
+                        MoveNext();
                         break;
                     case '\n':
-                        line++;
-                        position++;
+                        _line++;
+                        MoveNext();
                         break;
                     case ' ':
                     case '\t':
                     case '\r':
-                        position++;
+                        MoveNext();
                         break;
                     default:
-                        if (char.IsLetter(input[position]))
+                        if (char.IsLetter(Current))
                         {
-                            var nameStart = position;
-                            while (position < length && char.IsLetterOrDigit(input[position]))
+                            var nameStart = _position;
+                            while (IsAtEnd() && char.IsLetterOrDigit(Current))
                             {
-                                position++;
+                                MoveNext();
                             }
 
-                            var name = new string(input, nameStart, position - nameStart);
+                            var name = Substr(nameStart, _position - nameStart);
                             switch (name)
                             {
                                 case "true":
                                 case "false":
-                                    yield return new Token(TokenType.Boolean, name, line);
+                                    yield return new Token(TokenType.Boolean, name, Location);
                                     break;
                                 case "var":
                                 case "for":
@@ -229,16 +257,16 @@ namespace ScripterLang
                                 case "return":
                                 case "throw":
                                 case "static":
-                                    yield return new Token(TokenType.Keyword, name, line);
+                                    yield return new Token(TokenType.Keyword, name, Location);
                                     break;
                                 default:
-                                    yield return new Token(TokenType.Identifier, name, line);
+                                    yield return new Token(TokenType.Identifier, name, Location);
                                     break;
                             }
                         }
                         else
                         {
-                            throw new InvalidOperationException("Unexpected character: " + input[position]);
+                            throw new InvalidOperationException("Unexpected character: " + Current);
                         }
 
                         break;

@@ -2,16 +2,16 @@
 {
     public class BooleanExpression : Expression
     {
+        private readonly bool _value;
+
         public BooleanExpression(bool value)
         {
-            Value = value;
+            _value = value;
         }
-
-        public bool Value { get; }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            return ScripterLang.Value.CreateBoolean(Value);
+            return Value.CreateBoolean(_value);
         }
     }
 }

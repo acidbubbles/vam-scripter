@@ -10,6 +10,7 @@ src\Lib\Expressions\FunctionCallExpression.cs
 src\Lib\Expressions\IfExpression.cs
 src\Lib\Expressions\IncrementDecrementExpression.cs
 src\Lib\Expressions\IntegerExpression.cs
+src\Lib\Expressions\NegateExpression.cs
 src\Lib\Expressions\ParenthesesExpression.cs
 src\Lib\Expressions\ReturnExpression.cs
 src\Lib\Expressions\StringExpression.cs
@@ -17,6 +18,7 @@ src\Lib\Expressions\ThrowExpression.cs
 src\Lib\Expressions\VariableDeclarationExpression.cs
 src\Lib\Expressions\VariableExpression.cs
 src\Lib\Expressions\WhileExpression.cs
+src\Lib\Parsing\Location.cs
 src\Lib\Parsing\Parser.cs
 src\Lib\Parsing\ScripterParsingException.cs
 src\Lib\Parsing\Token.cs

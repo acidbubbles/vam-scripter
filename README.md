@@ -16,9 +16,10 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 
 ## Notable Omissions
 
-- Objects
-- Custom functions
-- Order of precedence
+- Objects and dictionaries cannot be created
+- Custom functions cannot be declared, nor classes
+- Order of precedence, like `1 + 2 * 3 + 4`
+- Code blocks without brackets, like `if(condition) something();`
 
 ## Virt-A-Mate Functions
 

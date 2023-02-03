@@ -2,16 +2,16 @@
 {
     public class ThrowExpression : Expression
     {
+        private readonly Expression _message;
+
         public ThrowExpression(Expression message)
         {
-            Message = message;
+            _message = message;
         }
-
-        public Expression Message { get; }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            var message = Message.Evaluate(domain);
+            var message = _message.Evaluate(domain);
             throw new ScripterRuntimeException(message.ToString());
         }
     }

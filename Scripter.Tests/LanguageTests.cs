@@ -107,6 +107,41 @@ public class Tests
     }
 
     [Test]
+    public void ConditionsAndThrow()
+    {
+        const string source = """
+            if(false) { throw "false"; }
+            if(!true) { throw "!true"; }
+            return "nice";
+            """;
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var domain = new RuntimeDomain(_globalLexicalContext);
+        var result = expression.Evaluate(domain);
+
+        Assert.That(result.ToString(), Is.EqualTo("nice"));
+    }
+
+    [Test]
+    public void Loops()
+    {
+        const string source = """
+            var x = 0;
+            while(x < 5) {
+                x++;
+            }
+            for(var y = 0; y < 5; y++) {
+                x++;
+            }
+            return x;
+            """;
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var domain = new RuntimeDomain(_globalLexicalContext);
+        var result = expression.Evaluate(domain);
+
+        Assert.That(result.ToString(), Is.EqualTo("10"));
+    }
+
+    [Test]
     public void MultipleRuns()
     {
         const string source = """

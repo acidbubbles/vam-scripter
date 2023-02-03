@@ -2,19 +2,19 @@
 {
     public class VariableDeclarationExpression : Expression
     {
+        private readonly string _name;
+        private readonly Expression _expression;
+
         public VariableDeclarationExpression(string name, Expression expression)
         {
-            Name = name;
-            Expression = expression;
+            _name = name;
+            _expression = expression;
         }
-
-        public string Name { get; }
-        public Expression Expression { get; }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            var rightValue = Expression.Evaluate(domain);
-            domain.CreateVariable(Name, rightValue);
+            var rightValue = _expression.Evaluate(domain);
+            domain.CreateVariable(_name, rightValue);
             return rightValue;
         }
     }

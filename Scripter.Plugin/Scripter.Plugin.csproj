@@ -81,6 +81,7 @@
     <Compile Include="src\Lib\Expressions\IfExpression.cs" />
     <Compile Include="src\Lib\Expressions\IncrementDecrementExpression.cs" />
     <Compile Include="src\Lib\Expressions\IntegerExpression.cs" />
+    <Compile Include="src\Lib\Expressions\NegateExpression.cs" />
     <Compile Include="src\Lib\Expressions\ParenthesesExpression.cs" />
     <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
     <Compile Include="src\Lib\Expressions\StringExpression.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="src\Lib\Expressions\VariableDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableExpression.cs" />
     <Compile Include="src\Lib\Expressions\WhileExpression.cs" />
+    <Compile Include="src\Lib\Parsing\Location.cs" />
     <Compile Include="src\Lib\Parsing\Parser.cs" />
     <Compile Include="src\Lib\Parsing\ScripterParsingException.cs" />
     <Compile Include="src\Lib\Parsing\Token.cs" />

@@ -2,16 +2,16 @@
 {
     public class StringExpression : Expression
     {
+        private readonly string _value;
+
         public StringExpression(string value)
         {
-            Value = value;
+            _value = value;
         }
-
-        public string Value { get; }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            return ScripterLang.Value.CreateString(Value);
+            return ScripterLang.Value.CreateString(_value);
         }
     }
 }

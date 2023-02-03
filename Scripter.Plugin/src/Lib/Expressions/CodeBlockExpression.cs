@@ -5,20 +5,19 @@ namespace ScripterLang
     public class CodeBlockExpression : Expression
     {
         private readonly LexicalContext _lexicalContext;
+        private readonly List<Expression> _expressions;
 
         public CodeBlockExpression(List<Expression> expressions, LexicalContext lexicalContext)
         {
             _lexicalContext = lexicalContext;
-            Expressions = expressions;
+            _expressions = expressions;
         }
-
-        public List<Expression> Expressions { get; }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
             try
             {
-                foreach (var expression in Expressions)
+                foreach (var expression in _expressions)
                 {
                     var result = expression.Evaluate(domain);
                     if (expression is ReturnExpression)

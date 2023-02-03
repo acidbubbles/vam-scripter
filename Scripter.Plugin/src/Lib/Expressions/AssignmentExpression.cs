@@ -2,19 +2,19 @@
 {
     public class AssignmentExpression : Expression
     {
+        private readonly string _name;
+        private readonly Expression _expression;
+
         public AssignmentExpression(string name, Expression expression)
         {
-            Name = name;
-            Expression = expression;
+            _name = name;
+            _expression = expression;
         }
-
-        public string Name { get; }
-        public Expression Expression { get; }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            var right = Expression.Evaluate(domain);
-            domain.SetVariableValue(Name, right);
+            var right = _expression.Evaluate(domain);
+            domain.SetVariableValue(_name, right);
             return right;
         }
     }
