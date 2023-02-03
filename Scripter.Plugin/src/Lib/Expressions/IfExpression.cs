@@ -13,7 +13,7 @@
             _falseBranch = falseBranch;
         }
 
-        public override Value Evaluate(LexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
         {
             var condition = _condition.Evaluate(lexicalContext);
             return condition.AsBool

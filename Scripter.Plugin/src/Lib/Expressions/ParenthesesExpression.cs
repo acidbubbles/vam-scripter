@@ -9,7 +9,7 @@
 
         public Expression Expression { get; }
 
-        public override Value Evaluate(LexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
         {
             return Expression.Evaluate(lexicalContext);
         }

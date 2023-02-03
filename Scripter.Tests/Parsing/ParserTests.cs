@@ -4,6 +4,14 @@ namespace Scripter.Tests.Parsing;
 
 public class ParserTests
 {
+    private GlobalLexicalContext _globalLexicalContext;
+
+    [SetUp]
+    public void SetUp()
+    {
+        _globalLexicalContext = new GlobalLexicalContext();
+    }
+
     [Test]
     public void VariableDeclaration()
     {
@@ -16,7 +24,7 @@ public class ParserTests
             new Token(TokenType.SemiColon, ";", 0),
         };
 
-        var expression = (CodeBlockExpression)Parser.Parse(tokens);
+        var expression = (CodeBlockExpression)Parser.Parse(tokens, _globalLexicalContext);
 
         Assert.That(expression.Expressions, Has.Count.EqualTo(1));
         Assert.That(expression.Expressions[0], Is.TypeOf<VariableDeclarationExpression>());
@@ -25,6 +33,8 @@ public class ParserTests
         Assert.That(declare.Expression, Is.TypeOf<FloatExpression>());
         var number = (FloatExpression)declare.Expression;
         Assert.That(number.Value, Is.EqualTo(123));
+
+        Assert.That(_globalLexicalContext.Variables.ContainsKey("x"), Is.True);
     }
 
     [Test]
@@ -46,9 +56,10 @@ public class ParserTests
             new Token(TokenType.RightBrace, "}", 0),
         };
 
-        var expression = (CodeBlockExpression)Parser.Parse(tokens);
+        var expression = (CodeBlockExpression)Parser.Parse(tokens, _globalLexicalContext);
 
         Assert.That(expression.Expressions, Has.Count.EqualTo(1));
         Assert.That(expression.Expressions[0], Is.TypeOf<IfExpression>());
+        Assert.That(_globalLexicalContext.Variables.ContainsKey("x"), Is.False);
     }
 }

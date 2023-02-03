@@ -2,6 +2,6 @@
 {
     public abstract class Expression
     {
-        public abstract Value Evaluate(LexicalContext lexicalContext);
+        public abstract Value Evaluate(RuntimeLexicalContext lexicalContext);
     }
 }

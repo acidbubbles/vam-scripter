@@ -2,7 +2,8 @@
 {
     public static class ValueTypes
     {
-        public const int UndefinedType = TokenType.None;
+        public const int UndefinedType = 0;
+        public const int Uninitialized = -1;
         public const int IntegerType = TokenType.Integer;
         public const int FloatType = TokenType.Float;
         public const int StringType = TokenType.String;

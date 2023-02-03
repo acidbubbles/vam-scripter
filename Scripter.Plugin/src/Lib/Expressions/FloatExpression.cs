@@ -9,7 +9,7 @@
 
         public float Value { get; }
 
-        public override Value Evaluate(LexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
         {
             return ScripterLang.Value.CreateFloat(Value);
         }

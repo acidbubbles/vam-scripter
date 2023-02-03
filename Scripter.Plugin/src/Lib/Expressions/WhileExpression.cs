@@ -6,7 +6,7 @@ namespace ScripterLang
         {
         }
 
-        public override Value Evaluate(LexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
         {
             throw new System.NotImplementedException();
         }

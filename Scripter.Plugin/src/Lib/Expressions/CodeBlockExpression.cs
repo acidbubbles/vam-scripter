@@ -4,14 +4,17 @@ namespace ScripterLang
 {
     public class CodeBlockExpression : Expression
     {
-        public CodeBlockExpression(List<Expression> expressions)
+        private readonly LexicalContext _lexicalContext;
+
+        public CodeBlockExpression(List<Expression> expressions, LexicalContext lexicalContext)
         {
+            _lexicalContext = lexicalContext;
             Expressions = expressions;
         }
 
         public List<Expression> Expressions { get; }
 
-        public override Value Evaluate(LexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
         {
             #warning Handle return;
             #warning Handle child lexical context

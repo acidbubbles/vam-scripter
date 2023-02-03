@@ -11,13 +11,13 @@
         public string Name { get; }
         public Expression Expression { get; }
 
-        public override Value Evaluate(LexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
         {
-            if (lexicalContext.Variables.ContainsKey(Name))
+            if (lexicalContext.Declarations.ContainsKey(Name))
                 throw new ScripterRuntimeException($"Variable '{Name}' was already declared");
-            var right = Expression.Evaluate(lexicalContext);
-            lexicalContext.Variables.Add(Name, right);
-            return right;
+            var rightValue = Expression.Evaluate(lexicalContext);
+            lexicalContext.Declarations[Name] = rightValue;
+            return rightValue;
         }
     }
 }

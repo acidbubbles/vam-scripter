@@ -5,7 +5,7 @@ namespace Vam
 {
     public class VamFunctions
     {
-        public static void Register(LexicalContext lexicalContext)
+        public static void Register(GlobalLexicalContext lexicalContext)
         {
             lexicalContext.Functions.Add("logMessage", LogMessage);
             lexicalContext.Functions.Add("logError", LogError);

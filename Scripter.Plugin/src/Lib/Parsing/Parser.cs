@@ -1,13 +1,19 @@
 ﻿using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Linq;
 
 namespace ScripterLang
 {
     public class Parser
     {
-        public static Expression Parse(IList<Token> tokens)
+        public static Expression Parse(string source, GlobalLexicalContext globalLexicalContext)
         {
-            return new Parser(tokens).Parse();
+            var tokens = Tokenizer.Tokenize(source).ToList();
+            return new Parser(tokens).Parse(globalLexicalContext);
+        }
+
+        public static Expression Parse(IList<Token> tokens, GlobalLexicalContext globalLexicalContext)
+        {
+            return new Parser(tokens).Parse(globalLexicalContext);
         }
 
         private readonly IList<Token> _tokens;
@@ -19,10 +25,9 @@ namespace ScripterLang
             _position = 0;
         }
 
-        private bool MoveNext()
+        private void MoveNext()
         {
             _position++;
-            return !IsAtEnd();
         }
 
         private Token Peek()
@@ -49,26 +54,27 @@ namespace ScripterLang
             return _position == _tokens.Count;
         }
 
-        private Expression Parse()
+        private Expression Parse(GlobalLexicalContext globalLexicalContext)
         {
             var expressions = new List<Expression>();
+            var lexicalContext = new ScopeLexicalContext(globalLexicalContext);
             while (!IsAtEnd())
             {
-                expressions.Add(ParseExpression());
+                expressions.Add(ParseExpression(lexicalContext));
             }
-            return new CodeBlockExpression(expressions);
+            return new CodeBlockExpression(expressions, lexicalContext);
         }
 
-        private Expression ParseExpression()
+        private Expression ParseExpression(ScopeLexicalContext lexicalContext)
         {
             var token = Peek();
             if (token.Match(TokenType.Keyword))
             {
-                if (token.Value == "if") return ParseIfStatement();
-                if (token.Value == "for") return ParseForStatement();
-                if (token.Value == "while") return ParseWhileStatement();
+                if (token.Value == "if") return ParseIfStatement(lexicalContext);
+                if (token.Value == "for") return ParseForStatement(lexicalContext);
+                if (token.Value == "while") return ParseWhileStatement(lexicalContext);
                 if (token.Value == "return") return ParseReturnStatement();
-                if (token.Value == "var") return ParseVariableDeclaration();
+                if (token.Value == "var") return ParseVariableDeclaration(lexicalContext);
                 throw new ScripterParsingException($"Unexpected keyword: {token.Value}");
             }
 
@@ -93,48 +99,48 @@ namespace ScripterLang
                 Consume();
                 return new EmptyExpression();
             }
-            if (token.Match(TokenType.LeftBrace)) return ParseCodeBlock();
+            if (token.Match(TokenType.LeftBrace)) return ParseCodeBlock(lexicalContext);
             throw new ScripterParsingException($"Unexpected token: '{token.Value}'");
         }
 
-        private Expression ParseIfStatement()
+        private Expression ParseIfStatement(ScopeLexicalContext lexicalContext)
         {
             MoveNext();
             Consume().Expect(TokenType.LeftParenthesis);
             var condition = ParseValueStatementExpression();
             Consume().Expect(TokenType.RightParenthesis);
-            var thenBlock = ParseCodeBlock();
+            var thenBlock = ParseCodeBlock(lexicalContext);
 
             if (Peek().Match(TokenType.Keyword, "else"))
             {
                 MoveNext();
-                var elseBlock = ParseCodeBlock();
+                var elseBlock = ParseCodeBlock(lexicalContext);
                 return new IfExpression(condition, thenBlock, elseBlock);
             }
 
             return new IfExpression(condition, thenBlock, null);
         }
 
-        private Expression ParseForStatement()
+        private Expression ParseForStatement(ScopeLexicalContext lexicalContext)
         {
             MoveNext();
             Consume().Expect(TokenType.LeftParenthesis);
-            var initializer = ParseExpression();
-            var condition = ParseExpression();
-            var increment = ParseExpression();
+            var initializer = ParseValueStatementExpression();
+            var condition = ParseValueStatementExpression();
+            var increment = ParseValueStatementExpression();
             Consume().Expect(TokenType.RightParenthesis);
-            var body = ParseCodeBlock();
+            var body = ParseCodeBlock(lexicalContext);
 
             return new ForExpression(initializer, condition, increment, body);
         }
 
-        private Expression ParseWhileStatement()
+        private Expression ParseWhileStatement(ScopeLexicalContext lexicalContext)
         {
             MoveNext();
             Consume().Expect(TokenType.LeftParenthesis);
-            var condition = ParseExpression();
+            var condition = ParseValueExpression();
             Consume().Expect(TokenType.RightParenthesis);
-            var body = ParseCodeBlock();
+            var body = ParseCodeBlock(lexicalContext);
 
             return new WhileExpression(condition, body);
         }
@@ -147,11 +153,12 @@ namespace ScripterLang
             return new ReturnExpression(value);
         }
 
-        private Expression ParseVariableDeclaration()
+        private Expression ParseVariableDeclaration(ScopeLexicalContext lexicalContext)
         {
             MoveNext();
             var nameToken = Consume();
             nameToken.Expect(TokenType.Identifier);
+            lexicalContext.Declarations.Add(nameToken.Value, Value.Uninitialized);
             if (Peek().Match(TokenType.Assignment))
             {
                 MoveNext();
@@ -238,17 +245,18 @@ namespace ScripterLang
             }
         }
 
-        private CodeBlockExpression ParseCodeBlock()
+        private CodeBlockExpression ParseCodeBlock(ScopeLexicalContext parentLexicalContext)
         {
-            var expressions = new List<Expression>();
             Consume().Expect(TokenType.LeftBrace);
+            var expressions = new List<Expression>();
+            var lexicalContext = new ScopeLexicalContext(parentLexicalContext);
             while (!Peek().Match(TokenType.RightBrace))
             {
-                var expression = ParseExpression();
+                var expression = ParseExpression(lexicalContext);
                 expressions.Add(expression);
             }
             Consume().Expect(TokenType.RightBrace);
-            return new CodeBlockExpression(expressions);
+            return new CodeBlockExpression(expressions, lexicalContext);
         }
 
         private List<Expression> ParseArgumentList()

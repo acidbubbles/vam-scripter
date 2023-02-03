@@ -6,7 +6,7 @@
         {
         }
 
-        public override Value Evaluate(LexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
         {
             return Value.Undefined;
         }

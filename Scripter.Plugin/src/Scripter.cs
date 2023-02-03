@@ -7,13 +7,14 @@ using Vam;
 
 public class Scripter : MVRScript
 {
+    private GlobalLexicalContext _globalLexicalContext;
     private Runtime _runtime;
+    private Expression _expression;
 
     private readonly JSONStorableString _scriptJSON;
     private readonly JSONStorableAction _executeScriptJSON;
     private readonly JSONStorableString _consoleJSON;
     private readonly List<string> _history = new List<string>();
-    private Expression _expression;
 
     public Scripter()
     {
@@ -29,8 +30,9 @@ public class Scripter : MVRScript
 
     public override void Init()
     {
-        _runtime = new Runtime();
-        VamFunctions.Register(_runtime.GlobalLexicalContext);
+        _globalLexicalContext = new GlobalLexicalContext();
+        VamFunctions.Register(_globalLexicalContext);
+        _runtime = new Runtime(_globalLexicalContext);
 
         _scriptJSON.valNoCallback = @"
 // Welcome to Scripter!
@@ -69,9 +71,7 @@ if(alpha == 0) {
     {
         try
         {
-            _expression = Parser.Parse(
-                Tokenizer.Tokenize(val).ToList()
-            );
+            _expression = Parser.Parse(val, _globalLexicalContext);
             _consoleJSON.val = "Code parsed successfully";
         }
         catch (Exception exc)

@@ -13,7 +13,7 @@
         public string Operator { get; }
         public Expression Right { get; }
 
-        public override Value Evaluate(LexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
         {
             var left = Left.Evaluate(lexicalContext);
             var right = Right.Evaluate(lexicalContext);

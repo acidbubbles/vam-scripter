@@ -9,9 +9,9 @@
 
         public string Name { get; }
 
-        public override Value Evaluate(LexicalContext lexicalContext)
+        public override Value Evaluate(RuntimeLexicalContext lexicalContext)
         {
-            return lexicalContext.Variables[Name];
+            return lexicalContext.Declarations[Name];
         }
     }
 }
