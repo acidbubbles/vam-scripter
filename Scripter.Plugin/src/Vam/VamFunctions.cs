@@ -3,7 +3,7 @@ using ScripterLang;
 
 namespace Vam
 {
-    public class VamFunctions
+    public static class VamFunctions
     {
         public static void Register(GlobalLexicalContext lexicalContext)
         {

@@ -1,0 +1,30 @@
+﻿using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+
+namespace UI
+{
+    public class Clickable : MonoBehaviour, IPointerClickHandler
+    {
+        public readonly ClickableEvent onClick = new ClickableEvent();
+        public readonly ClickableEvent onRightClick = new ClickableEvent();
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Right)
+                onRightClick.Invoke(eventData);
+            else
+                onClick.Invoke(eventData);
+        }
+
+        public void OnDestroy()
+        {
+            onClick.RemoveAllListeners();
+            onRightClick.RemoveAllListeners();
+        }
+
+        public class ClickableEvent : UnityEvent<PointerEventData>
+        {
+        }
+    }
+}

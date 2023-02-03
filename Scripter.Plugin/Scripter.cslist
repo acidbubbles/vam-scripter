@@ -31,6 +31,9 @@ src\Lib\Runtime\ScopeLexicalContext.cs
 src\Lib\Runtime\ScripterParsingException.cs
 src\Lib\Runtime\Value.cs
 src\Lib\Runtime\ValueTypes.cs
+src\UI\Clickable.cs
+src\UI\Components.cs
+src\UI\HistoryManager.cs
 src\Vam\ScripterPluginException.cs
 src\Vam\VamFunctions.cs
 src\Scripter.cs

@@ -102,6 +102,9 @@
     <Compile Include="src\Lib\Runtime\ScripterParsingException.cs" />
     <Compile Include="src\Lib\Runtime\Value.cs" />
     <Compile Include="src\Lib\Runtime\ValueTypes.cs" />
+    <Compile Include="src\UI\Clickable.cs" />
+    <Compile Include="src\UI\Components.cs" />
+    <Compile Include="src\UI\HistoryManager.cs" />
     <Compile Include="src\Vam\ScripterPluginException.cs" />
     <Compile Include="src\Vam\VamFunctions.cs" />
     <Compile Include="src\Scripter.cs" />
