@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using UnityEngine;
+using UnityEngine.UI;
 
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public class ScriptsManagerScreen : Screen
@@ -9,7 +11,19 @@ public class ScriptsManagerScreen : Screen
         var screen = Screen.Create<ScriptsManagerScreen>(manager.Root);
 
         var toolbar = MakeToolbar(screen.transform);
-        AddToToolbar(toolbar,  CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Create", () => manager.Scripts.Create(ScriptActionTrigger.Type)));
+        var types = new List<string>
+        {
+            ScriptActionTrigger.Type,
+        };
+        var addTypeJSON = new JSONStorableStringChooser("Type", types, types[0], "Trigger:");
+
+        var addTypeUI = Instantiate(manager.Prefabs.configurablePopupPrefab, toolbar).GetComponent<UIDynamicPopup>();
+        addTypeUI.GetComponent<LayoutElement>().minHeight = 52;
+        addTypeUI.height = 52;
+        addTypeJSON.popup = addTypeUI.popup;
+        #warning Drop down is hidden!
+        AddToToolbar(toolbar, addTypeUI.transform);
+        AddToToolbar(toolbar,  CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Create", () => manager.Scripts.Create(addTypeJSON.val)));
 
         screen.Initialize(manager);
 
