@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Scripter : MVRScript
 {
     private readonly ScriptsManager _scripts;
-    private Screen _screen;
+    private ScreenManager _screens;
 
     public Scripter()
     {
@@ -20,6 +21,8 @@ public class Scripter : MVRScript
         base.InitUI();
         if (UITransform == null) return;
         leftUIContent.anchorMax = new Vector2(1, 1);
-        _screen = ScriptEditScreen.Create(leftUIContent, manager, _scripts.ByName("1"));
+        _screens = new ScreenManager(UITransform, leftUIContent, manager, _scripts);
+        SuperController.singleton.transform.parent.BroadcastMessage("DevToolsGameObjectExplorerShow", UITransform.gameObject);
+        _screens.EditScriptsList();
     }
 }

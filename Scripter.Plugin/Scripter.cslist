@@ -34,7 +34,9 @@ src\Lib\Runtime\ValueTypes.cs
 src\UI\Clickable.cs
 src\UI\HistoryManager.cs
 src\UI\Screen.cs
+src\UI\ScreenManager.cs
 src\UI\ScriptEditScreen.cs
+src\UI\ScriptsManagerScreen.cs
 src\Script.cs
 src\Scripter.cs
 src\ScripterPluginException.cs

@@ -1,47 +1,27 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public class ScriptEditScreen : Screen
 {
-    public static Screen Create(Transform parent, MVRPluginManager manager, Script script)
+    public static Screen Create(ScreenManager manager, Script script)
     {
-        var go = new GameObject();
-        go.transform.SetParent(parent, false);
+        var screen = Screen.Create<ScriptEditScreen>(manager.Root);
 
-        var rect = go.AddComponent<RectTransform>();
-
-        rect.anchorMin = Vector2.zero;
-        rect.anchorMax = Vector2.one;
-        rect.anchoredPosition = new Vector2(0, 0);
-        rect.sizeDelta = new Vector2(0, 0);
-
-        var layout = go.AddComponent<LayoutElement>();
-        layout.preferredHeight = 1200f;
-        layout.flexibleWidth = 1;
-
-        var screen = go.AddComponent<ScriptEditScreen>();
-
-        var group = go.AddComponent<VerticalLayoutGroup>();
-        group.spacing = 10f;
-        group.childControlHeight = true;
-        group.childForceExpandHeight = false;
-
-        var fitter = go.AddComponent<ContentSizeFitter>();
-        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-        var button = Instantiate(manager.configurableButtonPrefab, go.transform).GetComponent<UIDynamicButton>();
+        var button = Instantiate(manager.Prefabs.configurableButtonPrefab, screen.transform).GetComponent<UIDynamicButton>();
         button.label = "Run";
         button.button.onClick.AddListener(script.Run);
-        CreateMultilineInput(go.transform, manager, script.SourceJSON);
+        CreateMultilineInput(screen.transform, manager.Prefabs, script.SourceJSON);
 
-        var toolbar = MakeToolbar(go.transform, manager);
-        AddToToolbar(toolbar, manager.configurableButtonPrefab, "Undo", script.History.Undo);
-        AddToToolbar(toolbar, manager.configurableButtonPrefab, "Redo", script.History.Redo);
+        var toolbar = MakeToolbar(screen.transform);
+        AddToToolbar(toolbar, manager.Prefabs.configurableButtonPrefab, "Undo", script.History.Undo);
+        AddToToolbar(toolbar, manager.Prefabs.configurableButtonPrefab, "Redo", script.History.Redo);
 
-        var console = Instantiate(manager.configurableTextFieldPrefab, go.transform).GetComponent<UIDynamicTextField>();
+        var console = Instantiate(manager.Prefabs.configurableTextFieldPrefab, screen.transform).GetComponent<UIDynamicTextField>();
         console.backgroundColor = Color.black;
         console.textColor = Color.white;
         script.ConsoleJSON.dynamicText = console;
@@ -49,9 +29,9 @@ public class ScriptEditScreen : Screen
         return screen;
     }
 
-    private static UIDynamicTextField CreateMultilineInput(Transform parent, MVRPluginManager manager, JSONStorableString jss)
+    private static void CreateMultilineInput(Transform parent, MVRPluginManager prefabs, JSONStorableString jss)
     {
-        var textfield = Instantiate(manager.configurableTextFieldPrefab, parent).GetComponent<UIDynamicTextField>();
+        var textfield = Instantiate(prefabs.configurableTextFieldPrefab, parent).GetComponent<UIDynamicTextField>();
         textfield.height = 880;
         jss.dynamicText = textfield;
         textfield.backgroundColor = Color.white;
@@ -67,7 +47,6 @@ public class ScriptEditScreen : Screen
             input.ActivateInputField();
             input.StartCoroutine(Select(input));
         });
-        return textfield;
     }
 
     private static IEnumerator Select(InputField input)
@@ -76,7 +55,7 @@ public class ScriptEditScreen : Screen
         input.MoveTextEnd(true);
     }
 
-    private static Transform MakeToolbar(Transform parent, MVRPluginManager manager)
+    private static Transform MakeToolbar(Transform parent)
     {
         var go = new GameObject();
         go.transform.SetParent(parent, false);

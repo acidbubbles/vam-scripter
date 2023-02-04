@@ -105,7 +105,9 @@
     <Compile Include="src\UI\Clickable.cs" />
     <Compile Include="src\UI\HistoryManager.cs" />
     <Compile Include="src\UI\Screen.cs" />
+    <Compile Include="src\UI\ScreenManager.cs" />
     <Compile Include="src\UI\ScriptEditScreen.cs" />
+    <Compile Include="src\UI\ScriptsManagerScreen.cs" />
     <Compile Include="src\Script.cs" />
     <Compile Include="src\Scripter.cs" />
     <Compile Include="src\ScripterPluginException.cs" />
