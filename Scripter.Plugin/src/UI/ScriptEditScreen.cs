@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using ScripterLang;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -14,7 +14,9 @@ public class ScriptEditScreen : Screen
 
         var button = Instantiate(manager.Prefabs.configurableButtonPrefab, screen.transform).GetComponent<UIDynamicButton>();
         button.label = "Run";
-        button.button.onClick.AddListener(script.Run);
+        #warning Create UI based on which trigger is currently used, including value refresh
+        #warning Toggle to disable script
+        button.button.onClick.AddListener(() => script.Run(Value.Undefined));
         CreateMultilineInput(screen.transform, manager.Prefabs, script.SourceJSON);
 
         var toolbar = MakeToolbar(screen.transform);

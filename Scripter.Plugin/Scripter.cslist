@@ -31,6 +31,10 @@ src\Lib\Runtime\ScopeLexicalContext.cs
 src\Lib\Runtime\ScripterParsingException.cs
 src\Lib\Runtime\Value.cs
 src\Lib\Runtime\ValueTypes.cs
+src\Scripts\Triggers\ScriptActionTrigger.cs
+src\Scripts\Triggers\ScriptTrigger.cs
+src\Scripts\Script.cs
+src\Scripts\ScriptsManager.cs
 src\UI\Clickable.cs
 src\UI\HistoryManager.cs
 src\UI\Screen.cs
@@ -38,8 +42,6 @@ src\UI\ScreenManager.cs
 src\UI\ScriptEditScreen.cs
 src\UI\ScriptEntryComponent.cs
 src\UI\ScriptsManagerScreen.cs
-src\Script.cs
 src\Scripter.cs
 src\ScripterPluginException.cs
-src\ScriptsManager.cs
 src\VamFunctions.cs

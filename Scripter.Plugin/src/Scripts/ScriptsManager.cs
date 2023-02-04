@@ -6,18 +6,28 @@ using UnityEngine.Events;
 
 public class ScriptsManager
 {
+    private readonly MVRScript _plugin;
     public readonly UnityEvent ScriptsUpdated = new UnityEvent();
     public readonly List<Script> Scripts = new List<Script>();
 
-    public void Add()
+    public ScriptsManager(MVRScript plugin)
+    {
+        _plugin = plugin;
+    }
+
+    public void Create(string type)
     {
         var name = NewName();
-        Scripts.Add(new Script(name));
+        var script = new Script();
+        script.Trigger = ScriptTrigger.Create(type, name, script.Run);
+        script.Trigger.Register(_plugin);
+        Scripts.Add(script);
         ScriptsUpdated.Invoke();
     }
 
     public void Delete(Script script)
     {
+        script.Trigger.Deregister(_plugin);
         Scripts.Remove(script);
         ScriptsUpdated.Invoke();
     }
@@ -28,7 +38,7 @@ public class ScriptsManager
         for (var i = 1; i < 9999; i++)
         {
             var name = $"{prefix}{i}";
-            if (Scripts.All(s => s.NameJSON.val != name))
+            if (Scripts.All(s => s.Trigger.NameJSON.val != name))
                 return name;
         }
         throw new InvalidOperationException("You're creating way too many scripts!");
@@ -49,7 +59,10 @@ public class ScriptsManager
         var array = json.AsArray;
         foreach (JSONNode scriptJSON in array)
         {
-            Scripts.Add(Script.FromJSON(scriptJSON));
+            var script = Script.FromJSON(scriptJSON);
+            script.Trigger.Register(_plugin);
+            Scripts.Add(script);
         }
+        ScriptsUpdated.Invoke();
     }
 }

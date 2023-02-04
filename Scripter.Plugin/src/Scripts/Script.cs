@@ -4,27 +4,23 @@ using SimpleJSON;
 
 public class Script
 {
-
     public readonly HistoryManager History;
-    public readonly JSONStorableString NameJSON = new JSONStorableString("Name", "");
     public readonly JSONStorableString SourceJSON = new JSONStorableString("Source", "// Write some code!");
     public readonly JSONStorableString ConsoleJSON = new JSONStorableString("Console", "");
+    public ScriptTrigger Trigger;
 
     private readonly GlobalLexicalContext _globalLexicalContext;
     private RuntimeDomain _domain;
     private Expression _expression;
 
-    public JSONStorableAction TriggerJSON;
-
-    public Script(string name, string source = null)
+    public Script(string source = null)
     {
         _globalLexicalContext = new GlobalLexicalContext();
+        _globalLexicalContext.StaticDeclarations.Add("value", Value.Undefined);
         VamFunctions.Register(_globalLexicalContext);
 
         History = new HistoryManager(SourceJSON);
-        TriggerJSON = new JSONStorableAction("Run", Run);
 
-        NameJSON.valNoCallback = name;
         SourceJSON.setCallbackFunction = val =>
         {
             History.Update(val);
@@ -51,12 +47,13 @@ public class Script
         }
     }
 
-    public void Run()
+    public void Run(Value value)
     {
         if (_expression == null) return;
 
         try
         {
+            _domain.SetVariableValue("value", value);
             _expression.Evaluate(_domain);
         }
         catch (Exception exc)
@@ -67,19 +64,19 @@ public class Script
         }
     }
 
-    public JSONNode GetJSON()
-    {
-        var json = new JSONClass
-        {
-            { "Name", NameJSON.val },
-            { "Source", NameJSON.val },
-        };
-        return json;
-    }
-
     public static Script FromJSON(JSONNode json)
     {
-        var script = new Script(json["Name"], json["Source"]);
-        return script;
+        var s = new Script(json["Source"].Value);
+        s.Trigger = ScriptTrigger.FromJSON(json["Trigger"], s.Run);
+        return s;
+    }
+
+    public JSONNode GetJSON()
+    {
+        return new JSONClass
+        {
+            { "Trigger", Trigger.GetJSON() },
+            { "Source", SourceJSON.val },
+        };
     }
 }

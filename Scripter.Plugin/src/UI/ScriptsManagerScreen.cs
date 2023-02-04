@@ -9,7 +9,7 @@ public class ScriptsManagerScreen : Screen
         var screen = Screen.Create<ScriptsManagerScreen>(manager.Root);
 
         var toolbar = MakeToolbar(screen.transform);
-        AddToToolbar(toolbar,  CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Create", manager.Scripts.Add));
+        AddToToolbar(toolbar,  CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Create", () => manager.Scripts.Create(ScriptActionTrigger.Type)));
 
         screen.Initialize(manager);
 

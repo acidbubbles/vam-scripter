@@ -48,7 +48,7 @@ public class ScriptEntryComponent : MonoBehaviour
             rowGroup.childControlWidth = true;
             rowGroup.childForceExpandWidth = true;
 
-            var input = CreateTextInput(script.NameJSON, manager.Prefabs.configurableTextFieldPrefab, rowGo.transform);
+            var input = CreateTextInput(script.Trigger.NameJSON, manager.Prefabs.configurableTextFieldPrefab, rowGo.transform);
             var inputLayout = input.GetComponent<LayoutElement>();
             inputLayout.flexibleWidth = 1000;
             inputLayout.minWidth = 800;

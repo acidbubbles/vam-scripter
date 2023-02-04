@@ -10,7 +10,7 @@ public class Scripter : MVRScript
 
     public Scripter()
     {
-        _scripts = new ScriptsManager();
+        _scripts = new ScriptsManager(this);
     }
 
     public override void Init()
@@ -23,10 +23,7 @@ public class Scripter : MVRScript
         yield return new WaitForEndOfFrame();
         if (this == null) yield break;
         if (!_restored)
-        {
             containingAtom.RestoreFromLast(this);
-            _restored = true;
-        }
     }
 
     public override void InitUI()
@@ -35,7 +32,6 @@ public class Scripter : MVRScript
         if (UITransform == null) return;
         leftUIContent.anchorMax = new Vector2(1, 1);
         _screens = new ScreenManager(UITransform, leftUIContent, manager, _scripts);
-        SuperController.singleton.transform.parent.BroadcastMessage("DevToolsGameObjectExplorerShow", UITransform.gameObject);
         _screens.EditScriptsList();
     }
 

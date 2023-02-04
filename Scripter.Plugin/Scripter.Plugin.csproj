@@ -102,6 +102,10 @@
     <Compile Include="src\Lib\Runtime\ScripterParsingException.cs" />
     <Compile Include="src\Lib\Runtime\Value.cs" />
     <Compile Include="src\Lib\Runtime\ValueTypes.cs" />
+    <Compile Include="src\Scripts\Triggers\ScriptActionTrigger.cs" />
+    <Compile Include="src\Scripts\Triggers\ScriptTrigger.cs" />
+    <Compile Include="src\Scripts\Script.cs" />
+    <Compile Include="src\Scripts\ScriptsManager.cs" />
     <Compile Include="src\UI\Clickable.cs" />
     <Compile Include="src\UI\HistoryManager.cs" />
     <Compile Include="src\UI\Screen.cs" />
@@ -109,10 +113,8 @@
     <Compile Include="src\UI\ScriptEditScreen.cs" />
     <Compile Include="src\UI\ScriptEntryComponent.cs" />
     <Compile Include="src\UI\ScriptsManagerScreen.cs" />
-    <Compile Include="src\Script.cs" />
     <Compile Include="src\Scripter.cs" />
     <Compile Include="src\ScripterPluginException.cs" />
-    <Compile Include="src\ScriptsManager.cs" />
     <Compile Include="src\VamFunctions.cs" />
     <!-- /ScripterSource -->
   </ItemGroup>
