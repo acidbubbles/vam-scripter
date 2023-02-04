@@ -13,7 +13,6 @@ public class Scripter : MVRScript
 
     public override void Init()
     {
-        _scripts.Add("1");
     }
 
     public override void InitUI()

@@ -18,8 +18,8 @@ public class ScriptEditScreen : Screen
         CreateMultilineInput(screen.transform, manager.Prefabs, script.SourceJSON);
 
         var toolbar = MakeToolbar(screen.transform);
-        AddToToolbar(toolbar, manager.Prefabs.configurableButtonPrefab, "Undo", script.History.Undo);
-        AddToToolbar(toolbar, manager.Prefabs.configurableButtonPrefab, "Redo", script.History.Redo);
+        AddToToolbar(toolbar, CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Undo", script.History.Undo));
+        AddToToolbar(toolbar, CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Redo", script.History.Redo));
 
         var console = Instantiate(manager.Prefabs.configurableTextFieldPrefab, screen.transform).GetComponent<UIDynamicTextField>();
         console.backgroundColor = Color.black;
@@ -53,31 +53,5 @@ public class ScriptEditScreen : Screen
     {
         yield return 0;
         input.MoveTextEnd(true);
-    }
-
-    private static Transform MakeToolbar(Transform parent)
-    {
-        var go = new GameObject();
-        go.transform.SetParent(parent, false);
-        var layout = go.AddComponent<LayoutElement>();
-        layout.minHeight = 50;
-        layout.preferredHeight = 50;
-        layout.flexibleHeight = 0;
-        var group = go.gameObject.AddComponent<HorizontalLayoutGroup>();
-        group.spacing = 4f;
-        group.childForceExpandWidth = false;
-        group.childControlWidth = true;
-        return go.transform;
-    }
-
-    private static void AddToToolbar(Transform parent, Transform prefab, string label, UnityAction action)
-    {
-        var button = Object.Instantiate(prefab, parent, false);
-        var ui = button.GetComponent<UIDynamicButton>();
-        ui.label = label;
-        ui.button.onClick.AddListener(action);
-        var layoutElement = button.GetComponent<LayoutElement>();
-        layoutElement.preferredWidth = 0;
-        layoutElement.flexibleWidth = 100;
     }
 }

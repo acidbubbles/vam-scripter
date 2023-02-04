@@ -5,6 +5,7 @@ public class Script
 {
 
     public readonly HistoryManager History;
+    public readonly JSONStorableString NameJSON = new JSONStorableString("Name", "");
     public readonly JSONStorableString SourceJSON = new JSONStorableString("Source", "// Write some code!");
     public readonly JSONStorableString ConsoleJSON = new JSONStorableString("Console", "");
 
@@ -14,7 +15,7 @@ public class Script
 
     public JSONStorableAction TriggerJSON;
 
-    public Script()
+    public Script(string name, string source = null)
     {
         _globalLexicalContext = new GlobalLexicalContext();
         VamFunctions.Register(_globalLexicalContext);
@@ -22,11 +23,15 @@ public class Script
         History = new HistoryManager(SourceJSON);
         TriggerJSON = new JSONStorableAction("Run", Run);
 
+        NameJSON.valNoCallback = name;
         SourceJSON.setCallbackFunction = val =>
         {
             History.Update(val);
             Parse(val);
         };
+        if (source != null)
+            SourceJSON.val = source;
+        ConsoleJSON.val = "This script is empty.";
     }
 
     private void Parse(string val)

@@ -1,16 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.Events;
 
 public class ScriptsManager
 {
-    private readonly Dictionary<string, Script> _scripts = new Dictionary<string, Script>();
+    public readonly UnityEvent ScriptsUpdated = new UnityEvent();
+    public readonly List<Script> Scripts = new List<Script>();
 
-    public void Add(string name)
+    public void Add()
     {
-        _scripts.Add(name, new Script());
+        var name = NewName();
+        Scripts.Add(new Script(name));
+        ScriptsUpdated.Invoke();
     }
 
-    public Script ByName(string name)
+    public void Delete(Script script)
     {
-        return _scripts[name];
+        Scripts.Remove(script);
+        ScriptsUpdated.Invoke();
+    }
+
+    private string NewName()
+    {
+        const string prefix = "Untitled ";
+        for (var i = 1; i < 9999; i++)
+        {
+            var name = $"{prefix}{i}";
+            if (Scripts.All(s => s.NameJSON.val != name))
+                return name;
+        }
+        throw new InvalidOperationException("You're creating way too many scripts!");
     }
 }
