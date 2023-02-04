@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SimpleJSON;
 using UnityEngine.Events;
 
 public class ScriptsManager
@@ -31,5 +32,24 @@ public class ScriptsManager
                 return name;
         }
         throw new InvalidOperationException("You're creating way too many scripts!");
+    }
+
+    public JSONNode GetJSON()
+    {
+        var json = new JSONArray();
+        foreach (var script in Scripts)
+        {
+            json.Add(script.GetJSON());
+        }
+        return json;
+    }
+
+    public void RestoreFromJSON(JSONNode json)
+    {
+        var array = json.AsArray;
+        foreach (JSONNode scriptJSON in array)
+        {
+            Scripts.Add(Script.FromJSON(scriptJSON));
+        }
     }
 }

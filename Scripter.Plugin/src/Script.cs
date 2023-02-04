@@ -1,5 +1,6 @@
 ﻿using System;
 using ScripterLang;
+using SimpleJSON;
 
 public class Script
 {
@@ -64,5 +65,21 @@ public class Script
                 SuperController.LogError($"Scripter: There was an error executing the script.\n{exc.Message}");
             ConsoleJSON.val = $"<color=red>{exc}</color>";
         }
+    }
+
+    public JSONNode GetJSON()
+    {
+        var json = new JSONClass
+        {
+            { "Name", NameJSON.val },
+            { "Source", NameJSON.val },
+        };
+        return json;
+    }
+
+    public static Script FromJSON(JSONNode json)
+    {
+        var script = new Script(json["Name"], json["Source"]);
+        return script;
     }
 }
