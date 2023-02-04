@@ -1,42 +1,39 @@
 ﻿using System.Collections.Generic;
 
-namespace UI
+public class HistoryManager
 {
-    public class HistoryManager
+    private readonly JSONStorableString _storable;
+    private readonly List<string> _history = new List<string>();
+    private int _index;
+
+    public HistoryManager(JSONStorableString storable)
     {
-        private readonly JSONStorableString _storable;
-        private readonly List<string> _history = new List<string>();
-        private int _index;
+        _storable = storable;
+        Update(_storable.val);
+    }
 
-        public HistoryManager(JSONStorableString storable)
+    public void Update(string val)
+    {
+        while (_history.Count > _index + 1)
         {
-            _storable = storable;
-            Update(_storable.val);
+            _history.RemoveAt(_history.Count - 1);
         }
+        if (_history.Count > 50) _history.RemoveAt(0);
+        _history.Add(val);
+        _index = _history.Count - 1;
+    }
 
-        public void Update(string val)
-        {
-            while (_history.Count > _index + 1)
-            {
-                _history.RemoveAt(_history.Count - 1);
-            }
-            if (_history.Count > 50) _history.RemoveAt(0);
-            _history.Add(val);
-            _index = _history.Count - 1;
-        }
+    public void Undo()
+    {
+        if (_index == 0) return;
+        _index--;
+        _storable.valNoCallback = _history[_index];
+    }
 
-        public void Undo()
-        {
-            if (_index == 0) return;
-            _index--;
-            _storable.valNoCallback = _history[_index];
-        }
-
-        public void Redo()
-        {
-            if (_index >= _history.Count - 1) return;
-            _index++;
-            _storable.valNoCallback = _history[_index];
-        }
+    public void Redo()
+    {
+        if (_index >= _history.Count - 1) return;
+        _index++;
+        _storable.valNoCallback = _history[_index];
     }
 }

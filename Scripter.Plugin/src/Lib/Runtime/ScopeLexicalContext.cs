@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ScripterLang
 {
     public class ScopeLexicalContext : LexicalContext
     {
+        public readonly List<string> Declarations = new List<string>();
         public readonly GlobalLexicalContext Root;
+
         private readonly LexicalContext _parent;
 
         public ScopeLexicalContext(GlobalLexicalContext parent)

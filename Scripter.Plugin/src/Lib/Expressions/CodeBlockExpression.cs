@@ -4,10 +4,10 @@ namespace ScripterLang
 {
     public class CodeBlockExpression : Expression
     {
-        private readonly LexicalContext _lexicalContext;
+        private readonly ScopeLexicalContext _lexicalContext;
         private readonly List<Expression> _expressions;
 
-        public CodeBlockExpression(List<Expression> expressions, LexicalContext lexicalContext)
+        public CodeBlockExpression(List<Expression> expressions, ScopeLexicalContext lexicalContext)
         {
             _lexicalContext = lexicalContext;
             _expressions = expressions;
