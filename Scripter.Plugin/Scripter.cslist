@@ -40,7 +40,9 @@ src\Scripts\Triggers\ScriptTrigger.cs
 src\Scripts\Triggers\ScriptUpdateTrigger.cs
 src\Scripts\Script.cs
 src\Scripts\ScriptsManager.cs
+src\Scripts\VamFunctions.cs
 src\UI\Clickable.cs
+src\UI\CodeInputField.cs
 src\UI\HistoryManager.cs
 src\UI\Screen.cs
 src\UI\ScreenManager.cs
@@ -49,4 +51,3 @@ src\UI\ScriptEntryComponent.cs
 src\UI\ScriptsManagerScreen.cs
 src\Scripter.cs
 src\ScripterPluginException.cs
-src\VamFunctions.cs

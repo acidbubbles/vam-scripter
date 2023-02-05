@@ -38,8 +38,7 @@ public class ScriptEditScreen : Screen
         jss.dynamicText = textfield;
         textfield.backgroundColor = Color.white;
         var text = textfield.GetComponentInChildren<Text>(true);
-        var input = text.gameObject.AddComponent<InputField>();
-        input.lineType = InputField.LineType.MultiLineNewline;
+        var input = text.gameObject.AddComponent<CodeInputField>();
         input.textComponent = textfield.UItext;
         jss.inputField = input;
         textfield.gameObject.AddComponent<Clickable>().onClick.AddListener(_ =>
