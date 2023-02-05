@@ -1,5 +1,6 @@
 ﻿using System;
 using ScripterLang;
+using UnityEngine;
 
 public static class VamFunctions
 {
@@ -8,6 +9,7 @@ public static class VamFunctions
         lexicalContext.Functions.Add("getDateTime", GetDateTime);
         lexicalContext.Functions.Add("logMessage", LogMessage);
         lexicalContext.Functions.Add("logError", LogError);
+        lexicalContext.Functions.Add("getTime", _ => Time.time);
         lexicalContext.Functions.Add("getFloatParamValue", GetFloatParamValue);
         lexicalContext.Functions.Add("setFloatParamValue", SetFloatParamValue);
         lexicalContext.Functions.Add("getBoolParamValue", GetBoolParamValue);

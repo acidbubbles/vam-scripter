@@ -26,8 +26,15 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 - `getDateTime(format)`
 - `logMessage(message)`
 - `logError(message)`
+- `getTime()`
 - `getFloatParamValue(atomName, storableName, paramName)`
 - `setFloatParamValue(atomName, storableName, paramName, value)`
+- `getBoolParamValue(atomName, storableName, paramName)`
+- `setBoolParamValue(atomName, storableName, paramName, value)`
+- `getStringParamValue(atomName, storableName, paramName)`
+- `setStringParamValue(atomName, storableName, paramName, value)`
+- `getStringChooserParamValue(atomName, storableName, paramName)`
+- `setStringChooserParamValue(atomName, storableName, paramName, value)`
 - `invokeTrigger(atomName, storableName, paramName)`
 - `invokeKeybinding(bindingName)`
 
