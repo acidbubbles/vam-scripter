@@ -13,7 +13,11 @@ public class ScriptActionTrigger : ScriptTrigger
     public ScriptActionTrigger(string name, Action<Value> run, bool enabled, MVRScript plugin)
         : base(name, enabled, plugin)
     {
-        _actionJSON = new JSONStorableAction(name, () => run(Value.Undefined));
+        _actionJSON = new JSONStorableAction(name, () =>
+        {
+            if (!EnabledJSON.val) return;
+            run(Value.Undefined);
+        });
         NameJSON.setCallbackFunction = val =>
         {
             Deregister();

@@ -13,7 +13,11 @@ public class ScriptBoolParamTrigger : ScriptTrigger
     public ScriptBoolParamTrigger(string name, Action<Value> run, bool enabled, MVRScript plugin)
         : base(name, enabled, plugin)
     {
-        _valueJSON = new JSONStorableBool(name, false, val => run(val));
+        _valueJSON = new JSONStorableBool(name, false, val =>
+        {
+            if (!EnabledJSON.val) return;
+            run(val);
+        });
         NameJSON.setCallbackFunction = val =>
         {
             Deregister();

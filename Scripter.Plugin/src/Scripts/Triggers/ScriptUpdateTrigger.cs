@@ -34,6 +34,7 @@ public class ScriptUpdateTrigger : ScriptTrigger
         while (true)
         {
             yield return 0;
+            if (!EnabledJSON.val) continue;
             _run(Value.Undefined);
         }
         // ReSharper disable once IteratorNeverReturns

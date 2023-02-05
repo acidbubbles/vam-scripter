@@ -13,7 +13,11 @@ public class ScriptFloatParamTrigger : ScriptTrigger
     public ScriptFloatParamTrigger(string name, Action<Value> run, bool enabled, MVRScript plugin)
         : base(name, enabled, plugin)
     {
-        _valueJSON = new JSONStorableFloat(name, 0, val => run(val), 0, 1, false);
+        _valueJSON = new JSONStorableFloat(name, 0, val =>
+        {
+            if (!EnabledJSON.val) return;
+            run(val);
+        }, 0, 1, false);
         NameJSON.setCallbackFunction = val =>
         {
             Deregister();
