@@ -14,8 +14,6 @@ public class ScriptEditScreen : Screen
 
         var button = Instantiate(manager.Prefabs.configurableButtonPrefab, screen.transform).GetComponent<UIDynamicButton>();
         button.label = "Run";
-        #warning Create UI based on which trigger is currently used, including value refresh
-        #warning Toggle to disable script
         button.button.onClick.AddListener(() => script.Run(Value.Undefined));
         CreateMultilineInput(screen.transform, manager.Prefabs, script.SourceJSON);
 

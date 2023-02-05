@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -7,6 +8,9 @@ public class CodeInputField : InputField
     private int _prevCaretPosition;
     private bool _lastSelected;
     private int _lastSelectedPosition;
+    private bool _lastDoubleClick;
+    private int _lastDoubleClickStart;
+    private int _lastDoubleClickEnd;
 
     protected override void Awake()
     {
@@ -37,6 +41,45 @@ public class CodeInputField : InputField
         _lastSelected = true;
     }
 
+    public override void OnPointerClick(PointerEventData eventData)
+    {
+        base.OnPointerClick(eventData);
+        if (eventData.clickCount == 2)
+        {
+            Vector2 mousePos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(textComponent.rectTransform, eventData.position, eventData.pressEventCamera, out mousePos);
+            var pos = GetCharacterIndexFromPosition(mousePos);
+            if (pos == text.Length)
+                pos--;
+            var start = pos;
+            while (start > 0)
+            {
+                var c = text[start - 1];
+                if (c == '\r' || c == '\n' || c == ' ' || c == '.' || c == '"' || c == '(' || c == ')' || c == ';' || c == ',')
+                    break;
+                start--;
+            }
+            var end = pos;
+            while (end < text.Length - 2)
+            {
+                var c = text[end];
+                if (c == '\r' || c == '\n' || c == ' ' || c == '.' || c == '"' || c == '(' || c == ')' || c == ';' || c == ',')
+                    break;
+                end++;
+            }
+
+            _lastDoubleClick = true;
+            _lastDoubleClickStart = start;
+            _lastDoubleClickEnd = end;
+        }
+        else if (eventData.clickCount == 3)
+        {
+            _lastDoubleClick = true;
+            _lastDoubleClickStart = 0;
+            _lastDoubleClickEnd = text.Length;
+        }
+    }
+
     protected override void LateUpdate()
     {
         base.LateUpdate();
@@ -45,6 +88,15 @@ public class CodeInputField : InputField
             caretPosition = _lastSelectedPosition;
             ForceLabelUpdate();
             _lastSelected = false;
+        }
+        else if (_lastDoubleClick)
+        {
+            SuperController.LogMessage($"Selected: {_lastDoubleClickStart} {_lastDoubleClickEnd}");
+            caretPosition = _lastDoubleClickStart;
+            selectionAnchorPosition = _lastDoubleClickStart;
+            selectionFocusPosition = _lastDoubleClickEnd;
+            _lastDoubleClick = false;
+            ForceLabelUpdate();
         }
         else if (Input.GetKeyDown(KeyCode.End) && !Input.GetKey(KeyCode.LeftControl))
         {
