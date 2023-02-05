@@ -65,4 +65,14 @@ public class TokenizerTests
 
         Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "var", "x", "=", "1", ";", "return", "x", ";" }));
     }
+
+    [Test]
+    public void Operators()
+    {
+        var tokens = Tokenizer.Tokenize("""
+            x /= 2.3;
+            """);
+
+        Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "x", "/=", "2.3", ";" }));
+    }
 }

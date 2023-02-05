@@ -29,9 +29,11 @@ public class Tests
     public void ControlFlow()
     {
         const string source = """
-            var x = 1;
+            var x = 1 + 1;
             var result;
             if(x == 1) {
+                result = "not ok";
+            } else if(x == 2) {
                 result = "ok";
             }
             return result;
@@ -82,6 +84,7 @@ public class Tests
             var x = 1;
             var y = ++x;
             x = (x + y) * 2;
+            x += 1;
             return x++;
             ;
             """;
@@ -89,7 +92,7 @@ public class Tests
         var domain = new RuntimeDomain(_globalLexicalContext);
         var result = expression.Evaluate(domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("8"));
+        Assert.That(result.ToString(), Is.EqualTo("9"));
     }
 
     [Test]

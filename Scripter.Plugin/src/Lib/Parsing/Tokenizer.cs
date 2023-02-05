@@ -75,7 +75,9 @@ namespace ScripterLang
                         yield return new Token(isFloat ? TokenType.Float : TokenType.Integer, Substr(start, _position - start), Location);
                         break;
                     case '/':
-                        if (Peek() == '/')
+                    {
+                        var next = Peek();
+                        if (next == '/')
                         {
                             MoveNext();
                             while (MoveNext() && Current != '\n')
@@ -85,7 +87,7 @@ namespace ScripterLang
                             break;
                         }
 
-                        if (Peek() == '*')
+                        if (next == '*')
                         {
                             MoveNext();
                             while (MoveNext() && Current != '*' && Peek() != '/')
@@ -96,14 +98,32 @@ namespace ScripterLang
                             break;
                         }
 
-                        yield return new Token(TokenType.Operator, Current.ToString(), Location);
+                        if (next == '=')
+                        {
+                            yield return new Token(TokenType.AssignmentOperator, "/=", Location);
+                            MoveNext(2);
+                            break;
+                        }
+
+                        yield return new Token(TokenType.Operator, "/", Location);
                         MoveNext();
                         break;
+                    }
                     case '+':
                     case '-':
-                        if (Current == Peek())
+                    {
+                        var c = Current;
+                        var next = Peek();
+                        if (c == next)
                         {
                             yield return new Token(TokenType.IncrementDecrement, Substr(_position, 2), Location);
+                            MoveNext(2);
+                            break;
+                        }
+
+                        if (next == '=')
+                        {
+                            yield return new Token(TokenType.AssignmentOperator, c + "=", Location);
                             MoveNext(2);
                             break;
                         }
@@ -111,7 +131,18 @@ namespace ScripterLang
                         yield return new Token(TokenType.Operator, Current.ToString(), Location);
                         MoveNext();
                         break;
+                    }
                     case '*':
+                        if (MoveNext() && Current == '=')
+                        {
+                            yield return new Token(TokenType.AssignmentOperator, "*=", Location);
+                            MoveNext();
+                        }
+                        else
+                        {
+                            yield return new Token(TokenType.Operator, "*", Location);
+                        }
+                        break;
                     case '%':
                     case '^':
                         yield return new Token(TokenType.Operator, Current.ToString(), Location);

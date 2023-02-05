@@ -83,7 +83,8 @@ namespace ScripterLang
 
             if (token.Match(TokenType.Identifier))
             {
-                if (PeekNext().Match(TokenType.LeftParenthesis))
+                var next = PeekNext();
+                if (next.Match(TokenType.LeftParenthesis))
                 {
                     MoveNext();
                     MoveNext();
@@ -124,7 +125,15 @@ namespace ScripterLang
             if (Peek().Match(TokenType.Keyword, "else"))
             {
                 MoveNext();
-                var elseBlock = ParseCodeBlock(lexicalContext);
+                Expression elseBlock;
+                if (Peek().Match(TokenType.Keyword, "if"))
+                {
+                    elseBlock = ParseIfStatement(lexicalContext);
+                }
+                else
+                {
+                    elseBlock = ParseCodeBlock(lexicalContext);
+                }
                 return new IfExpression(condition, thenBlock, elseBlock);
             }
 
@@ -235,6 +244,14 @@ namespace ScripterLang
                 var right = ParseValueStatementExpression(lexicalContext);
                 Consume().Expect(TokenType.SemiColon);
                 return new AssignmentExpression(nameToken.Value, right);
+            }
+
+            if (nextToken.Match(TokenType.AssignmentOperator))
+            {
+                MoveNext();
+                var right = ParseValueStatementExpression(lexicalContext);
+                Consume().Expect(TokenType.SemiColon);
+                return new AssignmentOperatorExpression(nameToken.Value,  nextToken.Value, right);
             }
 
             if (nextToken.Match(TokenType.IncrementDecrement))

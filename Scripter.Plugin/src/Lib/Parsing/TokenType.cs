@@ -18,6 +18,7 @@
         public const int Assignment = 31;
         public const int Negation = 32;
         public const int IncrementDecrement = 33;
+        public const int AssignmentOperator = 34;
 
         public const int LeftParenthesis = 40;
         public const int RightParenthesis = 41;

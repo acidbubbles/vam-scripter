@@ -70,6 +70,7 @@
   <ItemGroup>
     <!-- ScripterSource -->
     <Compile Include="src\Lib\Expressions\AssignmentExpression.cs" />
+    <Compile Include="src\Lib\Expressions\AssignmentOperatorExpression.cs" />
     <Compile Include="src\Lib\Expressions\BinaryExpression.cs" />
     <Compile Include="src\Lib\Expressions\BooleanExpression.cs" />
     <Compile Include="src\Lib\Expressions\CodeBlockExpression.cs" />

@@ -1,4 +1,5 @@
 src\Lib\Expressions\AssignmentExpression.cs
+src\Lib\Expressions\AssignmentOperatorExpression.cs
 src\Lib\Expressions\BinaryExpression.cs
 src\Lib\Expressions\BooleanExpression.cs
 src\Lib\Expressions\CodeBlockExpression.cs

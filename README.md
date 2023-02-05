@@ -8,7 +8,7 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 - Boolean operators (`||`, `&&`, `==`, `!=`, `<`, `>`, `<=`, `>=`)
 - Math operators (`+`, `-`, `*`, `/`)
 - String concatenation (`+`)
-- Increment operators (`++`, `--`)
+- Assignment operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`)
 - Comments (`//`, `/* */`)
 - Keywords (`var`, `if`, `else`, `for`, `while`, `true`, `false`, `throw`, `static`)
 - Code blocks (`{`, `}`)
