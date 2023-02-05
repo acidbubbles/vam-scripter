@@ -19,15 +19,15 @@ public class ScriptsManager
     {
         var name = NewName();
         var script = new Script();
-        script.Trigger = ScriptTrigger.Create(type, name, script.Run);
-        script.Trigger.Register(_plugin);
+        script.Trigger = ScriptTrigger.Create(type, name, script.Run, _plugin);
         Scripts.Add(script);
+        script.Trigger.Register();
         ScriptsUpdated.Invoke();
     }
 
     public void Delete(Script script)
     {
-        script.Trigger.Deregister(_plugin);
+        script.Trigger.Deregister();
         Scripts.Remove(script);
         ScriptsUpdated.Invoke();
     }
@@ -59,9 +59,9 @@ public class ScriptsManager
         var array = json.AsArray;
         foreach (JSONNode scriptJSON in array)
         {
-            var script = Script.FromJSON(scriptJSON);
-            script.Trigger.Register(_plugin);
+            var script = Script.FromJSON(scriptJSON, _plugin);
             Scripts.Add(script);
+            script.Trigger.Register();
         }
         ScriptsUpdated.Invoke();
     }

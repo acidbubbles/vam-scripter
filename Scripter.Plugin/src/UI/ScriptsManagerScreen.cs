@@ -10,20 +10,25 @@ public class ScriptsManagerScreen : Screen
     {
         var screen = Screen.Create<ScriptsManagerScreen>(manager.Root);
 
-        var toolbar = MakeToolbar(screen.transform);
+        var toolbar = MakeToolbar(screen.transform, 56);
         var types = new List<string>
         {
             ScriptActionTrigger.Type,
+            ScriptFloatParamTrigger.Type,
+            ScriptBoolParamTrigger.Type,
+            ScriptUpdateTrigger.Type,
         };
-        var addTypeJSON = new JSONStorableStringChooser("Type", types, types[0], "Trigger:");
+        var addTypeJSON = new JSONStorableStringChooser("Type", types, types[0], "Add script:");
 
         var addTypeUI = Instantiate(manager.Prefabs.configurablePopupPrefab, toolbar).GetComponent<UIDynamicPopup>();
-        addTypeUI.GetComponent<LayoutElement>().minHeight = 52;
-        addTypeUI.height = 52;
+        screen._addTypePopup = addTypeUI.popup;
+        addTypeUI.GetComponent<LayoutElement>().minHeight = 60;
+        addTypeUI.height = 60;
         addTypeJSON.popup = addTypeUI.popup;
-        #warning Drop down is hidden!
+        addTypeUI.popup.topButton.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
         AddToToolbar(toolbar, addTypeUI.transform);
-        AddToToolbar(toolbar,  CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Create", () => manager.Scripts.Create(addTypeJSON.val)));
+        var buttonUI = CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "+ Create", () => manager.Scripts.Create(addTypeJSON.val));
+        AddToToolbar(toolbar,  buttonUI);
 
         screen.Initialize(manager);
 
@@ -32,12 +37,25 @@ public class ScriptsManagerScreen : Screen
 
     private readonly List<ScriptEntryComponent> _entries = new List<ScriptEntryComponent>();
     private ScreenManager _manager;
+    private UIPopup _addTypePopup;
 
     public void Initialize(ScreenManager manager)
     {
         _manager = manager;
         _manager.Scripts.ScriptsUpdated.AddListener(ScriptsUpdated);
         ScriptsUpdated();
+
+        _addTypePopup.onOpenPopupHandlers += OnOpenPopupHandler;
+    }
+
+    private void OnOpenPopupHandler()
+    {
+        Invoke(nameof(MovePopupToTop), 0);
+    }
+
+    private void MovePopupToTop()
+    {
+        _addTypePopup.popupPanel.SetParent(transform, true);
     }
 
     private void ScriptsUpdated()
@@ -61,5 +79,6 @@ public class ScriptsManagerScreen : Screen
     public void OnDestroy()
     {
         _manager?.Scripts.ScriptsUpdated.RemoveListener(ScriptsUpdated);
+        if (_addTypePopup != null) _addTypePopup.onOpenPopupHandlers -= OnOpenPopupHandler;
     }
 }

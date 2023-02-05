@@ -6,42 +6,39 @@ public class ScriptActionTrigger : ScriptTrigger
 {
     public const string Type = "Action";
 
-    private readonly JSONStorableAction _action;
+    private readonly JSONStorableAction _actionJSON;
 
-    public ScriptActionTrigger(string name, Action<Value> run)
+    public override string GetTypeName() => Type;
+
+    public ScriptActionTrigger(string name, Action<Value> run, bool enabled, MVRScript plugin)
+        : base(name, enabled, plugin)
     {
-        _action = new JSONStorableAction(name, () => run(Value.Undefined));
-        NameJSON = new JSONStorableString("Name", "")
+        _actionJSON = new JSONStorableAction(name, () => run(Value.Undefined));
+        NameJSON.setCallbackFunction = val =>
         {
-            valNoCallback = name,
-            setCallbackFunction = val => _action.name = val
+            Deregister();
+            _actionJSON.name = val;
+            Register();
         };
     }
 
-    public static ScriptTrigger FromJSONImpl(JSONNode json, Action<Value> run)
+    public static ScriptTrigger FromJSONImpl(JSONNode json, Action<Value> run, MVRScript plugin)
     {
         return new ScriptActionTrigger(
             json["Name"],
-            run
+            run,
+            json["Enabled"].AsBool,
+            plugin
         );
     }
 
-    public override JSONNode GetJSON()
+    public override void Register()
     {
-        return new JSONClass
-        {
-            { "Name", _action.name },
-            { "Type", Type }
-        };
+        Plugin.RegisterAction(_actionJSON);
     }
 
-    public override void Register(MVRScript plugin)
+    public override void Deregister()
     {
-        plugin.RegisterAction(_action);
-    }
-
-    public override void Deregister(MVRScript plugin)
-    {
-        plugin.DeregisterAction(_action);
+        Plugin.DeregisterAction(_actionJSON);
     }
 }

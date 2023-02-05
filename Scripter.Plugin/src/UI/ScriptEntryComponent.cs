@@ -11,7 +11,7 @@ public class ScriptEntryComponent : MonoBehaviour
         var layout = go.AddComponent<LayoutElement>();
         layout.flexibleWidth = 1;
         layout.flexibleHeight = 0;
-        layout.preferredHeight = 220;
+        layout.preferredHeight = 140;
 
         var colGroup = go.AddComponent<VerticalLayoutGroup>();
         colGroup.spacing = 10f;
@@ -24,20 +24,20 @@ public class ScriptEntryComponent : MonoBehaviour
         bg.color = new Color(0.721f, 0.682f, 0.741f);
         bg.raycastTarget = false;
 
-        {
-            var title = new GameObject();
-            title.transform.SetParent(go.transform, false);
-            var titleLayout = title.AddComponent<LayoutElement>();
-            titleLayout.minHeight = 40;
-
-            var text = title.gameObject.AddComponent<Text>();
-            text.text = "Trigger";
-            text.font = manager.Prefabs.configurableButtonPrefab.GetComponent<UIDynamicButton>().buttonText.font;
-            text.fontSize = 28;
-            text.fontStyle = FontStyle.Bold;
-            text.alignment = TextAnchor.MiddleCenter;
-            text.color = Color.black;
-        }
+        // {
+        //     var title = new GameObject();
+        //     title.transform.SetParent(go.transform, false);
+        //     var titleLayout = title.AddComponent<LayoutElement>();
+        //     titleLayout.minHeight = 40;
+        //
+        //     var text = title.gameObject.AddComponent<Text>();
+        //     text.text = "Trigger: " + script.Trigger.GetTypeName();
+        //     text.font = manager.Prefabs.configurableButtonPrefab.GetComponent<UIDynamicButton>().buttonText.font;
+        //     text.fontSize = 28;
+        //     text.fontStyle = FontStyle.Bold;
+        //     text.alignment = TextAnchor.MiddleCenter;
+        //     text.color = Color.black;
+        // }
 
         {
             var rowGo = new GameObject();
@@ -48,28 +48,35 @@ public class ScriptEntryComponent : MonoBehaviour
             rowGroup.childControlWidth = true;
             rowGroup.childForceExpandWidth = true;
 
-            var input = CreateTextInput(script.Trigger.NameJSON, manager.Prefabs.configurableTextFieldPrefab, rowGo.transform);
-            var inputLayout = input.GetComponent<LayoutElement>();
-            inputLayout.flexibleWidth = 1000;
-            inputLayout.minWidth = 800;
-            inputLayout.preferredWidth = 800;
+            var toggle = Instantiate(manager.Prefabs.configurableTogglePrefab, rowGo.transform).GetComponent<UIDynamicToggle>();
+            toggle.label = "On" + script.Trigger.GetTypeName();
+            script.Trigger.EnabledJSON.toggle = toggle.toggle;
+            var toggleLayout = toggle.GetComponent<LayoutElement>();
+            toggleLayout.flexibleWidth = 1;
+            toggleLayout.minWidth = 200;
+            toggleLayout.preferredWidth = 200;
+
+            var inputLayout = CreateTextInput(script.Trigger.NameJSON, manager.Prefabs.configurableTextFieldPrefab, rowGo.transform);
+            inputLayout.flexibleWidth = 8;
+            inputLayout.minWidth = 1;
+            inputLayout.preferredWidth = 1;
 
             var edit = Instantiate(manager.Prefabs.configurableButtonPrefab, rowGo.transform).GetComponent<UIDynamicButton>();
             edit.label = "Edit";
             edit.button.onClick.AddListener(() => { manager.EditScript(script); });
             var editLayout = edit.GetComponent<LayoutElement>();
-            editLayout.flexibleWidth = 1;
-            editLayout.minWidth = 1;
-            editLayout.preferredWidth = 1;
+            editLayout.flexibleWidth = 2;
+            editLayout.minWidth = 50;
+            editLayout.preferredWidth = 50;
 
             var delete = Instantiate(manager.Prefabs.configurableButtonPrefab, rowGo.transform).GetComponent<UIDynamicButton>();
-            delete.label = "Delete";
+            delete.label = "X";
             delete.button.onClick.AddListener(() =>
             {
-                if (delete.label == "Are you sure?")
+                if (delete.label == "OK")
                     manager.Scripts.Delete(script);
                 else
-                    delete.label = "Are you sure?";
+                    delete.label = "OK";
             });
             delete.buttonColor = Color.red;
             delete.textColor = Color.white;
@@ -81,7 +88,8 @@ public class ScriptEntryComponent : MonoBehaviour
 
         {
             var console = Instantiate(manager.Prefabs.configurableTextFieldPrefab, go.transform).GetComponent<UIDynamicTextField>();
-            console.height = 60;
+            console.GetComponent<LayoutElement>().minHeight = 56;
+            console.height = 56;
             console.backgroundColor = Color.black;
             console.textColor = Color.white;
             script.ConsoleJSON.dynamicText = console;
@@ -92,26 +100,39 @@ public class ScriptEntryComponent : MonoBehaviour
         return entry;
     }
 
-    private static UIDynamicTextField CreateTextInput(JSONStorableString jss, Transform configurableTextFieldPrefab, Transform container)
+    private static LayoutElement CreateTextInput(JSONStorableString jss, Transform configurableTextFieldPrefab, Transform container)
     {
-        var textfield = Instantiate(configurableTextFieldPrefab).GetComponent<UIDynamicTextField>();
-        textfield.gameObject.transform.SetParent(container, false);
-        jss.dynamicText = textfield;
+        var go = new GameObject();
+        go.transform.SetParent(container, false);
 
-        textfield.backgroundColor = Color.white;
+        var bg = go.AddComponent<Image>();
+        bg.color = Color.white;
 
-        var input = textfield.gameObject.AddComponent<InputField>();
-        input.textComponent = textfield.UItext;
-        jss.inputField = input;
+        var layout = go.AddComponent<LayoutElement>();
 
-        Destroy(textfield.GetComponent<LayoutElement>());
+        {
+            var box = new GameObject();
+            box.transform.SetParent(go.transform, false);
 
-        var rect = textfield.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0, 1);
-        rect.anchorMax = new Vector2(1, 1);
-        rect.pivot = new Vector2(0, 1);
-        rect.anchoredPosition = new Vector2(0, -30f);
-        rect.sizeDelta = new Vector2(0, 40f);
-        return textfield;
+            var rect = box.AddComponent<RectTransform>();
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.anchoredPosition = new Vector2(0.5f, 0.5f);
+            rect.sizeDelta = new Vector2(-10, 0);
+
+            var text = box.AddComponent<Text>();
+            text.font = configurableTextFieldPrefab.GetComponentInChildren<Text>().font;
+            text.fontSize = 28;
+            text.alignment = TextAnchor.MiddleLeft;
+            text.color = Color.black;
+
+            var input = box.AddComponent<InputField>();
+            input.textComponent = text;
+
+            input.text = jss.val;
+            input.onValueChanged.AddListener(val => jss.val = val);
+        }
+
+        return layout;
     }
 }

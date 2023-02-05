@@ -28,7 +28,8 @@ public class Script
         };
         if (source != null)
             SourceJSON.val = source;
-        ConsoleJSON.val = "This script is empty.";
+        else
+            ConsoleJSON.val = "This script is empty.";
     }
 
     private void Parse(string val)
@@ -64,10 +65,10 @@ public class Script
         }
     }
 
-    public static Script FromJSON(JSONNode json)
+    public static Script FromJSON(JSONNode json, MVRScript plugin)
     {
         var s = new Script(json["Source"].Value);
-        s.Trigger = ScriptTrigger.FromJSON(json["Trigger"], s.Run);
+        s.Trigger = ScriptTrigger.FromJSON(json["Trigger"], s.Run, plugin);
         return s;
     }
 

@@ -103,7 +103,11 @@
     <Compile Include="src\Lib\Runtime\Value.cs" />
     <Compile Include="src\Lib\Runtime\ValueTypes.cs" />
     <Compile Include="src\Scripts\Triggers\ScriptActionTrigger.cs" />
+    <Compile Include="src\Scripts\Triggers\ScriptBoolParamTrigger.cs" />
+    <Compile Include="src\Scripts\Triggers\ScriptFloatParamTrigger.cs" />
+    <Compile Include="src\Scripts\Triggers\ScriptStringParamTrigger.cs" />
     <Compile Include="src\Scripts\Triggers\ScriptTrigger.cs" />
+    <Compile Include="src\Scripts\Triggers\ScriptUpdateTrigger.cs" />
     <Compile Include="src\Scripts\Script.cs" />
     <Compile Include="src\Scripts\ScriptsManager.cs" />
     <Compile Include="src\UI\Clickable.cs" />

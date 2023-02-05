@@ -30,13 +30,13 @@ public abstract class Screen : MonoBehaviour
         return go.AddComponent<T>();
     }
 
-    protected static Transform MakeToolbar(Transform parent)
+    protected static Transform MakeToolbar(Transform parent, float height = 50)
     {
         var go = new GameObject();
         go.transform.SetParent(parent, false);
         var layout = go.AddComponent<LayoutElement>();
-        layout.minHeight = 50;
-        layout.preferredHeight = 50;
+        layout.minHeight = height;
+        layout.preferredHeight = height;
         layout.flexibleHeight = 0;
         var group = go.gameObject.AddComponent<HorizontalLayoutGroup>();
         group.spacing = 4f;
