@@ -118,10 +118,14 @@ namespace ScripterLang
             MoveNext();
             var name = Consume().Expect(TokenType.Identifier);
             Consume().Expect(TokenType.LeftParenthesis);
+            var functionLexicalContext = new ScopeLexicalContext(lexicalContext);
             var arguments = new List<string>();
             while (!Peek().Match(TokenType.RightParenthesis))
             {
                 var arg = Consume().Expect(TokenType.Identifier).Value;
+                functionLexicalContext.Declare(name.Value, name.Location);
+                if (arguments.Contains(name.Value))
+                    throw new ScripterParsingException($"Argument {name.Value} of function {name.Value} was declared more than once", name.Location);
                 arguments.Add(arg);
                 if (Peek().Match(TokenType.Comma))
                     MoveNext();
@@ -130,7 +134,7 @@ namespace ScripterLang
 
             Consume().Expect(TokenType.LeftBrace);
             var expressions = new List<Expression>();
-            var functionLexicalContext = new ScopeLexicalContext(lexicalContext);
+
             while (!Peek().Match(TokenType.RightBrace))
             {
                 var expression = ParseExpression(functionLexicalContext);
@@ -210,9 +214,7 @@ namespace ScripterLang
             MoveNext();
             var nameToken = Consume();
             nameToken.Expect(TokenType.Identifier);
-            if (lexicalContext.Declarations.Contains(nameToken.Value))
-                throw new ScripterRuntimeException($"Variable '{nameToken.Value}' was already declared");
-            lexicalContext.Declarations.Add(nameToken.Value);
+            lexicalContext.Declare(nameToken.Value, nameToken.Location);
             if (Peek().Match(TokenType.Assignment))
             {
                 MoveNext();
@@ -235,9 +237,6 @@ namespace ScripterLang
             Consume().Expect(TokenType.Assignment);
             var initialValueExpression = ParseValueStatementExpression(lexicalContext);
             Consume().Expect(TokenType.SemiColon);
-
-            if (lexicalContext.Root.StaticDeclarations.Contains(nameToken.Value))
-                throw new ScripterParsingException($"Static variable {nameToken.Value} was already declared.", nameToken.Location);
 
             return new StaticVariableDeclarationExpression(nameToken.Value, initialValueExpression);
         }

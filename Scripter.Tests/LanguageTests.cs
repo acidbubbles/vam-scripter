@@ -219,6 +219,7 @@ public class LanguageTests
         const string source = """
             var x = 0;
             function run() {
+                var x = 1;
                 var y = 0;
                 y += 1;
                 x += y;

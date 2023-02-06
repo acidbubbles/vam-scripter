@@ -8,18 +8,12 @@ namespace ScripterLang
         public bool IsReturn;
 
         public readonly Dictionary<string, Value> StaticVariables = new Dictionary<string, Value>();
-
-        private readonly Dictionary<string, Value> _variables = new Dictionary<string, Value>();
-
-        public void CreateVariable(string name, Value value)
-        {
-            _variables.Add(name, value);
-        }
+        public readonly Dictionary<string, Value> Variables = new Dictionary<string, Value>();
 
         public Value GetVariableValue(string name)
         {
             Value value;
-            if (_variables.TryGetValue(name, out value))
+            if (Variables.TryGetValue(name, out value))
                 return value;
             if (StaticVariables.TryGetValue(name, out value))
                 return value;
@@ -28,8 +22,8 @@ namespace ScripterLang
 
         public Value SetVariableValue(string name, Value value)
         {
-            if (_variables.ContainsKey(name))
-                _variables[name] = value;
+            if (Variables.ContainsKey(name))
+                Variables[name] = value;
             else if (StaticVariables.ContainsKey(name))
                 StaticVariables[name] = value;
             else
@@ -44,7 +38,7 @@ namespace ScripterLang
 
         public void ClearVariable(string name)
         {
-            _variables.Remove(name);
+            Variables.Remove(name);
         }
     }
 }
