@@ -81,6 +81,7 @@
     <Compile Include="src\Lib\Expressions\ForExpression.cs" />
     <Compile Include="src\Lib\Expressions\FunctionBlockExpression.cs" />
     <Compile Include="src\Lib\Expressions\FunctionCallExpression.cs" />
+    <Compile Include="src\Lib\Expressions\FunctionDeclaration.cs" />
     <Compile Include="src\Lib\Expressions\IfExpression.cs" />
     <Compile Include="src\Lib\Expressions\IncrementDecrementExpression.cs" />
     <Compile Include="src\Lib\Expressions\IntegerExpression.cs" />

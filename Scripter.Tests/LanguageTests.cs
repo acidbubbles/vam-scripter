@@ -2,14 +2,16 @@ using ScripterLang;
 
 namespace Scripter.Tests;
 
-public class Tests
+public class LanguageTests
 {
     private GlobalLexicalContext _globalLexicalContext;
+    private RuntimeDomain _domain;
 
     [SetUp]
     public void SetUp()
     {
         _globalLexicalContext = new GlobalLexicalContext();
+        _domain = new RuntimeDomain();
     }
 
     [Test]
@@ -20,8 +22,7 @@ public class Tests
             return x;
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
-        var result = expression.Evaluate(domain);
+        var result = expression.Evaluate(_domain);
 
         Assert.That(result.ToString(), Is.EqualTo("1"));
     }
@@ -34,8 +35,7 @@ public class Tests
             return undefined == undefined;
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
-        var result = expression.Evaluate(domain);
+        var result = expression.Evaluate(_domain);
 
         Assert.That(result.ToString(), Is.EqualTo("true"));
     }
@@ -54,8 +54,7 @@ public class Tests
             return result;
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
-        var result = expression.Evaluate(domain);
+        var result = expression.Evaluate(_domain);
 
         Assert.That(result.ToString(), Is.EqualTo("ok"));
     }
@@ -70,8 +69,7 @@ public class Tests
             throw "Did not return!";
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
-        var result = expression.Evaluate(domain);
+        var result = expression.Evaluate(_domain);
 
         Assert.That(result.ToString(), Is.EqualTo("ok"));
     }
@@ -90,8 +88,7 @@ public class Tests
             Assert.That(args[2].ToString(), Is.EqualTo("true"));
             return Value.CreateString("ok");
         });
-        var domain = new RuntimeDomain();
-        var result = expression.Evaluate(domain);
+        var result = expression.Evaluate(_domain);
 
         Assert.That(result.ToString(), Is.EqualTo("ok"));
     }
@@ -103,8 +100,7 @@ public class Tests
             throw "Error!";
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
-        var exc = Assert.Throws<ScripterRuntimeException>(() => expression.Evaluate(domain));
+        var exc = Assert.Throws<ScripterRuntimeException>(() => expression.Evaluate(_domain));
         Assert.That(exc!.Message, Is.EqualTo("Error!"));
     }
 
@@ -120,8 +116,7 @@ public class Tests
             ;
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
-        var result = expression.Evaluate(domain);
+        var result = expression.Evaluate(_domain);
 
         Assert.That(result.ToString(), Is.EqualTo("9"));
     }
@@ -134,9 +129,8 @@ public class Tests
             if(!(false || true && true)) { throw "&& before ||"; }
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
 
-        Assert.DoesNotThrow(() => expression.Evaluate(domain));
+        Assert.DoesNotThrow(() => expression.Evaluate(_domain));
     }
 
     [Test]
@@ -147,8 +141,7 @@ public class Tests
             ;
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
-        var result = expression.Evaluate(domain);
+        var result = expression.Evaluate(_domain);
 
         Assert.That(result.ToString(), Is.EqualTo("a2true"));
     }
@@ -162,8 +155,7 @@ public class Tests
             return "nice";
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
-        var result = expression.Evaluate(domain);
+        var result = expression.Evaluate(_domain);
 
         Assert.That(result.ToString(), Is.EqualTo("nice"));
     }
@@ -182,8 +174,7 @@ public class Tests
             return x;
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
-        var result = expression.Evaluate(domain);
+        var result = expression.Evaluate(_domain);
 
         Assert.That(result.ToString(), Is.EqualTo("10"));
     }
@@ -196,9 +187,8 @@ public class Tests
             return x;
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
-        var result1 = expression.Evaluate(domain);
-        var result2 = expression.Evaluate(domain);
+        var result1 = expression.Evaluate(_domain);
+        var result2 = expression.Evaluate(_domain);
 
         Assert.That(result1.ToString(), Is.EqualTo("1"));
         Assert.That(result2.ToString(), Is.EqualTo("1"));
@@ -213,11 +203,30 @@ public class Tests
             return x;
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        var domain = new RuntimeDomain();
-        var result1 = expression.Evaluate(domain);
-        var result2 = expression.Evaluate(domain);
+        var result1 = expression.Evaluate(_domain);
+        var result2 = expression.Evaluate(_domain);
 
         Assert.That(result1.ToString(), Is.EqualTo("3"));
         Assert.That(result2.ToString(), Is.EqualTo("4"));
+    }
+
+    [Test]
+    public void Functions()
+    {
+        const string source = """
+            var x = 0;
+            function run() {
+                var y = 0;
+                y += 1;
+                x += y;
+            }
+            run();
+            run();
+            return x;
+            """;
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var result = expression.Evaluate(_domain);
+
+        Assert.That(result.ToString(), Is.EqualTo("2"));
     }
 }

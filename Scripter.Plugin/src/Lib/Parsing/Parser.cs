@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace ScripterLang
 {
@@ -7,7 +6,7 @@ namespace ScripterLang
     {
         public static Expression Parse(string source, GlobalLexicalContext globalLexicalContext)
         {
-            var tokens = Tokenizer.Tokenize(source).ToList();
+            var tokens = new List<Token>(Tokenizer.Tokenize(source));
             return Parse(tokens, globalLexicalContext);
         }
 
@@ -77,6 +76,7 @@ namespace ScripterLang
                 if (token.Value == "static") return ParseStaticDeclaration(lexicalContext);
                 if (token.Value == "var") return ParseVariableDeclaration(lexicalContext);
                 if (token.Value == "throw") return ParseThrowDeclaration(lexicalContext);
+                if (token.Value == "function") return ParseFunctionDeclaration(lexicalContext);
                 throw new ScripterParsingException($"Unexpected keyword: {token.Value}", token.Location);
             }
 
@@ -111,6 +111,35 @@ namespace ScripterLang
             MoveNext();
             var message = ParseValueStatementExpression(lexicalContext);
             return new ThrowExpression(message);
+        }
+
+        private Expression ParseFunctionDeclaration(ScopeLexicalContext lexicalContext)
+        {
+            MoveNext();
+            var name = Consume().Expect(TokenType.Identifier);
+            Consume().Expect(TokenType.LeftParenthesis);
+            var arguments = new List<string>();
+            while (!Peek().Match(TokenType.RightParenthesis))
+            {
+                var arg = Consume().Expect(TokenType.Identifier).Value;
+                arguments.Add(arg);
+                if (Peek().Match(TokenType.Comma))
+                    MoveNext();
+            }
+            Consume().Expect(TokenType.RightParenthesis);
+
+            Consume().Expect(TokenType.LeftBrace);
+            var expressions = new List<Expression>();
+            var functionLexicalContext = new ScopeLexicalContext(lexicalContext);
+            while (!Peek().Match(TokenType.RightBrace))
+            {
+                var expression = ParseExpression(functionLexicalContext);
+                expressions.Add(expression);
+            }
+            Consume().Expect(TokenType.RightBrace);
+            var body = new FunctionBlockExpression(expressions, functionLexicalContext);
+            lexicalContext.Root.Functions.Add(name.Value, new FunctionDeclaration(name.Value, arguments, body).Invoke);
+            return new UndefinedExpression();
         }
 
         private Expression ParseIfStatement(ScopeLexicalContext lexicalContext)
@@ -367,8 +396,7 @@ namespace ScripterLang
             {
                 var expression = ParseValueStatementExpression(lexicalContext);
                 arguments.Add(expression);
-                var cur = Peek();
-                if (cur.Match(TokenType.Comma))
+                if (Peek().Match(TokenType.Comma))
                     MoveNext();
             }
             return arguments;
