@@ -15,6 +15,7 @@ $sourceFiles > .\Scripter.cslist
 | Set-Content ".\Scripter.Plugin.csproj" -NoNewline
 
 # meta.json
+$sourceFiles += "Scripter.cslist"
 ( Get-Content ".\meta.json" -Raw ) -Replace "(?sm)(?<=^  `"contentList`": \[`r?`n).*?(?=`r?`n  \],)", `
     [System.String]::Join("`r`n", ($sourceFiles | % { "    `"Custom\\Scripts\\AcidBubbles\\Scripter\\$($_.Replace("\", "\\"))`"," } ) ).Trim(",") `
 | Set-Content ".\meta.json" -NoNewline

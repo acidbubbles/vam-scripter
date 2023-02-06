@@ -62,7 +62,8 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\ScriptEntryComponent.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\ScriptsManagerScreen.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripter.cs",
-    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\ScripterPluginException.cs"
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\ScripterPluginException.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\Scripter.cslist"
   ],
   "dependencies": {
   }
