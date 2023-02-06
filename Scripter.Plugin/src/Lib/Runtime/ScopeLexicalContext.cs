@@ -22,7 +22,7 @@ namespace ScripterLang
             _parent = parent;
         }
 
-        public override Func<Value[], Value> GetFunction(string name)
+        public override Func<RuntimeDomain, Value[], Value> GetFunction(string name)
         {
             return Root.GetFunction(name);
         }

@@ -10,8 +10,8 @@ public static class VamFunctions
         lexicalContext.Functions.Add("getDateTime", GetDateTime);
         lexicalContext.Functions.Add("logMessage", LogMessage);
         lexicalContext.Functions.Add("logError", LogError);
-        lexicalContext.Functions.Add("getTime", _ => Time.time);
-        lexicalContext.Functions.Add("getDeltaTime", _ => Time.deltaTime);
+        lexicalContext.Functions.Add("getTime", (d, a) => Time.time);
+        lexicalContext.Functions.Add("getDeltaTime", (d, a) => Time.deltaTime);
         lexicalContext.Functions.Add("getRandom", GetRandom);
         lexicalContext.Functions.Add("getFloatParamValue", GetFloatParamValue);
         lexicalContext.Functions.Add("setFloatParamValue", SetFloatParamValue);
@@ -25,7 +25,7 @@ public static class VamFunctions
         lexicalContext.Functions.Add("invokeKeybinding", InvokeKeybinding);
     }
 
-    private static Value GetDateTime(Value[] args)
+    private static Value GetDateTime(RuntimeDomain domain, Value[] args)
     {
         var now = DateTime.Now;
         if (args.Length == 0)
@@ -34,21 +34,21 @@ public static class VamFunctions
             return now.ToString(args[0].StringValue);
     }
 
-    private static Value LogMessage(Value[] args)
+    private static Value LogMessage(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 1, nameof(LogMessage));
         SuperController.LogMessage("Scripter: " + args[0].StringValue);
         return Value.Undefined;
     }
 
-    private static Value LogError(Value[] args)
+    private static Value LogError(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 1, nameof(LogError));
         SuperController.LogError(args[0].ToString());
         return Value.Undefined;
     }
 
-    private static Value GetRandom(Value[] args)
+    private static Value GetRandom(RuntimeDomain domain, Value[] args)
     {
         if (args.Length == 0)
             return Random.value;
@@ -56,7 +56,7 @@ public static class VamFunctions
         return Random.Range(args[0].AsFloat, args[1].AsFloat);
     }
 
-    private static Value GetFloatParamValue(Value[] args)
+    private static Value GetFloatParamValue(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 3, nameof(GetFloatParamValue));
         var storable = GetStorable(args[0], args[1]);
@@ -66,7 +66,7 @@ public static class VamFunctions
         return Value.CreateFloat(param.val);
     }
 
-    private static Value SetFloatParamValue(Value[] args)
+    private static Value SetFloatParamValue(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 4, nameof(SetFloatParamValue));
         var storable = GetStorable(args[0], args[1]);
@@ -77,7 +77,7 @@ public static class VamFunctions
         return args[3];
     }
 
-    private static Value GetBoolParamValue(Value[] args)
+    private static Value GetBoolParamValue(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 3, nameof(GetBoolParamValue));
         var storable = GetStorable(args[0], args[1]);
@@ -87,7 +87,7 @@ public static class VamFunctions
         return Value.CreateBoolean(param.val);
     }
 
-    private static Value SetBoolParamValue(Value[] args)
+    private static Value SetBoolParamValue(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 4, nameof(SetBoolParamValue));
         var storable = GetStorable(args[0], args[1]);
@@ -98,7 +98,7 @@ public static class VamFunctions
         return args[3];
     }
 
-    private static Value GetStringParamValue(Value[] args)
+    private static Value GetStringParamValue(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 3, nameof(GetStringParamValue));
         var storable = GetStorable(args[0], args[1]);
@@ -108,7 +108,7 @@ public static class VamFunctions
         return Value.CreateString(param.val);
     }
 
-    private static Value SetStringParamValue(Value[] args)
+    private static Value SetStringParamValue(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 4, nameof(SetStringParamValue));
         var storable = GetStorable(args[0], args[1]);
@@ -120,7 +120,7 @@ public static class VamFunctions
         return Value.Undefined;
     }
 
-    private static Value GetStringChooserParamValue(Value[] args)
+    private static Value GetStringChooserParamValue(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 3, nameof(GetStringChooserParamValue));
         var storable = GetStorable(args[0], args[1]);
@@ -130,7 +130,7 @@ public static class VamFunctions
         return Value.CreateString(param.val);
     }
 
-    private static Value SetStringChooserParamValue(Value[] args)
+    private static Value SetStringChooserParamValue(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 4, nameof(SetStringChooserParamValue));
         var storable = GetStorable(args[0], args[1]);
@@ -141,7 +141,7 @@ public static class VamFunctions
         return args[3];
     }
 
-    private static Value InvokeTrigger(Value[] args)
+    private static Value InvokeTrigger(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 3, nameof(InvokeTrigger));
         var storable = GetStorable(args[0], args[1]);
@@ -152,7 +152,7 @@ public static class VamFunctions
         return Value.Undefined;
     }
 
-    private static Value InvokeKeybinding(Value[] args)
+    private static Value InvokeKeybinding(RuntimeDomain domain, Value[] args)
     {
         throw new NotImplementedException();
     }

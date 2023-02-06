@@ -4,6 +4,6 @@ namespace ScripterLang
 {
     public abstract class LexicalContext
     {
-        public abstract Func<Value[], Value> GetFunction(string name);
+        public abstract Func<RuntimeDomain, Value[], Value> GetFunction(string name);
     }
 }

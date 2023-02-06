@@ -37,7 +37,7 @@ namespace ScripterLang
             return value;
         }
 
-        public Func<Value[], Value> GetFunction(LexicalContext lexicalContext, string name)
+        public Func<RuntimeDomain, Value[], Value> GetFunction(LexicalContext lexicalContext, string name)
         {
             return lexicalContext.GetFunction(name);
         }

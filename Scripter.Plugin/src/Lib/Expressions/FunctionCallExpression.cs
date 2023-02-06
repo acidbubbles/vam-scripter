@@ -21,7 +21,7 @@ namespace ScripterLang
         {
             var args = _arguments.Select(arg => arg.Evaluate(domain)).ToArray();
             var func = domain.GetFunction(_lexicalContext, _name);
-            return func(args);
+            return func(domain, args);
         }
     }
 }

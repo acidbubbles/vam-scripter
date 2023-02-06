@@ -78,11 +78,14 @@ public class LanguageTests
     public void CustomFunctions()
     {
         const string source = """
+            var x = 1;
             return MyFunction(1 * 1, "a" + "b", true == true);
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        _globalLexicalContext.Functions.Add("MyFunction", args =>
+        _globalLexicalContext.Functions.Add("MyFunction", (d, args) =>
         {
+            Assert.That(d.GetVariableValue("x").IntValue, Is.EqualTo(1));
+            Assert.That(args[0].ToString(), Is.EqualTo("1"));
             Assert.That(args[0].ToString(), Is.EqualTo("1"));
             Assert.That(args[1].ToString(), Is.EqualTo("ab"));
             Assert.That(args[2].ToString(), Is.EqualTo("true"));
