@@ -38,6 +38,7 @@ src\Lib\Runtime\ValueTypes.cs
 src\Scripts\Triggers\ScriptActionTrigger.cs
 src\Scripts\Triggers\ScriptBoolParamTrigger.cs
 src\Scripts\Triggers\ScriptFloatParamTrigger.cs
+src\Scripts\Triggers\ScriptKeybindingsTrigger.cs
 src\Scripts\Triggers\ScriptLoadTrigger.cs
 src\Scripts\Triggers\ScriptStringParamTrigger.cs
 src\Scripts\Triggers\ScriptTrigger.cs

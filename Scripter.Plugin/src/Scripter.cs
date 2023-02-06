@@ -8,10 +8,12 @@ public class Scripter : MVRScript
 {
     private readonly ScriptsManager _scripts;
     private ScreenManager _screens;
+    private bool _loading;
     private bool _restored;
 
     public List<ScriptUpdateTrigger> UpdateTriggers { get; } = new List<ScriptUpdateTrigger>();
     public List<ScriptLoadTrigger> LoadTriggers { get; } = new List<ScriptLoadTrigger>();
+    public List<ScriptKeybindingsTrigger> KeybindingsTriggers { get; } = new List<ScriptKeybindingsTrigger>();
 
     public Scripter()
     {
@@ -70,7 +72,36 @@ public class Scripter : MVRScript
     public override void RestoreFromJSON(JSONClass jc, bool restorePhysical = true, bool restoreAppearance = true, JSONArray presetAtoms = null, bool setMissingToDefault = true)
     {
         base.RestoreFromJSON(jc, restorePhysical, restoreAppearance, presetAtoms, setMissingToDefault);
+        _loading = true;
         _scripts.RestoreFromJSON(jc["Scripts"]);
+        _loading = false;
         _restored = true;
+        UpdateKeybindings();
+    }
+
+    public void UpdateKeybindings()
+    {
+        if(_loading) return;
+        SuperController.singleton.BroadcastMessage("OnActionsProviderAvailable", this, SendMessageOptions.DontRequireReceiver);
+    }
+
+    public void OnBindingsListRequested(List<object> bindings)
+    {
+        bindings.Add(new Dictionary<string, string>
+        {
+            {"Namespace", "Scripter"}
+        });
+
+        foreach (var trigger in KeybindingsTriggers)
+        {
+            var n = trigger.NameJSON.val;
+            if (n == "") continue;
+            bindings.Add(new JSONStorableAction(n, trigger.Run));
+        }
+    }
+
+    public void OnDestroy()
+    {
+        SuperController.singleton.BroadcastMessage("OnActionsProviderDestroyed", this, SendMessageOptions.DontRequireReceiver);
     }
 }
