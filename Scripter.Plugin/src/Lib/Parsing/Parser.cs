@@ -143,6 +143,8 @@ namespace ScripterLang
             }
             Consume().Expect(TokenType.RightBrace);
             var body = new FunctionBlockExpression(expressions, functionLexicalContext);
+            if (lexicalContext.Root.Functions.ContainsKey(name.Value))
+                throw new ScripterParsingException($"A function with the name {name.Value} was already declared", name.Location);
             lexicalContext.Root.Functions.Add(name.Value, new FunctionDeclaration(name.Value, arguments, body).Invoke);
             return new UndefinedExpression();
         }
@@ -290,31 +292,33 @@ namespace ScripterLang
 
         private int GetOperatorPrecedence(string op)
         {
+            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#table
             switch (op)
             {
-                case "+":
-                case "-":
-                    return 1;
-
                 case "*":
                 case "/":
                 case "%":
-                    return 2;
+                    return 12;
 
-                case "==":
-                case "!=":
+                case "+":
+                case "-":
+                    return 11;
+
                 case "<=":
                 case "<":
                 case ">=":
                 case ">":
-                    return 3;
+                    return 9;
+
+                case "==":
+                case "!=":
+                    return 8;
 
                 case "&&":
                     return 4;
 
                 case "||":
-                    return 5;
-
+                    return 3;
 
                 default:
                     return 0;

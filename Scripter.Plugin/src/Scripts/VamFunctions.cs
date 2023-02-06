@@ -38,14 +38,14 @@ public static class VamFunctions
     {
         ValidateArgumentsLength(args, 1, nameof(LogMessage));
         SuperController.LogMessage("Scripter: " + args[0].StringValue);
-        return Value.Undefined;
+        return Value.Void;
     }
 
     private static Value LogError(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 1, nameof(LogError));
         SuperController.LogError(args[0].ToString());
-        return Value.Undefined;
+        return Value.Void;
     }
 
     private static Value GetRandom(RuntimeDomain domain, Value[] args)
@@ -117,7 +117,7 @@ public static class VamFunctions
         if(param == null) throw new ScripterRuntimeException($"StringParam {paramName} was not found in storable {storable.storeId} of atom {storable.containingAtom.uid}");
         param.val = args[3].ToString();
         // return args[3];
-        return Value.Undefined;
+        return Value.Void;
     }
 
     private static Value GetStringChooserParamValue(RuntimeDomain domain, Value[] args)
@@ -149,7 +149,7 @@ public static class VamFunctions
         var param = storable.GetAction(paramName);
         if(param == null) throw new ScripterRuntimeException($"Action {paramName} was not found in storable {storable.storeId} of atom {storable.containingAtom.uid}");
         param.actionCallback.Invoke();
-        return Value.Undefined;
+        return Value.Void;
     }
 
     private static Value InvokeKeybinding(RuntimeDomain domain, Value[] args)

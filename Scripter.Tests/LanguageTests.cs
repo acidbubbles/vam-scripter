@@ -28,6 +28,20 @@ public class LanguageTests
     }
 
     [Test]
+    public void Globals()
+    {
+        const string source = """
+            return v + 1;
+            """;
+        _globalLexicalContext.Declare("v", Location.Empty);
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        _domain.CreateVariableValue("v", 1);
+        var result = expression.Evaluate(_domain);
+
+        Assert.That(result.ToString(), Is.EqualTo("2"));
+    }
+
+    [Test]
     public void Undefined()
     {
         const string source = """
@@ -130,6 +144,7 @@ public class LanguageTests
         const string source = """
             if((1 + 1 * 2) != 3) { throw "* before +"; }
             if(!(false || true && true)) { throw "&& before ||"; }
+            if(1 < 2 && false) { throw "< before &&"; }
             """;
         var expression = Parser.Parse(source, _globalLexicalContext);
 
@@ -235,5 +250,26 @@ public class LanguageTests
         var result = expression.Evaluate(_domain);
 
         Assert.That(result.ToString(), Is.EqualTo("4"));
+    }
+
+    [Test]
+    public void PerfTestStructure()
+    {
+        const string source = """
+        var x1 = 0;
+        function test(x2) {
+            for(var i = 0; i < 1; i++) {
+                x2++;
+            }
+            return x2;
+        }
+        {
+            for(var j = 0; j < 1; j++) {
+                x1 = test(x1);
+            }
+        }
+        """;
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        expression.Evaluate(_domain);
     }
 }

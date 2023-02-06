@@ -24,7 +24,7 @@ namespace ScripterLang
                         return result;
                 }
 
-                return Value.Undefined;
+                return Value.Void;
             }
             finally
             {

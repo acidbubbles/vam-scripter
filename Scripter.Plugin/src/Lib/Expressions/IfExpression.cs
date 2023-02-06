@@ -20,7 +20,7 @@
                 return _trueBranch.Evaluate(domain);
             if (_falseBranch != null)
                 return _falseBranch.Evaluate(domain);
-            return Value.Undefined;
+            return Value.Void;
         }
     }
 }

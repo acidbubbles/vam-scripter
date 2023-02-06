@@ -7,15 +7,19 @@ namespace ScripterLang
     {
         public bool IsReturn;
 
-        public readonly Dictionary<string, Value> StaticVariables = new Dictionary<string, Value>();
         public readonly Dictionary<string, Value> Variables = new Dictionary<string, Value>();
+
+        public void CreateVariableValue(string name, Value value)
+        {
+            if (Variables.ContainsKey(name))
+                throw new ScripterRuntimeException($"Variable '{name}' was already declared");
+            Variables.Add(name, value);
+        }
 
         public Value GetVariableValue(string name)
         {
             Value value;
             if (Variables.TryGetValue(name, out value))
-                return value;
-            if (StaticVariables.TryGetValue(name, out value))
                 return value;
             throw new ScripterRuntimeException($"Variable '{name}' was not declared");
         }
@@ -24,8 +28,6 @@ namespace ScripterLang
         {
             if (Variables.ContainsKey(name))
                 Variables[name] = value;
-            else if (StaticVariables.ContainsKey(name))
-                StaticVariables[name] = value;
             else
                 throw new ScripterRuntimeException($"Variable '{name}' was not declared");
             return value;

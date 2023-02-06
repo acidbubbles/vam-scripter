@@ -16,6 +16,7 @@ public class Script
     public Script(string source = null)
     {
         _globalLexicalContext = new GlobalLexicalContext();
+        _globalLexicalContext.Declare("value", Location.Empty);
         VamFunctions.Register(_globalLexicalContext);
 
         History = new HistoryManager(SourceJSON);
@@ -53,7 +54,8 @@ public class Script
 
         try
         {
-            _domain.SetVariableValue("value", value);
+            if (value.Type != ValueTypes.Uninitialized)
+                _domain.Variables["value"] = value;
             _expression.Evaluate(_domain);
         }
         catch (Exception exc)

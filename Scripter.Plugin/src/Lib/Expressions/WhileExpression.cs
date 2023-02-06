@@ -17,7 +17,7 @@ namespace ScripterLang
             {
                 _body.Evaluate(domain);
             }
-            return Value.Undefined;
+            return Value.Void;
         }
     }
 }

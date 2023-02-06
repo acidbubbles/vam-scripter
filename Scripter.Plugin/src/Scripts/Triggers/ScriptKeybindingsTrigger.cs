@@ -30,7 +30,7 @@ public class ScriptKeybindingsTrigger : ScriptTrigger
     public void Run()
     {
         if (!EnabledJSON.val) return;
-        _run(Value.Undefined);
+        _run(Value.Void);
     }
 
     public override void Register()

@@ -14,10 +14,10 @@
         public override Value Evaluate(RuntimeDomain domain)
         {
             Value value;
-            if (domain.StaticVariables.TryGetValue(_name, out value))
+            if (domain.Variables.TryGetValue(_name, out value))
                 return value;
             value = _expression.Evaluate(domain);
-            domain.StaticVariables.Add(_name, value);
+            domain.CreateVariableValue(_name, value);
             return value;
         }
     }

@@ -6,7 +6,7 @@ namespace ScripterLang
     public struct Value
     {
         public static readonly Value Undefined = new Value { Type = ValueTypes.UndefinedType };
-        public static readonly Value Uninitialized = new Value { Type = ValueTypes.Uninitialized };
+        public static readonly Value Void = new Value { Type = ValueTypes.Uninitialized };
 
         public int Type;
         public float FloatValue;
@@ -51,6 +51,7 @@ namespace ScripterLang
                 case ValueTypes.BooleanType: return IntValue == other.IntValue;
                 case ValueTypes.StringType: return StringValue == other.StringValue;
                 case ValueTypes.UndefinedType: return true;
+                case ValueTypes.Uninitialized: throw new ScripterRuntimeException("Variable was not initialized");
                 default: return false;
             }
         }

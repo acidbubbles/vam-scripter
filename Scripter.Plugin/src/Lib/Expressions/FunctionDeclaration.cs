@@ -23,7 +23,7 @@ namespace ScripterLang
             for (var i = 0; i < args.Length; i++)
             {
                 var name = _arguments[i];
-                domain.Variables.Add(name, args[i]);
+                domain.CreateVariableValue(name, args[i]);
             }
 
             try

@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace ScripterLang
 {
     public class ScopeLexicalContext : LexicalContext
     {
-        public readonly List<string> Declarations = new List<string>();
         public readonly GlobalLexicalContext Root;
 
-        private readonly ScopeLexicalContext _parent;
+        private readonly LexicalContext _parent;
 
         public ScopeLexicalContext(GlobalLexicalContext root)
         {
             Root = root;
+            _parent = root;
         }
 
         public ScopeLexicalContext(ScopeLexicalContext parent)
@@ -26,16 +25,17 @@ namespace ScripterLang
             return Root.GetFunction(name);
         }
 
-        public void Declare(string name, Location location)
+        public override void Declare(string name, Location location)
         {
-            var scope = this;
+            LexicalContext scope = this;
             do
             {
                 if (scope.Declarations.Contains(name))
                     throw new ScripterParsingException($"Variable {name} was already declared in an outer scope", location);
-                Declarations.Add(name);
+                scope = (scope as ScopeLexicalContext)?._parent;
+            } while (scope != null);
 
-            } while ((scope = scope._parent) != null);
+            Declarations.Add(name);
         }
     }
 }

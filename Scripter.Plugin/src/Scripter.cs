@@ -1,6 +1,8 @@
+// #define SCRIPTER_RUN_PERF_TEST
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ScripterLang;
 using SimpleJSON;
 using UnityEngine;
 
@@ -22,6 +24,9 @@ public class Scripter : MVRScript
 
     public override void Init()
     {
+        #if(SCRIPTER_RUN_PERF_TEST)
+        PerformanceTest();
+        #endif
         SuperController.singleton.StartCoroutine(DeferredInit());
     }
 
@@ -104,4 +109,32 @@ public class Scripter : MVRScript
     {
         SuperController.singleton.BroadcastMessage("OnActionsProviderDestroyed", this, SendMessageOptions.DontRequireReceiver);
     }
+
+    #if SCRIPTER_RUN_PERF_TEST
+    private void PerformanceTest()
+    {
+        const string code = @"
+var x1 = 0;
+function test(x2) {
+    for(var i = 0; i < 100; i++) {
+        x2++;
+    }
+    return x2;
+}
+{
+    for(var j = 0; j < 100; j++) {
+        x1 = test(x1);
+    }
+}
+";
+        var script = new Script(code);
+        var sw = new System.Diagnostics.Stopwatch();
+        sw.Start();
+        for (var i = 0; i < 100; i++)
+            script.Run(Value.Undefined);
+        sw.Stop();
+        SuperController.singleton.ClearMessages();
+        SuperController.LogMessage(sw.Elapsed.TotalSeconds.ToString("0.0000"));
+    }
+    #endif
 }

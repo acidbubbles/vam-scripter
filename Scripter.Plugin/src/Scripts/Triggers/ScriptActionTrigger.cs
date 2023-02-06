@@ -16,7 +16,7 @@ public class ScriptActionTrigger : ScriptTrigger
         _actionJSON = new JSONStorableAction(name, () =>
         {
             if (!EnabledJSON.val) return;
-            run(Value.Undefined);
+            run(Value.Void);
         });
         NameJSON.setCallbackFunction = val =>
         {
