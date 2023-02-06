@@ -112,6 +112,19 @@ public class Tests
     }
 
     [Test]
+    public void Precedence()
+    {
+        const string source = """
+            if((1 + 1 * 2) != 3) { throw "* before +"; }
+            if(!(false || true && true)) { throw "&& before ||"; }
+            """;
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var domain = new RuntimeDomain(_globalLexicalContext);
+
+        Assert.DoesNotThrow(() => expression.Evaluate(domain));
+    }
+
+    [Test]
     public void Strings()
     {
         const string source = """

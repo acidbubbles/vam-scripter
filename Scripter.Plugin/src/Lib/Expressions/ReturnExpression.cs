@@ -12,6 +12,8 @@
         public override Value Evaluate(RuntimeDomain domain)
         {
             domain.IsReturn = true;
+            #warning Optional expression
+            #warning Allow using undefined (closer to JS)
             return _expression.Evaluate(domain);
         }
     }

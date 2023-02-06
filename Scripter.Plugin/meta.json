@@ -6,7 +6,7 @@
   "description": "v0.0.0 Scripter is a programming language that runs in Virt-A-Mate. It's high performance and doesn't require reflection.",
   "credits": "",
   "instructions": "",
-  "promotionalLink": "https://github.com/acidbubbles/vam-scripter",
+  "promotionalLink": "https://www.patreon.com/acidbubbles",
   "programVersion": "1.21.1.0",
   "contentList": [
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\AssignmentExpression.cs",

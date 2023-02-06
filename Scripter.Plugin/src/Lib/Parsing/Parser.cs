@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace ScripterLang
 {
@@ -264,29 +263,53 @@ namespace ScripterLang
             return new VariableExpression(nameToken.Value);
         }
 
-        private Expression ParseValueStatementExpression(LexicalContext lexicalContext)
+        private Expression ParseValueStatementExpression(LexicalContext lexicalContext, int precedence = 0)
         {
-            var left = ParseValueExpression(lexicalContext);
-            while (true)
-            {
-                var token = Peek();
-                if (token.Match(TokenType.SemiColon) || token.Match(TokenType.Comma) || token.Match(TokenType.RightParenthesis))
-                    break;
+            var left = ParsePureValueExpression(lexicalContext);
 
-                if (token.Match(TokenType.Operator))
-                {
-                    MoveNext();
-                    var right = ParseValueExpression(lexicalContext);
-                    left = new BinaryExpression(left, token.Value, right);
-                    continue;
-                }
-
-                throw new ScripterParsingException($"Unexpected token in value statement: {token.Value}", token.Location);
+            while (precedence < GetOperatorPrecedence(Peek().Value)) {
+                var operatorToken = Consume();
+                var right = ParseValueStatementExpression(lexicalContext, GetOperatorPrecedence(operatorToken.Value));
+                left = new BinaryExpression(left, operatorToken.Value, right);
             }
+
             return left;
         }
 
-        private Expression ParseValueExpression(LexicalContext lexicalContext)
+        private int GetOperatorPrecedence(string op)
+        {
+            switch (op)
+            {
+                case "+":
+                case "-":
+                    return 1;
+
+                case "*":
+                case "/":
+                case "%":
+                    return 2;
+
+                case "==":
+                case "!=":
+                case "<=":
+                case "<":
+                case ">=":
+                case ">":
+                    return 3;
+
+                case "&&":
+                    return 4;
+
+                case "||":
+                    return 5;
+
+
+                default:
+                    return 0;
+            }
+        }
+
+        private Expression ParsePureValueExpression(LexicalContext lexicalContext)
         {
             var token = Consume();
             switch (token.Type)
@@ -300,7 +323,7 @@ namespace ScripterLang
                 case TokenType.Boolean:
                     return new BooleanExpression(bool.Parse(token.Value));
                 case TokenType.Negation:
-                    return new NegateExpression(ParseValueExpression(lexicalContext));
+                    return new NegateExpression(ParsePureValueExpression(lexicalContext));
                 case TokenType.IncrementDecrement:
                 {
                     var op = token.Value;
