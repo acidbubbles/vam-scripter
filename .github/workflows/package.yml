@@ -23,7 +23,7 @@ jobs:
         cp -r src ../publish/Custom/Scripts/AcidBubbles/Scripter/
         cp *.cslist ../publish/Custom/Scripts/AcidBubbles/Scripter/
         cp meta.json ../publish/
-        cd publish
+        cd ../publish
         sed -i 's/v0.0.0/${{ steps.get_version.outputs.VERSION }}/' meta.json
         zip -r "AcidBubbles.Scripter.${{ github.run_number }}.var" *
     - name: GitHub release
