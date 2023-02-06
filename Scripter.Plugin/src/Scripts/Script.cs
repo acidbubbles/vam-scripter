@@ -64,7 +64,7 @@ public class Script
         }
     }
 
-    public static Script FromJSON(JSONNode json, MVRScript plugin)
+    public static Script FromJSON(JSONNode json, Scripter plugin)
     {
         var s = new Script(json["Source"].Value);
         s.Trigger = ScriptTrigger.FromJSON(json["Trigger"], s.Run, plugin);

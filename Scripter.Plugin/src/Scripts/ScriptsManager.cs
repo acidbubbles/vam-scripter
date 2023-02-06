@@ -6,11 +6,11 @@ using UnityEngine.Events;
 
 public class ScriptsManager
 {
-    private readonly MVRScript _plugin;
+    private readonly Scripter _plugin;
     public readonly UnityEvent ScriptsUpdated = new UnityEvent();
     public readonly List<Script> Scripts = new List<Script>();
 
-    public ScriptsManager(MVRScript plugin)
+    public ScriptsManager(Scripter plugin)
     {
         _plugin = plugin;
     }

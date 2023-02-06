@@ -10,7 +10,7 @@ public class ScriptFloatParamTrigger : ScriptTrigger
 
     public override string GetTypeName() => Type;
 
-    public ScriptFloatParamTrigger(string name, Action<Value> run, bool enabled, MVRScript plugin)
+    public ScriptFloatParamTrigger(string name, Action<Value> run, bool enabled, Scripter plugin)
         : base(name, enabled, plugin)
     {
         _valueJSON = new JSONStorableFloat(name, 0, val =>
@@ -26,7 +26,7 @@ public class ScriptFloatParamTrigger : ScriptTrigger
         };
     }
 
-    public static ScriptTrigger FromJSONImpl(JSONNode json, Action<Value> run, MVRScript plugin)
+    public static ScriptTrigger FromJSONImpl(JSONNode json, Action<Value> run, Scripter plugin)
     {
         var trigger = new ScriptFloatParamTrigger(
             json["Name"],

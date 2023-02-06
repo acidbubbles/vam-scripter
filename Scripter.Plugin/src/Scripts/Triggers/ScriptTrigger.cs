@@ -4,7 +4,7 @@ using SimpleJSON;
 
 public abstract class ScriptTrigger
 {
-    public static ScriptTrigger Create(string type, string name, Action<Value> run, MVRScript plugin)
+    public static ScriptTrigger Create(string type, string name, Action<Value> run, Scripter plugin)
     {
         switch (type)
         {
@@ -23,7 +23,7 @@ public abstract class ScriptTrigger
         }
     }
 
-    public static ScriptTrigger FromJSON(JSONNode json, Action<Value> run, MVRScript plugin)
+    public static ScriptTrigger FromJSON(JSONNode json, Action<Value> run, Scripter plugin)
     {
         switch (json["Type"].Value)
         {
@@ -42,12 +42,12 @@ public abstract class ScriptTrigger
         }
     }
 
-    protected readonly MVRScript Plugin;
+    protected readonly Scripter Plugin;
 
     public readonly JSONStorableString NameJSON;
     public readonly JSONStorableBool EnabledJSON;
 
-    protected ScriptTrigger(string name, bool enabled, MVRScript plugin)
+    protected ScriptTrigger(string name, bool enabled, Scripter plugin)
     {
         Plugin = plugin;
         NameJSON = new JSONStorableString("Name", "")

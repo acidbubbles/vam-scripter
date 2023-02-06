@@ -10,7 +10,7 @@ public class ScriptBoolParamTrigger : ScriptTrigger
 
     public override string GetTypeName() => Type;
 
-    public ScriptBoolParamTrigger(string name, Action<Value> run, bool enabled, MVRScript plugin)
+    public ScriptBoolParamTrigger(string name, Action<Value> run, bool enabled, Scripter plugin)
         : base(name, enabled, plugin)
     {
         _valueJSON = new JSONStorableBool(name, false, val =>
@@ -26,7 +26,7 @@ public class ScriptBoolParamTrigger : ScriptTrigger
         };
     }
 
-    public static ScriptTrigger FromJSONImpl(JSONNode json, Action<Value> run, MVRScript plugin)
+    public static ScriptTrigger FromJSONImpl(JSONNode json, Action<Value> run, Scripter plugin)
     {
         var trigger = new ScriptBoolParamTrigger(
             json["Name"],

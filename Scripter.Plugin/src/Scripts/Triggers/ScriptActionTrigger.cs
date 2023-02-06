@@ -10,7 +10,7 @@ public class ScriptActionTrigger : ScriptTrigger
 
     public override string GetTypeName() => Type;
 
-    public ScriptActionTrigger(string name, Action<Value> run, bool enabled, MVRScript plugin)
+    public ScriptActionTrigger(string name, Action<Value> run, bool enabled, Scripter plugin)
         : base(name, enabled, plugin)
     {
         _actionJSON = new JSONStorableAction(name, () =>
@@ -26,7 +26,7 @@ public class ScriptActionTrigger : ScriptTrigger
         };
     }
 
-    public static ScriptTrigger FromJSONImpl(JSONNode json, Action<Value> run, MVRScript plugin)
+    public static ScriptTrigger FromJSONImpl(JSONNode json, Action<Value> run, Scripter plugin)
     {
         return new ScriptActionTrigger(
             json["Name"],

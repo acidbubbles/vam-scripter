@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using ScripterLang;
 using SimpleJSON;
-using UnityEngine;
 
 public class ScriptUpdateTrigger : ScriptTrigger
 {
@@ -11,15 +9,14 @@ public class ScriptUpdateTrigger : ScriptTrigger
     public override string GetTypeName() => Type;
 
     private readonly Action<Value> _run;
-    private Coroutine _co;
 
-    public ScriptUpdateTrigger(string name, Action<Value> run, bool enabled, MVRScript plugin)
+    public ScriptUpdateTrigger(string name, Action<Value> run, bool enabled, Scripter plugin)
         : base(name, enabled, plugin)
     {
         _run = run;
     }
 
-    public static ScriptTrigger FromJSONImpl(JSONNode json, Action<Value> run, MVRScript plugin)
+    public static ScriptTrigger FromJSONImpl(JSONNode json, Action<Value> run, Scripter plugin)
     {
         return new ScriptUpdateTrigger(
             json["Name"],
@@ -29,24 +26,19 @@ public class ScriptUpdateTrigger : ScriptTrigger
         );
     }
 
-    private IEnumerator Update()
+    public void Run()
     {
-        while (true)
-        {
-            yield return 0;
-            if (!EnabledJSON.val) continue;
-            _run(Value.Undefined);
-        }
-        // ReSharper disable once IteratorNeverReturns
+        if (!EnabledJSON.val) return;
+        _run(Value.Undefined);
     }
 
     public override void Register()
     {
-        _co = Plugin.StartCoroutine(Update());
+        Plugin.UpdateTriggers.Add(this);
     }
 
     public override void Deregister()
     {
-        Plugin.StopCoroutine(_co);
+        Plugin.UpdateTriggers.Remove(this);
     }
 }
