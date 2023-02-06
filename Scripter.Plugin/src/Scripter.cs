@@ -11,6 +11,7 @@ public class Scripter : MVRScript
     private bool _restored;
 
     public List<ScriptUpdateTrigger> UpdateTriggers { get; } = new List<ScriptUpdateTrigger>();
+    public List<ScriptLoadTrigger> LoadTriggers { get; } = new List<ScriptLoadTrigger>();
 
     public Scripter()
     {
@@ -28,6 +29,9 @@ public class Scripter : MVRScript
         if (this == null) yield break;
         if (!_restored)
             containingAtom.RestoreFromLast(this);
+
+        foreach (var trigger in LoadTriggers)
+            trigger.Run();
     }
 
     public override void InitUI()

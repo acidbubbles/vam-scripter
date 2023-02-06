@@ -49,6 +49,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripts\\Triggers\\ScriptActionTrigger.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripts\\Triggers\\ScriptBoolParamTrigger.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripts\\Triggers\\ScriptFloatParamTrigger.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripts\\Triggers\\ScriptLoadTrigger.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripts\\Triggers\\ScriptStringParamTrigger.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripts\\Triggers\\ScriptTrigger.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripts\\Triggers\\ScriptUpdateTrigger.cs",

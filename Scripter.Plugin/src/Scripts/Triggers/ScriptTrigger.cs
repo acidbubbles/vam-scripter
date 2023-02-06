@@ -18,6 +18,8 @@ public abstract class ScriptTrigger
                 return new ScriptStringParamTrigger(name, run, true, plugin);
             case ScriptUpdateTrigger.Type:
                 return new ScriptUpdateTrigger(name, run, false, plugin);
+            case ScriptLoadTrigger.Type:
+                return new ScriptLoadTrigger(name, run, false, plugin);
             default:
                 throw new NotSupportedException($"Trigger type {type} is not supported. Maybe you're running an old version of Scripter?");
         }
@@ -37,6 +39,8 @@ public abstract class ScriptTrigger
                 return ScriptStringParamTrigger.FromJSONImpl(json, run, plugin);
             case ScriptUpdateTrigger.Type:
                 return ScriptUpdateTrigger.FromJSONImpl(json, run, plugin);
+            case ScriptLoadTrigger.Type:
+                return ScriptLoadTrigger.FromJSONImpl(json, run, plugin);
             default:
                 throw new NotSupportedException($"Trigger type {json["Type"].Value} is not supported. Maybe you're running an old version of Scripter?");
         }
