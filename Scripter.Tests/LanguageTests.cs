@@ -219,10 +219,13 @@ public class LanguageTests
         const string source = """
             var x = 0;
             function run() {
-                var x = 1;
                 var y = 0;
                 y += 1;
                 x += y;
+                function increment(v) {
+                    return ++v;
+                }
+                x = increment(x);
             }
             run();
             run();
@@ -231,6 +234,6 @@ public class LanguageTests
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("2"));
+        Assert.That(result.ToString(), Is.EqualTo("4"));
     }
 }
