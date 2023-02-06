@@ -100,7 +100,7 @@ namespace ScripterLang
             if (token.Match(TokenType.SemiColon))
             {
                 Consume();
-                return EmptyExpression.Instance;
+                return UndefinedExpression.Instance;
             }
             if (token.Match(TokenType.LeftBrace)) return ParseCodeBlock(lexicalContext);
             throw new ScripterParsingException($"Unexpected token: '{token.Value}'", token.Location);
@@ -194,7 +194,7 @@ namespace ScripterLang
             else
             {
                 Consume().Expect(TokenType.SemiColon);
-                return new VariableDeclarationExpression(nameToken.Value, EmptyExpression.Instance);
+                return new VariableDeclarationExpression(nameToken.Value, UndefinedExpression.Instance);
             }
         }
 
@@ -304,6 +304,8 @@ namespace ScripterLang
                     return new StringExpression(token.Value);
                 case TokenType.Boolean:
                     return new BooleanExpression(bool.Parse(token.Value));
+                case TokenType.Undefined:
+                    return new UndefinedExpression();
                 case TokenType.Negation:
                     return new NegateExpression(ParsePureValueExpression(lexicalContext));
                 case TokenType.IncrementDecrement:

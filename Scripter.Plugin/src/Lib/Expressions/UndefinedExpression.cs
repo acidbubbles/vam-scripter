@@ -1,8 +1,8 @@
 ﻿namespace ScripterLang
 {
-    public class EmptyExpression : Expression
+    public class UndefinedExpression : Expression
     {
-        public static readonly EmptyExpression Instance = new EmptyExpression();
+        public static readonly UndefinedExpression Instance = new UndefinedExpression();
 
         public override Value Evaluate(RuntimeDomain domain)
         {

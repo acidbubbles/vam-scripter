@@ -275,6 +275,10 @@ namespace ScripterLang
                                 case "false":
                                     yield return new Token(TokenType.Boolean, name, Location);
                                     break;
+                                case "undefined":
+                                case "null":
+                                    yield return new Token(TokenType.Undefined, name, Location);
+                                    break;
                                 case "var":
                                 case "for":
                                 case "while":

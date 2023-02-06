@@ -18,6 +18,7 @@ src\Lib\Expressions\ReturnExpression.cs
 src\Lib\Expressions\StaticVariableDeclarationExpression.cs
 src\Lib\Expressions\StringExpression.cs
 src\Lib\Expressions\ThrowExpression.cs
+src\Lib\Expressions\UndefinedExpression.cs
 src\Lib\Expressions\VariableDeclarationExpression.cs
 src\Lib\Expressions\VariableExpression.cs
 src\Lib\Expressions\WhileExpression.cs

@@ -76,7 +76,6 @@
     <Compile Include="src\Lib\Expressions\BinaryExpression.cs" />
     <Compile Include="src\Lib\Expressions\BooleanExpression.cs" />
     <Compile Include="src\Lib\Expressions\CodeBlockExpression.cs" />
-    <Compile Include="src\Lib\Expressions\EmptyExpression.cs" />
     <Compile Include="src\Lib\Expressions\Expression.cs" />
     <Compile Include="src\Lib\Expressions\FloatExpression.cs" />
     <Compile Include="src\Lib\Expressions\ForExpression.cs" />
@@ -91,6 +90,7 @@
     <Compile Include="src\Lib\Expressions\StaticVariableDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\StringExpression.cs" />
     <Compile Include="src\Lib\Expressions\ThrowExpression.cs" />
+    <Compile Include="src\Lib\Expressions\UndefinedExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableExpression.cs" />
     <Compile Include="src\Lib\Expressions\WhileExpression.cs" />

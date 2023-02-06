@@ -29,6 +29,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\StaticVariableDeclarationExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\StringExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\ThrowExpression.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\UndefinedExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\VariableDeclarationExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\VariableExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\WhileExpression.cs",

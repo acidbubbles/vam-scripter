@@ -11,6 +11,7 @@ public class Tests
     {
         _globalLexicalContext = new GlobalLexicalContext();
     }
+
     [Test]
     public void Variables()
     {
@@ -23,6 +24,20 @@ public class Tests
         var result = expression.Evaluate(domain);
 
         Assert.That(result.ToString(), Is.EqualTo("1"));
+    }
+
+    [Test]
+    public void Undefined()
+    {
+        const string source = """
+            var x = undefined;
+            return undefined == undefined;
+            """;
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var domain = new RuntimeDomain();
+        var result = expression.Evaluate(domain);
+
+        Assert.That(result.ToString(), Is.EqualTo("true"));
     }
 
     [Test]
