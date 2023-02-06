@@ -16,7 +16,6 @@ public class Script
     public Script(string source = null)
     {
         _globalLexicalContext = new GlobalLexicalContext();
-        _globalLexicalContext.StaticDeclarations.Add("value", Value.Undefined);
         VamFunctions.Register(_globalLexicalContext);
 
         History = new HistoryManager(SourceJSON);
@@ -37,7 +36,7 @@ public class Script
         try
         {
             _expression = Parser.Parse(val, _globalLexicalContext);
-            _domain = new RuntimeDomain(_globalLexicalContext);
+            _domain = new RuntimeDomain();
             ConsoleJSON.val = "<color=green>Code parsed successfully</color>";
         }
         catch (Exception exc)

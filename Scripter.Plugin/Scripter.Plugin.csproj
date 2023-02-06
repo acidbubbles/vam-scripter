@@ -88,6 +88,7 @@
     <Compile Include="src\Lib\Expressions\NegateExpression.cs" />
     <Compile Include="src\Lib\Expressions\ParenthesesExpression.cs" />
     <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
+    <Compile Include="src\Lib\Expressions\StaticVariableDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\StringExpression.cs" />
     <Compile Include="src\Lib\Expressions\ThrowExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableDeclarationExpression.cs" />

@@ -204,31 +204,13 @@ namespace ScripterLang
             Consume().Expect(TokenType.Keyword, "var");
             var nameToken = Consume().Expect(TokenType.Identifier);
             Consume().Expect(TokenType.Assignment);
-            var initialValueToken = Consume();
-            Value initialValue;
-            switch (initialValueToken.Type)
-            {
-                case TokenType.Float:
-                    initialValue = float.Parse(initialValueToken.Value);
-                    break;
-                case TokenType.Integer:
-                    initialValue = int.Parse(initialValueToken.Value);
-                    break;
-                case TokenType.String:
-                    initialValue = initialValueToken.Value;
-                    break;
-                case TokenType.Boolean:
-                    initialValue = bool.Parse(initialValueToken.Value);
-                    break;
-                default:
-                    throw new ScripterParsingException("Static declarations must be a value (float, integer, string or boolean)", initialValueToken.Location);
-            }
+            var initialValueExpression = ParseValueStatementExpression(lexicalContext);
             Consume().Expect(TokenType.SemiColon);
 
-            if (!lexicalContext.Root.StaticDeclarations.ContainsKey(nameToken.Value))
-                lexicalContext.Root.StaticDeclarations.Add(nameToken.Value, initialValue);
+            if (lexicalContext.Root.StaticDeclarations.Contains(nameToken.Value))
+                throw new ScripterParsingException($"Static variable {nameToken.Value} was already declared.", nameToken.Location);
 
-            return EmptyExpression.Instance;
+            return new StaticVariableDeclarationExpression(nameToken.Value, initialValueExpression);
         }
 
         private Expression ParseAssignmentExpression(LexicalContext lexicalContext)

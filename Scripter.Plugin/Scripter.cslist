@@ -15,6 +15,7 @@ src\Lib\Expressions\IntegerExpression.cs
 src\Lib\Expressions\NegateExpression.cs
 src\Lib\Expressions\ParenthesesExpression.cs
 src\Lib\Expressions\ReturnExpression.cs
+src\Lib\Expressions\StaticVariableDeclarationExpression.cs
 src\Lib\Expressions\StringExpression.cs
 src\Lib\Expressions\ThrowExpression.cs
 src\Lib\Expressions\VariableDeclarationExpression.cs

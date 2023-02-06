@@ -7,23 +7,13 @@ namespace ScripterLang
     {
         public bool IsReturn;
 
-        private readonly Dictionary<string, Value> _staticVariables = new Dictionary<string, Value>();
-        private readonly Dictionary<string, Value> _variables = new Dictionary<string, Value>();
+        public readonly Dictionary<string, Value> StaticVariables = new Dictionary<string, Value>();
 
-        public RuntimeDomain(GlobalLexicalContext globalLexicalContext)
-        {
-            foreach(var d in globalLexicalContext.StaticDeclarations)
-                _staticVariables.Add(d.Key, d.Value);
-        }
+        private readonly Dictionary<string, Value> _variables = new Dictionary<string, Value>();
 
         public void CreateVariable(string name, Value value)
         {
             _variables.Add(name, value);
-        }
-
-        public void CreateStaticVariable(string name, Value value)
-        {
-            _staticVariables.Add(name, value);
         }
 
         public Value GetVariableValue(string name)
@@ -31,7 +21,7 @@ namespace ScripterLang
             Value value;
             if (_variables.TryGetValue(name, out value))
                 return value;
-            if (_staticVariables.TryGetValue(name, out value))
+            if (StaticVariables.TryGetValue(name, out value))
                 return value;
             throw new ScripterRuntimeException($"Variable '{name}' was not declared");
         }
@@ -40,8 +30,8 @@ namespace ScripterLang
         {
             if (_variables.ContainsKey(name))
                 _variables[name] = value;
-            else if (_staticVariables.ContainsKey(name))
-                _staticVariables[name] = value;
+            else if (StaticVariables.ContainsKey(name))
+                StaticVariables[name] = value;
             else
                 throw new ScripterRuntimeException($"Variable '{name}' was not declared");
             return value;

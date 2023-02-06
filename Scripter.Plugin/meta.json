@@ -26,6 +26,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\NegateExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\ParenthesesExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\ReturnExpression.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\StaticVariableDeclarationExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\StringExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\ThrowExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\VariableDeclarationExpression.cs",
