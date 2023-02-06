@@ -26,7 +26,7 @@ public class ParserTests
 
         var expression = Parser.Parse(tokens, _globalLexicalContext);
 
-        Assert.That(expression, Is.TypeOf<CodeBlockExpression>());
+        Assert.That(expression, Is.TypeOf<FunctionBlockExpression>());
     }
 
     [Test]
@@ -50,6 +50,6 @@ public class ParserTests
 
         var expression = Parser.Parse(tokens, _globalLexicalContext);
 
-        Assert.That(expression, Is.TypeOf<CodeBlockExpression>());
+        Assert.That(expression, Is.TypeOf<FunctionBlockExpression>());
     }
 }

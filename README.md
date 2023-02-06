@@ -23,10 +23,12 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 
 ## Virt-A-Mate Functions
 
-- `getDateTime(format)`
-- `logMessage(message)`
-- `logError(message)`
-- `getTime()`
+- `getDateTime(format)` (.NET: `DateTime.Now.ToString(format)`)
+- `logMessage(message)` (VAM: `SuperController.LogMessage`)
+- `logError(message)` (VAM: `SuperController.LogError`)
+- `getTime()` (Unity: `Time.time`)
+- `getDeltaTime()` (Unity: `Time.deltaTime`)
+- `getRandom` (Unity: `Random.value` when no arguments are provided, `Random.Range(min, max)` when two arguments are provided)
 - `getFloatParamValue(atomName, storableName, paramName)`
 - `setFloatParamValue(atomName, storableName, paramName, value)`
 - `getBoolParamValue(atomName, storableName, paramName)`

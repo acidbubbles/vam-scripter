@@ -91,7 +91,6 @@ public class CodeInputField : InputField
         }
         else if (_lastDoubleClick)
         {
-            SuperController.LogMessage($"Selected: {_lastDoubleClickStart} {_lastDoubleClickEnd}");
             caretPosition = _lastDoubleClickStart;
             selectionAnchorPosition = _lastDoubleClickStart;
             selectionFocusPosition = _lastDoubleClickEnd;

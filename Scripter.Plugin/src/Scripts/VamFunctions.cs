@@ -1,6 +1,7 @@
 ﻿using System;
 using ScripterLang;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public static class VamFunctions
 {
@@ -10,6 +11,8 @@ public static class VamFunctions
         lexicalContext.Functions.Add("logMessage", LogMessage);
         lexicalContext.Functions.Add("logError", LogError);
         lexicalContext.Functions.Add("getTime", _ => Time.time);
+        lexicalContext.Functions.Add("getDeltaTime", _ => Time.deltaTime);
+        lexicalContext.Functions.Add("getRandom", GetRandom);
         lexicalContext.Functions.Add("getFloatParamValue", GetFloatParamValue);
         lexicalContext.Functions.Add("setFloatParamValue", SetFloatParamValue);
         lexicalContext.Functions.Add("getBoolParamValue", GetBoolParamValue);
@@ -43,6 +46,14 @@ public static class VamFunctions
         ValidateArgumentsLength(args, 1, nameof(LogError));
         SuperController.LogError(args[0].ToString());
         return Value.Undefined;
+    }
+
+    private static Value GetRandom(Value[] args)
+    {
+        if (args.Length == 0)
+            return Random.value;
+        ValidateArgumentsLength(args, 2, nameof(GetRandom));
+        return Random.Range(args[0].AsFloat, args[1].AsFloat);
     }
 
     private static Value GetFloatParamValue(Value[] args)

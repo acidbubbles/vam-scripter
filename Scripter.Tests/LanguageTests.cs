@@ -46,6 +46,22 @@ public class Tests
     }
 
     [Test]
+    public void ReturnExits()
+    {
+        const string source = """
+            {
+                return "ok";
+            }
+            throw "Did not return!";
+            """;
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var domain = new RuntimeDomain(_globalLexicalContext);
+        var result = expression.Evaluate(domain);
+
+        Assert.That(result.ToString(), Is.EqualTo("ok"));
+    }
+
+    [Test]
     public void CustomFunctions()
     {
         const string source = """

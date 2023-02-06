@@ -11,6 +11,7 @@
 
         public override Value Evaluate(RuntimeDomain domain)
         {
+            domain.IsReturn = true;
             return _expression.Evaluate(domain);
         }
     }

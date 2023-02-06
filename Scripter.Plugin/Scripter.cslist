@@ -7,6 +7,7 @@ src\Lib\Expressions\EmptyExpression.cs
 src\Lib\Expressions\Expression.cs
 src\Lib\Expressions\FloatExpression.cs
 src\Lib\Expressions\ForExpression.cs
+src\Lib\Expressions\FunctionBlockExpression.cs
 src\Lib\Expressions\FunctionCallExpression.cs
 src\Lib\Expressions\IfExpression.cs
 src\Lib\Expressions\IncrementDecrementExpression.cs

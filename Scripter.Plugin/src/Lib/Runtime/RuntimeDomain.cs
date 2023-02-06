@@ -5,6 +5,8 @@ namespace ScripterLang
 {
     public class RuntimeDomain
     {
+        public bool IsReturn;
+
         private readonly Dictionary<string, Value> _staticVariables = new Dictionary<string, Value>();
         private readonly Dictionary<string, Value> _variables = new Dictionary<string, Value>();
 

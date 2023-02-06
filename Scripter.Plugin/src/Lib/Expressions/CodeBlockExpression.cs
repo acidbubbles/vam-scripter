@@ -20,7 +20,7 @@ namespace ScripterLang
                 foreach (var expression in _expressions)
                 {
                     var result = expression.Evaluate(domain);
-                    if (expression is ReturnExpression)
+                    if (domain.IsReturn)
                         return result;
                 }
 

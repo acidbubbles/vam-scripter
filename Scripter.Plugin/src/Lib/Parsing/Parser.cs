@@ -63,7 +63,7 @@ namespace ScripterLang
             {
                 expressions.Add(ParseExpression(lexicalContext));
             }
-            return new CodeBlockExpression(expressions, lexicalContext);
+            return new FunctionBlockExpression(expressions, lexicalContext);
         }
 
         private Expression ParseExpression(ScopeLexicalContext lexicalContext)

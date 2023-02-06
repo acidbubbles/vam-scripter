@@ -4,6 +4,8 @@ namespace ScripterLang
 {
     public class BinaryExpression : Expression
     {
+        private const float _epsilon = float.Epsilon * 8;
+
         private readonly Expression _left;
         private readonly string _operator;
         private readonly Expression _right;
@@ -103,9 +105,15 @@ namespace ScripterLang
                     }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "==":
-                    return Value.CreateBoolean(left.Equals(right));
+                    if (left.IsFloat || right.IsFloat)
+                        return Math.Abs(left.AsFloat - right.AsFloat) <= _epsilon;
+                    else
+                        return Value.CreateBoolean(left.Equals(right));
                 case "!=":
-                    return Value.CreateBoolean(!left.Equals(right));
+                    if (left.IsFloat || right.IsFloat)
+                        return Math.Abs(left.AsFloat - right.AsFloat) > _epsilon;
+                    else
+                        return Value.CreateBoolean(!left.Equals(right));
             }
 
             throw MakeUnsupportedOperandsException(left, right);
