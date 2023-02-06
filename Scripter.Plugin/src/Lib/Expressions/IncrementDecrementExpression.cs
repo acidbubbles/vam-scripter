@@ -23,7 +23,7 @@
                     switch (original.Type)
                     {
                         case ValueTypes.IntegerType:
-                            value = Value.CreateInteger(original.IntValue + 1);
+                            value = Value.CreateInteger(original.AsInt + 1);
                             break;
                         case ValueTypes.FloatType:
                             value = Value.CreateFloat(original.FloatValue + 1);
@@ -36,7 +36,7 @@
                     switch (original.Type)
                     {
                         case ValueTypes.IntegerType:
-                            value = Value.CreateInteger(original.IntValue - 1);
+                            value = Value.CreateInteger(original.AsInt - 1);
                             break;
                         case ValueTypes.FloatType:
                             value = Value.CreateFloat(original.FloatValue - 1);

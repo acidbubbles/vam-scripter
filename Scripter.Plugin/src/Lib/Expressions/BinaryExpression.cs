@@ -4,8 +4,6 @@ namespace ScripterLang
 {
     public class BinaryExpression : Expression
     {
-        private const float _epsilon = float.Epsilon * 8;
-
         private readonly Expression _left;
         private readonly string _operator;
         private readonly Expression _right;
@@ -25,93 +23,57 @@ namespace ScripterLang
             switch (_operator)
             {
                 case "+":
-                    if (left.IsInt && right.IsInt)
-                    {
-                        return Value.CreateInteger(left.IntValue + right.IntValue);
-                    }
                     if (left.IsNumber && right.IsNumber)
-                    {
                         return Value.CreateFloat(left.AsFloat + right.AsFloat);
-                    }
                     if (left.IsString || right.IsString)
-                    {
                         return Value.CreateString(left.ToString() + right);
-                    }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "-":
-                    if (left.IsInt && right.IsInt)
-                    {
-                        return Value.CreateInteger(left.IntValue - right.IntValue);
-                    }
                     if (left.IsNumber && right.IsNumber)
-                    {
                         return Value.CreateFloat(left.AsFloat - right.AsFloat);
-                    }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "*":
-                    if (left.IsInt && right.IsInt)
-                    {
-                        return Value.CreateInteger(left.IntValue * right.IntValue);
-                    }
                     if (left.IsNumber && right.IsNumber)
-                    {
                         return Value.CreateFloat(left.AsFloat * right.AsFloat);
-                    }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "/":
                     if (left.IsInt && right.IsInt)
-                    {
-                        return Value.CreateInteger(left.IntValue / right.IntValue);
-                    }
+                        return Value.CreateInteger(left.AsInt / right.AsInt);
                     if (left.IsNumber && right.IsNumber)
-                    {
                         return Value.CreateFloat(left.AsFloat / right.AsFloat);
-                    }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "<":
                     if (left.IsNumber && right.IsNumber)
-                    {
                         return Value.CreateBoolean(left.AsFloat < right.AsFloat);
-                    }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "<=":
                     if (left.IsNumber && right.IsNumber)
-                    {
-                        return Value.CreateBoolean(left.AsFloat <= right.AsFloat);
-                    }
+                        return Value.CreateBoolean(left.AsFloat <= right.AsFloat + Value.Epsilon);
                     throw MakeUnsupportedOperandsException(left, right);
                 case ">":
                     if (left.IsNumber && right.IsNumber)
-                    {
                         return Value.CreateBoolean(left.AsFloat > right.AsFloat);
-                    }
                     throw MakeUnsupportedOperandsException(left, right);
                 case ">=":
                     if (left.IsNumber && right.IsNumber)
-                    {
-                        return Value.CreateBoolean(left.AsFloat >= right.AsFloat);
-                    }
+                        return Value.CreateBoolean(left.AsFloat >= right.AsFloat - Value.Epsilon);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "&&":
                     if (left.IsBool && right.IsBool)
-                    {
                         return Value.CreateBoolean(left.AsBool && right.AsBool);
-                    }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "||":
                     if (left.IsBool && right.IsBool)
-                    {
                         return Value.CreateBoolean(left.AsBool || right.AsBool);
-                    }
                     throw MakeUnsupportedOperandsException(left, right);
                 case "==":
                     if (left.IsFloat || right.IsFloat)
-                        return Math.Abs(left.AsFloat - right.AsFloat) <= _epsilon;
+                        return Math.Abs(left.AsFloat - right.AsFloat) <= Value.Epsilon;
                     else
                         return Value.CreateBoolean(left.Equals(right));
                 case "!=":
                     if (left.IsFloat || right.IsFloat)
-                        return Math.Abs(left.AsFloat - right.AsFloat) > _epsilon;
+                        return Math.Abs(left.AsFloat - right.AsFloat) > Value.Epsilon;
                     else
                         return Value.CreateBoolean(!left.Equals(right));
             }

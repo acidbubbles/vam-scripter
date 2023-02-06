@@ -5,20 +5,22 @@ namespace ScripterLang
 {
     public struct Value
     {
+        public const float Epsilon = float.Epsilon * 8;
+
         public static readonly Value Undefined = new Value { Type = ValueTypes.UndefinedType };
         public static readonly Value Void = new Value { Type = ValueTypes.Uninitialized };
 
         public int Type;
         public float FloatValue;
-        public int IntValue;
         public string StringValue;
 
         public bool IsBool => Type == ValueTypes.BooleanType;
-        public bool AsBool => IntValue != 0;
+        public bool AsBool => FloatValue >= Epsilon;
         public bool IsNumber => Type == ValueTypes.FloatType || Type == ValueTypes.IntegerType;
         public bool IsInt => Type == ValueTypes.IntegerType;
         public bool IsFloat => Type == ValueTypes.FloatType;
-        public float AsFloat => Type == ValueTypes.FloatType ? FloatValue : IntValue;
+        public float AsFloat => FloatValue;
+        public int AsInt => (int)FloatValue;
         public bool IsString => Type == ValueTypes.StringType;
 
         public static Value CreateFloat(float value)
@@ -28,7 +30,7 @@ namespace ScripterLang
 
         public static Value CreateInteger(int value)
         {
-            return new Value { Type = ValueTypes.IntegerType, IntValue = value };
+            return new Value { Type = ValueTypes.IntegerType, FloatValue = value };
         }
 
         public static Value CreateString(string value)
@@ -38,7 +40,7 @@ namespace ScripterLang
 
         public static Value CreateBoolean(bool value)
         {
-            return new Value { Type = ValueTypes.BooleanType, IntValue = value ? 1 : 0 };
+            return new Value { Type = ValueTypes.BooleanType, FloatValue = value ? 1 : 0 };
         }
 
         public bool Equals(Value other)
@@ -46,12 +48,16 @@ namespace ScripterLang
             if (Type != other.Type) return false;
             switch (Type)
             {
-                case ValueTypes.FloatType: return Math.Abs(FloatValue - other.FloatValue) < float.Epsilon;
-                case ValueTypes.IntegerType: return IntValue == other.IntValue;
-                case ValueTypes.BooleanType: return IntValue == other.IntValue;
-                case ValueTypes.StringType: return StringValue == other.StringValue;
-                case ValueTypes.UndefinedType: return true;
-                case ValueTypes.Uninitialized: throw new ScripterRuntimeException("Variable was not initialized");
+                case ValueTypes.FloatType:
+                case ValueTypes.IntegerType:
+                case ValueTypes.BooleanType:
+                    return Math.Abs(FloatValue - other.FloatValue) < Epsilon;
+                case ValueTypes.StringType:
+                    return StringValue == other.StringValue;
+                case ValueTypes.UndefinedType:
+                    return true;
+                case ValueTypes.Uninitialized:
+                    throw new ScripterRuntimeException("Variable was not initialized");
                 default: return false;
             }
         }
@@ -62,7 +68,7 @@ namespace ScripterLang
             {
                 case ValueTypes.StringType: return StringValue;
                 case ValueTypes.FloatType: return FloatValue.ToString(CultureInfo.InvariantCulture);
-                case ValueTypes.IntegerType: return IntValue.ToString();
+                case ValueTypes.IntegerType: return AsInt.ToString();
                 case ValueTypes.BooleanType: return AsBool ? "true" : "false";
                 default: return ValueTypes.Name(Type);
             }

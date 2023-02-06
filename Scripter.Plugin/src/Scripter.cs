@@ -1,10 +1,12 @@
-// #define SCRIPTER_RUN_PERF_TEST
+#define SCRIPTER_RUN_PERF_TEST
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using ScripterLang;
 using SimpleJSON;
 using UnityEngine;
+#if SCRIPTER_RUN_PERF_TEST
+using ScripterLang;
+#endif
 
 public class Scripter : MVRScript
 {

@@ -98,7 +98,7 @@ public class LanguageTests
         var expression = Parser.Parse(source, _globalLexicalContext);
         _globalLexicalContext.Functions.Add("MyFunction", (d, args) =>
         {
-            Assert.That(d.GetVariableValue("x").IntValue, Is.EqualTo(1));
+            Assert.That(d.GetVariableValue("x").AsInt, Is.EqualTo(1));
             Assert.That(args[0].ToString(), Is.EqualTo("1"));
             Assert.That(args[0].ToString(), Is.EqualTo("1"));
             Assert.That(args[1].ToString(), Is.EqualTo("ab"));
@@ -256,20 +256,23 @@ public class LanguageTests
     public void PerfTestStructure()
     {
         const string source = """
-        var x1 = 0;
+        var x1 = 1;
         function test(x2) {
-            for(var i = 0; i < 1; i++) {
+            for(var i = 0; i < 5; i++) {
                 x2++;
             }
             return x2;
         }
         {
-            for(var j = 0; j < 1; j++) {
+            for(var j = 0; j < 5; j++) {
                 x1 = test(x1);
             }
         }
+        return x1;
         """;
         var expression = Parser.Parse(source, _globalLexicalContext);
-        expression.Evaluate(_domain);
+        var result = expression.Evaluate(_domain);
+
+        Assert.That(result.AsInt, Is.EqualTo(26));
     }
 }
