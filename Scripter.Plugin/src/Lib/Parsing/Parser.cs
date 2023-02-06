@@ -75,6 +75,7 @@ namespace ScripterLang
                 if (token.Value == "return") return ParseReturnStatement(lexicalContext);
                 if (token.Value == "static") return ParseStaticDeclaration(lexicalContext);
                 if (token.Value == "var") return ParseVariableDeclaration(lexicalContext);
+                if (token.Value == "let") return ParseVariableDeclaration(lexicalContext);
                 if (token.Value == "throw") return ParseThrowDeclaration(lexicalContext);
                 if (token.Value == "function") return ParseFunctionDeclaration(lexicalContext);
                 throw new ScripterParsingException($"Unexpected keyword: {token.Value}", token.Location);
@@ -177,7 +178,8 @@ namespace ScripterLang
             MoveNext();
             Consume().Expect(TokenType.LeftParenthesis);
             Expression initializer;
-            if (Peek().Match(TokenType.Keyword, "var"))
+            var next = Peek();
+            if (next.Match(TokenType.Keyword) && (next.Value == "var" || next.Value == "let"))
                 initializer = ParseVariableDeclaration(lexicalContext);
             else
                 initializer = ParseValueStatementExpression(lexicalContext);

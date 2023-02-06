@@ -280,6 +280,7 @@ namespace ScripterLang
                                     yield return new Token(TokenType.Undefined, name, Location);
                                     break;
                                 case "var":
+                                case "let":
                                 case "for":
                                 case "while":
                                 case "if":

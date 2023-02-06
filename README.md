@@ -1,23 +1,24 @@
 # Virt-A-Mate Scripter Plugin
 
-A scripting engine to write some code inside Virt-A-Mate without having to write a new plugin.
+A scripting engine to write some code inside Virt-A-Mate without having to write a new plugin. The language is greatly inspired from JavaScript.
 
 ## Language Features
 
-- Types (`string`, `float`, `int`, `bool`)
+- Variables (`var`, `let`)
+- Types (`string`, `float`, `int`, `bool`, `undefined`)
 - Boolean operators (`||`, `&&`, `==`, `!=`, `<`, `>`, `<=`, `>=`)
 - Math operators (`+`, `-`, `*`, `/`)
 - String concatenation (`+`)
 - Assignment operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`)
 - Comments (`//`, `/* */`)
-- Keywords (`var`, `if`, `else`, `for`, `while`, `true`, `false`, `throw`, `static`)
-- Code blocks (`{`, `}`)
-- Lexical scope (scoped variables)
+- Keywords (`if`, `else`, `for`, `while`, `throw`)
+- Static variables (`static`)
+- Functions (`function`, `return`)
+- Code blocks and lexical scopes (`{`, `}`)
 
 ## Notable Omissions
 
 - Objects and dictionaries cannot be created
-- Custom functions cannot be declared, nor classes
 - Code blocks without brackets, like `if(condition) something();`
 
 ## Virt-A-Mate Functions
@@ -43,7 +44,7 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 
 Here is a simple example to get you started with the kind of code you can write:
 
-```c#
+```js
 // Welcome to Scripter!
 var alpha = getFloatParamValue("Cube", "CubeMat", "Alpha Adjust", 0.5);
 if(alpha == 0) {
@@ -55,7 +56,7 @@ if(alpha == 0) {
 
 You can use static values:
 
-```c#
+```js
 static var initialized = false;
 static var counter = 0;
 if(!initialized) {
@@ -63,6 +64,16 @@ if(!initialized) {
 }
 counter++;
 logMessage("Called " + counter + " times");
+```
+
+And functions:
+
+```js
+function say(message) {
+    invokeTrigger("Person", "SpeechBubble", "bubbleText", message);
+}
+
+say("Hello, world!");
 ```
 
 # License
