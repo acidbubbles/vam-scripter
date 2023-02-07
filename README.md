@@ -18,8 +18,9 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 
 ## Notable Omissions
 
-- Objects and dictionaries cannot be created
+- Objects, arrays and maps cannot be created
 - Code blocks without brackets, like `if(condition) something();`
+- Variable values are locally scoped, but you cannot reuse them in other functions of the same script
 
 ## Virt-A-Mate Functions
 

@@ -255,7 +255,6 @@ public class LanguageTests
     [Test]
     public void PerfTestStructure()
     {
-        #warning Here j should be i
         const string source = """
             var x1 = 1;
             function test(x2) {
