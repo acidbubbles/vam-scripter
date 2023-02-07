@@ -1,3 +1,7 @@
+src\Integration\GlobalDotNetFunctions.cs
+src\Integration\GlobalFunctions.cs
+src\Integration\GlobalUnityFunctions.cs
+src\Integration\GlobalVamFunctions.cs
 src\Lib\Expressions\AssignmentExpression.cs
 src\Lib\Expressions\AssignmentOperatorExpression.cs
 src\Lib\Expressions\BinaryExpression.cs
@@ -12,6 +16,7 @@ src\Lib\Expressions\FunctionDeclaration.cs
 src\Lib\Expressions\IfExpression.cs
 src\Lib\Expressions\IncrementDecrementExpression.cs
 src\Lib\Expressions\IntegerExpression.cs
+src\Lib\Expressions\MethodCallExpression.cs
 src\Lib\Expressions\NegateExpression.cs
 src\Lib\Expressions\ParenthesesExpression.cs
 src\Lib\Expressions\PropertyGetExpression.cs
@@ -47,7 +52,6 @@ src\Scripts\Triggers\ScriptTrigger.cs
 src\Scripts\Triggers\ScriptUpdateTrigger.cs
 src\Scripts\Script.cs
 src\Scripts\ScriptsManager.cs
-src\Scripts\VamFunctions.cs
 src\UI\Clickable.cs
 src\UI\CodeInputField.cs
 src\UI\HistoryManager.cs

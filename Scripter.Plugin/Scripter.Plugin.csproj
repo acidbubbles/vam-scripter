@@ -71,6 +71,10 @@
 
   <ItemGroup>
     <!-- ScripterSource -->
+    <Compile Include="src\Integration\GlobalDotNetFunctions.cs" />
+    <Compile Include="src\Integration\GlobalFunctions.cs" />
+    <Compile Include="src\Integration\GlobalUnityFunctions.cs" />
+    <Compile Include="src\Integration\GlobalVamFunctions.cs" />
     <Compile Include="src\Lib\Expressions\AssignmentExpression.cs" />
     <Compile Include="src\Lib\Expressions\AssignmentOperatorExpression.cs" />
     <Compile Include="src\Lib\Expressions\BinaryExpression.cs" />
@@ -121,7 +125,6 @@
     <Compile Include="src\Scripts\Triggers\ScriptUpdateTrigger.cs" />
     <Compile Include="src\Scripts\Script.cs" />
     <Compile Include="src\Scripts\ScriptsManager.cs" />
-    <Compile Include="src\Scripts\VamFunctions.cs" />
     <Compile Include="src\UI\Clickable.cs" />
     <Compile Include="src\UI\CodeInputField.cs" />
     <Compile Include="src\UI\HistoryManager.cs" />

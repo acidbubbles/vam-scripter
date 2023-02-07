@@ -17,7 +17,7 @@ public class Script
     {
         _globalLexicalContext = new GlobalLexicalContext();
         _globalLexicalContext.Declare("value", Location.Empty);
-        VamFunctions.Register(_globalLexicalContext);
+        GlobalFunctions.Register(_globalLexicalContext);
 
         History = new HistoryManager(SourceJSON);
 

@@ -1,18 +1,12 @@
 ﻿using System;
 using ScripterLang;
-using UnityEngine;
-using Random = UnityEngine.Random;
 
-public static class VamFunctions
+public static class GlobalVamFunctions
 {
     public static void Register(GlobalLexicalContext lexicalContext)
     {
-        lexicalContext.Functions.Add("getDateTime", GetDateTime);
         lexicalContext.Functions.Add("logMessage", LogMessage);
         lexicalContext.Functions.Add("logError", LogError);
-        lexicalContext.Functions.Add("getTime", (d, a) => Time.time);
-        lexicalContext.Functions.Add("getDeltaTime", (d, a) => Time.deltaTime);
-        lexicalContext.Functions.Add("getRandom", GetRandom);
         lexicalContext.Functions.Add("getFloatParamValue", GetFloatParamValue);
         lexicalContext.Functions.Add("setFloatParamValue", SetFloatParamValue);
         lexicalContext.Functions.Add("getBoolParamValue", GetBoolParamValue);
@@ -25,40 +19,23 @@ public static class VamFunctions
         lexicalContext.Functions.Add("invokeKeybinding", InvokeKeybinding);
     }
 
-    private static Value GetDateTime(RuntimeDomain domain, Value[] args)
-    {
-        var now = DateTime.Now;
-        if (args.Length == 0)
-            return now.ToString("s");
-        else
-            return now.ToString(args[0].AsString);
-    }
-
     private static Value LogMessage(RuntimeDomain domain, Value[] args)
     {
-        ValidateArgumentsLength(args, 1, nameof(LogMessage));
+        Reference.ValidateArgumentsLength(nameof(LogMessage), args, 1);
         SuperController.LogMessage("Scripter: " + args[0].AsString);
         return Value.Void;
     }
 
     private static Value LogError(RuntimeDomain domain, Value[] args)
     {
-        ValidateArgumentsLength(args, 1, nameof(LogError));
+        Reference.ValidateArgumentsLength(nameof(LogError), args, 1);
         SuperController.LogError(args[0].ToString());
         return Value.Void;
     }
 
-    private static Value GetRandom(RuntimeDomain domain, Value[] args)
-    {
-        if (args.Length == 0)
-            return Random.value;
-        ValidateArgumentsLength(args, 2, nameof(GetRandom));
-        return Random.Range(args[0].AsFloat, args[1].AsFloat);
-    }
-
     private static Value GetFloatParamValue(RuntimeDomain domain, Value[] args)
     {
-        ValidateArgumentsLength(args, 3, nameof(GetFloatParamValue));
+        Reference.ValidateArgumentsLength(nameof(GetFloatParamValue), args, 3);
         var storable = GetStorable(args[0], args[1]);
         var paramName = args[2].AsString;
         var param = storable.GetFloatJSONParam(paramName);
@@ -68,7 +45,7 @@ public static class VamFunctions
 
     private static Value SetFloatParamValue(RuntimeDomain domain, Value[] args)
     {
-        ValidateArgumentsLength(args, 4, nameof(SetFloatParamValue));
+        Reference.ValidateArgumentsLength(nameof(SetFloatParamValue), args, 4);
         var storable = GetStorable(args[0], args[1]);
         var paramName = args[2].AsString;
         var param = storable.GetFloatJSONParam(paramName);
@@ -79,7 +56,7 @@ public static class VamFunctions
 
     private static Value GetBoolParamValue(RuntimeDomain domain, Value[] args)
     {
-        ValidateArgumentsLength(args, 3, nameof(GetBoolParamValue));
+        Reference.ValidateArgumentsLength(nameof(GetBoolParamValue), args, 3);
         var storable = GetStorable(args[0], args[1]);
         var paramName = args[2].AsString;
         var param = storable.GetBoolJSONParam(paramName);
@@ -89,7 +66,7 @@ public static class VamFunctions
 
     private static Value SetBoolParamValue(RuntimeDomain domain, Value[] args)
     {
-        ValidateArgumentsLength(args, 4, nameof(SetBoolParamValue));
+        Reference.ValidateArgumentsLength(nameof(SetBoolParamValue), args, 4);
         var storable = GetStorable(args[0], args[1]);
         var paramName = args[2].AsString;
         var param = storable.GetBoolJSONParam(paramName);
@@ -100,7 +77,7 @@ public static class VamFunctions
 
     private static Value GetStringParamValue(RuntimeDomain domain, Value[] args)
     {
-        ValidateArgumentsLength(args, 3, nameof(GetStringParamValue));
+        Reference.ValidateArgumentsLength(nameof(GetStringParamValue), args, 3);
         var storable = GetStorable(args[0], args[1]);
         var paramName = args[2].AsString;
         var param = storable.GetStringJSONParam(paramName);
@@ -110,7 +87,7 @@ public static class VamFunctions
 
     private static Value SetStringParamValue(RuntimeDomain domain, Value[] args)
     {
-        ValidateArgumentsLength(args, 4, nameof(SetStringParamValue));
+        Reference.ValidateArgumentsLength(nameof(SetStringParamValue), args, 4);
         var storable = GetStorable(args[0], args[1]);
         var paramName = args[2].AsString;
         var param = storable.GetStringJSONParam(paramName);
@@ -122,7 +99,7 @@ public static class VamFunctions
 
     private static Value GetStringChooserParamValue(RuntimeDomain domain, Value[] args)
     {
-        ValidateArgumentsLength(args, 3, nameof(GetStringChooserParamValue));
+        Reference.ValidateArgumentsLength(nameof(GetStringChooserParamValue), args, 3);
         var storable = GetStorable(args[0], args[1]);
         var paramName = args[2].AsString;
         var param = storable.GetStringChooserJSONParam(paramName);
@@ -132,7 +109,7 @@ public static class VamFunctions
 
     private static Value SetStringChooserParamValue(RuntimeDomain domain, Value[] args)
     {
-        ValidateArgumentsLength(args, 4, nameof(SetStringChooserParamValue));
+        Reference.ValidateArgumentsLength(nameof(SetStringChooserParamValue), args, 4);
         var storable = GetStorable(args[0], args[1]);
         var paramName = args[2].AsString;
         var param = storable.GetStringChooserJSONParam(paramName);
@@ -143,7 +120,7 @@ public static class VamFunctions
 
     private static Value InvokeTrigger(RuntimeDomain domain, Value[] args)
     {
-        ValidateArgumentsLength(args, 3, nameof(InvokeTrigger));
+        Reference.ValidateArgumentsLength(nameof(InvokeTrigger), args, 3);
         var storable = GetStorable(args[0], args[1]);
         var paramName = args[2].AsString;
         var param = storable.GetAction(paramName);
@@ -164,10 +141,5 @@ public static class VamFunctions
         var storable = atom.GetStorableByID(storableName.AsString);
         if (storable == null) throw new ScripterPluginException($"Could not find an storable named '{storableName}' in atom '{atomName}'");
         return storable;
-    }
-
-    private static void ValidateArgumentsLength(Value[] args, int expectedLength, string fnName)
-    {
-        if (args.Length < expectedLength) throw new ScripterRuntimeException($"Method {fnName[0].ToString().ToLower()}{fnName.Substring(1)} Expected {expectedLength} arguments, received {args.Length}");
     }
 }
