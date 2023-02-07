@@ -13,5 +13,10 @@
         {
             return domain.GetVariableValue(_name);
         }
+
+        public override string ToString()
+        {
+            return _name;
+        }
     }
 }

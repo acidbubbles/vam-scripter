@@ -13,5 +13,10 @@ namespace ScripterLang
         {
             return Value.CreateInteger(_value);
         }
+
+        public override string ToString()
+        {
+            return $"{_value}";
+        }
     }
 }

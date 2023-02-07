@@ -23,5 +23,10 @@ namespace ScripterLang
             var func = domain.GetFunction(_lexicalContext, _name);
             return func(domain, args);
         }
+
+        public override string ToString()
+        {
+            return $"{_name}({string.Join(", ", _arguments.Select(a => a.ToString()).ToArray())})";
+        }
     }
 }

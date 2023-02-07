@@ -46,5 +46,10 @@
         {
             return new ScripterRuntimeException($"Operator {_op} is not supported on operands of type {ValueTypes.Name(value.Type)} and {ValueTypes.Name(right.Type)}");
         }
+
+        public override string ToString()
+        {
+            return $"{_name} {_op} {_expression}";
+        }
     }
 }

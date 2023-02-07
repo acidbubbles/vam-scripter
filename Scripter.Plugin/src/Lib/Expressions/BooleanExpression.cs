@@ -13,5 +13,10 @@
         {
             return Value.CreateBoolean(_value);
         }
+
+        public override string ToString()
+        {
+            return $"{_value.ToString().ToLowerInvariant()}";
+        }
     }
 }

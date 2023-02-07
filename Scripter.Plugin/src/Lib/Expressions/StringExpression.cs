@@ -11,7 +11,12 @@
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            return ScripterLang.Value.CreateString(_value);
+            return Value.CreateString(_value);
+        }
+
+        public override string ToString()
+        {
+            return $"\"{_value}\"";
         }
     }
 }

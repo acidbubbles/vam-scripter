@@ -17,5 +17,10 @@
             domain.SetVariableValue(_name, right);
             return right;
         }
+
+        public override string ToString()
+        {
+            return $"{_name} = {_expression}";
+        }
     }
 }

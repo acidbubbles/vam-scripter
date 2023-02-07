@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ScripterLang
 {
@@ -33,6 +34,11 @@ namespace ScripterLang
                     domain.ClearVariable(_lexicalContext.Declarations[i]);
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Join(";\n", _expressions.Select(e => e.ToString()).ToArray()) + ";";
         }
     }
 }

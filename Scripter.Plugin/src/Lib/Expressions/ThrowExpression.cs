@@ -14,5 +14,10 @@
             var message = _message.Evaluate(domain);
             throw new ScripterRuntimeException(message.ToString());
         }
+
+        public override string ToString()
+        {
+            return $"throw {_message}";
+        }
     }
 }

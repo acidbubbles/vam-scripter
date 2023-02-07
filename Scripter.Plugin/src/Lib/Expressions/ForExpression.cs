@@ -21,9 +21,15 @@ namespace ScripterLang
         {
             const float maxTime = 10;
             var max = Time.time + maxTime;
-            for (_start.Evaluate(domain); _end.Evaluate(domain).AsBool; _increment.Evaluate(domain))
+            var iterations = 0;
+            var start = _start.Evaluate(domain);
+            SuperController.LogMessage("Entering with " + start);
+            for (; _end.Evaluate(domain).AsBool; _increment.Evaluate(domain))
             {
+                SuperController.LogMessage(domain.GetVariableValue("i") + " is " + _end + " " + _end.Evaluate(domain));
                 _body.Evaluate(domain);
+                if (iterations++ > 10)
+                    throw new ScripterRuntimeException("Too many iterations");
                 if (Time.time > max)
                     throw new ScripterRuntimeException($"Spent more than {maxTime} seconds in the for loop");
             }

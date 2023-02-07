@@ -16,5 +16,10 @@
             #warning Allow using undefined (closer to JS)
             return _expression.Evaluate(domain);
         }
+
+        public override string ToString()
+        {
+            return $"return {_expression}";
+        }
     }
 }

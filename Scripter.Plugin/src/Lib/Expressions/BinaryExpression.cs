@@ -85,5 +85,10 @@ namespace ScripterLang
         {
             return new ScripterRuntimeException($"Operator {_operator} is not supported on operands of type {ValueTypes.Name(left.Type)} and {ValueTypes.Name(right.Type)}");
         }
+
+        public override string ToString()
+        {
+            return $"{_left} {_operator} {_right}";
+        }
     }
 }

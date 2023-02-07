@@ -13,5 +13,10 @@
         {
             return _expression.Evaluate(domain);
         }
+
+        public override string ToString()
+        {
+            return $"({_expression})";
+        }
     }
 }

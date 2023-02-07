@@ -22,5 +22,12 @@
                 return _falseBranch.Evaluate(domain);
             return Value.Void;
         }
+
+        public override string ToString()
+        {
+            return _falseBranch == null
+                ? $"if({_condition}) {{\n{_trueBranch}\n}}"
+                : $"if({_condition}) {{\n{_trueBranch}\n}} else {{\n{_falseBranch}\n}}";
+        }
     }
 }

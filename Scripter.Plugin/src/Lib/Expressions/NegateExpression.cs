@@ -16,5 +16,10 @@
                 throw new ScripterRuntimeException("Operator ! must be followed by a boolean value");
             return !value.AsBool;
         }
+
+        public override string ToString()
+        {
+            return $"!{_expression}";
+        }
     }
 }

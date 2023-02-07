@@ -51,5 +51,13 @@
             domain.SetVariableValue(_name, value);
             return _returnOriginal ? original : value;
         }
+
+        public override string ToString()
+        {
+            return
+                _returnOriginal
+                    ? $"{_name}{_op}"
+                    : $"{_op}{_name}";
+        }
     }
 }
