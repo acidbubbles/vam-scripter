@@ -1,11 +1,11 @@
 ﻿namespace ScripterLang
 {
-    public class AssignmentExpression : Expression
+    public class VariableAssignmentExpression : Expression
     {
         private readonly string _name;
         private readonly Expression _expression;
 
-        public AssignmentExpression(string name, Expression expression)
+        public VariableAssignmentExpression(string name, Expression expression)
         {
             _name = name;
             _expression = expression;

@@ -7,7 +7,12 @@
             throw new ScripterRuntimeException($"Property '{name}' does not exist on the object");
         }
 
-        public virtual Value Method(string name, Value[] args)
+        public virtual void Set(string name, Value value)
+        {
+            throw new ScripterRuntimeException($"Property '{name}' does not exist on the object");
+        }
+
+        public virtual Value InvokeMethod(string name, Value[] args)
         {
             throw new ScripterRuntimeException($"Method '{name}' does not exist on the object");
         }

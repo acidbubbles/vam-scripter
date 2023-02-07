@@ -23,7 +23,7 @@ namespace ScripterLang
                 throw new ScripterRuntimeException($"Cannot call method {_name} of value {value} because it is not an object");
             var reference = (Reference)value.AsObject;
             var args = _arguments.Select(arg => arg.Evaluate(domain)).ToArray();
-            return reference.Method(_name, args);
+            return reference.InvokeMethod(_name, args);
         }
 
         public override string ToString()

@@ -60,19 +60,25 @@ namespace ScripterLang
                     case '8':
                     case '9':
                         var start = _position;
-                        var isFloat = false;
+                        var numberType = TokenType.Integer;
                         while (MoveNext())
                         {
                             if (char.IsDigit(Current)) continue;
                             if (Current == '.')
                             {
-                                isFloat = true;
+                                numberType = TokenType.Float;
                                 continue;
                             }
                             break;
                         }
 
-                        yield return new Token(isFloat ? TokenType.Float : TokenType.Integer, Substr(start, _position - start), Location);
+                        if (Current == 'f')
+                        {
+                            MoveNext();
+                            numberType = TokenType.Float;
+                        }
+
+                        yield return new Token(numberType, Substr(start, _position - start), Location);
                         break;
                     case '/':
                     {

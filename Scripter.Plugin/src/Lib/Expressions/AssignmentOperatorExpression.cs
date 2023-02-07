@@ -1,48 +1,56 @@
 ﻿namespace ScripterLang
 {
-    public class AssignmentOperatorExpression : Expression
+    public abstract class AssignmentOperatorExpression : Expression
     {
-        private readonly string _name;
         private readonly string _op;
         private readonly Expression _expression;
 
-        public AssignmentOperatorExpression(string name, string op, Expression expression)
+        protected AssignmentOperatorExpression(string op, Expression expression)
         {
-            _name = name;
             _op = op;
             _expression = expression;
         }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            var value = domain.GetVariableValue(_name);
+            var value = GetVariableValue(domain);
             var right = _expression.Evaluate(domain);
             switch (_op)
             {
                 case "+=":
                     if (value.IsInt && right.IsInt)
-                        return domain.SetVariableValue(_name, value.AsNumber + right.AsNumber);
+                        return SetVariableValue(domain, value.AsInt + right.AsInt);
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.AsNumber + right.AsNumber);
+                        return SetVariableValue(domain, value.AsNumber + right.AsNumber);
                     if (value.IsString)
-                        return domain.SetVariableValue(_name, value.AsString + right.AsString);
+                        return SetVariableValue(domain, value.AsString + right.AsString);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "-=":
+                    if (value.IsInt && right.IsInt)
+                        return SetVariableValue(domain, value.AsInt - right.AsInt);
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.AsNumber - right.AsNumber);
+                        return SetVariableValue(domain, value.AsNumber - right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "*=":
+                    if (value.IsInt && right.IsInt)
+                        return SetVariableValue(domain, value.AsInt * right.AsInt);
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.AsNumber * right.AsNumber);
+                        return SetVariableValue(domain, value.AsNumber * right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "/*":
+                    if (value.IsInt && right.IsInt)
+                        return SetVariableValue(domain, value.AsInt / right.AsInt);
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.AsNumber / right.AsNumber);
+                        return SetVariableValue(domain, value.AsNumber / right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);
                 default:
                     throw MakeUnsupportedOperandsException(value, right);
             }
         }
+
+        protected abstract string LeftString();
+        protected abstract Value GetVariableValue(RuntimeDomain domain);
+        protected abstract Value SetVariableValue(RuntimeDomain domain, Value value);
 
         private ScripterRuntimeException MakeUnsupportedOperandsException(Value value, Value right)
         {
@@ -51,7 +59,7 @@
 
         public override string ToString()
         {
-            return $"{_name} {_op} {_expression}";
+            return $"{LeftString()} {_op} {_expression}";
         }
     }
 }

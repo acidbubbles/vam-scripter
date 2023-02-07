@@ -24,9 +24,9 @@ namespace ScripterLang
             _position = 0;
         }
 
-        private void MoveNext()
+        private void MoveNext(int tokens = 1)
         {
-            _position++;
+            _position += tokens;
         }
 
         private Token Peek()
@@ -83,19 +83,8 @@ namespace ScripterLang
 
             if (token.Match(TokenType.Identifier))
             {
-                var next = PeekNext();
-                if (next.Match(TokenType.LeftParenthesis))
-                {
-                    MoveNext();
-                    MoveNext();
-                    var arguments = ParseArgumentList(lexicalContext);
-                    Consume().Expect(TokenType.RightParenthesis);
-                    return new FunctionCallExpression(token.Value, arguments, lexicalContext);
-                }
-                else
-                {
-                    return ParseAssignmentExpression(lexicalContext);
-                }
+                MoveNext();
+                return ParseVariableExpression(lexicalContext, token.Value);
             }
 
             if (token.Match(TokenType.SemiColon))
@@ -103,8 +92,49 @@ namespace ScripterLang
                 Consume();
                 return UndefinedExpression.Instance;
             }
+
             if (token.Match(TokenType.LeftBrace)) return ParseCodeBlock(lexicalContext);
+
             throw new ScripterParsingException($"Unexpected token: '{token.Value}'", token.Location);
+        }
+
+        private Expression ParseVariableExpression(ScopeLexicalContext lexicalContext, string name)
+        {
+            var next = Consume();
+            if (next.Match(TokenType.LeftParenthesis))
+            {
+                var arguments = ParseArgumentList(lexicalContext);
+                Consume().Expect(TokenType.RightParenthesis);
+                return new FunctionCallExpression(name, arguments, lexicalContext);
+            }
+
+            if (next.Match(TokenType.Assignment))
+            {
+                var right = ParseValueStatementExpression(lexicalContext);
+                Consume().Expect(TokenType.SemiColon);
+                return new VariableAssignmentExpression(name, right);
+            }
+
+            if (next.Match(TokenType.AssignmentOperator))
+            {
+                var right = ParseValueStatementExpression(lexicalContext);
+                Consume().Expect(TokenType.SemiColon);
+                return new VariableAssignmentOperatorExpression(name, next.Value, right);
+            }
+
+            if (next.Match(TokenType.IncrementDecrement))
+            {
+                Consume().Expect(TokenType.SemiColon);
+                return new IncrementDecrementExpression(name, next.Value, true);
+            }
+
+            if (next.Match(TokenType.Dot))
+            {
+                var left = new VariableExpression(name);
+                return ParseDotRightExpression(lexicalContext, left);
+            }
+
+            throw new ScripterParsingException($"Unexpected token: '{next.Value}'", next.Location);
         }
 
         private Expression ParseThrowDeclaration(ScopeLexicalContext lexicalContext)
@@ -245,38 +275,6 @@ namespace ScripterLang
             return new StaticVariableDeclarationExpression(nameToken.Value, initialValueExpression);
         }
 
-        private Expression ParseAssignmentExpression(LexicalContext lexicalContext)
-        {
-            var nameToken = Consume().Expect(TokenType.Identifier);
-
-            var nextToken = Peek();
-
-            if (nextToken.Match(TokenType.Assignment))
-            {
-                MoveNext();
-                var right = ParseValueStatementExpression(lexicalContext);
-                Consume().Expect(TokenType.SemiColon);
-                return new AssignmentExpression(nameToken.Value, right);
-            }
-
-            if (nextToken.Match(TokenType.AssignmentOperator))
-            {
-                MoveNext();
-                var right = ParseValueStatementExpression(lexicalContext);
-                Consume().Expect(TokenType.SemiColon);
-                return new AssignmentOperatorExpression(nameToken.Value,  nextToken.Value, right);
-            }
-
-            if (nextToken.Match(TokenType.IncrementDecrement))
-            {
-                MoveNext();
-                return new IncrementDecrementExpression(nameToken.Value, nextToken.Value, true);
-            }
-
-            MoveNext();
-            return new VariableExpression(nameToken.Value);
-        }
-
         private Expression ParseValueStatementExpression(LexicalContext lexicalContext, int precedence = 0)
         {
             var left = ParsePureValueExpression(lexicalContext);
@@ -290,23 +288,48 @@ namespace ScripterLang
                 }
                 else if (operatorToken.Type == TokenType.Dot)
                 {
-                    var property = Consume().Expect(TokenType.Identifier);
-                    if (Peek().Match(TokenType.LeftParenthesis))
-                    {
-                        MoveNext();
-                        var arguments = ParseArgumentList(lexicalContext);
-                        Consume().Expect(TokenType.RightParenthesis);
-                        left = new MethodCallExpression(left, property.Value, arguments);
-                    }
-                    else
-                    {
-                        left = new PropertyGetExpression(left, property.Value);
-                    }
+                    left = ParseDotRightExpression(lexicalContext, left);
                 }
                 else
                 {
                     throw new ScripterParsingException($"Unexpected token {operatorToken.Value}");
                 }
+            }
+
+            return left;
+        }
+
+        private Expression ParseDotRightExpression(LexicalContext lexicalContext, Expression left)
+        {
+            var property = Consume().Expect(TokenType.Identifier);
+            var next = Peek();
+            if (next.Match(TokenType.LeftParenthesis))
+            {
+                MoveNext();
+                var arguments = ParseArgumentList(lexicalContext);
+                Consume().Expect(TokenType.RightParenthesis);
+                left = new MethodCallExpression(left, property.Value, arguments);
+            }
+            else if (next.Match(TokenType.Assignment))
+            {
+                MoveNext();
+                var right = ParseValueStatementExpression(lexicalContext);
+                return new PropertyAssignmentExpression(left, property.Value,  right);
+            }
+            else if (next.Match(TokenType.AssignmentOperator))
+            {
+                MoveNext();
+                var right = ParseValueStatementExpression(lexicalContext);
+                return new PropertyAssignmentOperatorExpression(left, property.Value,  next.Value, right);
+            }
+            else if (next.Match(TokenType.Dot))
+            {
+                MoveNext();
+                left = ParseDotRightExpression(lexicalContext, new PropertyGetExpression(left, property.Value));
+            }
+            else
+            {
+                left = new PropertyGetExpression(left, property.Value);
             }
 
             return left;

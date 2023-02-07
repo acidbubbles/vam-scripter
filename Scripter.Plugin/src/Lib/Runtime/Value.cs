@@ -30,6 +30,12 @@ namespace ScripterLang
             get { return IntValue > 0; }
         }
 
+        public bool ForceBool
+        {
+            [MethodImpl(0x0100)]
+            get { return IsBool ? AsBool : ThrowInvalidType<bool>(); }
+        }
+
         public bool IsNumber
         {
             [MethodImpl(0x0100)]
@@ -40,6 +46,12 @@ namespace ScripterLang
         {
             [MethodImpl(0x0100)]
             get { return Type == ValueTypes.FloatType ? FloatValue : IntValue; }
+        }
+
+        public float ForceNumber
+        {
+            [MethodImpl(0x0100)]
+            get { return IsNumber ? AsNumber : ThrowInvalidType<float>(); }
         }
 
         public bool IsInt
@@ -54,6 +66,12 @@ namespace ScripterLang
             get { return IntValue; }
         }
 
+        public int ForceInt
+        {
+            [MethodImpl(0x0100)]
+            get { return IsInt ? AsInt : ThrowInvalidType<int>(); }
+        }
+
         public bool IsFloat
         {
             [MethodImpl(0x0100)]
@@ -66,16 +84,28 @@ namespace ScripterLang
             get { return FloatValue; }
         }
 
+        public float ForceFloat
+        {
+            [MethodImpl(0x0100)]
+            get { return IsFloat ? AsFloat : ThrowInvalidType<float>(); }
+        }
+
         public bool IsObject
         {
             [MethodImpl(0x0100)]
             get { return Type == ValueTypes.ObjectType; }
         }
 
-        public object AsObject
+        public Reference AsObject
         {
             [MethodImpl(0x0100)]
-            get { return ObjectValue; }
+            get { return (Reference)ObjectValue; }
+        }
+
+        public Reference ForceObject
+        {
+            [MethodImpl(0x0100)]
+            get { return IsObject ? AsObject : ThrowInvalidType<Reference>(); }
         }
 
         public bool IsString
@@ -88,6 +118,12 @@ namespace ScripterLang
         {
             [MethodImpl(0x0100)]
             get { return IsString ? (string)ObjectValue : ToString(); }
+        }
+
+        public string ForceString
+        {
+            [MethodImpl(0x0100)]
+            get { return IsString ? AsString : ThrowInvalidType<string>(); }
         }
 
         [MethodImpl(0x0100)]
@@ -118,6 +154,11 @@ namespace ScripterLang
         public static Value CreateObject(Reference value)
         {
             return new Value { Type = ValueTypes.ObjectType, ObjectValue = value };
+        }
+
+        private T ThrowInvalidType<T>()
+        {
+            throw new ScripterRuntimeException($"Unexpected type {ValueTypes.Name(Type)}");
         }
 
         [MethodImpl(0x0100)]

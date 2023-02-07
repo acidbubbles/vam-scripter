@@ -260,6 +260,7 @@ public class LanguageTests
         const string source = """
             static var x = getThing(10);
             var o = getThing(1);
+            o.value = o.value + 1;
             return o.value
                 + o.increment(2)
                 + x.value
@@ -268,36 +269,73 @@ public class LanguageTests
                     .createAndAdd(100)
                     .increment(1);
             """;
-        _globalLexicalContext.Functions.Add("getThing", (d, args) => new MyThing { Value = args[0] });
+        _globalLexicalContext.Functions.Add("getThing", (d, args) => new MyThing { Value = args[0].ForceInt });
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("129"));
+        Assert.That(result.ToString(), Is.EqualTo("134"));
+    }
+
+    [Test]
+    public void Deep()
+    {
+        const string source = """
+            var o = getThing(1);
+            o.deep.deep.deep.value = o.deep.deep.deep.value + 1;
+            o.deep.deep.deep.increment(1);
+            o.deep.deep.deep.value += 1;
+            return o.deep.deep.deep.value;
+            """;
+        var thing = new MyThing
+        {
+            Deep = new MyThing
+            {
+                Deep = new MyThing
+                {
+                    Deep = new MyThing
+                    {
+                        Value = 1
+                    }
+                }
+            }
+        };
+        _globalLexicalContext.Functions.Add("getThing", (d, args) => thing);
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var result = expression.Evaluate(_domain);
+
+        Assert.That(result.ToString(), Is.EqualTo("4"));
     }
 
     private class MyThing : Reference
     {
-        public Value Value;
+        public int Value;
+        public MyThing Deep;
 
         public override Value Get(string name)
         {
             if (name == "value") return Value;
+            if (name == "deep") return Deep;
             return base.Get(name);
         }
 
-        public override Value Method(string name, Value[] args)
+        public override void Set(string name, Value value)
+        {
+            Value = value.ForceInt;
+        }
+
+        public override Value InvokeMethod(string name, Value[] args)
         {
             if (name == "increment")
             {
                 ValidateArgumentsLength(name, args, 1);
-                return  Value.AsInt + args[0].AsInt;
+                return  (Value = Value + args[0].ForceInt);
             }
             if (name == "createAndAdd")
             {
                 ValidateArgumentsLength(name, args, 1);
-                return new MyThing { Value = Value.AsInt + args[0].AsInt };
+                return Deep = new MyThing { Value = Value + args[0].ForceInt };
             }
-            return base.Method(name, args);
+            return base.InvokeMethod(name, args);
         }
     }
 

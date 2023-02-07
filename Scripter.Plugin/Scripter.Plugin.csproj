@@ -71,11 +71,11 @@
 
   <ItemGroup>
     <!-- ScripterSource -->
+    <Compile Include="src\Integration\FloatParamReference.cs" />
     <Compile Include="src\Integration\GlobalDotNetFunctions.cs" />
     <Compile Include="src\Integration\GlobalFunctions.cs" />
     <Compile Include="src\Integration\GlobalUnityFunctions.cs" />
     <Compile Include="src\Integration\GlobalVamFunctions.cs" />
-    <Compile Include="src\Lib\Expressions\AssignmentExpression.cs" />
     <Compile Include="src\Lib\Expressions\AssignmentOperatorExpression.cs" />
     <Compile Include="src\Lib\Expressions\BinaryExpression.cs" />
     <Compile Include="src\Lib\Expressions\BooleanExpression.cs" />
@@ -92,12 +92,16 @@
     <Compile Include="src\Lib\Expressions\MethodCallExpression.cs" />
     <Compile Include="src\Lib\Expressions\NegateExpression.cs" />
     <Compile Include="src\Lib\Expressions\ParenthesesExpression.cs" />
+    <Compile Include="src\Lib\Expressions\PropertyAssignmentExpression.cs" />
+    <Compile Include="src\Lib\Expressions\PropertyAssignmentOperatorExpression.cs" />
     <Compile Include="src\Lib\Expressions\PropertyGetExpression.cs" />
     <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
     <Compile Include="src\Lib\Expressions\StaticVariableDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\StringExpression.cs" />
     <Compile Include="src\Lib\Expressions\ThrowExpression.cs" />
     <Compile Include="src\Lib\Expressions\UndefinedExpression.cs" />
+    <Compile Include="src\Lib\Expressions\VariableAssignmentExpression.cs" />
+    <Compile Include="src\Lib\Expressions\VariableAssignmentOperatorExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableExpression.cs" />
     <Compile Include="src\Lib\Expressions\WhileExpression.cs" />
