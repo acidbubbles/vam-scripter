@@ -26,7 +26,7 @@
                             value = Value.CreateInteger(original.AsInt + 1);
                             break;
                         case ValueTypes.FloatType:
-                            value = Value.CreateFloat(original.FloatValue + 1);
+                            value = Value.CreateFloat(original.AsFloat + 1);
                             break;
                         default:
                             throw new ScripterRuntimeException($"Cannot increment variable of type {ValueTypes.Name(original.Type)}");
@@ -39,7 +39,7 @@
                             value = Value.CreateInteger(original.AsInt - 1);
                             break;
                         case ValueTypes.FloatType:
-                            value = Value.CreateFloat(original.FloatValue - 1);
+                            value = Value.CreateFloat(original.AsFloat - 1);
                             break;
                         default:
                             throw new ScripterRuntimeException($"Cannot decrement variable of type {ValueTypes.Name(original.Type)}");

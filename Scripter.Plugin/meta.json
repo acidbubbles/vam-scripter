@@ -43,7 +43,6 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\GlobalLexicalContext.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\LexicalContext.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\Reference.cs",
-    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\ReferenceCounted.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\RuntimeDomain.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\ScopeLexicalContext.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\ScripterParsingException.cs",

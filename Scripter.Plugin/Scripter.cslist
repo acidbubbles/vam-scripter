@@ -32,7 +32,6 @@ src\Lib\Parsing\TokenType.cs
 src\Lib\Runtime\GlobalLexicalContext.cs
 src\Lib\Runtime\LexicalContext.cs
 src\Lib\Runtime\Reference.cs
-src\Lib\Runtime\ReferenceCounted.cs
 src\Lib\Runtime\RuntimeDomain.cs
 src\Lib\Runtime\ScopeLexicalContext.cs
 src\Lib\Runtime\ScripterParsingException.cs

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using ScripterLang;
 
@@ -263,7 +264,7 @@ public class LanguageTests
             var o = getThing(1);
             return o.value;
             """;
-        _globalLexicalContext.Functions.Add("getThing", (d, args) => d.WrapReference(new MyThing { Value = args[0] }));
+        _globalLexicalContext.Functions.Add("getThing", (d, args) => new MyThing { Value = args[0] });
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 

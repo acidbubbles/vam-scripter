@@ -31,13 +31,13 @@ public static class VamFunctions
         if (args.Length == 0)
             return now.ToString("s");
         else
-            return now.ToString(args[0].StringValue);
+            return now.ToString(args[0].AsString);
     }
 
     private static Value LogMessage(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 1, nameof(LogMessage));
-        SuperController.LogMessage("Scripter: " + args[0].StringValue);
+        SuperController.LogMessage("Scripter: " + args[0].AsString);
         return Value.Void;
     }
 
@@ -53,14 +53,14 @@ public static class VamFunctions
         if (args.Length == 0)
             return Random.value;
         ValidateArgumentsLength(args, 2, nameof(GetRandom));
-        return Random.Range(args[0].FloatValue, args[1].FloatValue);
+        return Random.Range(args[0].AsFloat, args[1].AsFloat);
     }
 
     private static Value GetFloatParamValue(RuntimeDomain domain, Value[] args)
     {
         ValidateArgumentsLength(args, 3, nameof(GetFloatParamValue));
         var storable = GetStorable(args[0], args[1]);
-        var paramName = args[2].StringValue;
+        var paramName = args[2].AsString;
         var param = storable.GetFloatJSONParam(paramName);
         if(param == null) throw new ScripterRuntimeException($"FloatParam {paramName} was not found in storable {storable.storeId} of atom {storable.containingAtom.uid}");
         return Value.CreateFloat(param.val);
@@ -70,10 +70,10 @@ public static class VamFunctions
     {
         ValidateArgumentsLength(args, 4, nameof(SetFloatParamValue));
         var storable = GetStorable(args[0], args[1]);
-        var paramName = args[2].StringValue;
+        var paramName = args[2].AsString;
         var param = storable.GetFloatJSONParam(paramName);
         if(param == null) throw new ScripterRuntimeException($"FloatParam {paramName} was not found in storable {storable.storeId} of atom {storable.containingAtom.uid}");
-        param.val = args[3].FloatValue;
+        param.val = args[3].AsFloat;
         return args[3];
     }
 
@@ -81,7 +81,7 @@ public static class VamFunctions
     {
         ValidateArgumentsLength(args, 3, nameof(GetBoolParamValue));
         var storable = GetStorable(args[0], args[1]);
-        var paramName = args[2].StringValue;
+        var paramName = args[2].AsString;
         var param = storable.GetBoolJSONParam(paramName);
         if(param == null) throw new ScripterRuntimeException($"BoolParam {paramName} was not found in storable {storable.storeId} of atom {storable.containingAtom.uid}");
         return Value.CreateBoolean(param.val);
@@ -91,7 +91,7 @@ public static class VamFunctions
     {
         ValidateArgumentsLength(args, 4, nameof(SetBoolParamValue));
         var storable = GetStorable(args[0], args[1]);
-        var paramName = args[2].StringValue;
+        var paramName = args[2].AsString;
         var param = storable.GetBoolJSONParam(paramName);
         if(param == null) throw new ScripterRuntimeException($"BoolParam {paramName} was not found in storable {storable.storeId} of atom {storable.containingAtom.uid}");
         param.val = args[3].AsBool;
@@ -102,7 +102,7 @@ public static class VamFunctions
     {
         ValidateArgumentsLength(args, 3, nameof(GetStringParamValue));
         var storable = GetStorable(args[0], args[1]);
-        var paramName = args[2].StringValue;
+        var paramName = args[2].AsString;
         var param = storable.GetStringJSONParam(paramName);
         if(param == null) throw new ScripterRuntimeException($"StringParam {paramName} was not found in storable {storable.storeId} of atom {storable.containingAtom.uid}");
         return Value.CreateString(param.val);
@@ -112,7 +112,7 @@ public static class VamFunctions
     {
         ValidateArgumentsLength(args, 4, nameof(SetStringParamValue));
         var storable = GetStorable(args[0], args[1]);
-        var paramName = args[2].StringValue;
+        var paramName = args[2].AsString;
         var param = storable.GetStringJSONParam(paramName);
         if(param == null) throw new ScripterRuntimeException($"StringParam {paramName} was not found in storable {storable.storeId} of atom {storable.containingAtom.uid}");
         param.val = args[3].ToString();
@@ -124,7 +124,7 @@ public static class VamFunctions
     {
         ValidateArgumentsLength(args, 3, nameof(GetStringChooserParamValue));
         var storable = GetStorable(args[0], args[1]);
-        var paramName = args[2].StringValue;
+        var paramName = args[2].AsString;
         var param = storable.GetStringChooserJSONParam(paramName);
         if(param == null) throw new ScripterRuntimeException($"StringChooserParam {paramName} was not found in storable {storable.storeId} of atom {storable.containingAtom.uid}");
         return Value.CreateString(param.val);
@@ -134,7 +134,7 @@ public static class VamFunctions
     {
         ValidateArgumentsLength(args, 4, nameof(SetStringChooserParamValue));
         var storable = GetStorable(args[0], args[1]);
-        var paramName = args[2].StringValue;
+        var paramName = args[2].AsString;
         var param = storable.GetStringChooserJSONParam(paramName);
         if(param == null) throw new ScripterRuntimeException($"StringChooserParam {paramName} was not found in storable {storable.storeId} of atom {storable.containingAtom.uid}");
         param.val = args[3].ToString();
@@ -145,7 +145,7 @@ public static class VamFunctions
     {
         ValidateArgumentsLength(args, 3, nameof(InvokeTrigger));
         var storable = GetStorable(args[0], args[1]);
-        var paramName = args[2].StringValue;
+        var paramName = args[2].AsString;
         var param = storable.GetAction(paramName);
         if(param == null) throw new ScripterRuntimeException($"Action {paramName} was not found in storable {storable.storeId} of atom {storable.containingAtom.uid}");
         param.actionCallback.Invoke();
@@ -159,9 +159,9 @@ public static class VamFunctions
 
     private static JSONStorable GetStorable(Value atomName, Value storableName)
     {
-        var atom = SuperController.singleton.GetAtomByUid(atomName.StringValue);
+        var atom = SuperController.singleton.GetAtomByUid(atomName.AsString);
         if (atom == null) throw new ScripterPluginException($"Could not find an atom named '{atomName}'");
-        var storable = atom.GetStorableByID(storableName.StringValue);
+        var storable = atom.GetStorableByID(storableName.AsString);
         if (storable == null) throw new ScripterPluginException($"Could not find an storable named '{storableName}' in atom '{atomName}'");
         return storable;
     }

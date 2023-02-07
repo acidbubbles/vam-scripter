@@ -20,22 +20,24 @@
             switch (_op)
             {
                 case "+=":
+                    if (value.IsInt && right.IsInt)
+                        return domain.SetVariableValue(_name, value.AsNumber + right.AsNumber);
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.FloatValue + right.FloatValue);
+                        return domain.SetVariableValue(_name, value.AsNumber + right.AsNumber);
                     if (value.IsString)
-                        return domain.SetVariableValue(_name, value.StringValue + right);
+                        return domain.SetVariableValue(_name, value.AsString + right.AsString);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "-=":
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.FloatValue - right.FloatValue);
+                        return domain.SetVariableValue(_name, value.AsNumber - right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "*=":
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.FloatValue * right.FloatValue);
+                        return domain.SetVariableValue(_name, value.AsNumber * right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "/*":
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.FloatValue / right.FloatValue);
+                        return domain.SetVariableValue(_name, value.AsNumber / right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);
                 default:
                     throw MakeUnsupportedOperandsException(value, right);

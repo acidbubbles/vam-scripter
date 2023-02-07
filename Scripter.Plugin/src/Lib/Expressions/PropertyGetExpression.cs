@@ -15,10 +15,8 @@
         {
             var value = _left.Evaluate(domain);
             if (!value.IsObject) throw new ScripterRuntimeException($"Value is not an object");
-            ReferenceCounted reference;
-            if (!domain.Objects.TryGetValue((int)value.FloatValue, out reference))
-                throw new ScripterRuntimeException("Null object reference");
-            return reference.Reference.Get(_property);
+            var reference = (Reference)value.AsObject;
+            return reference.Get(_property);
         }
 
         public override string ToString()

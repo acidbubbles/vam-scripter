@@ -105,7 +105,6 @@
     <Compile Include="src\Lib\Runtime\GlobalLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\LexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\Reference.cs" />
-    <Compile Include="src\Lib\Runtime\ReferenceCounted.cs" />
     <Compile Include="src\Lib\Runtime\RuntimeDomain.cs" />
     <Compile Include="src\Lib\Runtime\ScopeLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\ScripterParsingException.cs" />
