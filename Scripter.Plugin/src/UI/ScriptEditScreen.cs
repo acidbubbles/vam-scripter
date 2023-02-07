@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using ScripterLang;
 using UnityEngine;
@@ -14,7 +16,7 @@ public class ScriptEditScreen : Screen
 
         var button = Instantiate(manager.Prefabs.configurableButtonPrefab, screen.transform).GetComponent<UIDynamicButton>();
         button.label = "Run";
-        button.button.onClick.AddListener(() => script.Run(Value.Undefined));
+        button.button.onClick.AddListener(() => RunScriptWithTimer(script));
         CreateMultilineInput(screen.transform, manager.Prefabs, script.SourceJSON);
 
         var toolbar = MakeToolbar(screen.transform);
@@ -27,6 +29,16 @@ public class ScriptEditScreen : Screen
         script.ConsoleJSON.dynamicText = console;
 
         return screen;
+    }
+
+    private static void RunScriptWithTimer(Script script)
+    {
+        script.ConsoleJSON.val = $"[{DateTime.Now.ToLongTimeString()}] Running...";
+        var sw = new Stopwatch();
+        sw.Start();
+        script.Run(Value.Undefined);
+        sw.Stop();
+        script.ConsoleJSON.val += $"\n[{DateTime.Now.ToLongTimeString()}] <color=green>Script completed in {sw.Elapsed.TotalMilliseconds:0.000}ms</color>";
     }
 
     private static void CreateMultilineInput(Transform parent, MVRPluginManager prefabs, JSONStorableString jss)

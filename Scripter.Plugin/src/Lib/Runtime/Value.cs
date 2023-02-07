@@ -5,7 +5,7 @@ namespace ScripterLang
 {
     public struct Value
     {
-        public const float Epsilon = float.Epsilon * 8;
+        public const float Epsilon = 1.17549435E-38f;
 
         public static readonly Value Undefined = new Value { Type = ValueTypes.UndefinedType };
         public static readonly Value Void = new Value { Type = ValueTypes.Uninitialized };
@@ -15,7 +15,7 @@ namespace ScripterLang
         public string StringValue;
 
         public bool IsBool => Type == ValueTypes.BooleanType;
-        public bool AsBool => FloatValue >= Epsilon;
+        public bool AsBool => FloatValue > Epsilon;
         public bool IsNumber => Type == ValueTypes.FloatType || Type == ValueTypes.IntegerType;
         public bool IsInt => Type == ValueTypes.IntegerType;
         public bool IsFloat => Type == ValueTypes.FloatType;

@@ -255,21 +255,22 @@ public class LanguageTests
     [Test]
     public void PerfTestStructure()
     {
+        #warning Here j should be i
         const string source = """
-        var x1 = 1;
-        function test(x2) {
-            for(var i = 0; i < 5; i++) {
-                x2++;
+            var x1 = 1;
+            function test(x2) {
+                for(var i = 0; i < 5; i++) {
+                    x2++;
+                }
+                return x2;
             }
-            return x2;
-        }
-        {
-            for(var j = 0; j < 5; j++) {
-                x1 = test(x1);
+            {
+                for(var j = 0; j < 5; j++) {
+                    x1 = test(x1);
+                }
             }
-        }
-        return x1;
-        """;
+            return x1;
+            """;
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 

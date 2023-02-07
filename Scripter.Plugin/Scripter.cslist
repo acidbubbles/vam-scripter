@@ -54,5 +54,6 @@ src\UI\ScreenManager.cs
 src\UI\ScriptEditScreen.cs
 src\UI\ScriptEntryComponent.cs
 src\UI\ScriptsManagerScreen.cs
+src\PerfTest.cs
 src\Scripter.cs
 src\ScripterPluginException.cs

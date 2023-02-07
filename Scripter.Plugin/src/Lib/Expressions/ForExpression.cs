@@ -1,4 +1,6 @@
-﻿namespace ScripterLang
+﻿using UnityEngine;
+
+namespace ScripterLang
 {
     public class ForExpression : Expression
     {
@@ -17,9 +19,13 @@
 
         public override Value Evaluate(RuntimeDomain domain)
         {
+            const float maxTime = 10;
+            var max = Time.time + maxTime;
             for (_start.Evaluate(domain); _end.Evaluate(domain).AsBool; _increment.Evaluate(domain))
             {
                 _body.Evaluate(domain);
+                if (Time.time > max)
+                    throw new ScripterRuntimeException($"Spent more than {maxTime} seconds in the for loop");
             }
             return Value.Void;
         }

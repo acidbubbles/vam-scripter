@@ -127,6 +127,7 @@
     <Compile Include="src\UI\ScriptEditScreen.cs" />
     <Compile Include="src\UI\ScriptEntryComponent.cs" />
     <Compile Include="src\UI\ScriptsManagerScreen.cs" />
+    <Compile Include="src\PerfTest.cs" />
     <Compile Include="src\Scripter.cs" />
     <Compile Include="src\ScripterPluginException.cs" />
     <!-- /ScripterSource -->
