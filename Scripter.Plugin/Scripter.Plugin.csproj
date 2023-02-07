@@ -85,6 +85,7 @@
     <Compile Include="src\Lib\Expressions\IfExpression.cs" />
     <Compile Include="src\Lib\Expressions\IncrementDecrementExpression.cs" />
     <Compile Include="src\Lib\Expressions\IntegerExpression.cs" />
+    <Compile Include="src\Lib\Expressions\MethodCallExpression.cs" />
     <Compile Include="src\Lib\Expressions\NegateExpression.cs" />
     <Compile Include="src\Lib\Expressions\ParenthesesExpression.cs" />
     <Compile Include="src\Lib\Expressions\PropertyGetExpression.cs" />

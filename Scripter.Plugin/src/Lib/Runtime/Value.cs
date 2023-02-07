@@ -147,7 +147,7 @@ namespace ScripterLang
         {
             switch (Type)
             {
-                case ValueTypes.StringType: return (string)ObjectValue;
+                case ValueTypes.StringType: return $"\"{ObjectValue}\"";
                 case ValueTypes.FloatType: return FloatValue.ToString(CultureInfo.InvariantCulture);
                 case ValueTypes.IntegerType: return AsInt.ToString();
                 case ValueTypes.BooleanType: return AsBool ? "true" : "false";

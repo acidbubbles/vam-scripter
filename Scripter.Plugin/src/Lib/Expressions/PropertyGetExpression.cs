@@ -14,7 +14,8 @@
         public override Value Evaluate(RuntimeDomain domain)
         {
             var value = _left.Evaluate(domain);
-            if (!value.IsObject) throw new ScripterRuntimeException($"Value is not an object");
+            if (!value.IsObject)
+                throw new ScripterRuntimeException($"Cannot get property {_property} of value {value} because it is not an object");
             var reference = (Reference)value.AsObject;
             return reference.Get(_property);
         }

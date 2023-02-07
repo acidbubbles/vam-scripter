@@ -262,23 +262,33 @@ public class LanguageTests
     {
         const string source = """
             var o = getThing(1);
-            return o.value;
+            return o.value + o.increment(2);
             """;
         _globalLexicalContext.Functions.Add("getThing", (d, args) => new MyThing { Value = args[0] });
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("1"));
+        Assert.That(result.ToString(), Is.EqualTo("4"));
     }
 
     private class MyThing : Reference
     {
         public Value Value;
 
-        public override Value Get(string property)
+        public override Value Get(string name)
         {
-            if (property != "value") throw new NotSupportedException();
-            return Value;
+            if (name == "value") return Value;
+            return base.Get(name);
+        }
+
+        public override Value Method(string name, Value[] args)
+        {
+            if (name == "increment")
+            {
+                ValidateArgumentsLength(name, args, 1);
+                return args[0].AsInt + 1;
+            }
+            return base.Method(name, args);
         }
     }
 

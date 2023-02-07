@@ -291,14 +291,17 @@ namespace ScripterLang
                 else if (operatorToken.Type == TokenType.Dot)
                 {
                     var property = Consume().Expect(TokenType.Identifier);
-#warning Method calls on objects
-                    // if (Peek().Match(TokenType.LeftParenthesis))
-                    // {
-                    //     var arguments = ParseArgumentList(lexicalContext);
-                    //     Consume().Expect(TokenType.RightParenthesis);
-                    //     return new MethodCallExpression(name, arguments, lexicalContext);
-                    // }
-                    return new PropertyGetExpression(left, property.Value);
+                    if (Peek().Match(TokenType.LeftParenthesis))
+                    {
+                        MoveNext();
+                        var arguments = ParseArgumentList(lexicalContext);
+                        Consume().Expect(TokenType.RightParenthesis);
+                        left = new MethodCallExpression(left, property.Value, arguments);
+                    }
+                    else
+                    {
+                        left = new PropertyGetExpression(left, property.Value);
+                    }
                 }
                 else
                 {
