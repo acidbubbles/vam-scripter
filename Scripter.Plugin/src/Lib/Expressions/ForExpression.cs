@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace ScripterLang
+﻿namespace ScripterLang
 {
     public class ForExpression : Expression
     {
@@ -19,19 +17,17 @@ namespace ScripterLang
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            const float maxTime = 10;
+            #if SCRIPTER_DUMMY_MODE
+            const float maxTime = 5;
             var max = Time.time + maxTime;
-            var iterations = 0;
-            var start = _start.Evaluate(domain);
-            SuperController.LogMessage("Entering with " + start);
-            for (; _end.Evaluate(domain).AsBool; _increment.Evaluate(domain))
+            #endif
+            for (_start.Evaluate(domain); _end.Evaluate(domain).AsBool; _increment.Evaluate(domain))
             {
-                SuperController.LogMessage(domain.GetVariableValue("i") + " is " + _end + " " + _end.Evaluate(domain));
                 _body.Evaluate(domain);
-                if (iterations++ > 10)
-                    throw new ScripterRuntimeException("Too many iterations");
+                #if SCRIPTER_DUMMY_MODE
                 if (Time.time > max)
                     throw new ScripterRuntimeException($"Spent more than {maxTime} seconds in the for loop");
+                #endif
             }
             return Value.Void;
         }
