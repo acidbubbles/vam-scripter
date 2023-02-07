@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace ScripterLang
 {
@@ -14,35 +15,73 @@ namespace ScripterLang
         public float FloatValue;
         public string StringValue;
 
-        public bool IsBool => Type == ValueTypes.BooleanType;
-        public bool AsBool => FloatValue > Epsilon;
-        public bool IsNumber => Type == ValueTypes.FloatType || Type == ValueTypes.IntegerType;
-        public bool IsInt => Type == ValueTypes.IntegerType;
-        public bool IsFloat => Type == ValueTypes.FloatType;
-        public float AsFloat => FloatValue;
-        public int AsInt => (int)FloatValue;
-        public bool IsString => Type == ValueTypes.StringType;
+        public bool IsBool
+        {
+            [MethodImpl(0x0100)]
+            get { return Type == ValueTypes.BooleanType; }
+        }
 
+        public bool AsBool
+        {
+            [MethodImpl(0x0100)]
+            get { return FloatValue > Epsilon; }
+        }
+
+        public bool IsNumber
+        {
+            [MethodImpl(0x0100)]
+            get { return Type == ValueTypes.FloatType || Type == ValueTypes.IntegerType; }
+        }
+
+        public bool IsInt
+        {
+            [MethodImpl(0x0100)]
+            get { return Type == ValueTypes.IntegerType; }
+        }
+
+        public bool IsFloat
+        {
+            [MethodImpl(0x0100)]
+            get { return Type == ValueTypes.FloatType; }
+        }
+
+        public int AsInt
+        {
+            [MethodImpl(0x0100)]
+            get { return (int)FloatValue; }
+        }
+
+        public bool IsString
+        {
+            [MethodImpl(0x0100)]
+            get { return Type == ValueTypes.StringType; }
+        }
+
+        [MethodImpl(0x0100)]
         public static Value CreateFloat(float value)
         {
             return new Value { Type = ValueTypes.FloatType, FloatValue = value };
         }
 
+        [MethodImpl(0x0100)]
         public static Value CreateInteger(int value)
         {
             return new Value { Type = ValueTypes.IntegerType, FloatValue = value };
         }
 
+        [MethodImpl(0x0100)]
         public static Value CreateString(string value)
         {
             return new Value { Type = ValueTypes.StringType, StringValue = value };
         }
 
+        [MethodImpl(0x0100)]
         public static Value CreateBoolean(bool value)
         {
             return new Value { Type = ValueTypes.BooleanType, FloatValue = value ? 1 : 0 };
         }
 
+        [MethodImpl(0x0100)]
         public bool Equals(Value other)
         {
             if (Type != other.Type) return false;
@@ -74,9 +113,16 @@ namespace ScripterLang
             }
         }
 
+        [MethodImpl(0x0100)]
         public static implicit operator Value(string value) => CreateString(value);
+
+        [MethodImpl(0x0100)]
         public static implicit operator Value(int value) => CreateInteger(value);
+
+        [MethodImpl(0x0100)]
         public static implicit operator Value(float value) => CreateFloat(value);
+
+        [MethodImpl(0x0100)]
         public static implicit operator Value(bool value) => CreateBoolean(value);
     }
 }

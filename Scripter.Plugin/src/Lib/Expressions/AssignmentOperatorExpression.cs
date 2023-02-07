@@ -21,21 +21,21 @@
             {
                 case "+=":
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.AsFloat + right.AsFloat);
+                        return domain.SetVariableValue(_name, value.FloatValue + right.FloatValue);
                     if (value.IsString)
                         return domain.SetVariableValue(_name, value.StringValue + right);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "-=":
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.AsFloat - right.AsFloat);
+                        return domain.SetVariableValue(_name, value.FloatValue - right.FloatValue);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "*=":
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.AsFloat * right.AsFloat);
+                        return domain.SetVariableValue(_name, value.FloatValue * right.FloatValue);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "/*":
                     if (value.IsNumber && right.IsNumber)
-                        return domain.SetVariableValue(_name, value.AsFloat / right.AsFloat);
+                        return domain.SetVariableValue(_name, value.FloatValue / right.FloatValue);
                     throw MakeUnsupportedOperandsException(value, right);
                 default:
                     throw MakeUnsupportedOperandsException(value, right);

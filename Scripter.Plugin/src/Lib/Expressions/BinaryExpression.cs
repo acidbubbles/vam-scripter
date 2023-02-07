@@ -24,39 +24,39 @@ namespace ScripterLang
             {
                 case "+":
                     if (left.IsNumber && right.IsNumber)
-                        return Value.CreateFloat(left.AsFloat + right.AsFloat);
+                        return Value.CreateFloat(left.FloatValue + right.FloatValue);
                     if (left.IsString || right.IsString)
                         return Value.CreateString(left.ToString() + right);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "-":
                     if (left.IsNumber && right.IsNumber)
-                        return Value.CreateFloat(left.AsFloat - right.AsFloat);
+                        return Value.CreateFloat(left.FloatValue - right.FloatValue);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "*":
                     if (left.IsNumber && right.IsNumber)
-                        return Value.CreateFloat(left.AsFloat * right.AsFloat);
+                        return Value.CreateFloat(left.FloatValue * right.FloatValue);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "/":
                     if (left.IsInt && right.IsInt)
                         return Value.CreateInteger(left.AsInt / right.AsInt);
                     if (left.IsNumber && right.IsNumber)
-                        return Value.CreateFloat(left.AsFloat / right.AsFloat);
+                        return Value.CreateFloat(left.FloatValue / right.FloatValue);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "<":
                     if (left.IsNumber && right.IsNumber)
-                        return Value.CreateBoolean(left.AsFloat < right.AsFloat);
+                        return Value.CreateBoolean(left.FloatValue < right.FloatValue);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "<=":
                     if (left.IsNumber && right.IsNumber)
-                        return Value.CreateBoolean(left.AsFloat <= right.AsFloat + Value.Epsilon);
+                        return Value.CreateBoolean(left.FloatValue <= right.FloatValue + Value.Epsilon);
                     throw MakeUnsupportedOperandsException(left, right);
                 case ">":
                     if (left.IsNumber && right.IsNumber)
-                        return Value.CreateBoolean(left.AsFloat > right.AsFloat);
+                        return Value.CreateBoolean(left.FloatValue > right.FloatValue);
                     throw MakeUnsupportedOperandsException(left, right);
                 case ">=":
                     if (left.IsNumber && right.IsNumber)
-                        return Value.CreateBoolean(left.AsFloat >= right.AsFloat - Value.Epsilon);
+                        return Value.CreateBoolean(left.FloatValue >= right.FloatValue - Value.Epsilon);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "&&":
                     if (left.IsBool && right.IsBool)
@@ -68,12 +68,12 @@ namespace ScripterLang
                     throw MakeUnsupportedOperandsException(left, right);
                 case "==":
                     if (left.IsFloat || right.IsFloat)
-                        return Math.Abs(left.AsFloat - right.AsFloat) <= Value.Epsilon;
+                        return Math.Abs(left.FloatValue - right.FloatValue) <= Value.Epsilon;
                     else
                         return Value.CreateBoolean(left.Equals(right));
                 case "!=":
                     if (left.IsFloat || right.IsFloat)
-                        return Math.Abs(left.AsFloat - right.AsFloat) > Value.Epsilon;
+                        return Math.Abs(left.FloatValue - right.FloatValue) > Value.Epsilon;
                     else
                         return Value.CreateBoolean(!left.Equals(right));
             }

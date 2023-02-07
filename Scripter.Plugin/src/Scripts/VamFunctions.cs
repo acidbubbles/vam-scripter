@@ -53,7 +53,7 @@ public static class VamFunctions
         if (args.Length == 0)
             return Random.value;
         ValidateArgumentsLength(args, 2, nameof(GetRandom));
-        return Random.Range(args[0].AsFloat, args[1].AsFloat);
+        return Random.Range(args[0].FloatValue, args[1].FloatValue);
     }
 
     private static Value GetFloatParamValue(RuntimeDomain domain, Value[] args)

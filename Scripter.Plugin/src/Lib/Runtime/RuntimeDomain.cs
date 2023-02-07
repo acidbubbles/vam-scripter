@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace ScripterLang
 {
@@ -16,6 +17,7 @@ namespace ScripterLang
             Variables.Add(name, value);
         }
 
+        [MethodImpl(0x0100)]
         public Value GetVariableValue(string name)
         {
             Value value;
@@ -24,6 +26,7 @@ namespace ScripterLang
             throw new ScripterRuntimeException($"Variable '{name}' was not declared");
         }
 
+        [MethodImpl(0x0100)]
         public Value SetVariableValue(string name, Value value)
         {
             if (Variables.ContainsKey(name))
@@ -33,11 +36,13 @@ namespace ScripterLang
             return value;
         }
 
+        [MethodImpl(0x0100)]
         public Func<RuntimeDomain, Value[], Value> GetFunction(LexicalContext lexicalContext, string name)
         {
             return lexicalContext.GetFunction(name);
         }
 
+        [MethodImpl(0x0100)]
         public void ClearVariable(string name)
         {
             Variables.Remove(name);
