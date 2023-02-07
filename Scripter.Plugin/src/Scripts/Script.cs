@@ -38,6 +38,8 @@ public class Script
         {
             _expression = Parser.Parse(val, _globalLexicalContext);
             _domain = new RuntimeDomain();
+            foreach(var global in _globalLexicalContext.Globals)
+                _domain.CreateVariableValue(global.Key, global.Value);
             ConsoleJSON.val = "<color=green>Code parsed successfully</color>";
         }
         catch (Exception exc)

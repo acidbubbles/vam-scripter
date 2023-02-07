@@ -24,16 +24,16 @@ namespace ScripterLang
             get { return Type == ValueTypes.BooleanType; }
         }
 
-        public bool AsBool
+        public bool RawBool
         {
             [MethodImpl(0x0100)]
             get { return IntValue > 0; }
         }
 
-        public bool ForceBool
+        public bool AsBool
         {
             [MethodImpl(0x0100)]
-            get { return IsBool ? AsBool : ThrowInvalidType<bool>(); }
+            get { return IsBool ? RawBool : ThrowInvalidType<bool>(); }
         }
 
         public bool IsNumber
@@ -45,13 +45,18 @@ namespace ScripterLang
         public float AsNumber
         {
             [MethodImpl(0x0100)]
-            get { return Type == ValueTypes.FloatType ? FloatValue : IntValue; }
-        }
-
-        public float ForceNumber
-        {
-            [MethodImpl(0x0100)]
-            get { return IsNumber ? AsNumber : ThrowInvalidType<float>(); }
+            get
+            {
+                switch (Type)
+                {
+                    case ValueTypes.FloatType:
+                        return FloatValue;
+                    case ValueTypes.IntegerType:
+                        return IntValue;
+                    default:
+                        return ThrowInvalidType<float>();
+                }
+            }
         }
 
         public bool IsInt
@@ -60,16 +65,16 @@ namespace ScripterLang
             get { return Type == ValueTypes.IntegerType; }
         }
 
-        public int AsInt
+        public int RawInt
         {
             [MethodImpl(0x0100)]
             get { return IntValue; }
         }
 
-        public int ForceInt
+        public int AsInt
         {
             [MethodImpl(0x0100)]
-            get { return IsInt ? AsInt : ThrowInvalidType<int>(); }
+            get { return IsInt ? RawInt : ThrowInvalidType<int>(); }
         }
 
         public bool IsFloat
@@ -78,16 +83,16 @@ namespace ScripterLang
             get { return Type == ValueTypes.FloatType; }
         }
 
-        public float AsFloat
+        public float RawFloat
         {
             [MethodImpl(0x0100)]
             get { return FloatValue; }
         }
 
-        public float ForceFloat
+        public float AsFloat
         {
             [MethodImpl(0x0100)]
-            get { return IsFloat ? AsFloat : ThrowInvalidType<float>(); }
+            get { return IsFloat ? RawFloat : ThrowInvalidType<float>(); }
         }
 
         public bool IsObject
@@ -96,16 +101,16 @@ namespace ScripterLang
             get { return Type == ValueTypes.ObjectType; }
         }
 
-        public Reference AsObject
+        public Reference RawObject
         {
             [MethodImpl(0x0100)]
             get { return (Reference)ObjectValue; }
         }
 
-        public Reference ForceObject
+        public Reference AsObject
         {
             [MethodImpl(0x0100)]
-            get { return IsObject ? AsObject : ThrowInvalidType<Reference>(); }
+            get { return IsObject ? RawObject : ThrowInvalidType<Reference>(); }
         }
 
         public bool IsString
@@ -114,16 +119,45 @@ namespace ScripterLang
             get { return Type == ValueTypes.StringType; }
         }
 
+        public string RawString
+        {
+            [MethodImpl(0x0100)]
+            get { return (string)ObjectValue; }
+        }
+
         public string AsString
+        {
+            [MethodImpl(0x0100)]
+            get { return IsString ? RawString : ThrowInvalidType<string>(); }
+        }
+
+        public string Stringify
         {
             [MethodImpl(0x0100)]
             get { return IsString ? (string)ObjectValue : ToString(); }
         }
 
-        public string ForceString
+        public bool Boolify
         {
             [MethodImpl(0x0100)]
-            get { return IsString ? AsString : ThrowInvalidType<string>(); }
+            get
+            {
+                switch (Type)
+                {
+                    case ValueTypes.BooleanType:
+                        return RawBool;
+                    case ValueTypes.IntegerType:
+                        return RawInt > 0;
+                    case ValueTypes.FloatType:
+                        return RawFloat > Epsilon;
+                    case ValueTypes.ObjectType:
+                        return RawObject != null;
+                    case ValueTypes.StringType:
+                        return !string.IsNullOrEmpty(RawString);
+                    default:
+                        return false;
+                }
+            }
         }
 
         [MethodImpl(0x0100)]
@@ -141,6 +175,7 @@ namespace ScripterLang
         [MethodImpl(0x0100)]
         public static Value CreateString(string value)
         {
+            if (value == null) throw new ScripterRuntimeException("String cannot be null");
             return new Value { Type = ValueTypes.StringType, ObjectValue = value };
         }
 
@@ -165,17 +200,19 @@ namespace ScripterLang
         public bool Equals(Value other)
         {
             if (Type != other.Type) return false;
+            // throw new Exception( (ObjectValue == null) + " " + (ObjectValue == null));
             switch (Type)
             {
                 case ValueTypes.FloatType:
-                    return other.Type == ValueTypes.FloatType && Math.Abs(AsFloat - other.AsNumber) < Epsilon;
+                    return other.Type == ValueTypes.FloatType && Math.Abs(RawFloat - other.AsNumber) < Epsilon;
                 case ValueTypes.IntegerType:
-                    return other.Type == ValueTypes.IntegerType ? AsInt == other.AsInt : Math.Abs(AsNumber - other.AsNumber) < Epsilon;
+                    return other.Type == ValueTypes.IntegerType ? RawInt == other.RawInt : Math.Abs(AsNumber - other.AsNumber) < Epsilon;
                 case ValueTypes.BooleanType:
-                    return AsBool == other.AsBool;
+                    return RawBool == other.RawBool;
                 case ValueTypes.ObjectType:
+                    return AsObject == other.RawObject;
                 case ValueTypes.StringType:
-                    return AsObject.Equals(other.AsObject);
+                    return AsString == other.Stringify;
                 case ValueTypes.UndefinedType:
                     return other.Type == ValueTypes.UndefinedType;
                 case ValueTypes.Uninitialized:
@@ -188,10 +225,10 @@ namespace ScripterLang
         {
             switch (Type)
             {
-                case ValueTypes.StringType: return $"\"{ObjectValue}\"";
+                case ValueTypes.StringType: return AsString;
                 case ValueTypes.FloatType: return FloatValue.ToString(CultureInfo.InvariantCulture);
-                case ValueTypes.IntegerType: return AsInt.ToString();
-                case ValueTypes.BooleanType: return AsBool ? "true" : "false";
+                case ValueTypes.IntegerType: return RawInt.ToString();
+                case ValueTypes.BooleanType: return RawBool ? "true" : "false";
                 default: return ValueTypes.Name(Type);
             }
         }

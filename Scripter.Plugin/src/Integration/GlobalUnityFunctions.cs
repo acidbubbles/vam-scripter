@@ -1,20 +1,40 @@
 ﻿using ScripterLang;
 using UnityEngine;
 
+public class RandomReference : Reference
+{
+    public override Value Get(string name)
+    {
+        switch (name)
+        {
+            case "value":
+                return Random.value;
+            default:
+                return base.Get(name);
+        }
+    }
+
+    public override Value InvokeMethod(string name, Value[] args)
+    {
+        switch (name)
+        {
+            case "range":
+                ValidateArgumentsLength(name, args, 2);
+                if(args[0].IsInt && args[1].IsInt)
+                    return Random.Range(args[0].RawInt, args[1].RawInt);
+                else
+                    return Random.Range(args[0].AsNumber, args[1].AsNumber);
+            default:
+                return base.InvokeMethod(name, args);
+        }
+    }
+}
+
 public static class GlobalUnityFunctions
 {
     public static void Register(GlobalLexicalContext lexicalContext)
     {
-        lexicalContext.Functions.Add("getTime", (d, a) => Time.time);
-        lexicalContext.Functions.Add("getDeltaTime", (d, a) => Time.deltaTime);
-        lexicalContext.Functions.Add("getRandom", GetRandom);
-    }
-
-    private static Value GetRandom(RuntimeDomain domain, Value[] args)
-    {
-        if (args.Length == 0)
-            return Random.value;
-        Reference.ValidateArgumentsLength(nameof(GetRandom), args, 2);
-        return Random.Range(args[0].AsFloat, args[1].AsFloat);
+        lexicalContext.Globals.Add("Time", new TimeReference());
+        lexicalContext.Globals.Add("Random", new TimeReference());
     }
 }

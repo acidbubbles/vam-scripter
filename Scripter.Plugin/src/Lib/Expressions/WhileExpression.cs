@@ -13,7 +13,7 @@ namespace ScripterLang
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            while (_condition.Evaluate(domain).AsBool)
+            while (_condition.Evaluate(domain).RawBool)
             {
                 _body.Evaluate(domain);
             }

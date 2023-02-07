@@ -17,7 +17,7 @@
         {
             var value = _expression.Evaluate(domain);
             var obj = _left.Evaluate(domain);
-            obj.ForceObject.Set(_property, value);
+            obj.AsObject.Set(_property, value);
             return value;
         }
 

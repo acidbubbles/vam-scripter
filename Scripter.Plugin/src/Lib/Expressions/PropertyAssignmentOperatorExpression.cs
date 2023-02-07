@@ -17,7 +17,7 @@
 
         protected override Value GetVariableValue(RuntimeDomain domain)
         {
-            _temp = _left.Evaluate(domain).ForceObject;
+            _temp = _left.Evaluate(domain).AsObject;
             return _temp.Get(_name);
         }
 

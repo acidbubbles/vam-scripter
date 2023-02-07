@@ -21,7 +21,7 @@ namespace ScripterLang
             var value = _left.Evaluate(domain);
             if (!value.IsObject)
                 throw new ScripterRuntimeException($"Cannot call method {_name} of value {value} because it is not an object");
-            var reference = (Reference)value.AsObject;
+            var reference = (Reference)value.RawObject;
             var args = _arguments.Select(arg => arg.Evaluate(domain)).ToArray();
             return reference.InvokeMethod(_name, args);
         }

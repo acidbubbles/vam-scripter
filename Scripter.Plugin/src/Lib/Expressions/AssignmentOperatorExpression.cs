@@ -19,27 +19,27 @@
             {
                 case "+=":
                     if (value.IsInt && right.IsInt)
-                        return SetVariableValue(domain, value.AsInt + right.AsInt);
+                        return SetVariableValue(domain, value.RawInt + right.RawInt);
                     if (value.IsNumber && right.IsNumber)
                         return SetVariableValue(domain, value.AsNumber + right.AsNumber);
                     if (value.IsString)
-                        return SetVariableValue(domain, value.AsString + right.AsString);
+                        return SetVariableValue(domain, value.Stringify + right.Stringify);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "-=":
                     if (value.IsInt && right.IsInt)
-                        return SetVariableValue(domain, value.AsInt - right.AsInt);
+                        return SetVariableValue(domain, value.RawInt - right.RawInt);
                     if (value.IsNumber && right.IsNumber)
                         return SetVariableValue(domain, value.AsNumber - right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "*=":
                     if (value.IsInt && right.IsInt)
-                        return SetVariableValue(domain, value.AsInt * right.AsInt);
+                        return SetVariableValue(domain, value.RawInt * right.RawInt);
                     if (value.IsNumber && right.IsNumber)
                         return SetVariableValue(domain, value.AsNumber * right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "/*":
                     if (value.IsInt && right.IsInt)
-                        return SetVariableValue(domain, value.AsInt / right.AsInt);
+                        return SetVariableValue(domain, value.RawInt / right.RawInt);
                     if (value.IsNumber && right.IsNumber)
                         return SetVariableValue(domain, value.AsNumber / right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);

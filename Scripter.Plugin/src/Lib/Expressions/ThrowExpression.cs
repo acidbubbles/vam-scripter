@@ -12,7 +12,7 @@
         public override Value Evaluate(RuntimeDomain domain)
         {
             var message = _message.Evaluate(domain);
-            throw new ScripterRuntimeException(message.AsString);
+            throw new ScripterRuntimeException(message.Stringify);
         }
 
         public override string ToString()

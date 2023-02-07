@@ -5,8 +5,8 @@ public static class GlobalVamFunctions
 {
     public static void Register(GlobalLexicalContext lexicalContext)
     {
-        lexicalContext.Functions.Add("logMessage", LogMessage);
-        lexicalContext.Functions.Add("logError", LogError);
+        lexicalContext.Globals.Add("scene", new SceneReference());
+        lexicalContext.Globals.Add("console", new ConsoleReference());
         lexicalContext.Functions.Add("getFloatParamValue", GetFloatParamValue);
         lexicalContext.Functions.Add("setFloatParamValue", SetFloatParamValue);
         lexicalContext.Functions.Add("getBoolParamValue", GetBoolParamValue);
@@ -17,20 +17,6 @@ public static class GlobalVamFunctions
         lexicalContext.Functions.Add("setStringChooserParamValue", SetStringChooserParamValue);
         lexicalContext.Functions.Add("invokeTrigger", InvokeTrigger);
         lexicalContext.Functions.Add("invokeKeybinding", InvokeKeybinding);
-    }
-
-    private static Value LogMessage(RuntimeDomain domain, Value[] args)
-    {
-        Reference.ValidateArgumentsLength(nameof(LogMessage), args, 1);
-        SuperController.LogMessage("Scripter: " + args[0].AsString);
-        return Value.Void;
-    }
-
-    private static Value LogError(RuntimeDomain domain, Value[] args)
-    {
-        Reference.ValidateArgumentsLength(nameof(LogError), args, 1);
-        SuperController.LogError(args[0].ToString());
-        return Value.Void;
     }
 
     private static Value GetFloatParamValue(RuntimeDomain domain, Value[] args)

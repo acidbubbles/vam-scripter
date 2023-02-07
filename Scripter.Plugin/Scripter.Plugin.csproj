@@ -71,11 +71,21 @@
 
   <ItemGroup>
     <!-- ScripterSource -->
+    <Compile Include="src\Integration\AtomReference.cs" />
+    <Compile Include="src\Integration\BoolParamReference.cs" />
+    <Compile Include="src\Integration\ConsoleReference.cs" />
+    <Compile Include="src\Integration\DateTimeClassReference.cs" />
+    <Compile Include="src\Integration\DateTimeReference.cs" />
     <Compile Include="src\Integration\FloatParamReference.cs" />
     <Compile Include="src\Integration\GlobalDotNetFunctions.cs" />
     <Compile Include="src\Integration\GlobalFunctions.cs" />
     <Compile Include="src\Integration\GlobalUnityFunctions.cs" />
     <Compile Include="src\Integration\GlobalVamFunctions.cs" />
+    <Compile Include="src\Integration\SceneReference.cs" />
+    <Compile Include="src\Integration\StorableReference.cs" />
+    <Compile Include="src\Integration\StringChooserParamReference.cs" />
+    <Compile Include="src\Integration\StringParamReference.cs" />
+    <Compile Include="src\Integration\TimeReference.cs" />
     <Compile Include="src\Lib\Expressions\AssignmentOperatorExpression.cs" />
     <Compile Include="src\Lib\Expressions\BinaryExpression.cs" />
     <Compile Include="src\Lib\Expressions\BooleanExpression.cs" />

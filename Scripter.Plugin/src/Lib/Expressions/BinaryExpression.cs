@@ -22,61 +22,61 @@
             {
                 case "+":
                     if (left.IsInt && right.IsInt)
-                        return Value.CreateInteger(left.AsInt + right.AsInt);
+                        return Value.CreateInteger(left.RawInt + right.RawInt);
                     if (left.IsNumber && right.IsNumber)
                         return Value.CreateFloat(left.AsNumber + right.AsNumber);
                     if (left.IsString || right.IsString)
-                        return Value.CreateString(left.AsString + right.AsString);
+                        return Value.CreateString(left.Stringify + right.Stringify);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "-":
                     if (left.IsInt && right.IsInt)
-                        return Value.CreateInteger(left.AsInt - right.AsInt);
+                        return Value.CreateInteger(left.RawInt - right.RawInt);
                     if (left.IsNumber && right.IsNumber)
                         return Value.CreateFloat(left.AsNumber - right.AsNumber);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "*":
                     if (left.IsInt && right.IsInt)
-                        return Value.CreateInteger(left.AsInt * right.AsInt);
+                        return Value.CreateInteger(left.RawInt * right.RawInt);
                     if (left.IsNumber && right.IsNumber)
                         return Value.CreateFloat(left.AsNumber * right.AsNumber);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "/":
                     if (left.IsInt && right.IsInt)
-                        return Value.CreateInteger(left.AsInt / right.AsInt);
+                        return Value.CreateInteger(left.RawInt / right.RawInt);
                     if (left.IsNumber && right.IsNumber)
                         return Value.CreateFloat(left.AsNumber / right.AsNumber);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "<":
                     if (left.IsInt && right.IsInt)
-                        return Value.CreateBoolean(left.AsInt < right.AsInt);
+                        return Value.CreateBoolean(left.RawInt < right.RawInt);
                     if (left.IsNumber && right.IsNumber)
                         return Value.CreateBoolean(left.AsNumber < right.AsNumber);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "<=":
                     if (left.IsInt && right.IsInt)
-                        return Value.CreateBoolean(left.AsInt <= right.AsInt);
+                        return Value.CreateBoolean(left.RawInt <= right.RawInt);
                     if (left.IsNumber && right.IsNumber)
                         return Value.CreateBoolean(left.AsNumber <= right.AsNumber + Value.Epsilon);
                     throw MakeUnsupportedOperandsException(left, right);
                 case ">":
                     if (left.IsInt && right.IsInt)
-                        return Value.CreateBoolean(left.AsInt > right.AsInt);
+                        return Value.CreateBoolean(left.RawInt > right.RawInt);
                     if (left.IsNumber && right.IsNumber)
                         return Value.CreateBoolean(left.AsNumber > right.AsNumber);
                     throw MakeUnsupportedOperandsException(left, right);
                 case ">=":
                     if (left.IsInt && right.IsInt)
-                        return Value.CreateBoolean(left.AsInt >= right.AsInt);
+                        return Value.CreateBoolean(left.RawInt >= right.RawInt);
                     if (left.IsNumber && right.IsNumber)
                         return Value.CreateBoolean(left.AsNumber >= right.AsNumber - Value.Epsilon);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "&&":
                     if (left.IsBool && right.IsBool)
-                        return Value.CreateBoolean(left.AsBool && right.AsBool);
+                        return Value.CreateBoolean(left.RawBool && right.RawBool);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "||":
                     if (left.IsBool && right.IsBool)
-                        return Value.CreateBoolean(left.AsBool || right.AsBool);
+                        return Value.CreateBoolean(left.RawBool || right.RawBool);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "==":
                     return Value.CreateBoolean(left.Equals(right));

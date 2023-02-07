@@ -16,7 +16,7 @@
             var value = _left.Evaluate(domain);
             if (!value.IsObject)
                 throw new ScripterRuntimeException($"Cannot get property {_property} of value {value} because it is not an object");
-            var reference = (Reference)value.AsObject;
+            var reference = (Reference)value.RawObject;
             return reference.Get(_property);
         }
 

@@ -23,10 +23,10 @@
                     switch (original.Type)
                     {
                         case ValueTypes.IntegerType:
-                            value = Value.CreateInteger(original.AsInt + 1);
+                            value = Value.CreateInteger(original.RawInt + 1);
                             break;
                         case ValueTypes.FloatType:
-                            value = Value.CreateFloat(original.AsFloat + 1);
+                            value = Value.CreateFloat(original.RawFloat + 1);
                             break;
                         default:
                             throw new ScripterRuntimeException($"Cannot increment variable of type {ValueTypes.Name(original.Type)}");
@@ -36,10 +36,10 @@
                     switch (original.Type)
                     {
                         case ValueTypes.IntegerType:
-                            value = Value.CreateInteger(original.AsInt - 1);
+                            value = Value.CreateInteger(original.RawInt - 1);
                             break;
                         case ValueTypes.FloatType:
-                            value = Value.CreateFloat(original.AsFloat - 1);
+                            value = Value.CreateFloat(original.RawFloat - 1);
                             break;
                         default:
                             throw new ScripterRuntimeException($"Cannot decrement variable of type {ValueTypes.Name(original.Type)}");

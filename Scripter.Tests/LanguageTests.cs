@@ -98,7 +98,7 @@ public class LanguageTests
         var expression = Parser.Parse(source, _globalLexicalContext);
         _globalLexicalContext.Functions.Add("MyFunction", (d, args) =>
         {
-            Assert.That(d.GetVariableValue("x").AsInt, Is.EqualTo(1));
+            Assert.That(d.GetVariableValue("x").RawInt, Is.EqualTo(1));
             Assert.That(args[0].ToString(), Is.EqualTo("1"));
             Assert.That(args[0].ToString(), Is.EqualTo("1"));
             Assert.That(args[1].ToString(), Is.EqualTo("\"ab\""));
@@ -269,7 +269,7 @@ public class LanguageTests
                     .createAndAdd(100)
                     .increment(1);
             """;
-        _globalLexicalContext.Functions.Add("getThing", (d, args) => new MyThing { Value = args[0].ForceInt });
+        _globalLexicalContext.Functions.Add("getThing", (d, args) => new MyThing { Value = args[0].AsInt });
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 
@@ -320,7 +320,7 @@ public class LanguageTests
 
         public override void Set(string name, Value value)
         {
-            Value = value.ForceInt;
+            Value = value.AsInt;
         }
 
         public override Value InvokeMethod(string name, Value[] args)
@@ -328,12 +328,12 @@ public class LanguageTests
             if (name == "increment")
             {
                 ValidateArgumentsLength(name, args, 1);
-                return  (Value = Value + args[0].ForceInt);
+                return  (Value = Value + args[0].AsInt);
             }
             if (name == "createAndAdd")
             {
                 ValidateArgumentsLength(name, args, 1);
-                return Deep = new MyThing { Value = Value + args[0].ForceInt };
+                return Deep = new MyThing { Value = Value + args[0].AsInt };
             }
             return base.InvokeMethod(name, args);
         }
@@ -360,6 +360,6 @@ public class LanguageTests
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 
-        Assert.That(result.AsInt, Is.EqualTo(26));
+        Assert.That(result.RawInt, Is.EqualTo(26));
     }
 }
