@@ -26,7 +26,7 @@
                     if (left.IsNumber && right.IsNumber)
                         return Value.CreateFloat(left.AsNumber + right.AsNumber);
                     if (left.IsString || right.IsString)
-                        return Value.CreateString(left.ToString() + right);
+                        return Value.CreateString(left.AsString + right.AsString);
                     throw MakeUnsupportedOperandsException(left, right);
                 case "-":
                     if (left.IsInt && right.IsInt)

@@ -87,7 +87,7 @@ namespace ScripterLang
         public string AsString
         {
             [MethodImpl(0x0100)]
-            get { return (string)ObjectValue; }
+            get { return IsString ? (string)ObjectValue : ToString(); }
         }
 
         [MethodImpl(0x0100)]

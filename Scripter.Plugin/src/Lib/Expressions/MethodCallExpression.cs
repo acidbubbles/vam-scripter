@@ -28,7 +28,7 @@ namespace ScripterLang
 
         public override string ToString()
         {
-            return $"{_left}.{_name}";
+            return $"{_left}.{_name}({string.Join(", ", _arguments.Select(a => a.ToString()).ToArray())})";
         }
     }
 }

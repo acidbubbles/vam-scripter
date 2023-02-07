@@ -1,6 +1,3 @@
-using System;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using ScripterLang;
 
 namespace Scripter.Tests;
@@ -73,7 +70,7 @@ public class LanguageTests
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("ok"));
+        Assert.That(result.ToString(), Is.EqualTo("\"ok\""));
     }
 
     [Test]
@@ -88,7 +85,7 @@ public class LanguageTests
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("ok"));
+        Assert.That(result.ToString(), Is.EqualTo("\"ok\""));
     }
 
     [Test]
@@ -104,13 +101,13 @@ public class LanguageTests
             Assert.That(d.GetVariableValue("x").AsInt, Is.EqualTo(1));
             Assert.That(args[0].ToString(), Is.EqualTo("1"));
             Assert.That(args[0].ToString(), Is.EqualTo("1"));
-            Assert.That(args[1].ToString(), Is.EqualTo("ab"));
+            Assert.That(args[1].ToString(), Is.EqualTo("\"ab\""));
             Assert.That(args[2].ToString(), Is.EqualTo("true"));
             return Value.CreateString("ok");
         });
         var result = expression.Evaluate(_domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("ok"));
+        Assert.That(result.ToString(), Is.EqualTo("\"ok\""));
     }
 
     [Test]
@@ -164,7 +161,7 @@ public class LanguageTests
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("a2true"));
+        Assert.That(result.ToString(), Is.EqualTo("\"a2true\""));
     }
 
     [Test]
@@ -178,7 +175,7 @@ public class LanguageTests
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("nice"));
+        Assert.That(result.ToString(), Is.EqualTo("\"nice\""));
     }
 
     [Test]
@@ -261,14 +258,21 @@ public class LanguageTests
     public void Objects()
     {
         const string source = """
+            static var x = getThing(10);
             var o = getThing(1);
-            return o.value + o.increment(2);
+            return o.value
+                + o.increment(2)
+                + x.value
+                + x.increment(3)
+                + o
+                    .createAndAdd(100)
+                    .increment(1);
             """;
         _globalLexicalContext.Functions.Add("getThing", (d, args) => new MyThing { Value = args[0] });
         var expression = Parser.Parse(source, _globalLexicalContext);
         var result = expression.Evaluate(_domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("4"));
+        Assert.That(result.ToString(), Is.EqualTo("129"));
     }
 
     private class MyThing : Reference
@@ -286,7 +290,12 @@ public class LanguageTests
             if (name == "increment")
             {
                 ValidateArgumentsLength(name, args, 1);
-                return args[0].AsInt + 1;
+                return  Value.AsInt + args[0].AsInt;
+            }
+            if (name == "createAndAdd")
+            {
+                ValidateArgumentsLength(name, args, 1);
+                return new MyThing { Value = Value.AsInt + args[0].AsInt };
             }
             return base.Method(name, args);
         }
