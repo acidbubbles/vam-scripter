@@ -45,6 +45,12 @@ namespace ScripterLang
             get { return Type == ValueTypes.FloatType; }
         }
 
+        public bool IsObject
+        {
+            [MethodImpl(0x0100)]
+            get { return Type == ValueTypes.ObjectType; }
+        }
+
         public int AsInt
         {
             [MethodImpl(0x0100)]
@@ -82,6 +88,12 @@ namespace ScripterLang
         }
 
         [MethodImpl(0x0100)]
+        public static Value CreateObject(int id)
+        {
+            return new Value { Type = ValueTypes.ObjectType, FloatValue = id };
+        }
+
+        [MethodImpl(0x0100)]
         public bool Equals(Value other)
         {
             if (Type != other.Type) return false;
@@ -90,6 +102,7 @@ namespace ScripterLang
                 case ValueTypes.FloatType:
                 case ValueTypes.IntegerType:
                 case ValueTypes.BooleanType:
+                case ValueTypes.ObjectType:
                     return Math.Abs(FloatValue - other.FloatValue) < Epsilon;
                 case ValueTypes.StringType:
                     return StringValue == other.StringValue;

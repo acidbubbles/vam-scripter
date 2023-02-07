@@ -1,3 +1,5 @@
+using System;
+using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using ScripterLang;
 
 namespace Scripter.Tests;
@@ -250,6 +252,33 @@ public class LanguageTests
         var result = expression.Evaluate(_domain);
 
         Assert.That(result.ToString(), Is.EqualTo("4"));
+    }
+
+    #warning No unary operators (+1, -2)
+
+    [Test]
+    public void Objects()
+    {
+        const string source = """
+            var o = getThing(1);
+            return o.value;
+            """;
+        _globalLexicalContext.Functions.Add("getThing", (d, args) => d.WrapReference(new MyThing { Value = args[0] }));
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var result = expression.Evaluate(_domain);
+
+        Assert.That(result.ToString(), Is.EqualTo("1"));
+    }
+
+    private class MyThing : Reference
+    {
+        public Value Value;
+
+        public override Value Get(string property)
+        {
+            if (property != "value") throw new NotSupportedException();
+            return Value;
+        }
     }
 
     [Test]

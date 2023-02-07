@@ -87,6 +87,7 @@
     <Compile Include="src\Lib\Expressions\IntegerExpression.cs" />
     <Compile Include="src\Lib\Expressions\NegateExpression.cs" />
     <Compile Include="src\Lib\Expressions\ParenthesesExpression.cs" />
+    <Compile Include="src\Lib\Expressions\PropertyGetExpression.cs" />
     <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
     <Compile Include="src\Lib\Expressions\StaticVariableDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\StringExpression.cs" />
@@ -103,6 +104,8 @@
     <Compile Include="src\Lib\Parsing\TokenType.cs" />
     <Compile Include="src\Lib\Runtime\GlobalLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\LexicalContext.cs" />
+    <Compile Include="src\Lib\Runtime\Reference.cs" />
+    <Compile Include="src\Lib\Runtime\ReferenceCounted.cs" />
     <Compile Include="src\Lib\Runtime\RuntimeDomain.cs" />
     <Compile Include="src\Lib\Runtime\ScopeLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\ScripterParsingException.cs" />

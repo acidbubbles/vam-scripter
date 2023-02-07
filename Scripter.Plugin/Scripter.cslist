@@ -14,6 +14,7 @@ src\Lib\Expressions\IncrementDecrementExpression.cs
 src\Lib\Expressions\IntegerExpression.cs
 src\Lib\Expressions\NegateExpression.cs
 src\Lib\Expressions\ParenthesesExpression.cs
+src\Lib\Expressions\PropertyGetExpression.cs
 src\Lib\Expressions\ReturnExpression.cs
 src\Lib\Expressions\StaticVariableDeclarationExpression.cs
 src\Lib\Expressions\StringExpression.cs
@@ -30,6 +31,8 @@ src\Lib\Parsing\Tokenizer.cs
 src\Lib\Parsing\TokenType.cs
 src\Lib\Runtime\GlobalLexicalContext.cs
 src\Lib\Runtime\LexicalContext.cs
+src\Lib\Runtime\Reference.cs
+src\Lib\Runtime\ReferenceCounted.cs
 src\Lib\Runtime\RuntimeDomain.cs
 src\Lib\Runtime\ScopeLexicalContext.cs
 src\Lib\Runtime\ScripterParsingException.cs

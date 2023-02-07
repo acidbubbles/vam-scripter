@@ -6,9 +6,12 @@ namespace ScripterLang
 {
     public class RuntimeDomain
     {
+        private int _objectIdCounter;
+
         public bool IsReturn;
 
         public readonly Dictionary<string, Value> Variables = new Dictionary<string, Value>();
+        public readonly Dictionary<int, ReferenceCounted> Objects = new Dictionary<int, ReferenceCounted>();
 
         public void CreateVariableValue(string name, Value value)
         {
@@ -45,7 +48,20 @@ namespace ScripterLang
         [MethodImpl(0x0100)]
         public void ClearVariable(string name)
         {
+            #warning If count is set to zero, delete the object from Objects (ObjectType)
             Variables.Remove(name);
+        }
+
+        [MethodImpl(0x0100)]
+        public Value WrapReference(Reference reference)
+        {
+            var id = _objectIdCounter++;
+            Objects.Add(id, new ReferenceCounted
+            {
+                Reference = reference,
+                Count = 1
+            });
+            return Value.CreateObject(id);
         }
     }
 }

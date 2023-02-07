@@ -250,6 +250,10 @@ namespace ScripterLang
                         yield return new Token(TokenType.RightBrace, "}", Location);
                         MoveNext();
                         break;
+                    case '.':
+                        yield return new Token(TokenType.Dot, ".", Location);
+                        MoveNext();
+                        break;
                     case '\n':
                         _line++;
                         MoveNext();

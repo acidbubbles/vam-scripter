@@ -283,8 +283,27 @@ namespace ScripterLang
 
             while (precedence < GetOperatorPrecedence(Peek().Value)) {
                 var operatorToken = Consume();
-                var right = ParseValueStatementExpression(lexicalContext, GetOperatorPrecedence(operatorToken.Value));
-                left = new BinaryExpression(left, operatorToken.Value, right);
+                if (operatorToken.Type == TokenType.Operator)
+                {
+                    var right = ParseValueStatementExpression(lexicalContext, GetOperatorPrecedence(operatorToken.Value));
+                    left = new BinaryExpression(left, operatorToken.Value, right);
+                }
+                else if (operatorToken.Type == TokenType.Dot)
+                {
+                    var property = Consume().Expect(TokenType.Identifier);
+#warning Method calls on objects
+                    // if (Peek().Match(TokenType.LeftParenthesis))
+                    // {
+                    //     var arguments = ParseArgumentList(lexicalContext);
+                    //     Consume().Expect(TokenType.RightParenthesis);
+                    //     return new MethodCallExpression(name, arguments, lexicalContext);
+                    // }
+                    return new PropertyGetExpression(left, property.Value);
+                }
+                else
+                {
+                    throw new ScripterParsingException($"Unexpected token {operatorToken.Value}");
+                }
             }
 
             return left;
@@ -295,6 +314,9 @@ namespace ScripterLang
             // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#table
             switch (op)
             {
+                case ".":
+                    return 17;
+
                 case "*":
                 case "/":
                 case "%":

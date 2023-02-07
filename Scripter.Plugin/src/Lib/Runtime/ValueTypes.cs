@@ -8,6 +8,7 @@
         public const int FloatType = TokenType.Float;
         public const int StringType = TokenType.String;
         public const int BooleanType = TokenType.Boolean;
+        public const int ObjectType = TokenType.Identifier;
 
         public static string Name(int type)
         {
@@ -18,6 +19,7 @@
                 case FloatType: return "float";
                 case StringType: return "string";
                 case BooleanType: return "boolean";
+                case ObjectType: return "object";
                 default: return "unknown";
             }
         }
