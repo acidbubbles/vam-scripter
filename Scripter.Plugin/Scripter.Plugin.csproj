@@ -81,6 +81,7 @@
     <Compile Include="src\Integration\GlobalFunctions.cs" />
     <Compile Include="src\Integration\GlobalUnityFunctions.cs" />
     <Compile Include="src\Integration\GlobalVamFunctions.cs" />
+    <Compile Include="src\Integration\RandomReference.cs" />
     <Compile Include="src\Integration\SceneReference.cs" />
     <Compile Include="src\Integration\StorableReference.cs" />
     <Compile Include="src\Integration\StringChooserParamReference.cs" />

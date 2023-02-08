@@ -10,15 +10,19 @@ public class DateTimeReference : ObjectReference
         _value = value;
     }
 
-    public override Value InvokeMethod(string name, Value[] args)
+    public override Value Get(string name)
     {
-        ValidateArgumentsLength(name, args, 1);
         switch (name)
         {
             case "toString":
-                return _value.ToString(args.Length == 1 ? args[0].AsString : "s");
+                return fn(ToString);
             default:
-                return base.InvokeMethod(name, args);
+                return base.Get(name);
         }
+    }
+
+    private Value ToString(RuntimeDomain domain, Value[] args)
+    {
+        return _value.ToString(args.Length == 1 ? args[0].AsString : "s");
     }
 }

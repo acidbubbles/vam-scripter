@@ -11,13 +11,25 @@ public class StringParamReference : ObjectReference
 
     public override Value Get(string name)
     {
-        if (name == "val") return _param.val;
-        return base.Get(name);
+        switch (name)
+        {
+            case "val":
+                return _param.val;
+            default:
+                return base.Get(name);
+        }
     }
 
     public override void Set(string name, Value value)
     {
-        if (name == "val") _param.val = value.AsString;
-        else base.Get(name);
+        switch (name)
+        {
+            case "val":
+                _param.val = value.AsString;
+                break;
+            default:
+                base.Get(name);
+                break;
+        }
     }
 }

@@ -2,23 +2,38 @@
 
 public class ConsoleReference : ObjectReference
 {
-    public override Value InvokeMethod(string name, Value[] args)
+    public override Value Get(string name)
     {
         switch (name)
         {
             case "clear":
-                SuperController.singleton.ClearMessages();
-                return Value.Void;
+                return fn(Clear);
             case "log":
-                ValidateArgumentsLength(name, args, 1);
-                SuperController.LogMessage(args[0].Stringify);
-                return Value.Void;
+                return fn(Log);
             case "error":
-                ValidateArgumentsLength(name, args, 1);
-                SuperController.LogError(args[0].Stringify);
-                return Value.Void;
+                return fn(Error);
             default:
-                return base.InvokeMethod(name, args);
+                return base.Get(name);
         }
+    }
+
+    private static Value Clear(RuntimeDomain domain, Value[] args)
+    {
+        SuperController.singleton.ClearMessages();
+        return Value.Void;
+    }
+
+    private static Value Log(RuntimeDomain domain, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(Log), args, 1);
+        SuperController.LogMessage(args[0].Stringify);
+        return Value.Void;
+    }
+
+    private static Value Error(RuntimeDomain domain, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(Error), args, 1);
+        SuperController.LogError(args[0].Stringify);
+        return Value.Void;
     }
 }

@@ -3,17 +3,16 @@ using UnityEngine;
 
 public class TimeReference : ObjectReference
 {
-    public override Value InvokeMethod(string name, Value[] args)
+    public override Value Get(string name)
     {
-        ValidateArgumentsLength(name, args, 1);
         switch (name)
         {
             case "time":
-                return Time.time;
+                return fn((d, a) => Time.time);
             case "deltaTime":
-                return Time.deltaTime;
+                return fn((d, a) => Time.deltaTime);
             default:
-                return base.InvokeMethod(name, args);
+                return base.Get(name);
         }
     }
 }

@@ -3,15 +3,14 @@ using ScripterLang;
 
 public class DateTimeClassReference : ObjectReference
 {
-    public override Value InvokeMethod(string name, Value[] args)
+    public override Value Get(string name)
     {
-        ValidateArgumentsLength(name, args, 1);
         switch (name)
         {
-            case "Now":
+            case "now":
                 return new DateTimeReference(DateTime.Now);
             default:
-                return base.InvokeMethod(name, args);
+                return base.Get(name);
         }
     }
 }

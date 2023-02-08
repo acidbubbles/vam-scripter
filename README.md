@@ -16,6 +16,7 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 - Functions (`function`, `return`)
 - Arrays (`var x = []`, `var x = [values]`, `x.add`, `x[index]`, `x.length`)
 - Code blocks and lexical scopes (`{`, `}`)
+- DateTime (`DateTime.now.format("")`)
 
 ## Notable Omissions
 
