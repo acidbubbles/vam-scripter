@@ -33,7 +33,7 @@ namespace ScripterLang
         public bool AsBool
         {
             [MethodImpl(0x0100)]
-            get { return IsBool ? RawBool : ThrowInvalidType<bool>(); }
+            get { return IsBool ? RawBool : ThrowInvalidType<bool>(ValueTypes.BooleanType); }
         }
 
         public bool IsNumber
@@ -54,7 +54,7 @@ namespace ScripterLang
                     case ValueTypes.IntegerType:
                         return _intValue;
                     default:
-                        return ThrowInvalidType<float>();
+                        return ThrowInvalidType<float>(ValueTypes.FloatType);
                 }
             }
         }
@@ -74,7 +74,7 @@ namespace ScripterLang
         public int AsInt
         {
             [MethodImpl(0x0100)]
-            get { return IsInt ? RawInt : ThrowInvalidType<int>(); }
+            get { return IsInt ? RawInt : ThrowInvalidType<int>(ValueTypes.IntegerType); }
         }
 
         public bool IsFloat
@@ -92,7 +92,7 @@ namespace ScripterLang
         public float AsFloat
         {
             [MethodImpl(0x0100)]
-            get { return IsFloat ? RawFloat : ThrowInvalidType<float>(); }
+            get { return IsFloat ? RawFloat : ThrowInvalidType<float>(ValueTypes.FloatType); }
         }
 
         public bool IsObject
@@ -110,7 +110,7 @@ namespace ScripterLang
         public ObjectReference AsObject
         {
             [MethodImpl(0x0100)]
-            get { return IsObject ? RawObject : ThrowInvalidType<ObjectReference>(); }
+            get { return IsObject ? RawObject : ThrowInvalidType<ObjectReference>(ValueTypes.ObjectType); }
         }
 
         public bool IsString
@@ -128,7 +128,7 @@ namespace ScripterLang
         public string AsString
         {
             [MethodImpl(0x0100)]
-            get { return IsString ? RawString : ThrowInvalidType<string>(); }
+            get { return IsString ? RawString : ThrowInvalidType<string>(ValueTypes.StringType); }
         }
 
         public bool IsFunction
@@ -146,7 +146,7 @@ namespace ScripterLang
         public FunctionReference AsFunction
         {
             [MethodImpl(0x0100)]
-            get { return IsFunction ? RawFunction : ThrowInvalidType<FunctionReference>(); }
+            get { return IsFunction ? RawFunction : ThrowInvalidType<FunctionReference>(ValueTypes.FunctionType); }
         }
 
         public string Stringify
@@ -216,9 +216,9 @@ namespace ScripterLang
             return new Value { Type = ValueTypes.FunctionType, _objectValue = fn };
         }
 
-        private T ThrowInvalidType<T>()
+        private T ThrowInvalidType<T>(ushort expectedType)
         {
-            throw new ScripterRuntimeException($"Unexpected type {ValueTypes.Name(Type)}");
+            throw new ScripterRuntimeException($"Unexpected type {ValueTypes.Name(Type)}, expected {ValueTypes.Name(expectedType)}");
         }
 
         [MethodImpl(0x0100)]

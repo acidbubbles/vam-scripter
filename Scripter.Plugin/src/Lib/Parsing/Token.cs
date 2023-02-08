@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace ScripterLang
 {
@@ -18,17 +18,20 @@ namespace ScripterLang
             Location = location;
         }
 
+        [MethodImpl(0x0100)]
         public bool Match(int type)
         {
             return Type == type;
         }
 
+        [MethodImpl(0x0100)]
         public bool Match(int type, string value)
         {
             return Type == type && Value == value;
         }
 
         [SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Global")]
+        [MethodImpl(0x0100)]
         public Token Expect(int type)
         {
             if (Type != type)
@@ -37,11 +40,11 @@ namespace ScripterLang
         }
 
         [SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Global")]
-        public Token Expect(int type, string value)
+        [MethodImpl(0x0100)]
+        public void Expect(int type, string value)
         {
             if (Type != type && value != Value)
                 throw new ScripterParsingException($"Unexpected token '{Value}'; expected {value}", Location);
-            return this;
         }
 
         public override string ToString()

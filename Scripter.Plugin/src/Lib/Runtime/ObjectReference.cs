@@ -9,7 +9,7 @@
 
         public virtual void Set(string name, Value value)
         {
-            throw new ScripterRuntimeException($"Property '{name}' does not exist on the object");
+            throw new ScripterRuntimeException($"Property '{name}' does not exist or is not writable");
         }
 
         public virtual Value GetIndex(Value index)
@@ -22,10 +22,7 @@
             throw new ScripterRuntimeException($"Object has no indexer");
         }
 
-        public virtual Value InvokeMethod(string name, Value[] args)
-        {
-            throw new ScripterRuntimeException($"Method '{name}' does not exist on the object");
-        }
+        protected Value fn(FunctionReference f) => ScripterLang.Value.CreateFunction(f);
 
         public static void ValidateArgumentsLength(string name, Value[] args, int expectedLength)
         {

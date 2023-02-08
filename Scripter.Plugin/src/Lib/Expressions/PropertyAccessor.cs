@@ -13,7 +13,7 @@
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            return _left.Evaluate(domain).AsObject;
+            return _left.Evaluate(domain).AsObject.Get(_property);
         }
 
         public override Value SetVariableValue(RuntimeDomain domain, Value value)
@@ -25,7 +25,7 @@
 
         public override string ToString()
         {
-            return _property;
+            return $"{_left}.{_property}";
         }
     }
 }

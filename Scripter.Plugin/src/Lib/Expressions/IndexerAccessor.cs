@@ -1,11 +1,11 @@
 ﻿namespace ScripterLang
 {
-    public class GetIndexerExpression : Expression
+    public class IndexerAccessor : VariableAccessor
     {
         private readonly VariableAccessor _accessor;
         private readonly Expression _index;
 
-        public GetIndexerExpression(VariableAccessor accessor, Expression index)
+        public IndexerAccessor(VariableAccessor accessor, Expression index)
         {
             _accessor = accessor;
             _index = index;
@@ -16,6 +16,15 @@
             var obj = _accessor.Evaluate(domain).AsObject;
             var index = _index.Evaluate(domain);
             return obj.GetIndex(index);
+        }
+
+        public override Value SetVariableValue(RuntimeDomain domain, Value value)
+        {
+            var obj = _accessor.Evaluate(domain).AsObject;
+            #warning We evaluate the object and index twice, again
+            var index = _index.Evaluate(domain);
+            obj.SetIndex(index, value);
+            return value;
         }
 
         public override string ToString()

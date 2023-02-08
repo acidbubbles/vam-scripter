@@ -89,7 +89,7 @@ namespace ScripterLang
             throw new ScripterParsingException($"Unexpected token: '{token.Value}'", token.Location);
         }
 
-        private Expression ParseVariableStatement(ScopeLexicalContext lexicalContext, Token token)
+        private Expression ParseVariableStatement(LexicalContext lexicalContext, Token token)
         {
             MoveNext();
             var expression = ParseVariableExpression(lexicalContext, new ScopedVariableAccessor(token.Value));
@@ -99,55 +99,52 @@ namespace ScripterLang
 
         private Expression ParseVariableExpression(LexicalContext lexicalContext, VariableAccessor accessor)
         {
-            var next = Peek();
-
-            if (next.Match(TokenType.LeftParenthesis))
+            while (true)
             {
-                MoveNext();
-                var arguments = ParseArgumentList(lexicalContext, TokenType.RightParenthesis);
-                Consume().Expect(TokenType.RightParenthesis);
-                return new FunctionCallExpression(accessor, arguments);
-            }
+                var next = Peek();
 
-            if (next.Match(TokenType.Assignment))
-            {
-                MoveNext();
-                var right = ParseValueStatementExpression(lexicalContext);
-                return new AssignmentExpression(accessor, right);
+                switch (next.Type)
+                {
+                    case TokenType.LeftBracket:
+                    {
+                        MoveNext();
+                        var index = ParseValueStatementExpression(lexicalContext);
+                        Consume().Expect(TokenType.RightBracket);
+                        accessor = new IndexerAccessor(accessor, index);
+                        continue;
+                    }
+                    case TokenType.LeftParenthesis:
+                    {
+                        MoveNext();
+                        var arguments = ParseArgumentList(lexicalContext, TokenType.RightParenthesis);
+                        Consume().Expect(TokenType.RightParenthesis);
+                        return new FunctionCallExpression(accessor, arguments);
+                    }
+                    case TokenType.Assignment:
+                    {
+                        MoveNext();
+                        var right = ParseValueStatementExpression(lexicalContext);
+                        return new AssignmentExpression(accessor, right);
+                    }
+                    case TokenType.AssignmentOperator:
+                    {
+                        MoveNext();
+                        var right = ParseValueStatementExpression(lexicalContext);
+                        return new AssignmentOperatorExpression(accessor, next.Value, right);
+                    }
+                    case TokenType.IncrementDecrement:
+                        MoveNext();
+                        return new IncrementDecrementExpression(accessor, next.Value, true);
+                    case TokenType.Dot:
+                        MoveNext();
+                        return ParseDotRightExpression(lexicalContext, accessor);
+                    default:
+                        return accessor;
+                }
             }
-
-            if (next.Match(TokenType.AssignmentOperator))
-            {
-                MoveNext();
-                var right = ParseValueStatementExpression(lexicalContext);
-                return new AssignmentOperatorExpression(accessor, next.Value, right);
-            }
-
-            if (next.Match(TokenType.IncrementDecrement))
-            {
-                MoveNext();
-                return new IncrementDecrementExpression(accessor, next.Value, true);
-            }
-
-            if (next.Match(TokenType.LeftBracket))
-            {
-                MoveNext();
-                var index = ParseValueStatementExpression(lexicalContext);
-                Consume().Expect(TokenType.RightBracket);
-                return new GetIndexerExpression(accessor, index);
-            }
-
-            if (next.Match(TokenType.Dot))
-            {
-                MoveNext();
-                var left = new VariableExpression(accessor);
-                return ParseDotRightExpression(lexicalContext, left);
-            }
-
-            return new VariableExpression(accessor);
         }
 
-        private Expression ParseThrowDeclaration(ScopeLexicalContext lexicalContext)
+        private Expression ParseThrowDeclaration(LexicalContext lexicalContext)
         {
             MoveNext();
             var message = ParseValueStatementExpression(lexicalContext);
@@ -286,7 +283,19 @@ namespace ScripterLang
             return new StaticVariableDeclarationExpression(nameToken.Value, initialValueExpression);
         }
 
-        private Expression ParseValueStatementExpression(LexicalContext lexicalContext, int precedence = 0)
+        private Expression ParseValueStatementExpression(LexicalContext lexicalContext)
+        {
+            if (Peek().Match(TokenType.LeftBracket))
+            {
+                MoveNext();
+                var values = ParseArgumentList(lexicalContext, TokenType.RightBracket);
+                Consume().Expect(TokenType.RightBracket);
+                return new ArrayDeclarationExpression(values);
+            }
+            return ParseValueStatementExpression(lexicalContext, 0);
+        }
+
+        private Expression ParseValueStatementExpression(LexicalContext lexicalContext, int precedence)
         {
             var left = ParsePureValueExpression(lexicalContext);
 
@@ -373,8 +382,7 @@ namespace ScripterLang
                 case TokenType.Negation:
                     return new NegateExpression(ParsePureValueExpression(lexicalContext));
                 case TokenType.IncrementDecrement:
-                    #warning This should also work for array indexers
-                    return new IncrementDecrementExpression(new ScopedVariableAccessor(Consume().Expect(TokenType.Identifier).Value), token.Value, false);
+                    return ParseIncrementDecrementExpression(lexicalContext, token);
                 case TokenType.LeftParenthesis:
                 {
                     var expression = ParseValueStatementExpression(lexicalContext);
@@ -383,51 +391,26 @@ namespace ScripterLang
                 }
                 case TokenType.Identifier:
                     return ParseVariableExpression(lexicalContext, new ScopedVariableAccessor(token.Value));
-                #warning This does not go there, lots of duplication
-                /*
-                case TokenType.IncrementDecrement:
-                {
-                    var op = token.Value;
-                    var name = Consume().Value;
-                    return new IncrementDecrementExpression(name, op, false);
-                }
-                case TokenType.LeftParenthesis:
-                {
-                    var expression = ParseValueStatementExpression(lexicalContext);
-                    Consume().Expect(TokenType.RightParenthesis);
-                    return new ParenthesesExpression(expression);
-                }
-                case TokenType.LeftBracket:
-                {
-                    var values = ParseArgumentList(lexicalContext, TokenType.RightBracket);
-                    Consume().Expect(TokenType.RightBracket);
-                    return new ArrayDeclarationExpression(values);
-                }
-                case TokenType.Identifier:
-                {
-                    var name = token.Value;
-                    var next = Peek();
-                    if (next.Match(TokenType.LeftParenthesis))
-                    {
-                        MoveNext();
-                        var arguments = ParseArgumentList(lexicalContext, TokenType.RightParenthesis);
-                        Consume().Expect(TokenType.RightParenthesis);
-                        return new GlobalFunctionCallExpression(name, arguments, lexicalContext);
-                    }
-                    else if (next.Match(TokenType.IncrementDecrement))
-                    {
-                        MoveNext();
-                        return new IncrementDecrementExpression(name, next.Value, true);
-                    }
-                    else
-                    {
-                        return new VariableExpression(name);
-                    }
-                }
-                */
                 default:
                     throw new ScripterParsingException("Unexpected token " + token.Value, token.Location);
             }
+        }
+
+        private Expression ParseIncrementDecrementExpression(LexicalContext lexicalContext, Token op)
+        {
+            var next = Consume();
+            VariableAccessor accessor = new ScopedVariableAccessor(next.Value);
+            if (!next.Match(TokenType.Identifier))
+                throw new ScripterParsingException($"Unexpected token {next.Value}", next.Location);
+            if (Peek().Match(TokenType.LeftBracket))
+            {
+                MoveNext();
+                var index = ParseValueStatementExpression(lexicalContext);
+                Consume().Expect(TokenType.RightBracket);
+                accessor = new IndexerAccessor(accessor, index);
+            }
+
+            return new IncrementDecrementExpression(accessor, op.Value, false);
         }
 
         private CodeBlockExpression ParseCodeBlock(ScopeLexicalContext parentLexicalContext)

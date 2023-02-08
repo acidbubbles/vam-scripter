@@ -273,6 +273,9 @@ public class LanguageTests
             static var x = [];
             x.add(1);
             x[0] = x[0] + 1;
+            x[0]++;
+            x[0] += 1;
+            x[0] = ++x[0];
             return x[0];
             """;
         _globalLexicalContext.Globals.Add("getThing", Value.CreateFunction((d, args) => new MyThing { Value = args[0].AsInt }));
@@ -280,7 +283,7 @@ public class LanguageTests
         var domain = new RuntimeDomain(_globalLexicalContext);
         var result = expression.Evaluate(domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("134"));
+        Assert.That(result.ToString(), Is.EqualTo("5"));
     }
 
     [Test]
@@ -344,29 +347,39 @@ public class LanguageTests
 
         public override Value Get(string name)
         {
-            if (name == "value") return Value;
-            if (name == "deep") return Deep;
-            return base.Get(name);
+            switch (name)
+            {
+                case "value": return Value;
+                case "deep": return Deep;
+                case "increment": return fn(Increment);
+                case "createAndAdd": return fn(CreateAndAdd);
+                default: return base.Get(name);
+            }
         }
 
         public override void Set(string name, Value value)
         {
-            Value = value.AsInt;
+            switch (name)
+            {
+                case "value":
+                    Value = value.AsInt;
+                    break;
+                default:
+                    base.Set(name, value);
+                    break;
+            }
         }
 
-        public override Value InvokeMethod(string name, Value[] args)
+        private Value Increment(RuntimeDomain domain, Value[] args)
         {
-            if (name == "increment")
-            {
-                ValidateArgumentsLength(name, args, 1);
-                return  (Value = Value + args[0].AsInt);
-            }
-            if (name == "createAndAdd")
-            {
-                ValidateArgumentsLength(name, args, 1);
-                return Deep = new MyThing { Value = Value + args[0].AsInt };
-            }
-            return base.InvokeMethod(name, args);
+            ValidateArgumentsLength(nameof(Increment), args, 1);
+            return  (Value = Value + args[0].AsInt);
+        }
+
+        private Value CreateAndAdd(RuntimeDomain domain, Value[] args)
+        {
+            ValidateArgumentsLength(nameof(CreateAndAdd), args, 1);
+            return new MyThing { Value = Value + args[0].AsInt };
         }
     }
 
