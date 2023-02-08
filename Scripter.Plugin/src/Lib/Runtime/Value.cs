@@ -255,6 +255,7 @@ namespace ScripterLang
                 case ValueTypes.FloatType: return RawFloat.ToString(CultureInfo.InvariantCulture);
                 case ValueTypes.IntegerType: return RawInt.ToString();
                 case ValueTypes.BooleanType: return RawBool ? "true" : "false";
+                case ValueTypes.ObjectType: return RawObject.ToString();
                 default: return ValueTypes.Name(Type);
             }
         }

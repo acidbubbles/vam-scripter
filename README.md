@@ -14,6 +14,7 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 - Keywords (`if`, `else`, `for`, `while`, `throw`)
 - Static variables (`static`)
 - Functions (`function`, `return`)
+- Arrays (`var x = []`, `var x = [values]`, `x.add`, `x[index]`, `x.length`)
 - Code blocks and lexical scopes (`{`, `}`)
 
 ## Notable Omissions

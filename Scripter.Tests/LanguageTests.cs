@@ -276,14 +276,14 @@ public class LanguageTests
             x[0]++;
             x[0] += 1;
             x[0] = ++x[0];
-            return x[0];
+            return [x[0], x.length];
             """;
         _globalLexicalContext.Globals.Add("getThing", Value.CreateFunction((d, args) => new MyThing { Value = args[0].AsInt }));
         var expression = Parser.Parse(source, _globalLexicalContext);
         var domain = new RuntimeDomain(_globalLexicalContext);
         var result = expression.Evaluate(domain);
 
-        Assert.That(result.ToString(), Is.EqualTo("5"));
+        Assert.That(result.ToString(), Is.EqualTo("[5, 1]"));
     }
 
     [Test]

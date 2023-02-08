@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ScripterLang
 {
@@ -17,6 +18,8 @@ namespace ScripterLang
             {
                 case "add":
                     return fn(Add);
+                case "length":
+                    return _values.Count;
                 default:
                     return base.Get(name);
             }
@@ -37,6 +40,11 @@ namespace ScripterLang
             ValidateArgumentsLength(nameof(Add), args, 1);
             _values.Add(args[0]);
             return Value.Void;
+        }
+
+        public override string ToString()
+        {
+            return "[" + string.Join(", ", _values.Select(x => x.ToString()).ToArray()) + "]";
         }
     }
 }

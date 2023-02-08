@@ -16,7 +16,7 @@ namespace ScripterLang
         {
             var values = new List<Value>(_expressions.Count);
             for (var i = 0; i < _expressions.Count; i++)
-                values[i] = _expressions[i].Evaluate(domain);
+                values.Add(_expressions[i].Evaluate(domain));
             return Value.CreateObject(new ListReference(values));
         }
 
