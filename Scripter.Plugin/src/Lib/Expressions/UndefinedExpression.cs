@@ -2,7 +2,7 @@
 {
     public class UndefinedExpression : Expression
     {
-        public static readonly UndefinedExpression Instance = new UndefinedExpression();
+        public static readonly Expression Instance = new UndefinedExpression();
 
         public override Value Evaluate(RuntimeDomain domain)
         {

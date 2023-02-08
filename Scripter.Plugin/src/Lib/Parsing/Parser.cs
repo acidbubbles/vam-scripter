@@ -246,7 +246,7 @@ namespace ScripterLang
         private Expression ParseReturnStatement(LexicalContext lexicalContext)
         {
             MoveNext();
-            var value = ParseValueStatementExpression(lexicalContext);
+            var value = !Peek().Match(TokenType.SemiColon) ? ParseValueStatementExpression(lexicalContext) : UndefinedExpression.Instance;
             Consume().Expect(TokenType.SemiColon);
             return new ReturnExpression(value);
         }

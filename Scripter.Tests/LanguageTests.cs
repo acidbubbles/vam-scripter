@@ -92,6 +92,20 @@ public class LanguageTests
     }
 
     [Test]
+    public void ReturnExitsNoStatement()
+    {
+        const string source = """
+            {
+                return;
+            }
+            throw "Did not return!";
+            """;
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var domain = new RuntimeDomain(_globalLexicalContext);
+        Assert.DoesNotThrow(() => expression.Evaluate(domain));
+    }
+
+    [Test]
     public void CustomFunctions()
     {
         const string source = """
