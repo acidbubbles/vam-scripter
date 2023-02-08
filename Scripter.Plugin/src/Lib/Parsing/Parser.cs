@@ -7,11 +7,6 @@ namespace ScripterLang
         public static Expression Parse(string source, GlobalLexicalContext globalLexicalContext)
         {
             var tokens = new List<Token>(Tokenizer.Tokenize(source));
-            return Parse(tokens, globalLexicalContext);
-        }
-
-        public static Expression Parse(IList<Token> tokens, GlobalLexicalContext globalLexicalContext)
-        {
             return new Parser(tokens).Parse(globalLexicalContext);
         }
 
@@ -33,12 +28,6 @@ namespace ScripterLang
         {
             if (IsAtEnd()) return Token.None;
             return _tokens[_position];
-        }
-
-        private Token PeekNext()
-        {
-            if (_position >= _tokens.Count - 2) throw new ScripterParsingException("Unexpected end of script");
-            return _tokens[_position + 1];
         }
 
         private Token Consume()
@@ -74,8 +63,7 @@ namespace ScripterLang
                 if (token.Value == "while") return ParseWhileStatement(lexicalContext);
                 if (token.Value == "return") return ParseReturnStatement(lexicalContext);
                 if (token.Value == "static") return ParseStaticDeclaration(lexicalContext);
-                if (token.Value == "var") return ParseVariableDeclaration(lexicalContext);
-                if (token.Value == "let") return ParseVariableDeclaration(lexicalContext);
+                if (token.Value == "var" || token.Value == "let") return ParseVariableDeclaration(lexicalContext);
                 if (token.Value == "throw") return ParseThrowDeclaration(lexicalContext);
                 if (token.Value == "function") return ParseFunctionDeclaration(lexicalContext);
                 throw new ScripterParsingException($"Unexpected keyword: {token.Value}", token.Location);
@@ -83,64 +71,87 @@ namespace ScripterLang
 
             if (token.Match(TokenType.Identifier))
             {
-                MoveNext();
-                return ParseVariableExpression(lexicalContext, token.Value);
+                return ParseVariableStatement(lexicalContext, token);
+            }
+
+            if (token.Match(TokenType.LeftBrace))
+            {
+                return ParseCodeBlock(lexicalContext);
             }
 
             if (token.Match(TokenType.SemiColon))
             {
+                #warning We probably don't always validate that lines indeed finish with a semicolon?
                 Consume();
                 return UndefinedExpression.Instance;
             }
 
-            if (token.Match(TokenType.LeftBrace)) return ParseCodeBlock(lexicalContext);
-
             throw new ScripterParsingException($"Unexpected token: '{token.Value}'", token.Location);
         }
 
-        private Expression ParseVariableExpression(ScopeLexicalContext lexicalContext, string name)
+        private Expression ParseVariableStatement(ScopeLexicalContext lexicalContext, Token token)
         {
-            var next = Consume();
+            MoveNext();
+            var expression = ParseVariableExpression(lexicalContext, new ScopedVariableAccessor(token.Value));
+            Consume().Expect(TokenType.SemiColon);
+            return expression;
+        }
+
+        private Expression ParseVariableExpression(LexicalContext lexicalContext, VariableAccessor accessor)
+        {
+            var next = Peek();
+
             if (next.Match(TokenType.LeftParenthesis))
             {
+                MoveNext();
                 var arguments = ParseArgumentList(lexicalContext, TokenType.RightParenthesis);
                 Consume().Expect(TokenType.RightParenthesis);
-                return new FunctionCallExpression(name, arguments, lexicalContext);
+                return new FunctionCallExpression(accessor, arguments);
             }
 
             if (next.Match(TokenType.Assignment))
             {
+                MoveNext();
                 var right = ParseValueStatementExpression(lexicalContext);
-                Consume().Expect(TokenType.SemiColon);
-                return new VariableAssignmentExpression(name, right);
+                return new AssignmentExpression(accessor, right);
             }
 
             if (next.Match(TokenType.AssignmentOperator))
             {
+                MoveNext();
                 var right = ParseValueStatementExpression(lexicalContext);
-                Consume().Expect(TokenType.SemiColon);
-                return new VariableAssignmentOperatorExpression(name, next.Value, right);
+                return new AssignmentOperatorExpression(accessor, next.Value, right);
             }
 
             if (next.Match(TokenType.IncrementDecrement))
             {
-                Consume().Expect(TokenType.SemiColon);
-                return new IncrementDecrementExpression(name, next.Value, true);
+                MoveNext();
+                return new IncrementDecrementExpression(accessor, next.Value, true);
+            }
+
+            if (next.Match(TokenType.LeftBracket))
+            {
+                MoveNext();
+                var index = ParseValueStatementExpression(lexicalContext);
+                Consume().Expect(TokenType.RightBracket);
+                return new GetIndexerExpression(accessor, index);
             }
 
             if (next.Match(TokenType.Dot))
             {
-                var left = new VariableExpression(name);
+                MoveNext();
+                var left = new VariableExpression(accessor);
                 return ParseDotRightExpression(lexicalContext, left);
             }
 
-            throw new ScripterParsingException($"Unexpected token: '{next.Value}'", next.Location);
+            return new VariableExpression(accessor);
         }
 
         private Expression ParseThrowDeclaration(ScopeLexicalContext lexicalContext)
         {
             MoveNext();
             var message = ParseValueStatementExpression(lexicalContext);
+            Consume().Expect(TokenType.SemiColon);
             return new ThrowExpression(message);
         }
 
@@ -154,7 +165,7 @@ namespace ScripterLang
             while (!Peek().Match(TokenType.RightParenthesis))
             {
                 var arg = Consume().Expect(TokenType.Identifier).Value;
-                functionLexicalContext.Declare(name.Value, name.Location);
+                functionLexicalContext.Declare(arg, name.Location);
                 if (arguments.Contains(name.Value))
                     throw new ScripterParsingException($"Argument {name.Value} of function {name.Value} was declared more than once", name.Location);
                 arguments.Add(arg);
@@ -172,10 +183,10 @@ namespace ScripterLang
                 expressions.Add(expression);
             }
             Consume().Expect(TokenType.RightBrace);
+
             var body = new FunctionBlockExpression(expressions, functionLexicalContext);
-            if (lexicalContext.Root.Functions.ContainsKey(name.Value))
-                throw new ScripterParsingException($"A function with the name {name.Value} was already declared", name.Location);
-            lexicalContext.Root.Functions.Add(name.Value, new FunctionDeclaration(name.Value, arguments, body).Invoke);
+            #warning We don't want a global here, we want a scoped value, but defined when entering the scope
+            lexicalContext.Root.Globals.Add(name.Value, Value.CreateFunction(new FunctionDeclaration(name.Value, arguments, body).Invoke));
             return new UndefinedExpression();
         }
 
@@ -302,37 +313,8 @@ namespace ScripterLang
         private Expression ParseDotRightExpression(LexicalContext lexicalContext, Expression left)
         {
             var property = Consume().Expect(TokenType.Identifier);
-            var next = Peek();
-            if (next.Match(TokenType.LeftParenthesis))
-            {
-                MoveNext();
-                var arguments = ParseArgumentList(lexicalContext, TokenType.RightParenthesis);
-                Consume().Expect(TokenType.RightParenthesis);
-                left = new MethodCallExpression(left, property.Value, arguments);
-            }
-            else if (next.Match(TokenType.Assignment))
-            {
-                MoveNext();
-                var right = ParseValueStatementExpression(lexicalContext);
-                return new PropertyAssignmentExpression(left, property.Value,  right);
-            }
-            else if (next.Match(TokenType.AssignmentOperator))
-            {
-                MoveNext();
-                var right = ParseValueStatementExpression(lexicalContext);
-                return new PropertyAssignmentOperatorExpression(left, property.Value,  next.Value, right);
-            }
-            else if (next.Match(TokenType.Dot))
-            {
-                MoveNext();
-                left = ParseDotRightExpression(lexicalContext, new PropertyGetExpression(left, property.Value));
-            }
-            else
-            {
-                left = new PropertyGetExpression(left, property.Value);
-            }
-
-            return left;
+            var accessor = new PropertyAccessor(left, property.Value);
+            return ParseVariableExpression(lexicalContext, accessor);
         }
 
         private int GetOperatorPrecedence(string op)
@@ -391,6 +373,19 @@ namespace ScripterLang
                 case TokenType.Negation:
                     return new NegateExpression(ParsePureValueExpression(lexicalContext));
                 case TokenType.IncrementDecrement:
+                    #warning This should also work for array indexers
+                    return new IncrementDecrementExpression(new ScopedVariableAccessor(Consume().Expect(TokenType.Identifier).Value), token.Value, false);
+                case TokenType.LeftParenthesis:
+                {
+                    var expression = ParseValueStatementExpression(lexicalContext);
+                    Consume().Expect(TokenType.RightParenthesis);
+                    return new ParenthesesExpression(expression);
+                }
+                case TokenType.Identifier:
+                    return ParseVariableExpression(lexicalContext, new ScopedVariableAccessor(token.Value));
+                #warning This does not go there, lots of duplication
+                /*
+                case TokenType.IncrementDecrement:
                 {
                     var op = token.Value;
                     var name = Consume().Value;
@@ -417,7 +412,7 @@ namespace ScripterLang
                         MoveNext();
                         var arguments = ParseArgumentList(lexicalContext, TokenType.RightParenthesis);
                         Consume().Expect(TokenType.RightParenthesis);
-                        return new FunctionCallExpression(name, arguments, lexicalContext);
+                        return new GlobalFunctionCallExpression(name, arguments, lexicalContext);
                     }
                     else if (next.Match(TokenType.IncrementDecrement))
                     {
@@ -429,6 +424,7 @@ namespace ScripterLang
                         return new VariableExpression(name);
                     }
                 }
+                */
                 default:
                     throw new ScripterParsingException("Unexpected token " + token.Value, token.Location);
             }

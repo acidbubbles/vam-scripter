@@ -2,7 +2,7 @@
 
 namespace ScripterLang
 {
-    public class ListReference : Reference
+    public class ListReference : ObjectReference
     {
         private readonly List<Value> _values;
 

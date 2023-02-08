@@ -1,6 +1,6 @@
 ﻿namespace ScripterLang
 {
-    public abstract class Reference
+    public abstract class ObjectReference
     {
         public virtual Value Get(string name)
         {
@@ -10,6 +10,16 @@
         public virtual void Set(string name, Value value)
         {
             throw new ScripterRuntimeException($"Property '{name}' does not exist on the object");
+        }
+
+        public virtual Value GetIndex(Value index)
+        {
+            throw new ScripterRuntimeException($"Object has no indexer");
+        }
+
+        public virtual void SetIndex(Value index, Value value)
+        {
+            throw new ScripterRuntimeException($"Object has no indexer");
         }
 
         public virtual Value InvokeMethod(string name, Value[] args)

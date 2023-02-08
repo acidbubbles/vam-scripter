@@ -5,9 +5,9 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 ## Language Features
 
 - Variables (`var`, `let`)
-- Types (`string`, `float`, `int`, `bool`, `undefined`)
+- Types (`string`, `float`, `int`, `bool`, `undefined`, `function`)
 - Boolean operators (`||`, `&&`, `==`, `!=`, `<`, `>`, `<=`, `>=`)
-- Math operators (`+`, `-`, `*`, `/`)
+- Math operators (`+`, `-`, `*`, `/`, `%`)
 - String concatenation (`+`)
 - Assignment operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`)
 - Comments (`//`, `/* */`)
@@ -18,7 +18,9 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 
 ## Notable Omissions
 
-- Objects, arrays and maps cannot be created
+- No support for dictionaries (maps)
+- No `break` and `continue` statements
+- No `foreach`
 - Code blocks without brackets, like `if(condition) something();`
 - Variable values are locally scoped, but you cannot reuse them in other functions of the same script
 

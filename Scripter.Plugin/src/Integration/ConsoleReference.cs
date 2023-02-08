@@ -1,6 +1,6 @@
 ﻿using ScripterLang;
 
-public class ConsoleReference : Reference
+public class ConsoleReference : ObjectReference
 {
     public override Value InvokeMethod(string name, Value[] args)
     {

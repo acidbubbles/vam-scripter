@@ -1,7 +1,7 @@
 ﻿using System;
 using ScripterLang;
 
-public class DateTimeClassReference : Reference
+public class DateTimeClassReference : ObjectReference
 {
     public override Value InvokeMethod(string name, Value[] args)
     {

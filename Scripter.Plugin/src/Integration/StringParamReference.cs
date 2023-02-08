@@ -1,6 +1,6 @@
 ﻿using ScripterLang;
 
-public class StringParamReference : Reference
+public class StringParamReference : ObjectReference
 {
     private readonly JSONStorableString _param;
 

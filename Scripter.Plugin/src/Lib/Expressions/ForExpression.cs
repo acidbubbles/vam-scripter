@@ -17,6 +17,8 @@
 
         public override Value Evaluate(RuntimeDomain domain)
         {
+            #warning break and continue statements;
+            #warning foreach
             #if SCRIPTER_DUMMY_MODE
             const float maxTime = 5;
             var max = Time.time + maxTime;

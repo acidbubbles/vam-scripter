@@ -1,7 +1,7 @@
 ﻿using System;
 using ScripterLang;
 
-public class DateTimeReference : Reference
+public class DateTimeReference : ObjectReference
 {
     private readonly DateTime _value;
 

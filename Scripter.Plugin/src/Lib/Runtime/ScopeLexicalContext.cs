@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ScripterLang
+﻿namespace ScripterLang
 {
     public class ScopeLexicalContext : LexicalContext
     {
@@ -18,11 +16,6 @@ namespace ScripterLang
         {
             Root = parent.Root;
             _parent = parent;
-        }
-
-        public override Func<RuntimeDomain, Value[], Value> GetFunction(string name)
-        {
-            return Root.GetFunction(name);
         }
 
         public override void Declare(string name, Location location)

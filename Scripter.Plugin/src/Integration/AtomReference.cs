@@ -1,6 +1,6 @@
 ﻿using ScripterLang;
 
-public class AtomReference : Reference
+public class AtomReference : ObjectReference
 {
     private readonly Atom _atom;
 

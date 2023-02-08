@@ -1,6 +1,6 @@
 ﻿using ScripterLang;
 
-public class StorableReference : Reference
+public class StorableReference : ObjectReference
 {
     private readonly JSONStorable _storable;
 

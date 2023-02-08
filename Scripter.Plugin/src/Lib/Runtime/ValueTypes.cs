@@ -2,15 +2,16 @@
 {
     public static class ValueTypes
     {
-        public const int UndefinedType = 0;
-        public const int Uninitialized = -1;
-        public const int IntegerType = TokenType.Integer;
-        public const int FloatType = TokenType.Float;
-        public const int StringType = TokenType.String;
-        public const int BooleanType = TokenType.Boolean;
-        public const int ObjectType = TokenType.Identifier;
+        public const ushort UndefinedType = 0;
+        public const ushort Uninitialized = 1;
+        public const ushort IntegerType = 2;
+        public const ushort FloatType = 3;
+        public const ushort StringType = 4;
+        public const ushort BooleanType = 5;
+        public const ushort ObjectType = 6;
+        public const ushort FunctionType = 7;
 
-        public static string Name(int type)
+        public static string Name(ushort type)
         {
             switch (type)
             {
@@ -20,6 +21,7 @@
                 case StringType: return "string";
                 case BooleanType: return "boolean";
                 case ObjectType: return "object";
+                case FunctionType: return "function";
                 default: return "unknown";
             }
         }

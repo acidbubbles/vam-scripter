@@ -1,6 +1,6 @@
 ﻿using ScripterLang;
 
-public class SceneReference : Reference
+public class SceneReference : ObjectReference
 {
     public override Value InvokeMethod(string name, Value[] args)
     {

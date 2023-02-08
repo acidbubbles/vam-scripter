@@ -1,56 +1,54 @@
 ﻿namespace ScripterLang
 {
-    public abstract class AssignmentOperatorExpression : Expression
+    public class AssignmentOperatorExpression : Expression
     {
+        private readonly VariableAccessor _accessor;
         private readonly string _op;
         private readonly Expression _expression;
 
-        protected AssignmentOperatorExpression(string op, Expression expression)
+        public AssignmentOperatorExpression(VariableAccessor accessor, string op, Expression expression)
         {
+            _accessor = accessor;
             _op = op;
             _expression = expression;
         }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            var value = GetVariableValue(domain);
+            var value = _accessor.Evaluate(domain);
             var right = _expression.Evaluate(domain);
             switch (_op)
             {
                 case "+=":
                     if (value.IsInt && right.IsInt)
-                        return SetVariableValue(domain, value.RawInt + right.RawInt);
+                        return _accessor.SetVariableValue(domain, value.RawInt + right.RawInt);
                     if (value.IsNumber && right.IsNumber)
-                        return SetVariableValue(domain, value.AsNumber + right.AsNumber);
+                        return _accessor.SetVariableValue(domain, value.AsNumber + right.AsNumber);
                     if (value.IsString)
-                        return SetVariableValue(domain, value.Stringify + right.Stringify);
+                        return _accessor.SetVariableValue(domain, value.Stringify + right.Stringify);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "-=":
                     if (value.IsInt && right.IsInt)
-                        return SetVariableValue(domain, value.RawInt - right.RawInt);
+                        return _accessor.SetVariableValue(domain, value.RawInt - right.RawInt);
                     if (value.IsNumber && right.IsNumber)
-                        return SetVariableValue(domain, value.AsNumber - right.AsNumber);
+                        return _accessor.SetVariableValue(domain, value.AsNumber - right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "*=":
                     if (value.IsInt && right.IsInt)
-                        return SetVariableValue(domain, value.RawInt * right.RawInt);
+                        return _accessor.SetVariableValue(domain, value.RawInt * right.RawInt);
                     if (value.IsNumber && right.IsNumber)
-                        return SetVariableValue(domain, value.AsNumber * right.AsNumber);
+                        return _accessor.SetVariableValue(domain, value.AsNumber * right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);
                 case "/*":
                     if (value.IsInt && right.IsInt)
-                        return SetVariableValue(domain, value.RawInt / right.RawInt);
+                        return _accessor.SetVariableValue(domain, value.RawInt / right.RawInt);
                     if (value.IsNumber && right.IsNumber)
-                        return SetVariableValue(domain, value.AsNumber / right.AsNumber);
+                        return _accessor.SetVariableValue(domain, value.AsNumber / right.AsNumber);
                     throw MakeUnsupportedOperandsException(value, right);
                 default:
                     throw MakeUnsupportedOperandsException(value, right);
             }
         }
-
-        protected abstract string LeftString();
-        protected abstract Value GetVariableValue(RuntimeDomain domain);
-        protected abstract Value SetVariableValue(RuntimeDomain domain, Value value);
 
         private ScripterRuntimeException MakeUnsupportedOperandsException(Value value, Value right)
         {
@@ -59,7 +57,7 @@
 
         public override string ToString()
         {
-            return $"{LeftString()} {_op} {_expression}";
+            return $"{_accessor} {_op} {_expression}";
         }
     }
 }

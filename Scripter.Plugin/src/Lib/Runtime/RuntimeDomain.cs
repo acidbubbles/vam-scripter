@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace ScripterLang
@@ -9,6 +8,12 @@ namespace ScripterLang
         public bool IsReturn;
 
         public readonly Dictionary<string, Value> Variables = new Dictionary<string, Value>();
+
+        public RuntimeDomain(GlobalLexicalContext globalLexicalContext)
+        {
+            foreach(var global in globalLexicalContext.Globals)
+                CreateVariableValue(global.Key, global.Value);
+        }
 
         public void CreateVariableValue(string name, Value value)
         {
@@ -34,12 +39,6 @@ namespace ScripterLang
             else
                 throw new ScripterRuntimeException($"Variable '{name}' was not declared");
             return value;
-        }
-
-        [MethodImpl(0x0100)]
-        public Func<RuntimeDomain, Value[], Value> GetFunction(LexicalContext lexicalContext, string name)
-        {
-            return lexicalContext.GetFunction(name);
         }
 
         [MethodImpl(0x0100)]

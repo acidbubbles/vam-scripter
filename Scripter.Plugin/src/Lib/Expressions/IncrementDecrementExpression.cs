@@ -2,20 +2,20 @@
 {
     public class IncrementDecrementExpression : Expression
     {
-        private readonly string _name;
+        private readonly VariableAccessor _accessor;
         private readonly string _op;
         private readonly bool _returnOriginal;
 
-        public IncrementDecrementExpression(string name, string op, bool returnOriginal)
+        public IncrementDecrementExpression(VariableAccessor accessor, string op, bool returnOriginal)
         {
+            _accessor = accessor;
             _op = op;
-            _name = name;
             _returnOriginal = returnOriginal;
         }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            var original = domain.GetVariableValue(_name);
+            var original = _accessor.Evaluate(domain);
             Value value;
             switch (_op)
             {
@@ -48,7 +48,7 @@
                 default:
                     throw new ScripterParsingException($"Unexpected operator {_op}");
             }
-            domain.SetVariableValue(_name, value);
+            _accessor.SetVariableValue(domain, value);
             return _returnOriginal ? original : value;
         }
 
@@ -56,8 +56,8 @@
         {
             return
                 _returnOriginal
-                    ? $"{_name}{_op}"
-                    : $"{_op}{_name}";
+                    ? $"{_accessor}{_op}"
+                    : $"{_op}{_accessor}";
         }
     }
 }

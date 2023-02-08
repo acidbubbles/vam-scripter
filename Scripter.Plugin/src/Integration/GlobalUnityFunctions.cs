@@ -1,7 +1,7 @@
 ﻿using ScripterLang;
 using UnityEngine;
 
-public class RandomReference : Reference
+public class RandomReference : ObjectReference
 {
     public override Value Get(string name)
     {

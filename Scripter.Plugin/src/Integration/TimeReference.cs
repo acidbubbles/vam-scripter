@@ -1,7 +1,7 @@
 ﻿using ScripterLang;
 using UnityEngine;
 
-public class TimeReference : Reference
+public class TimeReference : ObjectReference
 {
     public override Value InvokeMethod(string name, Value[] args)
     {

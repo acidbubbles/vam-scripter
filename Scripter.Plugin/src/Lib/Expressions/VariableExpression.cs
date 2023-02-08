@@ -2,21 +2,21 @@
 {
     public class VariableExpression : Expression
     {
-        private readonly string _name;
+        private readonly VariableAccessor _accessor;
 
-        public VariableExpression(string name)
+        public VariableExpression(VariableAccessor accessor)
         {
-            _name = name;
+            _accessor = accessor;
         }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
-            return domain.GetVariableValue(_name);
+            return _accessor.Evaluate(domain);
         }
 
         public override string ToString()
         {
-            return _name;
+            return _accessor.ToString();
         }
     }
 }

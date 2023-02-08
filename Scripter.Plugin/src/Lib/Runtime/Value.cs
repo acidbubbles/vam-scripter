@@ -13,10 +13,10 @@ namespace ScripterLang
         public static readonly Value Undefined = new Value { Type = ValueTypes.UndefinedType };
         public static readonly Value Void = new Value { Type = ValueTypes.Uninitialized };
 
-        [FieldOffset(0)] public int Type;
-        [FieldOffset(4)] private float FloatValue;
-        [FieldOffset(4)] private int IntValue;
-        [FieldOffset(8)] private object ObjectValue;
+        [FieldOffset(0)] public ushort Type;
+        [FieldOffset(4)] private float _floatValue;
+        [FieldOffset(4)] private int _intValue;
+        [FieldOffset(8)] private object _objectValue;
 
         public bool IsBool
         {
@@ -27,7 +27,7 @@ namespace ScripterLang
         public bool RawBool
         {
             [MethodImpl(0x0100)]
-            get { return IntValue > 0; }
+            get { return _intValue > 0; }
         }
 
         public bool AsBool
@@ -50,9 +50,9 @@ namespace ScripterLang
                 switch (Type)
                 {
                     case ValueTypes.FloatType:
-                        return FloatValue;
+                        return _floatValue;
                     case ValueTypes.IntegerType:
-                        return IntValue;
+                        return _intValue;
                     default:
                         return ThrowInvalidType<float>();
                 }
@@ -68,7 +68,7 @@ namespace ScripterLang
         public int RawInt
         {
             [MethodImpl(0x0100)]
-            get { return IntValue; }
+            get { return _intValue; }
         }
 
         public int AsInt
@@ -86,7 +86,7 @@ namespace ScripterLang
         public float RawFloat
         {
             [MethodImpl(0x0100)]
-            get { return FloatValue; }
+            get { return _floatValue; }
         }
 
         public float AsFloat
@@ -101,16 +101,16 @@ namespace ScripterLang
             get { return Type == ValueTypes.ObjectType; }
         }
 
-        public Reference RawObject
+        public ObjectReference RawObject
         {
             [MethodImpl(0x0100)]
-            get { return (Reference)ObjectValue; }
+            get { return (ObjectReference)_objectValue; }
         }
 
-        public Reference AsObject
+        public ObjectReference AsObject
         {
             [MethodImpl(0x0100)]
-            get { return IsObject ? RawObject : ThrowInvalidType<Reference>(); }
+            get { return IsObject ? RawObject : ThrowInvalidType<ObjectReference>(); }
         }
 
         public bool IsString
@@ -122,7 +122,7 @@ namespace ScripterLang
         public string RawString
         {
             [MethodImpl(0x0100)]
-            get { return (string)ObjectValue; }
+            get { return (string)_objectValue; }
         }
 
         public string AsString
@@ -131,10 +131,28 @@ namespace ScripterLang
             get { return IsString ? RawString : ThrowInvalidType<string>(); }
         }
 
+        public bool IsFunction
+        {
+            [MethodImpl(0x0100)]
+            get { return Type == ValueTypes.FunctionType; }
+        }
+
+        public FunctionReference RawFunction
+        {
+            [MethodImpl(0x0100)]
+            get { return (FunctionReference)_objectValue; }
+        }
+
+        public FunctionReference AsFunction
+        {
+            [MethodImpl(0x0100)]
+            get { return IsFunction ? RawFunction : ThrowInvalidType<FunctionReference>(); }
+        }
+
         public string Stringify
         {
             [MethodImpl(0x0100)]
-            get { return IsString ? (string)ObjectValue : ToString(); }
+            get { return ToString(); }
         }
 
         public bool Boolify
@@ -151,6 +169,7 @@ namespace ScripterLang
                     case ValueTypes.FloatType:
                         return RawFloat > Epsilon;
                     case ValueTypes.ObjectType:
+                    case ValueTypes.FunctionType:
                         return RawObject != null;
                     case ValueTypes.StringType:
                         return !string.IsNullOrEmpty(RawString);
@@ -163,32 +182,38 @@ namespace ScripterLang
         [MethodImpl(0x0100)]
         public static Value CreateFloat(float value)
         {
-            return new Value { Type = ValueTypes.FloatType, FloatValue = value };
+            return new Value { Type = ValueTypes.FloatType, _floatValue = value };
         }
 
         [MethodImpl(0x0100)]
         public static Value CreateInteger(int value)
         {
-            return new Value { Type = ValueTypes.IntegerType, IntValue = value };
+            return new Value { Type = ValueTypes.IntegerType, _intValue = value };
         }
 
         [MethodImpl(0x0100)]
         public static Value CreateString(string value)
         {
             if (value == null) throw new ScripterRuntimeException("String cannot be null");
-            return new Value { Type = ValueTypes.StringType, ObjectValue = value };
+            return new Value { Type = ValueTypes.StringType, _objectValue = value };
         }
 
         [MethodImpl(0x0100)]
         public static Value CreateBoolean(bool value)
         {
-            return new Value { Type = ValueTypes.BooleanType, IntValue = value ? 1 : 0 };
+            return new Value { Type = ValueTypes.BooleanType, _intValue = value ? 1 : 0 };
         }
 
         [MethodImpl(0x0100)]
-        public static Value CreateObject(Reference value)
+        public static Value CreateObject(ObjectReference value)
         {
-            return new Value { Type = ValueTypes.ObjectType, ObjectValue = value };
+            return new Value { Type = ValueTypes.ObjectType, _objectValue = value };
+        }
+
+        [MethodImpl(0x0100)]
+        public static Value CreateFunction(FunctionReference fn)
+        {
+            return new Value { Type = ValueTypes.FunctionType, _objectValue = fn };
         }
 
         private T ThrowInvalidType<T>()
@@ -210,6 +235,7 @@ namespace ScripterLang
                 case ValueTypes.BooleanType:
                     return RawBool == other.RawBool;
                 case ValueTypes.ObjectType:
+                case ValueTypes.FunctionType:
                     return AsObject == other.RawObject;
                 case ValueTypes.StringType:
                     return AsString == other.Stringify;
@@ -225,8 +251,8 @@ namespace ScripterLang
         {
             switch (Type)
             {
-                case ValueTypes.StringType: return AsString;
-                case ValueTypes.FloatType: return FloatValue.ToString(CultureInfo.InvariantCulture);
+                case ValueTypes.StringType: return RawString;
+                case ValueTypes.FloatType: return RawFloat.ToString(CultureInfo.InvariantCulture);
                 case ValueTypes.IntegerType: return RawInt.ToString();
                 case ValueTypes.BooleanType: return RawBool ? "true" : "false";
                 default: return ValueTypes.Name(Type);
@@ -246,6 +272,9 @@ namespace ScripterLang
         public static implicit operator Value(bool value) => CreateBoolean(value);
 
         [MethodImpl(0x0100)]
-        public static implicit operator Value(Reference value) => CreateObject(value);
+        public static implicit operator Value(ObjectReference value) => CreateObject(value);
+
+        [MethodImpl(0x0100)]
+        public static implicit operator Value(FunctionReference value) => CreateFunction(value);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using ScripterLang;
 
-public class StringChooserParamReference : Reference
+public class StringChooserParamReference : ObjectReference
 {
     private readonly JSONStorableStringChooser _param;
 

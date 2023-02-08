@@ -1,6 +1,6 @@
 ﻿using ScripterLang;
 
-public class BoolParamReference : Reference
+public class BoolParamReference : ObjectReference
 {
     private readonly JSONStorableBool _param;
 

@@ -1,26 +1,26 @@
 ﻿namespace ScripterLang
 {
-    public class VariableAssignmentExpression : Expression
+    public class AssignmentExpression : Expression
     {
-        private readonly string _name;
+        private readonly VariableAccessor _accessor;
         private readonly Expression _expression;
 
-        public VariableAssignmentExpression(string name, Expression expression)
+        public AssignmentExpression(VariableAccessor accessor, Expression expression)
         {
-            _name = name;
+            _accessor = accessor;
             _expression = expression;
         }
 
         public override Value Evaluate(RuntimeDomain domain)
         {
             var right = _expression.Evaluate(domain);
-            domain.SetVariableValue(_name, right);
+            _accessor.SetVariableValue(domain, right);
             return right;
         }
 
         public override string ToString()
         {
-            return $"{_name} = {_expression}";
+            return $"{_accessor} = {_expression}";
         }
     }
 }

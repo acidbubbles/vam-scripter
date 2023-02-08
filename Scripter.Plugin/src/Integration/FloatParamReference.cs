@@ -1,6 +1,6 @@
 ﻿using ScripterLang;
 
-public class FloatParamReference : Reference
+public class FloatParamReference : ObjectReference
 {
     private readonly JSONStorableFloat _param;
 
