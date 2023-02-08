@@ -255,6 +255,22 @@ public class LanguageTests
     #warning No unary operators (+1, -2)
 
     [Test]
+    public void Arrays()
+    {
+        const string source = """
+            static var x = [];
+            x.add(1);
+            x[0] = x[0] + 1;
+            return x[0];
+            """;
+        _globalLexicalContext.Functions.Add("getThing", (d, args) => new MyThing { Value = args[0].AsInt });
+        var expression = Parser.Parse(source, _globalLexicalContext);
+        var result = expression.Evaluate(_domain);
+
+        Assert.That(result.ToString(), Is.EqualTo("134"));
+    }
+
+    [Test]
     public void Objects()
     {
         const string source = """

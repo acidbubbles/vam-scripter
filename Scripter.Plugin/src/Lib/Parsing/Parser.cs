@@ -103,7 +103,7 @@ namespace ScripterLang
             var next = Consume();
             if (next.Match(TokenType.LeftParenthesis))
             {
-                var arguments = ParseArgumentList(lexicalContext);
+                var arguments = ParseArgumentList(lexicalContext, TokenType.RightParenthesis);
                 Consume().Expect(TokenType.RightParenthesis);
                 return new FunctionCallExpression(name, arguments, lexicalContext);
             }
@@ -306,7 +306,7 @@ namespace ScripterLang
             if (next.Match(TokenType.LeftParenthesis))
             {
                 MoveNext();
-                var arguments = ParseArgumentList(lexicalContext);
+                var arguments = ParseArgumentList(lexicalContext, TokenType.RightParenthesis);
                 Consume().Expect(TokenType.RightParenthesis);
                 left = new MethodCallExpression(left, property.Value, arguments);
             }
@@ -402,6 +402,12 @@ namespace ScripterLang
                     Consume().Expect(TokenType.RightParenthesis);
                     return new ParenthesesExpression(expression);
                 }
+                case TokenType.LeftBracket:
+                {
+                    var values = ParseArgumentList(lexicalContext, TokenType.RightBracket);
+                    Consume().Expect(TokenType.RightBracket);
+                    return new ArrayDeclarationExpression(values);
+                }
                 case TokenType.Identifier:
                 {
                     var name = token.Value;
@@ -409,7 +415,7 @@ namespace ScripterLang
                     if (next.Match(TokenType.LeftParenthesis))
                     {
                         MoveNext();
-                        var arguments = ParseArgumentList(lexicalContext);
+                        var arguments = ParseArgumentList(lexicalContext, TokenType.RightParenthesis);
                         Consume().Expect(TokenType.RightParenthesis);
                         return new FunctionCallExpression(name, arguments, lexicalContext);
                     }
@@ -442,10 +448,10 @@ namespace ScripterLang
             return new CodeBlockExpression(expressions, lexicalContext);
         }
 
-        private List<Expression> ParseArgumentList(LexicalContext lexicalContext)
+        private List<Expression> ParseArgumentList(LexicalContext lexicalContext, int endTokenType)
         {
             var arguments = new List<Expression>();
-            while (!Peek().Match(TokenType.RightParenthesis))
+            while (!Peek().Match(endTokenType))
             {
                 var expression = ParseValueStatementExpression(lexicalContext);
                 arguments.Add(expression);

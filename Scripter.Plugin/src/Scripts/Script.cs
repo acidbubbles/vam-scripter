@@ -34,6 +34,7 @@ public class Script
 
     private void Parse(string val)
     {
+        #warning Add globals for Init (shared variables)
         try
         {
             _expression = Parser.Parse(val, _globalLexicalContext);

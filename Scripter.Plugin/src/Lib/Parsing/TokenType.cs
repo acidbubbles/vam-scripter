@@ -26,7 +26,10 @@
         public const int LeftBrace = 50;
         public const int RightBrace = 51;
 
-        public const int Dot = 60;
+        public const int LeftBracket = 60;
+        public const int RightBracket = 61;
+
+        public const int Dot = 70;
 
         public const int Keyword = 100;
     }

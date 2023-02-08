@@ -86,6 +86,7 @@
     <Compile Include="src\Integration\StringChooserParamReference.cs" />
     <Compile Include="src\Integration\StringParamReference.cs" />
     <Compile Include="src\Integration\TimeReference.cs" />
+    <Compile Include="src\Lib\Expressions\ArrayDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\AssignmentOperatorExpression.cs" />
     <Compile Include="src\Lib\Expressions\BinaryExpression.cs" />
     <Compile Include="src\Lib\Expressions\BooleanExpression.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="src\Lib\Runtime\ScripterParsingException.cs" />
     <Compile Include="src\Lib\Runtime\Value.cs" />
     <Compile Include="src\Lib\Runtime\ValueTypes.cs" />
+    <Compile Include="src\Lib\Types\ListReference.cs" />
     <Compile Include="src\Scripts\Triggers\ScriptActionTrigger.cs" />
     <Compile Include="src\Scripts\Triggers\ScriptBoolParamTrigger.cs" />
     <Compile Include="src\Scripts\Triggers\ScriptFloatParamTrigger.cs" />
@@ -151,10 +153,6 @@
     <Compile Include="src\Scripter.cs" />
     <Compile Include="src\ScripterPluginException.cs" />
     <!-- /ScripterSource -->
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="src\Lib" />
   </ItemGroup>
 
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
