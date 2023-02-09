@@ -6,9 +6,9 @@ namespace ScripterLang
     {
         private readonly List<string> _imports;
         private readonly string _module;
-        private readonly ModuleLexicalContext _context;
+        private readonly LexicalContext _context;
 
-        public ImportExpression(List<string> imports, string module, ModuleLexicalContext context)
+        public ImportExpression(List<string> imports, string module, LexicalContext context)
         {
             _imports = imports;
             _module = module;
@@ -21,7 +21,10 @@ namespace ScripterLang
             var module = _context.GetGlobalContext().GetModule(_module);
             foreach (var import in _imports)
             {
-                _context.DeclareHoisted(import, module.GetVariableValue(import));
+                Value value;
+                if (!module.Context.Exports.TryGetValue(import, out value))
+                    throw new ScripterRuntimeException($"Module '{module.ModuleName}' does not export '{import}'");
+                _context.DeclareHoisted(import, value);
             }
             return Value.Void;
         }

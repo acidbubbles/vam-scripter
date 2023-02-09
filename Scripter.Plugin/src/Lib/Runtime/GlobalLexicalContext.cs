@@ -4,21 +4,21 @@ namespace ScripterLang
 {
     public class GlobalLexicalContext : ScopeLexicalContext
     {
-        private readonly Dictionary<string, ModuleLexicalContext> _modules = new Dictionary<string, ModuleLexicalContext>();
+        private readonly Dictionary<string, ModuleExpression> _modules = new Dictionary<string, ModuleExpression>();
 
         public GlobalLexicalContext() : base(null)
         {
         }
 
-        public void DeclareModule(string module, ModuleLexicalContext context)
+        public void DeclareModule(string module, ModuleExpression context)
         {
             #warning Dispose modules
             _modules[module] = context;
         }
 
-        public ModuleLexicalContext GetModule(string module)
+        public ModuleExpression GetModule(string module)
         {
-            ModuleLexicalContext context;
+            ModuleExpression context;
             if (_modules.TryGetValue(module, out context))
                 return context;
             throw new ScripterRuntimeException($"Module {module} was not declared");

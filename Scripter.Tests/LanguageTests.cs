@@ -124,7 +124,6 @@ public class LanguageTests
             x = (x + y) * 2;
             x += 1;
             return x++;
-            ;
             """);
 
         Assert.That(result.ToString(), Is.EqualTo("9"));
@@ -145,7 +144,6 @@ public class LanguageTests
     {
         var result = _program.Add("script", """
             return "a" + 2 + true;
-            ;
             """);
 
         Assert.That(result.ToString(), Is.EqualTo("a2true"));
@@ -293,7 +291,7 @@ public class LanguageTests
             export function fn(y) { return x + y; }
             """);
         var result = _program.Add("importing", """
-            import { x, fn } from "OtherScript";
+            import { x, fn } from "exporting";
             return x + fn(1);
             """);
 

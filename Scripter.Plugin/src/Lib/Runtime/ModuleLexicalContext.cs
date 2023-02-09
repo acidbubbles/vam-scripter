@@ -6,7 +6,7 @@ namespace ScripterLang
     {
         public readonly GlobalLexicalContext GlobalContext;
 
-        public readonly Dictionary<string, Expression> Exports = new Dictionary<string, Expression>();
+        public readonly Dictionary<string, Value> Exports = new Dictionary<string, Value>();
 
         public ModuleLexicalContext(GlobalLexicalContext globalContext)
             : base(globalContext)

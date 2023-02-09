@@ -9,14 +9,12 @@ public class Script
     public readonly JSONStorableString ConsoleJSON = new JSONStorableString("Console", "");
     public ScriptTrigger Trigger;
 
-    private readonly GlobalLexicalContext _globalLexicalContext;
+    private readonly Program _program = new Program();
     private Expression _expression;
 
     public Script(string source = null)
     {
-        _globalLexicalContext = new GlobalLexicalContext();
-        _globalLexicalContext.Declare("value", Location.Empty);
-        GlobalFunctions.Register(_globalLexicalContext);
+        GlobalFunctions.Register(_program.GlobalContext);
 
         History = new HistoryManager(SourceJSON);
 
@@ -36,7 +34,7 @@ public class Script
         #warning Add globals for Init (shared variables)
         try
         {
-            _expression = Parser.Parse(val, _globalLexicalContext);
+            _program.Add("", val);
             ConsoleJSON.val = "<color=green>Code parsed successfully</color>";
         }
         catch (Exception exc)

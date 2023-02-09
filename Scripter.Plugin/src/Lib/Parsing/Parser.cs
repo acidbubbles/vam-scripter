@@ -4,16 +4,10 @@ namespace ScripterLang
 {
     public class Parser
     {
-        public static ModuleExpression Parse(string source, GlobalLexicalContext globalLexicalContext)
-        {
-            var tokens = new List<Token>(Tokenizer.Tokenize(source));
-            return new Parser(tokens).Parse(globalLexicalContext);
-        }
-
         private readonly IList<Token> _tokens;
         private int _position;
 
-        private Parser(IList<Token> tokens)
+        public Parser(IList<Token> tokens)
         {
             _tokens = tokens;
             _position = 0;
@@ -42,7 +36,7 @@ namespace ScripterLang
             return _position == _tokens.Count;
         }
 
-        private ModuleExpression Parse(GlobalLexicalContext globalLexicalContext)
+        public ModuleExpression Parse(GlobalLexicalContext globalLexicalContext, string moduleName)
         {
             var expressions = new List<Expression>();
             var lexicalContext = new ModuleLexicalContext(globalLexicalContext);
@@ -50,7 +44,7 @@ namespace ScripterLang
             {
                 expressions.Add(ParseExpression(lexicalContext));
             }
-            return new ModuleExpression(expressions, lexicalContext);
+            return new ModuleExpression(expressions, moduleName, lexicalContext);
         }
 
         private Expression ParseExpression(ScopeLexicalContext lexicalContext)
@@ -82,7 +76,6 @@ namespace ScripterLang
 
             if (token.Match(TokenType.SemiColon))
             {
-                #warning We probably don't always validate that lines indeed finish with a semicolon?
                 Consume();
                 return UndefinedExpression.Instance;
             }
@@ -97,11 +90,10 @@ namespace ScripterLang
             DeclarationExpression expression;
             if (!token.Match(TokenType.Keyword))
                 throw new ScripterParsingException("Expected var or function after export");
-            if (token.Value == "var" || token.Value == "let") expression = ParseVariableDeclaration(lexicalContext);
+            if (token.Value == "var" || token.Value == "let") expression = ParseVariableDeclaration(lexicalContext, false);
             else if (token.Value == "function") expression = ParseFunctionDeclaration(lexicalContext);
             else throw new ScripterParsingException("Expected var or function after export");
-            lexicalContext.GetModuleContext().Exports.Add(expression.Name, expression);
-            return expression;
+            return new ExportExpression(expression, lexicalContext);
         }
 
         private Expression ParseImportDeclaration(ScopeLexicalContext lexicalContext)
@@ -122,7 +114,7 @@ namespace ScripterLang
             Consume().Expect(TokenType.Keyword, "from");
             var module = Consume().Expect(TokenType.String);
             Consume().Expect(TokenType.SemiColon);
-            return new ImportExpression(arguments, module.Value, lexicalContext.GetModuleContext());
+            return new ImportExpression(arguments, module.Value, lexicalContext);
         }
 
         private Expression ParseVariableStatement(ScopeLexicalContext lexicalContext, Token token)
@@ -287,12 +279,12 @@ namespace ScripterLang
             return new ReturnExpression(value, lexicalContext);
         }
 
-        private VariableDeclarationExpression ParseVariableDeclaration(ScopeLexicalContext lexicalContext)
+        private VariableDeclarationExpression ParseVariableDeclaration(ScopeLexicalContext lexicalContext, bool declareInScope = true)
         {
             MoveNext();
             var nameToken = Consume();
             nameToken.Expect(TokenType.Identifier);
-            lexicalContext.Declare(nameToken.Value, nameToken.Location);
+            if (declareInScope) lexicalContext.Declare(nameToken.Value, nameToken.Location);
             if (Peek().Match(TokenType.Assignment))
             {
                 MoveNext();

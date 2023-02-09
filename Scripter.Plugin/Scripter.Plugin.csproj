@@ -94,6 +94,7 @@
     <Compile Include="src\Lib\Expressions\BooleanExpression.cs" />
     <Compile Include="src\Lib\Expressions\CodeBlockExpression.cs" />
     <Compile Include="src\Lib\Expressions\DeclarationExpression.cs" />
+    <Compile Include="src\Lib\Expressions\ExportExpression.cs" />
     <Compile Include="src\Lib\Expressions\Expression.cs" />
     <Compile Include="src\Lib\Expressions\FloatExpression.cs" />
     <Compile Include="src\Lib\Expressions\ForExpression.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="src\Lib\Expressions\WhileExpression.cs" />
     <Compile Include="src\Lib\Parsing\Location.cs" />
     <Compile Include="src\Lib\Parsing\Parser.cs" />
+    <Compile Include="src\Lib\Parsing\Program.cs" />
     <Compile Include="src\Lib\Parsing\ScripterParsingException.cs" />
     <Compile Include="src\Lib\Parsing\Token.cs" />
     <Compile Include="src\Lib\Parsing\Tokenizer.cs" />

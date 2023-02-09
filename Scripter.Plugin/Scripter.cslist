@@ -21,6 +21,7 @@ src\Lib\Expressions\BinaryExpression.cs
 src\Lib\Expressions\BooleanExpression.cs
 src\Lib\Expressions\CodeBlockExpression.cs
 src\Lib\Expressions\DeclarationExpression.cs
+src\Lib\Expressions\ExportExpression.cs
 src\Lib\Expressions\Expression.cs
 src\Lib\Expressions\FloatExpression.cs
 src\Lib\Expressions\ForExpression.cs
@@ -31,14 +32,13 @@ src\Lib\Expressions\ImportExpression.cs
 src\Lib\Expressions\IncrementDecrementExpression.cs
 src\Lib\Expressions\IndexerAccessor.cs
 src\Lib\Expressions\IntegerExpression.cs
-src\Lib\Expressions\Module.cs
+src\Lib\Expressions\ModuleExpression.cs
 src\Lib\Expressions\NegateExpression.cs
 src\Lib\Expressions\ParenthesesExpression.cs
 src\Lib\Expressions\PropertyAccessor.cs
 src\Lib\Expressions\ReturnExpression.cs
 src\Lib\Expressions\ScopedVariableAccessor.cs
 src\Lib\Expressions\SetIndexerExpression.cs
-src\Lib\Expressions\StaticVariableDeclarationExpression.cs
 src\Lib\Expressions\StringExpression.cs
 src\Lib\Expressions\ThrowExpression.cs
 src\Lib\Expressions\UndefinedExpression.cs
@@ -47,6 +47,7 @@ src\Lib\Expressions\VariableDeclarationExpression.cs
 src\Lib\Expressions\WhileExpression.cs
 src\Lib\Parsing\Location.cs
 src\Lib\Parsing\Parser.cs
+src\Lib\Parsing\Program.cs
 src\Lib\Parsing\ScripterParsingException.cs
 src\Lib\Parsing\Token.cs
 src\Lib\Parsing\Tokenizer.cs
