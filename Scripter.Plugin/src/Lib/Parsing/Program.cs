@@ -13,9 +13,10 @@ namespace ScripterLang
             GlobalContext.DeclareModule(expression.ModuleName, expression);
         }
 
-        public Value Run(string moduleName)
+        public ModuleReference Run(string moduleName)
         {
-            return GlobalContext.GetModule(moduleName).Evaluate();
+            GlobalContext.InvalidateModules();
+            return GlobalContext.GetModule(moduleName).Import();
         }
     }
 }

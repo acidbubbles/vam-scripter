@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace ScripterLang
+﻿namespace ScripterLang
 {
     public class ModuleLexicalContext : FunctionLexicalContext
     {
         public readonly GlobalLexicalContext GlobalContext;
 
-        public readonly Dictionary<string, Value> Exports = new Dictionary<string, Value>();
+        public readonly ModuleReference Module = new ModuleReference();
 
         public ModuleLexicalContext(GlobalLexicalContext globalContext)
             : base(globalContext)

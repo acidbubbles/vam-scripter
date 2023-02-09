@@ -20,11 +20,11 @@ namespace ScripterLang
         public override Value Evaluate()
         {
             var module = _globalContext.GetModule(_module);
-            var exports = module.Import();
+            var ns = module.Import();
             foreach (var import in _imports)
             {
                 Value value;
-                if (!exports.TryGetValue(import, out value))
+                if (!ns.Exports.TryGetValue(import, out value))
                     throw new ScripterRuntimeException($"Module '{module.ModuleName}' does not export '{import}'");
                 _context.Variables[import] = value;
             }

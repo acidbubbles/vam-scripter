@@ -10,7 +10,7 @@ public class RandomReference : ObjectReference
             case "value":
                 return Random.value;
             case "range":
-                return fn(Range);
+                return Func(Range);
             default:
                 return base.Get(name);
         }

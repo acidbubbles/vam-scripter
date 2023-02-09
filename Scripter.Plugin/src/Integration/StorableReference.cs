@@ -14,15 +14,15 @@ public class StorableReference : ObjectReference
         switch (name)
         {
             case "trigger":
-                return fn(Trigger);
+                return Func(Trigger);
             case "getFloat":
-                return fn(GetFloat);
+                return Func(GetFloat);
             case "getString":
-                return fn(GetString);
+                return Func(GetString);
             case "getStringChooser":
-                return fn(GetStringChooser);
+                return Func(GetStringChooser);
             case "getBool":
-                return fn(GetBool);
+                return Func(GetBool);
             default:
                 return base.Get(name);
         }

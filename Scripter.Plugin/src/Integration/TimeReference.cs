@@ -8,9 +8,9 @@ public class TimeReference : ObjectReference
         switch (name)
         {
             case "time":
-                return fn((d, a) => Time.time);
+                return Func((d, a) => Time.time);
             case "deltaTime":
-                return fn((d, a) => Time.deltaTime);
+                return Func((d, a) => Time.deltaTime);
             default:
                 return base.Get(name);
         }

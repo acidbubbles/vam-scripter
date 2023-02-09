@@ -15,7 +15,7 @@ public class DateTimeReference : ObjectReference
         switch (name)
         {
             case "toString":
-                return fn(ToString);
+                return Func(ToString);
             default:
                 return base.Get(name);
         }

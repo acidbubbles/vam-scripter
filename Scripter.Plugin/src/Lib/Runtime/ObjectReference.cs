@@ -1,5 +1,13 @@
-﻿namespace ScripterLang
+﻿using System.Collections.Generic;
+
+namespace ScripterLang
 {
+    public class ModuleReference : ObjectReference
+    {
+        public Value Returned;
+        public readonly Dictionary<string, Value> Exports = new Dictionary<string, Value>();
+    }
+
     public abstract class ObjectReference
     {
         public virtual Value Get(string name)
@@ -22,9 +30,9 @@
             throw new ScripterRuntimeException($"Object has no indexer");
         }
 
-        protected Value fn(FunctionReference f) => ScripterLang.Value.CreateFunction(f);
+        protected static Value Func(FunctionReference f) => Value.CreateFunction(f);
 
-        public static void ValidateArgumentsLength(string name, Value[] args, int expectedLength)
+        protected static void ValidateArgumentsLength(string name, Value[] args, int expectedLength)
         {
             if (args.Length < expectedLength) throw new ScripterRuntimeException($"Method {name} Expected {expectedLength} arguments, received {args.Length}");
         }

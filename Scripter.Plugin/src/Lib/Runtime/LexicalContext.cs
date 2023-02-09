@@ -27,9 +27,7 @@ namespace ScripterLang
 
         public void CreateVariableValue(string name, Value value)
         {
-            if (Variables.ContainsKey(name))
-                throw new ScripterRuntimeException($"Variable '{name}' was already declared");
-            Variables.Add(name, value);
+            Variables[name] = value;
         }
 
         public virtual Value GetVariableValue(string name)

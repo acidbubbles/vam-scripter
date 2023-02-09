@@ -101,6 +101,7 @@
     <Compile Include="src\Lib\Expressions\FunctionCallExpression.cs" />
     <Compile Include="src\Lib\Expressions\FunctionDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\IfExpression.cs" />
+    <Compile Include="src\Lib\Expressions\IModule.cs" />
     <Compile Include="src\Lib\Expressions\ImportExpression.cs" />
     <Compile Include="src\Lib\Expressions\IncrementDecrementExpression.cs" />
     <Compile Include="src\Lib\Expressions\IndexerAccessor.cs" />

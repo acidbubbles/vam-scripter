@@ -1,4 +1,3 @@
-using System;
 using ScripterLang;
 
 namespace Scripter.Tests;
@@ -22,7 +21,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("1"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("1"));
     }
 
     [Test]
@@ -34,7 +33,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("2"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("2"));
     }
 
     [Test]
@@ -46,7 +45,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("true"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("true"));
     }
 
     [Test]
@@ -64,7 +63,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("ok"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("ok"));
     }
 
     [Test]
@@ -78,7 +77,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("ok"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("ok"));
     }
 
     [Test]
@@ -92,7 +91,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result, Is.EqualTo(Value.Undefined));
+        Assert.That(result.Returned, Is.EqualTo(Value.Undefined));
     }
 
     [Test]
@@ -112,7 +111,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("ok"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("ok"));
     }
 
     [Test]
@@ -138,7 +137,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("9"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("9"));
     }
 
     [Test]
@@ -159,7 +158,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("a2true"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("a2true"));
     }
 
     [Test]
@@ -190,7 +189,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("10"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("10"));
     }
 
     [Test]
@@ -205,8 +204,8 @@ public class LanguageTests
         var result1 = _program.Run("script");
         var result2 = _program.Run("script");
 
-        Assert.That(result1.ToString(), Is.EqualTo("1"));
-        Assert.That(result2.ToString(), Is.EqualTo("1"));
+        Assert.That(result1.Returned.ToString(), Is.EqualTo("1"));
+        Assert.That(result2.Returned.ToString(), Is.EqualTo("1"));
     }
 
     #warning Replace static by export or bind to event, e.g. param.onChange(function() { ... }), plugin
@@ -232,7 +231,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("4"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("4"));
     }
 
     [Test]
@@ -245,7 +244,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("14"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("14"));
     }
 
     #warning No unary operators (+1, -2)
@@ -265,7 +264,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("[5, 1]"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("[5, 1]"));
     }
 
     [Test]
@@ -286,7 +285,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("134"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("134"));
     }
 
     [Test]
@@ -315,7 +314,7 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.ToString(), Is.EqualTo("4"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("4"));
     }
 
     [Test]
@@ -331,7 +330,7 @@ public class LanguageTests
             """);
         var result = _program.Run("main");
 
-        Assert.That(result.ToString(), Is.EqualTo("3"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("3"));
     }
 
     [Test]
@@ -346,7 +345,7 @@ public class LanguageTests
             """);
         var result = _program.Run("main");
 
-        Assert.That(result.ToString(), Is.EqualTo("1"));
+        Assert.That(result.Returned.ToString(), Is.EqualTo("1"));
     }
 
     [Test]
@@ -360,19 +359,20 @@ public class LanguageTests
             export var x = 1;
             """);
         var result1 = _program.Run("main");
+        Assert.That(result1.Returned.ToString(), Is.EqualTo("1"));
+
         _program.Add("main", """
             import { x } from "lib";
             return x * 3;
             """);
         var result2 = _program.Run("main");
+        Assert.That(result2.Returned.ToString(), Is.EqualTo("3"));
+
         _program.Add("lib", """
             export var x = 2;
             """);
         var result3 = _program.Run("main");
-
-        Assert.That(result1.ToString(), Is.EqualTo("1"));
-        Assert.That(result2.ToString(), Is.EqualTo("3"));
-        Assert.That(result3.ToString(), Is.EqualTo("6"));
+        Assert.That(result3.Returned.ToString(), Is.EqualTo("6"));
     }
 
     private class MyThing : ObjectReference
@@ -386,8 +386,8 @@ public class LanguageTests
             {
                 case "value": return Value;
                 case "deep": return Deep;
-                case "increment": return fn(Increment);
-                case "createAndAdd": return fn(CreateAndAdd);
+                case "increment": return Func(Increment);
+                case "createAndAdd": return Func(CreateAndAdd);
                 default: return base.Get(name);
             }
         }
@@ -438,6 +438,6 @@ public class LanguageTests
             """);
         var result = _program.Run("script");
 
-        Assert.That(result.RawInt, Is.EqualTo(26));
+        Assert.That(result.Returned.RawInt, Is.EqualTo(26));
     }
 }

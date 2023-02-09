@@ -3,18 +3,18 @@
     public class ExportExpression : Expression
     {
         private readonly DeclarationExpression _expression;
-        private readonly ScopeLexicalContext _lexicalContext;
+        private readonly ModuleLexicalContext _moduleLexicalContext;
 
-        public ExportExpression(DeclarationExpression expression, ScopeLexicalContext lexicalContext)
+        public ExportExpression(DeclarationExpression expression, LexicalContext lexicalContext)
         {
             _expression = expression;
-            _lexicalContext = lexicalContext;
+            _moduleLexicalContext = lexicalContext.GetModuleContext();
         }
 
         public override Value Evaluate()
         {
             var value = _expression.Evaluate();
-            _lexicalContext.GetModuleContext().Exports.Add(_expression.Name, value);
+            _moduleLexicalContext.Module.Exports.Add(_expression.Name, value);
             return Value.Void;
         }
 

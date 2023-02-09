@@ -7,11 +7,11 @@ public class ConsoleReference : ObjectReference
         switch (name)
         {
             case "clear":
-                return fn(Clear);
+                return Func(Clear);
             case "log":
-                return fn(Log);
+                return Func(Log);
             case "error":
-                return fn(Error);
+                return Func(Error);
             default:
                 return base.Get(name);
         }

@@ -17,7 +17,7 @@ namespace ScripterLang
             switch (name)
             {
                 case "add":
-                    return fn(Add);
+                    return Func(Add);
                 case "length":
                     return _values.Count;
                 default:

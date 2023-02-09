@@ -14,7 +14,7 @@ public class AtomReference : ObjectReference
         switch (name)
         {
             case "getStorable":
-                return fn(GetStorable);
+                return Func(GetStorable);
             default:
                 return base.Get(name);
         }

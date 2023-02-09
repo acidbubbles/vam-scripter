@@ -7,7 +7,7 @@ public class SceneReference : ObjectReference
         switch (name)
         {
             case "getAtom":
-                return fn(GetAtom);
+                return Func(GetAtom);
             default:
                 return base.Get(name);
         }

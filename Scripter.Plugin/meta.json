@@ -39,6 +39,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\FunctionCallExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\FunctionDeclarationExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\IfExpression.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\IModule.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\ImportExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\IncrementDecrementExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\IndexerAccessor.cs",
