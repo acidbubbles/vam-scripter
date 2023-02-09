@@ -168,11 +168,11 @@ public class LanguageTests
         _program.Add("script", """
             if(false) { throw "false"; }
             if(!true) { throw "!true"; }
-            return "nice";
+            if(false) throw "no brackets";
+            if(true) throw "success";
             """);
-        var result = _program.Run("script");
-
-        Assert.That(result.ToString(), Is.EqualTo("nice"));
+        var exc = Assert.Throws<ScripterRuntimeException>(() => _program.Run("script"));
+        Assert.That(exc?.Message, Is.EqualTo("success"));
     }
 
     [Test]
@@ -226,12 +226,26 @@ public class LanguageTests
                 }
                 x = increment(x);
             }
-            run();
+            var wrap = function() { return run(); };
+            wrap();
             return x;
             """);
         var result = _program.Run("script");
 
         Assert.That(result.ToString(), Is.EqualTo("4"));
+    }
+
+    [Test]
+    public void ArrowFunctions()
+    {
+        _program.Add("script", """
+            var x = (i) => { return i + 1; };
+            var y = i => i + 1;
+            return x(2) + y(10);
+            """);
+        var result = _program.Run("script");
+
+        Assert.That(result.ToString(), Is.EqualTo("14"));
     }
 
     #warning No unary operators (+1, -2)

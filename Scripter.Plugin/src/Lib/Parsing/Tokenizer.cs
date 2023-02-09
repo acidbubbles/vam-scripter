@@ -206,6 +206,11 @@ namespace ScripterLang
                             yield return new Token(TokenType.Operator, "==", Location);
                             MoveNext();
                         }
+                        else if (Current == '>')
+                        {
+                            yield return new Token(TokenType.Arrow, "=>", Location);
+                            MoveNext();
+                        }
                         else
                         {
                             yield return new Token(TokenType.Assignment, "=", Location);

@@ -35,7 +35,13 @@ namespace ScripterLang
         public Token Expect(int type)
         {
             if (Type != type)
+            {
+                if (type==TokenType.SemiColon)
+                {
+                    throw new ScripterParsingException($"Expected semicolon, found token '{Value}'", Location);
+                }
                 throw new ScripterParsingException($"Unexpected token '{Value}'", Location);
+            }
             return this;
         }
 

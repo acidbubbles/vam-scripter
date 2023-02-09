@@ -12,8 +12,8 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 - Assignment operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`)
 - Comments (`//`, `/* */`)
 - Keywords (`if`, `else`, `for`, `while`, `throw`)
-- Static variables (`static`)
 - Functions (`function`, `return`)
+- Arrow functions (`(x) => { code; }`, `x => code`)
 - Arrays (`var x = []`, `var x = [values]`, `x.add`, `x[index]`, `x.length`)
 - Code blocks and lexical scopes (`{`, `}`)
 - DateTime (`DateTime.now.format("")`)
@@ -24,8 +24,6 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 - No support for dictionaries (maps)
 - No `break` and `continue` statements
 - No `foreach`
-- Code blocks without brackets, like `if(condition) something();`
-- Variable values are locally scoped, but you cannot reuse them in other functions of the same script
 
 ## Globals
 

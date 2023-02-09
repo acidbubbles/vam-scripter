@@ -13,6 +13,7 @@
 
         public const int Comma = 20;
         public const int SemiColon = 21;
+        public const int Arrow = 22;
 
         public const int Operator = 30;
         public const int Assignment = 31;
