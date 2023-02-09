@@ -9,7 +9,7 @@
             _value = value;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
             return Value.CreateBoolean(_value);
         }

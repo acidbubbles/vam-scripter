@@ -13,11 +13,11 @@
             _value = value;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            var obj = _accessor.Evaluate(domain).AsObject;
-            var index = _index.Evaluate(domain);
-            var value = _value.Evaluate(domain);
+            var obj = _accessor.Evaluate().AsObject;
+            var index = _index.Evaluate();
+            var value = _value.Evaluate();
             obj.SetIndex(index, value);
             return Value.Void;
         }

@@ -15,7 +15,7 @@
             _body = body;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
             #warning break and continue statements;
             #warning foreach
@@ -23,9 +23,9 @@
             const float maxTime = 5;
             var max = Time.time + maxTime;
             #endif
-            for (_start.Evaluate(domain); _end.Evaluate(domain).RawBool; _increment.Evaluate(domain))
+            for (_start.Evaluate(); _end.Evaluate().RawBool; _increment.Evaluate())
             {
-                _body.Evaluate(domain);
+                _body.Evaluate();
                 #if SCRIPTER_DUMMY_MODE
                 if (Time.time > max)
                     throw new ScripterRuntimeException($"Spent more than {maxTime} seconds in the for loop");

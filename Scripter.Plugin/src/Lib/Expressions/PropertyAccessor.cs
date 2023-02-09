@@ -11,15 +11,15 @@
             _property = property;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            return _left.Evaluate(domain).AsObject.Get(_property);
+            return _left.Evaluate().AsObject.Get(_property);
         }
 
-        public override Value SetVariableValue(RuntimeDomain domain, Value value)
+        public override Value SetVariableValue(Value value)
         {
             #warning This is dangerous, we should not re-evaluate
-            _left.Evaluate(domain).AsObject.Set(_property, value);
+            _left.Evaluate().AsObject.Set(_property, value);
             return value;
         }
 

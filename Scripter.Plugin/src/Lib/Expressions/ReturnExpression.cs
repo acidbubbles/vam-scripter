@@ -3,16 +3,18 @@
     public class ReturnExpression : Expression
     {
         private readonly Expression _expression;
+        private readonly LexicalContext _context;
 
-        public ReturnExpression(Expression expression)
+        public ReturnExpression(Expression expression, LexicalContext context)
         {
             _expression = expression;
+            _context = context;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            domain.IsReturn = true;
-            return _expression.Evaluate(domain);
+            _context.GetFunctionContext().IsReturn = true;
+            return _expression.Evaluate();
         }
 
         public override string ToString()

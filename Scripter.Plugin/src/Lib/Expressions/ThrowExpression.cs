@@ -9,9 +9,9 @@
             _message = message;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            var message = _message.Evaluate(domain);
+            var message = _message.Evaluate();
             throw new ScripterRuntimeException(message.Stringify);
         }
 

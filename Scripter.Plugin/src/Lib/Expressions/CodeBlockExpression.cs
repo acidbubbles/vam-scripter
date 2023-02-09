@@ -5,23 +5,23 @@ namespace ScripterLang
 {
     public class CodeBlockExpression : Expression
     {
-        private readonly ScopeLexicalContext _lexicalContext;
         private readonly List<Expression> _expressions;
+        private readonly LexicalContext _context;
 
-        public CodeBlockExpression(List<Expression> expressions, ScopeLexicalContext lexicalContext)
+        public CodeBlockExpression(List<Expression> expressions, LexicalContext context)
         {
-            _lexicalContext = lexicalContext;
             _expressions = expressions;
+            _context = context;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
             try
             {
                 foreach (var expression in _expressions)
                 {
-                    var result = expression.Evaluate(domain);
-                    if (domain.IsReturn)
+                    var result = expression.Evaluate();
+                    if (_context.GetFunctionContext().IsReturn)
                         return result;
                 }
 
@@ -29,9 +29,9 @@ namespace ScripterLang
             }
             finally
             {
-                for (var i = 0; i < _lexicalContext.Declarations.Count; i++)
+                for (var i = 0; i < _context.Declarations.Count; i++)
                 {
-                    domain.ClearVariable(_lexicalContext.Declarations[i]);
+                    _context.ClearVariable(_context.Declarations[i]);
                 }
             }
         }

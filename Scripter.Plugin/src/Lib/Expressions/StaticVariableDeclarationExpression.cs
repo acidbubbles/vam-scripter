@@ -4,20 +4,22 @@
     {
         private readonly string _name;
         private readonly Expression _expression;
+        private readonly LexicalContext _context;
 
-        public StaticVariableDeclarationExpression(string name, Expression expression)
+        public StaticVariableDeclarationExpression(string name, Expression expression, LexicalContext context)
         {
             _name = name;
             _expression = expression;
+            _context = context.GetModuleContext();
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
             Value value;
-            if (domain.Variables.TryGetValue(_name, out value))
+            if (_context.Variables.TryGetValue(_name, out value))
                 return value;
-            value = _expression.Evaluate(domain);
-            domain.CreateVariableValue(_name, value);
+            value = _expression.Evaluate();
+            _context.CreateVariableValue(_name, value);
             return value;
         }
     }

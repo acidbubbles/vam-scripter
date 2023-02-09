@@ -17,20 +17,20 @@ public class ConsoleReference : ObjectReference
         }
     }
 
-    private static Value Clear(RuntimeDomain domain, Value[] args)
+    private static Value Clear(LexicalContext context, Value[] args)
     {
         SuperController.singleton.ClearMessages();
         return Value.Void;
     }
 
-    private static Value Log(RuntimeDomain domain, Value[] args)
+    private static Value Log(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(Log), args, 1);
         SuperController.LogMessage(args[0].Stringify);
         return Value.Void;
     }
 
-    private static Value Error(RuntimeDomain domain, Value[] args)
+    private static Value Error(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(Error), args, 1);
         SuperController.LogError(args[0].Stringify);

@@ -13,13 +13,13 @@
             _falseBranch = falseBranch;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            var condition = _condition.Evaluate(domain);
+            var condition = _condition.Evaluate();
             if (condition.AsBool)
-                return _trueBranch.Evaluate(domain);
+                return _trueBranch.Evaluate();
             if (_falseBranch != null)
-                return _falseBranch.Evaluate(domain);
+                return _falseBranch.Evaluate();
             return Value.Void;
         }
 

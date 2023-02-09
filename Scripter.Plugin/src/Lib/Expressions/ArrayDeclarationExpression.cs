@@ -12,11 +12,11 @@ namespace ScripterLang
             _expressions = expressions;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
             var values = new List<Value>(_expressions.Count);
             for (var i = 0; i < _expressions.Count; i++)
-                values.Add(_expressions[i].Evaluate(domain));
+                values.Add(_expressions[i].Evaluate());
             return Value.CreateObject(new ListReference(values));
         }
 

@@ -11,10 +11,10 @@
             _expression = expression;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            var right = _expression.Evaluate(domain);
-            _accessor.SetVariableValue(domain, right);
+            var right = _expression.Evaluate();
+            _accessor.SetVariableValue(right);
             return right;
         }
 

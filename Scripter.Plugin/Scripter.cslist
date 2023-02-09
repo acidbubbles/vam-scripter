@@ -8,6 +8,7 @@ src\Integration\GlobalDotNetFunctions.cs
 src\Integration\GlobalFunctions.cs
 src\Integration\GlobalUnityFunctions.cs
 src\Integration\GlobalVamFunctions.cs
+src\Integration\RandomReference.cs
 src\Integration\SceneReference.cs
 src\Integration\StorableReference.cs
 src\Integration\StringChooserParamReference.cs
@@ -19,12 +20,12 @@ src\Lib\Expressions\AssignmentOperatorExpression.cs
 src\Lib\Expressions\BinaryExpression.cs
 src\Lib\Expressions\BooleanExpression.cs
 src\Lib\Expressions\CodeBlockExpression.cs
+src\Lib\Expressions\DeclarationExpression.cs
 src\Lib\Expressions\Expression.cs
 src\Lib\Expressions\FloatExpression.cs
 src\Lib\Expressions\ForExpression.cs
-src\Lib\Expressions\FunctionBlockExpression.cs
 src\Lib\Expressions\FunctionCallExpression.cs
-src\Lib\Expressions\FunctionDeclaration.cs
+src\Lib\Expressions\FunctionDeclarationExpression.cs
 src\Lib\Expressions\IfExpression.cs
 src\Lib\Expressions\IncrementDecrementExpression.cs
 src\Lib\Expressions\IndexerAccessor.cs
@@ -48,11 +49,12 @@ src\Lib\Parsing\ScripterParsingException.cs
 src\Lib\Parsing\Token.cs
 src\Lib\Parsing\Tokenizer.cs
 src\Lib\Parsing\TokenType.cs
+src\Lib\Runtime\FunctionLexicalContext.cs
 src\Lib\Runtime\FunctionReference.cs
 src\Lib\Runtime\GlobalLexicalContext.cs
 src\Lib\Runtime\LexicalContext.cs
+src\Lib\Runtime\ModuleLexicalContext.cs
 src\Lib\Runtime\ObjectReference.cs
-src\Lib\Runtime\RuntimeDomain.cs
 src\Lib\Runtime\ScopeLexicalContext.cs
 src\Lib\Runtime\ScripterParsingException.cs
 src\Lib\Runtime\Value.cs

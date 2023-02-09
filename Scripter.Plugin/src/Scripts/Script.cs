@@ -10,7 +10,6 @@ public class Script
     public ScriptTrigger Trigger;
 
     private readonly GlobalLexicalContext _globalLexicalContext;
-    private RuntimeDomain _domain;
     private Expression _expression;
 
     public Script(string source = null)
@@ -38,13 +37,11 @@ public class Script
         try
         {
             _expression = Parser.Parse(val, _globalLexicalContext);
-            _domain = new RuntimeDomain(_globalLexicalContext);
             ConsoleJSON.val = "<color=green>Code parsed successfully</color>";
         }
         catch (Exception exc)
         {
             _expression = null;
-            _domain = null;
             ConsoleJSON.val = $"<color=red>Failed to compile.\n{exc}</color>";
         }
     }
@@ -55,9 +52,10 @@ public class Script
 
         try
         {
-            if (value.Type != ValueTypes.Uninitialized)
-                _domain.Variables["value"] = value;
-            _expression.Evaluate(_domain);
+            #warning Change to onEvent
+            // if (value.Type != ValueTypes.Uninitialized)
+            //     _domain.Variables["value"] = value;
+            _expression.Evaluate();
         }
         catch (Exception exc)
         {

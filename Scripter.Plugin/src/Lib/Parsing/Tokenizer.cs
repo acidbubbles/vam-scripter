@@ -307,6 +307,9 @@ namespace ScripterLang
                                 case "throw":
                                 case "static":
                                 case "function":
+                                case "export":
+                                case "import":
+                                case "from":
                                     yield return new Token(TokenType.Keyword, name, Location);
                                     break;
                                 default:

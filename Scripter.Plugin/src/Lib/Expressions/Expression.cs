@@ -2,6 +2,6 @@
 {
     public abstract class Expression
     {
-        public abstract Value Evaluate(RuntimeDomain domain);
+        public abstract Value Evaluate();
     }
 }

@@ -35,7 +35,7 @@ namespace ScripterLang
             _values[index.AsInt] = value;
         }
 
-        private Value Add(RuntimeDomain domain, Value[] args)
+        private Value Add(LexicalContext context, Value[] args)
         {
             ValidateArgumentsLength(nameof(Add), args, 1);
             _values.Add(args[0]);

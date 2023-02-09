@@ -11,18 +11,18 @@
             _index = index;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            var obj = _accessor.Evaluate(domain).AsObject;
-            var index = _index.Evaluate(domain);
+            var obj = _accessor.Evaluate().AsObject;
+            var index = _index.Evaluate();
             return obj.GetIndex(index);
         }
 
-        public override Value SetVariableValue(RuntimeDomain domain, Value value)
+        public override Value SetVariableValue(Value value)
         {
-            var obj = _accessor.Evaluate(domain).AsObject;
+            var obj = _accessor.Evaluate().AsObject;
             #warning We evaluate the object and index twice, again
-            var index = _index.Evaluate(domain);
+            var index = _index.Evaluate();
             obj.SetIndex(index, value);
             return value;
         }

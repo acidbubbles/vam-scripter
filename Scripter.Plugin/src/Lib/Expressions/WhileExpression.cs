@@ -11,11 +11,11 @@ namespace ScripterLang
             _body = body;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            while (_condition.Evaluate(domain).RawBool)
+            while (_condition.Evaluate().RawBool)
             {
-                _body.Evaluate(domain);
+                _body.Evaluate();
             }
             return Value.Void;
         }

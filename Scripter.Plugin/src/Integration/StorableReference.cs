@@ -28,7 +28,7 @@ public class StorableReference : ObjectReference
         }
     }
 
-    public Value Trigger(RuntimeDomain domain, Value[] args)
+    public Value Trigger(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(Trigger), args, 1);
         var paramName = args[0].AsString;
@@ -36,7 +36,7 @@ public class StorableReference : ObjectReference
         return Value.Void;
     }
 
-    public Value GetFloat(RuntimeDomain domain, Value[] args)
+    public Value GetFloat(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetFloat), args, 1);
         var paramName = args[0].AsString;
@@ -47,7 +47,7 @@ public class StorableReference : ObjectReference
         return new FloatParamReference(param);
     }
 
-    public Value GetString(RuntimeDomain domain, Value[] args)
+    public Value GetString(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetString), args, 1);
         var paramName = args[0].AsString;
@@ -58,7 +58,7 @@ public class StorableReference : ObjectReference
         return new StringParamReference(param);
     }
 
-    public Value GetStringChooser(RuntimeDomain domain, Value[] args)
+    public Value GetStringChooser(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetStringChooser), args, 1);
         var paramName = args[0].AsString;
@@ -69,7 +69,7 @@ public class StorableReference : ObjectReference
         return new StringChooserParamReference(param);
     }
 
-    public Value GetBool(RuntimeDomain domain, Value[] args)
+    public Value GetBool(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetBool), args, 1);
         var paramName = args[0].AsString;

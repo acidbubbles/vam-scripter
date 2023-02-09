@@ -13,9 +13,9 @@
             _returnOriginal = returnOriginal;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            var original = _accessor.Evaluate(domain);
+            var original = _accessor.Evaluate();
             Value value;
             switch (_op)
             {
@@ -48,7 +48,7 @@
                 default:
                     throw new ScripterParsingException($"Unexpected operator {_op}");
             }
-            _accessor.SetVariableValue(domain, value);
+            _accessor.SetVariableValue(value);
             return _returnOriginal ? original : value;
         }
 

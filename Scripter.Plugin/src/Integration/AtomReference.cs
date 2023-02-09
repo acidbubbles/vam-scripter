@@ -20,7 +20,7 @@ public class AtomReference : ObjectReference
         }
     }
 
-    private Value GetStorable(RuntimeDomain domain, Value[] args)
+    private Value GetStorable(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetStorable), args, 1);
         var storableName = args[0].AsString;

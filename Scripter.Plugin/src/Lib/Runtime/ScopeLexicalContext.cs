@@ -2,33 +2,45 @@
 {
     public class ScopeLexicalContext : LexicalContext
     {
-        public readonly GlobalLexicalContext Root;
-
-        private readonly LexicalContext _parent;
-
-        public ScopeLexicalContext(GlobalLexicalContext root)
-        {
-            Root = root;
-            _parent = root;
-        }
+        private readonly ScopeLexicalContext _parent;
 
         public ScopeLexicalContext(ScopeLexicalContext parent)
         {
-            Root = parent.Root;
             _parent = parent;
         }
 
         public override void Declare(string name, Location location)
         {
-            LexicalContext scope = this;
-            do
+            var scope = this;
+            while((scope = scope._parent) != null)
             {
                 if (scope.Declarations.Contains(name))
                     throw new ScripterParsingException($"Variable {name} was already declared in an outer scope", location);
-                scope = (scope as ScopeLexicalContext)?._parent;
-            } while (scope != null);
-
-            Declarations.Add(name);
+            }
+            base.Declare(name, location);
         }
+
+        public override Value GetVariableValue(string name)
+        {
+            Value value;
+            if (Variables.TryGetValue(name, out value))
+                return value;
+            if (_parent == null)
+                throw new ScripterRuntimeException($"{name} was not defined");
+            return _parent.GetVariableValue(name);
+        }
+
+        public override Value SetVariableValue(string name, Value value)
+        {
+            if (Declarations.Contains(name))
+                return base.SetVariableValue(name, value);
+            if (_parent == null)
+                throw new ScripterRuntimeException($"{name} was not defined");
+            return _parent.SetVariableValue(name, value);
+        }
+
+        public override ModuleLexicalContext GetModuleContext() => _parent.GetModuleContext();
+        public override FunctionLexicalContext GetFunctionContext() => _parent.GetFunctionContext();
+        public override GlobalLexicalContext GetGlobalContext() => _parent.GetGlobalContext();
     }
 }

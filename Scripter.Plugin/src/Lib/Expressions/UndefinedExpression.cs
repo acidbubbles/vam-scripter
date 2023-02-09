@@ -4,7 +4,7 @@
     {
         public static readonly Expression Instance = new UndefinedExpression();
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
             return Value.Undefined;
         }

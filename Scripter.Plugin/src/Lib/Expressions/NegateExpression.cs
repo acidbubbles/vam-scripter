@@ -9,9 +9,9 @@
             _expression = expression;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            var value = _expression.Evaluate(domain);
+            var value = _expression.Evaluate();
             if (value.Type != ValueTypes.BooleanType)
                 throw new ScripterRuntimeException("Operator ! must be followed by a boolean value");
             return !value.RawBool;

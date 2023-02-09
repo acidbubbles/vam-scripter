@@ -1,4 +1,4 @@
 ﻿namespace ScripterLang
 {
-    public delegate Value FunctionReference(RuntimeDomain domain, Value[] args);
+    public delegate Value FunctionReference(LexicalContext context, Value[] args);
 }

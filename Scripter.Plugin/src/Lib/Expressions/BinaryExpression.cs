@@ -13,10 +13,10 @@
             _right = right;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            var left = _left.Evaluate(domain);
-            var right = _right.Evaluate(domain);
+            var left = _left.Evaluate();
+            var right = _right.Evaluate();
 
             switch (_operator)
             {

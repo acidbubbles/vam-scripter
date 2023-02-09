@@ -9,9 +9,9 @@
             _expression = expression;
         }
 
-        public override Value Evaluate(RuntimeDomain domain)
+        public override Value Evaluate()
         {
-            return _expression.Evaluate(domain);
+            return _expression.Evaluate();
         }
 
         public override string ToString()

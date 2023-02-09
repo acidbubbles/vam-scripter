@@ -2,6 +2,6 @@
 {
     public abstract class VariableAccessor : Expression
     {
-        public abstract Value SetVariableValue(RuntimeDomain domain, Value value);
+        public abstract Value SetVariableValue(Value value);
     }
 }

@@ -13,7 +13,7 @@ public class SceneReference : ObjectReference
         }
     }
 
-    private static Value GetAtom(RuntimeDomain domain, Value[] args)
+    private static Value GetAtom(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetAtom), args, 1);
         var atomName = args[0].AsString;

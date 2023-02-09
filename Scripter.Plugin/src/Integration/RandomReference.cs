@@ -16,7 +16,7 @@ public class RandomReference : ObjectReference
         }
     }
 
-    private static Value Range(RuntimeDomain domain, Value[] args)
+    private static Value Range(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(Range), args, 2);
         if (args[0].IsInt && args[1].IsInt)

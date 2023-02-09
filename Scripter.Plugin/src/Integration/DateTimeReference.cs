@@ -21,7 +21,7 @@ public class DateTimeReference : ObjectReference
         }
     }
 
-    private Value ToString(RuntimeDomain domain, Value[] args)
+    private Value ToString(LexicalContext context, Value[] args)
     {
         return _value.ToString(args.Length == 1 ? args[0].AsString : "s");
     }
