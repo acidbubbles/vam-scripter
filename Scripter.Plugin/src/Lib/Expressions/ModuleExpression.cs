@@ -7,11 +7,22 @@ namespace ScripterLang
         public readonly string ModuleName;
         public readonly ModuleLexicalContext Context;
 
+        private bool _evaluated;
+        private Value _value = Value.Undefined;
+
         public ModuleExpression(List<Expression> expression, string moduleName, ModuleLexicalContext context)
             : base(expression, context)
         {
             ModuleName = moduleName;
             Context = context;
+        }
+
+        public override Value Evaluate()
+        {
+            if (_evaluated) return _value;
+            _value = base.Evaluate();
+            _evaluated = true;
+            return _value;
         }
     }
 }

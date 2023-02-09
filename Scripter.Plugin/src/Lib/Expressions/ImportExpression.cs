@@ -19,6 +19,7 @@ namespace ScripterLang
         {
             #warning Do not import twice
             var module = _context.GetGlobalContext().GetModule(_module);
+            module.Evaluate();
             foreach (var import in _imports)
             {
                 Value value;
