@@ -335,6 +335,32 @@ public class LanguageTests
         Assert.That(result.ToString(), Is.EqualTo("1"));
     }
 
+    [Test]
+    public void RefreshScripts()
+    {
+        _program.Add("main", """
+            import { x } from "lib";
+            return x;
+            """);
+        _program.Add("lib", """
+            export var x = 1;
+            """);
+        var result1 = _program.Run("main");
+        _program.Add("main", """
+            import { x } from "lib";
+            return x * 3;
+            """);
+        var result2 = _program.Run("main");
+        _program.Add("lib", """
+            export var x = 2;
+            """);
+        var result3 = _program.Run("main");
+
+        Assert.That(result1.ToString(), Is.EqualTo("1"));
+        Assert.That(result2.ToString(), Is.EqualTo("3"));
+        Assert.That(result3.ToString(), Is.EqualTo("6"));
+    }
+
     private class MyThing : ObjectReference
     {
         public int Value;

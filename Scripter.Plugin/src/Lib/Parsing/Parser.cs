@@ -107,6 +107,7 @@ namespace ScripterLang
                 if (arguments.Contains(arg.Value))
                     throw new ScripterParsingException($"Imported binding {arg.Value} was declared more than once", arg.Location);
                 arguments.Add(arg.Value);
+                lexicalContext.DeclareHoisted(arg.Value, Value.Undefined);
                 if (Peek().Match(TokenType.Comma))
                     MoveNext();
             }

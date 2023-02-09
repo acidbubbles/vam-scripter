@@ -12,8 +12,16 @@ namespace ScripterLang
 
         public void DeclareModule(string module, ModuleExpression context)
         {
-            #warning Dispose modules
+            RemoveModule(module);
             _modules[module] = context;
+        }
+
+        public void RemoveModule(string moduleName)
+        {
+            ModuleExpression module;
+            if (!_modules.TryGetValue(moduleName, out module))
+                return;
+            _modules.Remove(moduleName);
         }
 
         public ModuleExpression GetModule(string module)
@@ -28,7 +36,7 @@ namespace ScripterLang
 
         public override Value SetVariableValue(string name, Value value)
         {
-            throw new ScripterRuntimeException("Cannot set variable value in the global context");
+            throw new ScripterRuntimeException($"{name} was not defined");
         }
 
         public override ModuleLexicalContext GetModuleContext()

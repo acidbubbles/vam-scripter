@@ -34,8 +34,6 @@
         {
             if (Declarations.Contains(name))
                 return base.SetVariableValue(name, value);
-            if (_parent == null)
-                throw new ScripterRuntimeException($"{name} was not defined");
             return _parent.SetVariableValue(name, value);
         }
 

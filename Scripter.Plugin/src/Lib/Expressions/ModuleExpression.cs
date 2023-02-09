@@ -19,10 +19,22 @@ namespace ScripterLang
 
         public override Value Evaluate()
         {
-            if (_evaluated) return _value;
-            _value = base.Evaluate();
+            try
+            {
+                return base.Evaluate();
+            }
+            finally
+            {
+                Context.IsReturn = false;
+            }
+        }
+
+        public Dictionary<string, Value> Import()
+        {
+            if (_evaluated) return Context.Exports;
+            _value = Evaluate();
             _evaluated = true;
-            return _value;
+            return Context.Exports;
         }
     }
 }

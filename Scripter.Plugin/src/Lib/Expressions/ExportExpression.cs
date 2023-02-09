@@ -17,5 +17,10 @@
             _lexicalContext.GetModuleContext().Exports.Add(_expression.Name, value);
             return Value.Void;
         }
+
+        public override string ToString()
+        {
+            return $"export {_expression}";
+        }
     }
 }

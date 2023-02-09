@@ -7,11 +7,13 @@ namespace ScripterLang
     {
         private readonly List<Expression> _expressions;
         private readonly LexicalContext _context;
+        private readonly FunctionLexicalContext _functionContext;
 
         public CodeBlockExpression(List<Expression> expressions, LexicalContext context)
         {
             _expressions = expressions;
             _context = context;
+            _functionContext = _context.GetFunctionContext();
         }
 
         public override Value Evaluate()
@@ -21,7 +23,7 @@ namespace ScripterLang
                 foreach (var expression in _expressions)
                 {
                     var result = expression.Evaluate();
-                    if (_context.GetFunctionContext().IsReturn)
+                    if (_functionContext.IsReturn)
                         return result;
                 }
 
