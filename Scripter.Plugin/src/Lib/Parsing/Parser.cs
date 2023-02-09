@@ -4,7 +4,7 @@ namespace ScripterLang
 {
     public class Parser
     {
-        public static Expression Parse(string source, GlobalLexicalContext globalLexicalContext)
+        public static ModuleExpression Parse(string source, GlobalLexicalContext globalLexicalContext)
         {
             var tokens = new List<Token>(Tokenizer.Tokenize(source));
             return new Parser(tokens).Parse(globalLexicalContext);
@@ -42,7 +42,7 @@ namespace ScripterLang
             return _position == _tokens.Count;
         }
 
-        private Expression Parse(GlobalLexicalContext globalLexicalContext)
+        private ModuleExpression Parse(GlobalLexicalContext globalLexicalContext)
         {
             var expressions = new List<Expression>();
             var lexicalContext = new ModuleLexicalContext(globalLexicalContext);
@@ -50,7 +50,7 @@ namespace ScripterLang
             {
                 expressions.Add(ParseExpression(lexicalContext));
             }
-            return new CodeBlockExpression(expressions, lexicalContext);
+            return new ModuleExpression(expressions, lexicalContext);
         }
 
         private Expression ParseExpression(ScopeLexicalContext lexicalContext)
@@ -62,7 +62,6 @@ namespace ScripterLang
                 if (token.Value == "for") return ParseForStatement(lexicalContext);
                 if (token.Value == "while") return ParseWhileStatement(lexicalContext);
                 if (token.Value == "return") return ParseReturnStatement(lexicalContext);
-                if (token.Value == "static") return ParseStaticDeclaration(lexicalContext);
                 if (token.Value == "var" || token.Value == "let") return ParseVariableDeclaration(lexicalContext);
                 if (token.Value == "throw") return ParseThrowDeclaration(lexicalContext);
                 if (token.Value == "function") return ParseFunctionDeclaration(lexicalContext);
@@ -107,7 +106,23 @@ namespace ScripterLang
 
         private Expression ParseImportDeclaration(ScopeLexicalContext lexicalContext)
         {
-            throw new System.NotImplementedException();
+            MoveNext();
+            Consume().Expect(TokenType.LeftBrace);
+            var arguments = new List<string>();
+            while (!Peek().Match(TokenType.RightBrace))
+            {
+                var arg = Consume().Expect(TokenType.Identifier);
+                if (arguments.Contains(arg.Value))
+                    throw new ScripterParsingException($"Imported binding {arg.Value} was declared more than once", arg.Location);
+                arguments.Add(arg.Value);
+                if (Peek().Match(TokenType.Comma))
+                    MoveNext();
+            }
+            Consume().Expect(TokenType.RightBrace);
+            Consume().Expect(TokenType.Keyword, "from");
+            var module = Consume().Expect(TokenType.String);
+            Consume().Expect(TokenType.SemiColon);
+            return new ImportExpression(arguments, module.Value, lexicalContext.GetModuleContext());
         }
 
         private Expression ParseVariableStatement(ScopeLexicalContext lexicalContext, Token token)
@@ -290,18 +305,6 @@ namespace ScripterLang
                 Consume().Expect(TokenType.SemiColon);
                 return new VariableDeclarationExpression(nameToken.Value, UndefinedExpression.Instance, lexicalContext);
             }
-        }
-
-        private Expression ParseStaticDeclaration(ScopeLexicalContext lexicalContext)
-        {
-            MoveNext();
-            Consume().Expect(TokenType.Keyword, "var");
-            var nameToken = Consume().Expect(TokenType.Identifier);
-            Consume().Expect(TokenType.Assignment);
-            var initialValueExpression = ParseValueStatementExpression(lexicalContext);
-            Consume().Expect(TokenType.SemiColon);
-
-            return new StaticVariableDeclarationExpression(nameToken.Value, initialValueExpression, lexicalContext);
         }
 
         private Expression ParseValueStatementExpression(ScopeLexicalContext lexicalContext)

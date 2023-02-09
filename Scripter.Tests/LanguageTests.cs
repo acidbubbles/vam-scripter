@@ -4,23 +4,21 @@ namespace Scripter.Tests;
 
 public class LanguageTests
 {
-    private GlobalLexicalContext _globalLexicalContext;
+    private Program _program;
 
     [SetUp]
     public void SetUp()
     {
-        _globalLexicalContext = new GlobalLexicalContext();
+        _program = new Program();
     }
 
     [Test]
     public void Variables()
     {
-        const string source = """
+        var result = _program.Add("script", """
             var x = 1;
             return x;
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("1"));
     }
@@ -28,12 +26,10 @@ public class LanguageTests
     [Test]
     public void Globals()
     {
-        const string source = """
+        _program.GlobalContext.DeclareHoisted("v", 1, Location.Empty);
+        var result = _program.Add("script", """
             return v + 1;
-            """;
-        _globalLexicalContext.DeclareHoisted("v", 1, Location.Empty);
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("2"));
     }
@@ -41,12 +37,10 @@ public class LanguageTests
     [Test]
     public void Undefined()
     {
-        const string source = """
+        var result = _program.Add("script", """
             var x = undefined;
             return undefined == undefined;
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("true"));
     }
@@ -54,7 +48,7 @@ public class LanguageTests
     [Test]
     public void ControlFlow()
     {
-        const string source = """
+        var result = _program.Add("script", """
             var x = 1 + 1;
             var result;
             if(x == 1) {
@@ -63,9 +57,7 @@ public class LanguageTests
                 result = "ok";
             }
             return result;
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("ok"));
     }
@@ -73,14 +65,12 @@ public class LanguageTests
     [Test]
     public void ReturnExits()
     {
-        const string source = """
+        var result = _program.Add("script", """
             {
                 return "ok";
             }
             throw "Did not return!";
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("ok"));
     }
@@ -88,25 +78,19 @@ public class LanguageTests
     [Test]
     public void ReturnExitsNoStatement()
     {
-        const string source = """
+        var result = _program.Add("script", """
             {
                 return;
             }
             throw "Did not return!";
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        Assert.DoesNotThrow(() => expression.Evaluate());
+            """);
+        Assert.That(result, Is.EqualTo(Value.Undefined));
     }
 
     [Test]
     public void CustomFunctions()
     {
-        const string source = """
-            var x = 1;
-            return MyFunction(1 * 1, "a" + "b", true == true);
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        _globalLexicalContext.DeclareHoisted("MyFunction", Value.CreateFunction((context, args) =>
+        _program.GlobalContext.DeclareHoisted("MyFunction", Value.CreateFunction((context, args) =>
         {
             Assert.That(context.GetVariableValue("x").RawInt, Is.EqualTo(1));
             Assert.That(args[0].ToString(), Is.EqualTo("1"));
@@ -114,7 +98,10 @@ public class LanguageTests
             Assert.That(args[2].ToString(), Is.EqualTo("true"));
             return Value.CreateString("ok");
         }));
-        var result = expression.Evaluate();
+        var result = _program.Add("script", """
+            var x = 1;
+            return MyFunction(1 * 1, "a" + "b", true == true);
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("ok"));
     }
@@ -122,27 +109,23 @@ public class LanguageTests
     [Test]
     public void Errors()
     {
-        const string source = """
+        var exc = Assert.Throws<ScripterRuntimeException>(() => _program.Add("script", """
             throw "Error!";
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var exc = Assert.Throws<ScripterRuntimeException>(() => expression.Evaluate());
+            """));
         Assert.That(exc!.Message, Is.EqualTo("Error!"));
     }
 
     [Test]
     public void Maths()
     {
-        const string source = """
+        var result = _program.Add("script", """
             var x = 1;
             var y = ++x;
             x = (x + y) * 2;
             x += 1;
             return x++;
             ;
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("9"));
     }
@@ -150,25 +133,20 @@ public class LanguageTests
     [Test]
     public void Precedence()
     {
-        const string source = """
+        Assert.DoesNotThrow(() => _program.Add("script", """
             if((1 + 1 * 2) != 3) { throw "* before +"; }
             if(!(false || true && true)) { throw "&& before ||"; }
             if(1 < 2 && false) { throw "< before &&"; }
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-
-        Assert.DoesNotThrow(() => expression.Evaluate());
+            """));
     }
 
     [Test]
     public void Strings()
     {
-        const string source = """
+        var result = _program.Add("script", """
             return "a" + 2 + true;
             ;
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("a2true"));
     }
@@ -176,13 +154,11 @@ public class LanguageTests
     [Test]
     public void ConditionsAndThrow()
     {
-        const string source = """
+        var result = _program.Add("script", """
             if(false) { throw "false"; }
             if(!true) { throw "!true"; }
             return "nice";
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("nice"));
     }
@@ -190,7 +166,7 @@ public class LanguageTests
     [Test]
     public void Loops()
     {
-        const string source = """
+        var result = _program.Add("script", """
             var x = 0;
             while(x < 5) {
                 x++;
@@ -199,9 +175,7 @@ public class LanguageTests
                 x++;
             }
             return x;
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("10"));
     }
@@ -213,35 +187,19 @@ public class LanguageTests
             var x = 1;
             return x;
             """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result1 = expression.Evaluate();
-        var result2 = expression.Evaluate();
+        var result1 = _program.Add("script", source);
+        var result2 = _program.Add("script", source);
 
         Assert.That(result1.ToString(), Is.EqualTo("1"));
         Assert.That(result2.ToString(), Is.EqualTo("1"));
     }
 
-    #warning Replace by export or bind to event, e.g. param.onChange(function() { ... }), plugin
-    [Test]
-    public void StaticValues()
-    {
-        const string source = """
-            static var x = 1 + 1;
-            x++;
-            return x;
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result1 = expression.Evaluate();
-        var result2 = expression.Evaluate();
-
-        Assert.That(result1.ToString(), Is.EqualTo("3"));
-        Assert.That(result2.ToString(), Is.EqualTo("4"));
-    }
+    #warning Replace static by export or bind to event, e.g. param.onChange(function() { ... }), plugin
 
     [Test]
     public void Functions()
     {
-        const string source = """
+        var result = _program.Add("script", """
             var x = 0;
             run();
             function run() {
@@ -255,9 +213,7 @@ public class LanguageTests
             }
             run();
             return x;
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("4"));
     }
@@ -267,18 +223,16 @@ public class LanguageTests
     [Test]
     public void Arrays()
     {
-        const string source = """
-            static var x = [];
+        _program.GlobalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
+        var result = _program.Add("script", """
+            var x = [];
             x.add(1);
             x[0] = x[0] + 1;
             x[0]++;
             x[0] += 1;
             x[0] = ++x[0];
             return [x[0], x.length];
-            """;
-        _globalLexicalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("[5, 1]"));
     }
@@ -286,7 +240,8 @@ public class LanguageTests
     [Test]
     public void Objects()
     {
-        const string source = """
+        _program.GlobalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
+        var result = _program.Add("script", """
             var x = getThing(10);
             var o = getThing(1);
             o.value = o.value + 1;
@@ -297,10 +252,7 @@ public class LanguageTests
                 + o
                     .createAndAdd(100)
                     .increment(1);
-            """;
-        _globalLexicalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("134"));
     }
@@ -308,13 +260,6 @@ public class LanguageTests
     [Test]
     public void Deep()
     {
-        const string source = """
-            var o = getThing(1);
-            o.deep.deep.deep.value = o.deep.deep.deep.value + 1;
-            o.deep.deep.deep.increment(1);
-            o.deep.deep.deep.value += 1;
-            return o.deep.deep.deep.value;
-            """;
         var thing = new MyThing
         {
             Deep = new MyThing
@@ -328,9 +273,14 @@ public class LanguageTests
                 }
             }
         };
-        _globalLexicalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => thing));
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+        _program.GlobalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => thing));
+        var result = _program.Add("script", """
+            var o = getThing(1);
+            o.deep.deep.deep.value = o.deep.deep.deep.value + 1;
+            o.deep.deep.deep.increment(1);
+            o.deep.deep.deep.value += 1;
+            return o.deep.deep.deep.value;
+            """);
 
         Assert.That(result.ToString(), Is.EqualTo("4"));
     }
@@ -338,18 +288,16 @@ public class LanguageTests
     [Test]
     public void ImportExport()
     {
-        const string sourceExport = """
+        _program.Add("exporting", """
             export var x = 1;
-            """;
-        var expressionExport = Parser.Parse(sourceExport, _globalLexicalContext);
-        const string sourceImport = """
-            import { x } from "OtherScript";
-            return x;
-            """;
-        var expressionImport = Parser.Parse(sourceImport, _globalLexicalContext);
-        var importResult = expressionImport.Evaluate();
+            export function fn(y) { return x + y; }
+            """);
+        var result = _program.Add("importing", """
+            import { x, fn } from "OtherScript";
+            return x + fn(1);
+            """);
 
-        Assert.That(importResult.ToString(), Is.EqualTo("1"));
+        Assert.That(result.ToString(), Is.EqualTo("3"));
     }
 
     private class MyThing : ObjectReference
@@ -398,23 +346,21 @@ public class LanguageTests
     [Test]
     public void PerfTestStructure()
     {
-        const string source = """
+        var result = _program.Add("script", """
             var x1 = 1;
-            {
-                for(var i = 0; i < 5; i++) {
-                    x1 = test(x1);
-                }
-            }
             function test(x2) {
                 for(var i = 0; i < 5; i++) {
                     x2++;
                 }
                 return x2;
             }
+            {
+                for(var i = 0; i < 5; i++) {
+                    x1 = test(x1);
+                }
+            }
             return x1;
-            """;
-        var expression = Parser.Parse(source, _globalLexicalContext);
-        var result = expression.Evaluate();
+            """);
 
         Assert.That(result.RawInt, Is.EqualTo(26));
     }

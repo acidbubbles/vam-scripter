@@ -305,7 +305,6 @@ namespace ScripterLang
                                 case "else":
                                 case "return":
                                 case "throw":
-                                case "static":
                                 case "function":
                                 case "export":
                                 case "import":

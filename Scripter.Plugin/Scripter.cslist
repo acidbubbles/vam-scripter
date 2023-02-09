@@ -27,9 +27,11 @@ src\Lib\Expressions\ForExpression.cs
 src\Lib\Expressions\FunctionCallExpression.cs
 src\Lib\Expressions\FunctionDeclarationExpression.cs
 src\Lib\Expressions\IfExpression.cs
+src\Lib\Expressions\ImportExpression.cs
 src\Lib\Expressions\IncrementDecrementExpression.cs
 src\Lib\Expressions\IndexerAccessor.cs
 src\Lib\Expressions\IntegerExpression.cs
+src\Lib\Expressions\Module.cs
 src\Lib\Expressions\NegateExpression.cs
 src\Lib\Expressions\ParenthesesExpression.cs
 src\Lib\Expressions\PropertyAccessor.cs
