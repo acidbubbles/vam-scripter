@@ -5,6 +5,9 @@
         private readonly VariableAccessor _accessor;
         private readonly Expression _index;
 
+        private ObjectReference _object;
+        private Value _indexValue;
+
         public IndexerAccessor(VariableAccessor accessor, Expression index)
         {
             _accessor = accessor;
@@ -24,13 +27,31 @@
             return obj.GetIndex(index);
         }
 
-        public override Value SetVariableValue(Value value)
+        public override void SetVariableValue(Value value)
         {
             var obj = _accessor.Evaluate().AsObject;
-            #warning We evaluate the object and index twice, again
             var index = _index.Evaluate();
             obj.SetIndex(index, value);
-            return value;
+        }
+
+        public override Value GetAndHold()
+        {
+            _object = _accessor.Evaluate().AsObject;
+            _indexValue = _index.Evaluate();
+            return _object.GetIndex(_indexValue);
+        }
+
+        public override void Release()
+        {
+            _object = null;
+            _indexValue = Value.Undefined;
+        }
+
+        public override void SetAndRelease(Value value)
+        {
+            _object.SetIndex(_indexValue, value);
+            _object = null;
+            _indexValue = Value.Undefined;
         }
 
         public override string ToString()

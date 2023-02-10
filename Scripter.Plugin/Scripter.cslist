@@ -39,7 +39,6 @@ src\Lib\Expressions\ParenthesesExpression.cs
 src\Lib\Expressions\PropertyAccessor.cs
 src\Lib\Expressions\ReturnExpression.cs
 src\Lib\Expressions\ScopedVariableAccessor.cs
-src\Lib\Expressions\SetIndexerExpression.cs
 src\Lib\Expressions\StringExpression.cs
 src\Lib\Expressions\ThrowExpression.cs
 src\Lib\Expressions\UndefinedExpression.cs
@@ -60,7 +59,7 @@ src\Lib\Runtime\LexicalContext.cs
 src\Lib\Runtime\ModuleLexicalContext.cs
 src\Lib\Runtime\ObjectReference.cs
 src\Lib\Runtime\ScopeLexicalContext.cs
-src\Lib\Runtime\ScripterParsingException.cs
+src\Lib\Runtime\ScripterRuntimeException.cs
 src\Lib\Runtime\Value.cs
 src\Lib\Runtime\ValueTypes.cs
 src\Lib\Runtime\VariableReference.cs

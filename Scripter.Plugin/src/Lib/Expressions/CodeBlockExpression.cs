@@ -26,8 +26,9 @@ namespace ScripterLang
         {
             try
             {
-                foreach (var expression in _expressions)
+                for (var i = 0; i < _expressions.Count; i++)
                 {
+                    var expression = _expressions[i];
                     var result = expression.Evaluate();
                     if (_functionContext.IsReturn)
                         return result;

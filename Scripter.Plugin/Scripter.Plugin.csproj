@@ -112,7 +112,6 @@
     <Compile Include="src\Lib\Expressions\PropertyAccessor.cs" />
     <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
     <Compile Include="src\Lib\Expressions\ScopedVariableAccessor.cs" />
-    <Compile Include="src\Lib\Expressions\SetIndexerExpression.cs" />
     <Compile Include="src\Lib\Expressions\StringExpression.cs" />
     <Compile Include="src\Lib\Expressions\ThrowExpression.cs" />
     <Compile Include="src\Lib\Expressions\UndefinedExpression.cs" />

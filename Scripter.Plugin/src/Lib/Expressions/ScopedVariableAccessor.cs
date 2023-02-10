@@ -23,10 +23,23 @@
             return _variable.GetValue();
         }
 
-        public override Value SetVariableValue(Value value)
+        public override void SetVariableValue(Value value)
         {
             _variable.SetValue(value);
-            return value;
+        }
+
+        public override Value GetAndHold()
+        {
+            return _variable.GetValue();
+        }
+
+        public override void Release()
+        {
+        }
+
+        public override void SetAndRelease(Value value)
+        {
+            _variable.SetValue(value);
         }
 
         public override string ToString()

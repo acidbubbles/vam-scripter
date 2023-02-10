@@ -4,6 +4,7 @@
     {
         private readonly Expression _left;
         private readonly string _property;
+        private ObjectReference _object;
 
         public PropertyAccessor(Expression left, string property)
         {
@@ -21,11 +22,26 @@
             return _left.Evaluate().AsObject.Get(_property);
         }
 
-        public override Value SetVariableValue(Value value)
+        public override void SetVariableValue(Value value)
         {
-            #warning This is dangerous, we should not re-evaluate
             _left.Evaluate().AsObject.Set(_property, value);
-            return value;
+        }
+
+        public override Value GetAndHold()
+        {
+            _object = _left.Evaluate().AsObject;
+            return _object.Get(_property);
+        }
+
+        public override void Release()
+        {
+            _object = null;
+        }
+
+        public override void SetAndRelease(Value value)
+        {
+            _object.Set(_property, value);
+            _object = null;
         }
 
         public override string ToString()

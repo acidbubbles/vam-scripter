@@ -425,8 +425,8 @@ public class LanguageTests
     public void PerfTests()
     {
         // Latest results:
-        // Scripter: 0.2530ms
-        // Native: 0.0025ms
+        // Scripter: 0.2350ms
+        // Native: 0.0016ms
         PerfTest.Run();
     }
 }

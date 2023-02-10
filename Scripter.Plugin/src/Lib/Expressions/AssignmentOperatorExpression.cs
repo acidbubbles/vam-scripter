@@ -21,43 +21,56 @@
 
         public override Value Evaluate()
         {
-            var value = _accessor.Evaluate();
             var right = _expression.Evaluate();
+            var value = _accessor.GetAndHold();
+            Value result;
             switch (_op)
             {
                 case "+=":
                     if (value.IsInt && right.IsInt)
-                        return _accessor.SetVariableValue(value.RawInt + right.RawInt);
-                    if (value.IsNumber && right.IsNumber)
-                        return _accessor.SetVariableValue(value.AsNumber + right.AsNumber);
-                    if (value.IsString)
-                        return _accessor.SetVariableValue(value.Stringify + right.Stringify);
-                    throw MakeUnsupportedOperandsException(value, right);
+                        result = value.RawInt + right.RawInt;
+                    else if (value.IsNumber && right.IsNumber)
+                        result = value.AsNumber + right.AsNumber;
+                    else if (value.IsString)
+                        result = value.Stringify + right.Stringify;
+                    else
+                        throw MakeUnsupportedOperandsException(value, right);
+                    break;
                 case "-=":
                     if (value.IsInt && right.IsInt)
-                        return _accessor.SetVariableValue(value.RawInt - right.RawInt);
-                    if (value.IsNumber && right.IsNumber)
-                        return _accessor.SetVariableValue(value.AsNumber - right.AsNumber);
-                    throw MakeUnsupportedOperandsException(value, right);
+                        result = value.RawInt - right.RawInt;
+                    else if (value.IsNumber && right.IsNumber)
+                        result = value.AsNumber - right.AsNumber;
+                    else
+                        throw MakeUnsupportedOperandsException(value, right);
+                    break;
                 case "*=":
                     if (value.IsInt && right.IsInt)
-                        return _accessor.SetVariableValue(value.RawInt * right.RawInt);
-                    if (value.IsNumber && right.IsNumber)
-                        return _accessor.SetVariableValue(value.AsNumber * right.AsNumber);
-                    throw MakeUnsupportedOperandsException(value, right);
+                        result = value.RawInt * right.RawInt;
+                    else if (value.IsNumber && right.IsNumber)
+                        result = value.AsNumber * right.AsNumber;
+                    else
+                        throw MakeUnsupportedOperandsException(value, right);
+                    break;
                 case "/*":
                     if (value.IsInt && right.IsInt)
-                        return _accessor.SetVariableValue(value.RawInt / right.RawInt);
-                    if (value.IsNumber && right.IsNumber)
-                        return _accessor.SetVariableValue(value.AsNumber / right.AsNumber);
-                    throw MakeUnsupportedOperandsException(value, right);
+                        result = value.RawInt / right.RawInt;
+                    else if (value.IsNumber && right.IsNumber)
+                        result = value.AsNumber / right.AsNumber;
+                    else
+                        throw MakeUnsupportedOperandsException(value, right);
+                    break;
                 default:
                     throw MakeUnsupportedOperandsException(value, right);
+                    break;
             }
+            _accessor.SetAndRelease(result);
+            return result;
         }
 
         private ScripterRuntimeException MakeUnsupportedOperandsException(Value value, Value right)
         {
+            _accessor.Release();
             return new ScripterRuntimeException($"Operator {_op} is not supported on operands of type {ValueTypes.Name(value.Type)} and {ValueTypes.Name(right.Type)}");
         }
 

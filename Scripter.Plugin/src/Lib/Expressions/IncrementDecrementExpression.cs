@@ -20,7 +20,7 @@
 
         public override Value Evaluate()
         {
-            var original = _accessor.Evaluate();
+            var original = _accessor.GetAndHold();
             Value value;
             switch (_op)
             {
@@ -34,6 +34,7 @@
                             value = Value.CreateFloat(original.RawFloat + 1);
                             break;
                         default:
+                            _accessor.Release();
                             throw new ScripterRuntimeException($"Cannot increment variable of type {ValueTypes.Name(original.Type)}");
                     }
                     break;
@@ -47,13 +48,14 @@
                             value = Value.CreateFloat(original.RawFloat - 1);
                             break;
                         default:
+                            _accessor.Release();
                             throw new ScripterRuntimeException($"Cannot decrement variable of type {ValueTypes.Name(original.Type)}");
                     }
                     break;
                 default:
                     throw new ScripterParsingException($"Unexpected operator {_op}");
             }
-            _accessor.SetVariableValue(value);
+            _accessor.SetAndRelease(value);
             return _returnOriginal ? original : value;
         }
 
