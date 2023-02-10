@@ -1,49 +1,34 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace ScripterLang
 {
     public abstract class LexicalContext
     {
-        #warning Try to make private
-        public readonly List<string> Declarations = new List<string>();
-        public readonly List<string> HoistedDeclarations = new List<string>();
-        public readonly Dictionary<string, Value> Variables = new Dictionary<string, Value>();
+        private readonly Dictionary<string, VariableReference> _variables = new Dictionary<string, VariableReference>();
+        private readonly List<VariableReference> _localReferences = new List<VariableReference>();
 
-        public void DeclareHoisted(string name, Value value, Location location = default(Location))
+        [MethodImpl(0x0100)]
+        protected bool IsDeclared(string name)
         {
-            if (HoistedDeclarations.Contains(name))
-                throw new ScripterParsingException($"Constant {name} was already declared", location);
-            HoistedDeclarations.Add(name);
-            Variables.Add(name, value);
+            return _variables.ContainsKey(name);
         }
 
-        public virtual void Declare(string name, Location location)
+        public virtual void Declare(VariableReference variable)
         {
-            if (Declarations.Contains(name))
-                throw new ScripterParsingException($"Variable {name} was already declared", location);
-            Declarations.Add(name);
+            if (_variables.ContainsKey(variable.Name))
+                throw new ScripterParsingException($"Variable {variable.Name} was already declared", variable.Location);
+            _variables.Add(variable.Name, variable);
+            if (variable.Local)
+                _localReferences.Add(variable);
         }
 
-        public void CreateVariableValue(string name, Value value)
+        public virtual VariableReference GetVariable(string name)
         {
-            Variables[name] = value;
-        }
-
-        public virtual Value GetVariableValue(string name)
-        {
-            Value value;
-            if (Variables.TryGetValue(name, out value))
-                return value;
-            throw new ScripterRuntimeException($"Variable '{name}' was not declared");
-        }
-
-        public virtual Value SetVariableValue(string name, Value value)
-        {
-            if (Variables.ContainsKey(name))
-                Variables[name] = value;
-            else
+            VariableReference variable;
+            if (!_variables.TryGetValue(name, out variable))
                 throw new ScripterRuntimeException($"Variable '{name}' was not declared");
-            return value;
+            return variable;
         }
 
         public abstract GlobalLexicalContext GetGlobalContext();
@@ -52,9 +37,11 @@ namespace ScripterLang
 
         public virtual void Exit()
         {
-            for (var i = 0; i < Declarations.Count; i++)
+            for (var i = 0; i < _localReferences.Count; i++)
             {
-                Variables.Remove(Declarations[i]);
+                var variable = _localReferences[i];
+                variable.Value = Value.Undefined;
+                variable.Initialized = false;
             }
         }
     }

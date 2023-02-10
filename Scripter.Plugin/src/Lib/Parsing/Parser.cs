@@ -44,7 +44,9 @@ namespace ScripterLang
             {
                 expressions.Add(ParseExpression(lexicalContext));
             }
-            return new ModuleExpression(expressions, moduleName, lexicalContext);
+            var module = new ModuleExpression(expressions, moduleName, lexicalContext);
+            module.Bind();
+            return module;
         }
 
         private Expression ParseExpression(ScopeLexicalContext lexicalContext)
@@ -56,8 +58,8 @@ namespace ScripterLang
                 if (token.Value == "for") return ParseForStatement(lexicalContext);
                 if (token.Value == "while") return ParseWhileStatement(lexicalContext);
                 if (token.Value == "return") return ParseReturnStatement(lexicalContext);
-                #warning const
-                if (token.Value == "var" || token.Value == "let") return ParseVariableDeclaration(lexicalContext);
+                if (token.Value == "var" || token.Value == "let") return ParseVariableDeclaration(lexicalContext, false);
+                if (token.Value == "const") return ParseVariableDeclaration(lexicalContext, true);
                 if (token.Value == "throw") return ParseThrowDeclaration(lexicalContext);
                 if (token.Value == "function") return ParseFunctionDeclaration(lexicalContext, true);
                 if (token.Value == "import") return ParseImportDeclaration(lexicalContext);
@@ -91,9 +93,12 @@ namespace ScripterLang
             DeclarationExpression expression;
             if (!token.Match(TokenType.Keyword))
                 throw new ScripterParsingException("Expected var or function after export");
-            if (token.Value == "var" || token.Value == "let") expression = ParseVariableDeclaration(lexicalContext, false);
-            else if (token.Value == "function") expression = ParseFunctionDeclaration(lexicalContext, true);
-            else throw new ScripterParsingException("Expected var or function after export");
+            if (token.Value == "var" || token.Value == "let" || token.Value == "const")
+                expression = ParseVariableDeclaration(lexicalContext, true);
+            else if (token.Value == "function")
+                expression = ParseFunctionDeclaration(lexicalContext, true);
+            else
+                throw new ScripterParsingException("Expected var or function after export");
             return new ExportExpression(expression, lexicalContext);
         }
 
@@ -108,7 +113,7 @@ namespace ScripterLang
                 if (arguments.Contains(arg.Value))
                     throw new ScripterParsingException($"Imported binding {arg.Value} was declared more than once", arg.Location);
                 arguments.Add(arg.Value);
-                lexicalContext.DeclareHoisted(arg.Value, Value.Undefined);
+                lexicalContext.Declare(new VariableReference(arg.Value, arg.Location) { Constant = true });
                 if (Peek().Match(TokenType.Comma))
                     MoveNext();
             }
@@ -197,7 +202,7 @@ namespace ScripterLang
             var body = ParseFunctionBody(functionLexicalContext);
             var function = new FunctionDeclarationExpression(name.Value, arguments, body, functionLexicalContext);
             if (name.Type == TokenType.Identifier)
-                lexicalContext.DeclareHoisted(name.Value, function.Value, name.Location);
+                lexicalContext.Declare(new VariableReference(name.Value, function.FunctionValue, name.Location) { Constant = true, Bound = true});
             return function;
         }
 
@@ -223,7 +228,7 @@ namespace ScripterLang
             while (!Peek().Match(TokenType.RightParenthesis))
             {
                 var arg = Consume().Expect(TokenType.Identifier);
-                functionLexicalContext.Declare(arg.Value, arg.Location);
+                functionLexicalContext.Declare(new VariableReference(arg.Value, arg.Location) { Local = true });
                 if (arguments.Contains(arg.Value))
                     throw new ScripterParsingException($"Argument {arg.Value} of function {name} was declared more than once", arg.Location);
                 arguments.Add(arg.Value);
@@ -266,7 +271,9 @@ namespace ScripterLang
             Expression initializer;
             var next = Peek();
             if (next.Match(TokenType.Keyword) && (next.Value == "var" || next.Value == "let"))
-                initializer = ParseVariableDeclaration(lexicalContext);
+                initializer = ParseVariableDeclaration(lexicalContext, false);
+            else if (next.Match(TokenType.Keyword) && (next.Value == "var" || next.Value == "let"))
+                initializer = ParseVariableDeclaration(lexicalContext, true);
             else
                 initializer = ParseValueStatementExpression(lexicalContext);
             var condition = ParseValueStatementExpression(lexicalContext);
@@ -297,12 +304,12 @@ namespace ScripterLang
             return new ReturnExpression(value, lexicalContext);
         }
 
-        private VariableDeclarationExpression ParseVariableDeclaration(ScopeLexicalContext lexicalContext, bool declareInScope = true)
+        private VariableDeclarationExpression ParseVariableDeclaration(ScopeLexicalContext lexicalContext, bool isConstant)
         {
             MoveNext();
             var nameToken = Consume();
             nameToken.Expect(TokenType.Identifier);
-            if (declareInScope) lexicalContext.Declare(nameToken.Value, nameToken.Location);
+            lexicalContext.Declare(new VariableReference(nameToken.Value, nameToken.Location) { Local = true, Constant = isConstant });
             var next = Peek();
 
             if (next.Match(TokenType.Assignment))
@@ -477,7 +484,9 @@ namespace ScripterLang
             }
             else
             {
-                arguments = new List<string> { Consume().Value };
+                var arg = Consume();
+                functionLexicalContext.Declare(new VariableReference(arg.Value, arg.Location) { Local = true });
+                arguments = new List<string> { arg.Value };
             }
             Consume().Expect(TokenType.Arrow);
             CodeBlockExpression body;

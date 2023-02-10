@@ -9,32 +9,26 @@
             _parent = parent;
         }
 
-        public override void Declare(string name, Location location)
+        public override void Declare(VariableReference variable)
         {
             var scope = this;
             while((scope = scope._parent) != null)
             {
-                if (scope.Declarations.Contains(name))
-                    throw new ScripterParsingException($"Variable {name} was already declared in an outer scope", location);
+                if (scope.IsDeclared(variable.Name))
+                    throw new ScripterParsingException($"Variable {variable.Name} was already declared in an outer scope", variable.Location);
             }
-            base.Declare(name, location);
+            base.Declare(variable);
         }
 
-        public override Value GetVariableValue(string name)
+        public override VariableReference GetVariable(string name)
         {
-            Value value;
-            if (Variables.TryGetValue(name, out value))
-                return value;
-            if (_parent == null)
-                throw new ScripterRuntimeException($"{name} was not defined");
-            return _parent.GetVariableValue(name);
-        }
-
-        public override Value SetVariableValue(string name, Value value)
-        {
-            if (Declarations.Contains(name))
-                return base.SetVariableValue(name, value);
-            return _parent.SetVariableValue(name, value);
+            var scope = this;
+            while((scope = scope._parent) != null)
+            {
+                if (scope.IsDeclared(name))
+                    return scope.GetVariable(name);
+            }
+            return base.GetVariable(name);
         }
 
         public override ModuleLexicalContext GetModuleContext() => _parent.GetModuleContext();

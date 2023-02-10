@@ -8,7 +8,8 @@ namespace ScripterLang
         private readonly CodeBlockExpression _body;
         private readonly FunctionLexicalContext _context;
 
-        public readonly Value Value;
+        public readonly Value FunctionValue;
+        private readonly List<VariableReference> _argumentsVariables;
 
         public FunctionDeclarationExpression(string name, List<string> arguments, CodeBlockExpression body, FunctionLexicalContext context)
             : base(name)
@@ -16,12 +17,24 @@ namespace ScripterLang
             _arguments = arguments;
             _body = body;
             _context = context;
-            Value = Value.CreateFunction(Invoke);
+            FunctionValue = Value.CreateFunction(Invoke);
+            _argumentsVariables = new List<VariableReference>(arguments.Count);
+        }
+
+        public override void Bind()
+        {
+            foreach (var arg in _arguments)
+            {
+                var variable = _context.GetVariable(arg);
+                _argumentsVariables.Add(variable);
+                variable.Bound = true;
+            }
+            _body.Bind();
         }
 
         public override Value Evaluate()
         {
-            return Value;
+            return FunctionValue;
         }
 
         private Value Invoke(LexicalContext _, Value[] args)
@@ -31,8 +44,8 @@ namespace ScripterLang
 
             for (var i = 0; i < args.Length; i++)
             {
-                var name = _arguments[i];
-                _context.CreateVariableValue(name, args[i]);
+                var variable = _argumentsVariables[i];
+                variable.Initialize(args[i]);
             }
 
             try
@@ -41,11 +54,8 @@ namespace ScripterLang
             }
             finally
             {
+                _context.Exit();
                 _context.IsReturn = false;
-                for (var i = 0; i < _arguments.Count; i++)
-                {
-                    _context.Variables.Remove(_arguments[i]);
-                }
             }
         }
 

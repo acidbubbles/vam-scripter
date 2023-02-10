@@ -19,6 +19,13 @@ namespace ScripterLang
             _context = context;
         }
 
+        public override void Bind()
+        {
+            _accessor.Bind();
+            for(var i = 0; i < _arguments.Length; i++)
+                _arguments[i].Bind();
+        }
+
         public override Value Evaluate()
         {
             var value = _accessor.Evaluate();

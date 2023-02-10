@@ -12,6 +12,12 @@ namespace ScripterLang
             _expressions = expressions;
         }
 
+        public override void Bind()
+        {
+            for (var i = 0; i < _expressions.Count; i++)
+                _expressions[i].Bind();
+        }
+
         public override Value Evaluate()
         {
             var values = new List<Value>(_expressions.Count);

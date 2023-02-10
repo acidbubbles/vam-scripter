@@ -13,6 +13,12 @@
             _right = right;
         }
 
+        public override void Bind()
+        {
+            _left.Bind();
+            _right.Bind();
+        }
+
         public override Value Evaluate()
         {
             var left = _left.Evaluate();

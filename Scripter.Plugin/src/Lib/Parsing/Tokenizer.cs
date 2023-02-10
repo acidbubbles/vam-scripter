@@ -304,6 +304,7 @@ namespace ScripterLang
                                     break;
                                 case "var":
                                 case "let":
+                                case "const":
                                 case "for":
                                 case "while":
                                 case "if":

@@ -15,6 +15,14 @@
             _body = body;
         }
 
+        public override void Bind()
+        {
+            _start.Bind();
+            _end.Bind();
+            _increment.Bind();
+            _body.Bind();
+        }
+
         public override Value Evaluate()
         {
             #warning break and continue statements;
@@ -23,7 +31,7 @@
             const float maxTime = 5;
             var max = Time.time + maxTime;
             #endif
-            for (_start.Evaluate(); _end.Evaluate().RawBool; _increment.Evaluate())
+            for (_start.Evaluate(); _end.Evaluate().AsBool; _increment.Evaluate())
             {
                 _body.Evaluate();
                 #if SCRIPTER_DUMMY_MODE

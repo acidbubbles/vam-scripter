@@ -10,6 +10,15 @@ namespace ScripterLang
         {
         }
 
+        public void DeclareGlobal(string name, Value value)
+        {
+            Declare(new VariableReference(name, value, Location.Empty)
+            {
+                Constant = true,
+                Bound = true,
+            });
+        }
+
         public void DeclareModule(string module, IModule context)
         {
             RemoveModule(module);
@@ -41,11 +50,6 @@ namespace ScripterLang
         }
 
         public override GlobalLexicalContext GetGlobalContext() => this;
-
-        public override Value SetVariableValue(string name, Value value)
-        {
-            throw new ScripterRuntimeException($"{name} was not defined");
-        }
 
         public override ModuleLexicalContext GetModuleContext()
         {

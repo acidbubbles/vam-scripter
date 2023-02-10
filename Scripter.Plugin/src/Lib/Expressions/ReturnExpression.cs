@@ -11,6 +11,11 @@
             _context = context;
         }
 
+        public override void Bind()
+        {
+            _expression.Bind();
+        }
+
         public override Value Evaluate()
         {
             _context.GetFunctionContext().IsReturn = true;

@@ -16,6 +16,12 @@ namespace ScripterLang
             _functionContext = _context.GetFunctionContext();
         }
 
+        public override void Bind()
+        {
+            for (var i = 0; i < _expressions.Count; i++)
+                _expressions[i].Bind();
+        }
+
         public override Value Evaluate()
         {
             try

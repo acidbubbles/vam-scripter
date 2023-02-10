@@ -11,6 +11,11 @@
             _moduleLexicalContext = lexicalContext.GetModuleContext();
         }
 
+        public override void Bind()
+        {
+            _expression.Bind();
+        }
+
         public override Value Evaluate()
         {
             var value = _expression.Evaluate();

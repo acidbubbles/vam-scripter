@@ -9,6 +9,11 @@
             _message = message;
         }
 
+        public override void Bind()
+        {
+            _message.Bind();
+        }
+
         public override Value Evaluate()
         {
             var message = _message.Evaluate();

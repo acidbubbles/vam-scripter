@@ -9,6 +9,11 @@
             _expression = expression;
         }
 
+        public override void Bind()
+        {
+            _expression.Bind();
+        }
+
         public override Value Evaluate()
         {
             return _expression.Evaluate();

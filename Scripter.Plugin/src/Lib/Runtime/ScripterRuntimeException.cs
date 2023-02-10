@@ -8,5 +8,10 @@ namespace ScripterLang
             : base(message)
         {
         }
+
+        public ScripterRuntimeException(string message, Location location)
+            : base(message + " (" + location + ")")
+        {
+        }
     }
 }

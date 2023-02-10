@@ -13,6 +13,11 @@
             _returnOriginal = returnOriginal;
         }
 
+        public override void Bind()
+        {
+            _accessor.Bind();
+        }
+
         public override Value Evaluate()
         {
             var original = _accessor.Evaluate();

@@ -11,9 +11,15 @@ namespace ScripterLang
             _body = body;
         }
 
+        public override void Bind()
+        {
+            _condition.Bind();
+            _body.Bind();
+        }
+
         public override Value Evaluate()
         {
-            while (_condition.Evaluate().RawBool)
+            while (_condition.Evaluate().AsBool)
             {
                 _body.Evaluate();
             }

@@ -74,6 +74,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\ScripterParsingException.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\Value.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\ValueTypes.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\VariableReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Tests\\PerfTest.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Types\\ListReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripts\\Script.cs",

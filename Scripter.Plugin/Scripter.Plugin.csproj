@@ -133,9 +133,10 @@
     <Compile Include="src\Lib\Runtime\ModuleLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\ObjectReference.cs" />
     <Compile Include="src\Lib\Runtime\ScopeLexicalContext.cs" />
-    <Compile Include="src\Lib\Runtime\ScripterParsingException.cs" />
+    <Compile Include="src\Lib\Runtime\ScripterRuntimeException.cs" />
     <Compile Include="src\Lib\Runtime\Value.cs" />
     <Compile Include="src\Lib\Runtime\ValueTypes.cs" />
+    <Compile Include="src\Lib\Runtime\VariableReference.cs" />
     <Compile Include="src\Lib\Tests\PerfTest.cs" />
     <Compile Include="src\Lib\Types\ListReference.cs" />
     <Compile Include="src\Scripts\Script.cs" />

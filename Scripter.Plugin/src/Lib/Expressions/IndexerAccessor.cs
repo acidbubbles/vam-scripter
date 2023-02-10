@@ -11,6 +11,12 @@
             _index = index;
         }
 
+        public override void Bind()
+        {
+            _accessor.Bind();
+            _index.Bind();
+        }
+
         public override Value Evaluate()
         {
             var obj = _accessor.Evaluate().AsObject;

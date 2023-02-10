@@ -11,6 +11,12 @@
             _expression = expression;
         }
 
+        public override void Bind()
+        {
+            _accessor.Bind();
+            _expression.Bind();
+        }
+
         public override Value Evaluate()
         {
             var right = _expression.Evaluate();

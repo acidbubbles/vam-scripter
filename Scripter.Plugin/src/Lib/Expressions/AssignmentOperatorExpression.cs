@@ -13,6 +13,12 @@
             _expression = expression;
         }
 
+        public override void Bind()
+        {
+            _accessor.Bind();
+            _expression.Bind();
+        }
+
         public override Value Evaluate()
         {
             var value = _accessor.Evaluate();

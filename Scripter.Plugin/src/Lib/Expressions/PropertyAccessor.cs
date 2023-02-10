@@ -11,6 +11,11 @@
             _property = property;
         }
 
+        public override void Bind()
+        {
+            _left.Bind();
+        }
+
         public override Value Evaluate()
         {
             return _left.Evaluate().AsObject.Get(_property);

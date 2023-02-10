@@ -4,6 +4,7 @@
     {
         private readonly Expression _expression;
         private readonly LexicalContext _context;
+        private VariableReference _variable;
 
         public VariableDeclarationExpression(string name, Expression expression, LexicalContext context)
             : base(name)
@@ -12,10 +13,17 @@
             _context = context;
         }
 
+        public override void Bind()
+        {
+            _expression.Bind();
+            _variable = _context.GetVariable(Name);
+            _variable.Bound = true;
+        }
+
         public override Value Evaluate()
         {
             var rightValue = _expression.Evaluate();
-            _context.CreateVariableValue(Name, rightValue);
+            _variable.Initialize(rightValue);
             return rightValue;
         }
 

@@ -13,6 +13,13 @@
             _falseBranch = falseBranch;
         }
 
+        public override void Bind()
+        {
+            _condition.Bind();
+            _trueBranch.Bind();
+            _falseBranch?.Bind();
+        }
+
         public override Value Evaluate()
         {
             var condition = _condition.Evaluate();

@@ -19,17 +19,18 @@ public class LanguageTests
     {
         _program.Add("index.js", """
             var x = 1;
-            return x;
+            const y = 2;
+            return x + y;
             """);
         var result = _program.Run();
 
-        Assert.That(result.ToString(), Is.EqualTo("1"));
+        Assert.That(result.ToString(), Is.EqualTo("3"));
     }
 
     [Test]
     public void Globals()
     {
-        _program.GlobalContext.DeclareHoisted("v", 1, Location.Empty);
+        _program.GlobalContext.DeclareGlobal("v", 1);
         _program.Add("index.js", """
             return v + 1;
             """);
@@ -99,9 +100,9 @@ public class LanguageTests
     [Test]
     public void CustomFunctions()
     {
-        _program.GlobalContext.DeclareHoisted("MyFunction", Value.CreateFunction((context, args) =>
+        _program.GlobalContext.DeclareGlobal("MyFunction", Value.CreateFunction((context, args) =>
         {
-            Assert.That(context.GetVariableValue("x").RawInt, Is.EqualTo(1));
+            Assert.That(context.GetVariable("x").GetValue().RawInt, Is.EqualTo(1));
             Assert.That(args[0].ToString(), Is.EqualTo("1"));
             Assert.That(args[1].ToString(), Is.EqualTo("ab"));
             Assert.That(args[2].ToString(), Is.EqualTo("true"));
@@ -254,7 +255,7 @@ public class LanguageTests
     [Test]
     public void Arrays()
     {
-        _program.GlobalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
+        _program.GlobalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
         _program.Add("index.js", """
             var x = [];
             x.add(1);
@@ -272,7 +273,7 @@ public class LanguageTests
     [Test]
     public void Objects()
     {
-        _program.GlobalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
+        _program.GlobalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
         _program.Add("index.js", """
             var x = getThing(10);
             var o = getThing(1);
@@ -306,7 +307,7 @@ public class LanguageTests
                 }
             }
         };
-        _program.GlobalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => thing));
+        _program.GlobalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => thing));
         _program.Add("index.js", """
             var o = getThing(1);
             o.deep.deep.deep.value = o.deep.deep.deep.value + 1;
@@ -423,6 +424,9 @@ public class LanguageTests
     [Test]
     public void PerfTests()
     {
+        // Latest results:
+        // Scripter: 0.2530ms
+        // Native: 0.0025ms
         PerfTest.Run();
     }
 }

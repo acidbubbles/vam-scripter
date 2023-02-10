@@ -7,7 +7,7 @@ public static class GlobalUnityFunctions
 
     public static void Register(GlobalLexicalContext lexicalContext)
     {
-        lexicalContext.DeclareHoisted("Time", _timeReference);
-        lexicalContext.DeclareHoisted("Random", _randomReference);
+        lexicalContext.DeclareGlobal("Time", _timeReference);
+        lexicalContext.DeclareGlobal("Random", _randomReference);
     }
 }

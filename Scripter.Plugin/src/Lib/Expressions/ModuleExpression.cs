@@ -5,15 +5,15 @@ namespace ScripterLang
     public class ModuleExpression : CodeBlockExpression, IModule
     {
         public string ModuleName { get; }
-        public readonly ModuleLexicalContext Context;
 
+        private readonly ModuleLexicalContext _context;
         private bool _evaluated;
 
         public ModuleExpression(List<Expression> expression, string moduleName, ModuleLexicalContext context)
             : base(expression, context)
         {
             ModuleName = moduleName;
-            Context = context;
+            _context = context;
         }
 
         public override Value Evaluate()
@@ -24,23 +24,23 @@ namespace ScripterLang
             }
             finally
             {
-                Context.IsReturn = false;
+                _context.IsReturn = false;
             }
         }
 
         public ModuleReference Import()
         {
-            if (_evaluated) return Context.Module;
+            if (_evaluated) return _context.Module;
             var value = Evaluate();
-            Context.Module.Returned = value;
+            _context.Module.Returned = value;
             _evaluated = true;
-            return Context.Module;
+            return _context.Module;
         }
 
         public void Invalidate()
         {
-            Context.Module.Returned = Value.Undefined;
-            Context.Module.Exports.Clear();
+            _context.Module.Returned = Value.Undefined;
+            _context.Module.Exports.Clear();
             _evaluated = false;
         }
     }

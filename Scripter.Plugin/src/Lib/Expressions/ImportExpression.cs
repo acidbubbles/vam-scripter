@@ -9,6 +9,8 @@ namespace ScripterLang
         private readonly LexicalContext _context;
         private readonly GlobalLexicalContext _globalContext;
 
+        private List<VariableReference> _importVariables;
+
         public ImportExpression(List<string> imports, string path, LexicalContext context)
         {
             _imports = imports;
@@ -17,17 +19,31 @@ namespace ScripterLang
             _globalContext = _context.GetGlobalContext();
         }
 
+        public override void Bind()
+        {
+            _importVariables = new List<VariableReference>(_imports.Count);
+            foreach (var import in _imports)
+            {
+                var variable = _context.GetVariable(import);
+                variable.Bound = true;
+                _importVariables.Add(variable);
+            }
+        }
+
         public override Value Evaluate()
         {
             var module = _globalContext.GetModule(_module);
             var ns = module.Import();
-            foreach (var import in _imports)
+            for (var i = 0; i < _importVariables.Count; i++)
             {
+                var name = _imports[i];
+                var variable = _importVariables[i];
                 Value value;
-                if (!ns.Exports.TryGetValue(import, out value))
-                    throw new ScripterRuntimeException($"Module '{module.ModuleName}' does not export '{import}'");
-                _context.Variables[import] = value;
+                if (!ns.Exports.TryGetValue(name, out value))
+                    throw new ScripterRuntimeException($"Module '{module.ModuleName}' does not export '{variable}'");
+                variable.Initialize(value);
             }
+
             return Value.Void;
         }
 

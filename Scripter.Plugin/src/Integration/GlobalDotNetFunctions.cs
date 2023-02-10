@@ -6,6 +6,7 @@ public static class GlobalDotNetFunctions
 
     public static void Register(GlobalLexicalContext lexicalContext)
     {
-        lexicalContext.DeclareHoisted("DateTime", _dateTimeClassReference);
+        #warning Instead use "Date" like in JavaScript
+        lexicalContext.DeclareGlobal("DateTime", _dateTimeClassReference);
     }
 }

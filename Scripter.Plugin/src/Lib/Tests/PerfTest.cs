@@ -31,15 +31,14 @@ namespace ScripterLang
             const string code = @"
 export function run() {
     var x1 = 0;
-    function test(x2) {
-        for(var i = 0; i < 100; i++) {
-            x2++;
-        }
-        return x2;
-    }
+
     {
         for(var j = 0; j < 100; j++) {
-            x1 = test(x1);
+            var x2 = x1;
+            for(var i = 0; i < 100; i++) {
+                x2++;
+            }
+            x1 = x2;
         }
     }
 }
