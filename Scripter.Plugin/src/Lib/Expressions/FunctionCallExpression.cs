@@ -9,10 +9,13 @@ namespace ScripterLang
         private readonly Expression[] _arguments;
         private readonly LexicalContext _context;
 
+        private readonly Value[] _argumentValues;
+
         public FunctionCallExpression(VariableAccessor accessor, IEnumerable<Expression> arguments, LexicalContext context)
         {
             _accessor = accessor;
             _arguments = arguments.ToArray();
+            _argumentValues = new Value[_arguments.Length];
             _context = context;
         }
 
@@ -20,8 +23,9 @@ namespace ScripterLang
         {
             var value = _accessor.Evaluate();
             var fn = value.AsFunction;
-            var args = _arguments.Select(arg => arg.Evaluate()).ToArray();
-            return fn(_context, args);
+            for(var i = 0; i < _arguments.Length; i++)
+                _argumentValues[i] = _arguments[i].Evaluate();
+            return fn(_context, _argumentValues);
         }
 
         public override string ToString()

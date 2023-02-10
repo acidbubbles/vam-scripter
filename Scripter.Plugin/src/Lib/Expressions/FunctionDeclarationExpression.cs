@@ -44,7 +44,7 @@ namespace ScripterLang
                 _context.IsReturn = false;
                 for (var i = 0; i < _arguments.Count; i++)
                 {
-                    _context.ClearVariable(_arguments[i]);
+                    _context.Variables.Remove(_arguments[i]);
                 }
             }
         }

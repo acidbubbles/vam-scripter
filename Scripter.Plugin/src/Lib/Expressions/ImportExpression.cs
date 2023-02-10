@@ -9,10 +9,10 @@ namespace ScripterLang
         private readonly LexicalContext _context;
         private readonly GlobalLexicalContext _globalContext;
 
-        public ImportExpression(List<string> imports, string module, LexicalContext context)
+        public ImportExpression(List<string> imports, string path, LexicalContext context)
         {
             _imports = imports;
-            _module = module;
+            _module = path;
             _context = context;
             _globalContext = _context.GetGlobalContext();
         }
@@ -33,7 +33,7 @@ namespace ScripterLang
 
         public override string ToString()
         {
-            return $"import {{ {string.Join(", ", _imports)} }} from \"{_module}\"";
+            return $"import {{ {string.Join(", ", _imports.ToArray())} }} from \"{_module}\"";
         }
     }
 }

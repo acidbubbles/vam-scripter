@@ -2,17 +2,22 @@
 {
     public class ModuleLexicalContext : FunctionLexicalContext
     {
-        public readonly GlobalLexicalContext GlobalContext;
+        private readonly GlobalLexicalContext _globalContext;
 
         public readonly ModuleReference Module = new ModuleReference();
 
         public ModuleLexicalContext(GlobalLexicalContext globalContext)
             : base(globalContext)
         {
-            GlobalContext = globalContext;
+            _globalContext = globalContext;
         }
 
-        public override GlobalLexicalContext GetGlobalContext() => GlobalContext;
+        public override GlobalLexicalContext GetGlobalContext() => _globalContext;
         public override ModuleLexicalContext GetModuleContext() => this;
+
+        public override void Exit()
+        {
+            // TODO: We could clear references to variables neither exported nor used in child contexts, but it wouldn't be worth the effort
+        }
     }
 }

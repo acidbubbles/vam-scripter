@@ -8,37 +8,48 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-public class ScriptEditScreen : Screen
+public class ScriptEditScreen : MonoBehaviour
 {
-    public static Screen Create(ScreenManager manager, Script script)
+    public static ScriptEditScreen Create(Transform parent, Script script)
     {
-        var screen = Screen.Create<ScriptEditScreen>(manager.Root);
+        var go = new GameObject();
+        go.transform.SetParent(parent, false);
 
-        var button = Instantiate(manager.Prefabs.configurableButtonPrefab, screen.transform).GetComponent<UIDynamicButton>();
-        button.label = "Run";
-        button.button.onClick.AddListener(() => RunScriptWithTimer(script));
-        CreateMultilineInput(screen.transform, manager.Prefabs, script.SourceJSON);
+        var rect = go.AddComponent<RectTransform>();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.anchoredPosition = new Vector2(0, 0);
+        rect.sizeDelta = new Vector2(0, 0);
 
-        var toolbar = MakeToolbar(screen.transform);
-        AddToToolbar(toolbar, CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Undo", script.History.Undo));
-        AddToToolbar(toolbar, CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Redo", script.History.Redo));
+        var layout = go.AddComponent<LayoutElement>();
+        layout.preferredHeight = 1200f;
+        layout.flexibleWidth = 1;
 
-        var console = Instantiate(manager.Prefabs.configurableTextFieldPrefab, screen.transform).GetComponent<UIDynamicTextField>();
-        console.backgroundColor = Color.black;
-        console.textColor = Color.white;
-        script.ConsoleJSON.dynamicText = console;
+        var group = go.AddComponent<VerticalLayoutGroup>();
+        group.spacing = 10f;
+        group.childControlHeight = true;
+        group.childForceExpandHeight = false;
+
+        var fitter = go.AddComponent<ContentSizeFitter>();
+        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        var screen = go.AddComponent<ScriptEditScreen>();
+        //
+        // var button = Instantiate(manager.Prefabs.configurableButtonPrefab, screen.transform).GetComponent<UIDynamicButton>();
+        // button.label = "Run";
+        // button.button.onClick.AddListener(() => SuperController.LogMessage("Run!"));
+        // CreateMultilineInput(screen.transform, manager.Prefabs, script.SourceJSON);
+        //
+        // var toolbar = MakeToolbar(screen.transform);
+        // AddToToolbar(toolbar, CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Undo", script.History.Undo));
+        // AddToToolbar(toolbar, CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Redo", script.History.Redo));
+        //
+        // var console = Instantiate(manager.Prefabs.configurableTextFieldPrefab, screen.transform).GetComponent<UIDynamicTextField>();
+        // console.backgroundColor = Color.black;
+        // console.textColor = Color.white;
+        // manager.ConsoleJSON.dynamicText = console;
 
         return screen;
-    }
-
-    private static void RunScriptWithTimer(Script script)
-    {
-        script.ConsoleJSON.val = $"[{DateTime.Now.ToLongTimeString()}] Running...";
-        var sw = new Stopwatch();
-        sw.Start();
-        script.Run(Value.Undefined);
-        sw.Stop();
-        script.ConsoleJSON.val += $"\n[{DateTime.Now.ToLongTimeString()}] <color=green>Script completed in {sw.Elapsed.TotalMilliseconds:0.000}ms</color>";
     }
 
     private static void CreateMultilineInput(Transform parent, MVRPluginManager prefabs, JSONStorableString jss)

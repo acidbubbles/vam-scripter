@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using ScripterLang;
 
 namespace Scripter.Tests;
@@ -15,43 +17,43 @@ public class LanguageTests
     [Test]
     public void Variables()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             var x = 1;
             return x;
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("1"));
+        Assert.That(result.ToString(), Is.EqualTo("1"));
     }
 
     [Test]
     public void Globals()
     {
         _program.GlobalContext.DeclareHoisted("v", 1, Location.Empty);
-        _program.Add("script", """
+        _program.Add("index.js", """
             return v + 1;
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("2"));
+        Assert.That(result.ToString(), Is.EqualTo("2"));
     }
 
     [Test]
     public void Undefined()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             var x = undefined;
             return undefined == undefined;
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("true"));
+        Assert.That(result.ToString(), Is.EqualTo("true"));
     }
 
     [Test]
     public void ControlFlow()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             var x = 1 + 1;
             var result;
             if(x == 1) {
@@ -61,37 +63,37 @@ public class LanguageTests
             }
             return result;
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("ok"));
+        Assert.That(result.ToString(), Is.EqualTo("ok"));
     }
 
     [Test]
     public void ReturnExits()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             {
                 return "ok";
             }
             throw "Did not return!";
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("ok"));
+        Assert.That(result.ToString(), Is.EqualTo("ok"));
     }
 
     [Test]
     public void ReturnExitsNoStatement()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             {
                 return;
             }
             throw "Did not return!";
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned, Is.EqualTo(Value.Undefined));
+        Assert.That(result, Is.EqualTo(Value.Undefined));
     }
 
     [Test]
@@ -105,45 +107,45 @@ public class LanguageTests
             Assert.That(args[2].ToString(), Is.EqualTo("true"));
             return Value.CreateString("ok");
         }));
-        _program.Add("script", """
+        _program.Add("index.js", """
             var x = 1;
             return MyFunction(1 * 1, "a" + "b", true == true);
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("ok"));
+        Assert.That(result.ToString(), Is.EqualTo("ok"));
     }
 
     [Test]
     public void Errors()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             throw "Error!";
             """);
 
-        var exc = Assert.Throws<ScripterRuntimeException>(() => _program.Run("script"));
+        var exc = Assert.Throws<ScripterRuntimeException>(() => _program.Run());
         Assert.That(exc!.Message, Is.EqualTo("Error!"));
     }
 
     [Test]
     public void Maths()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             var x = 1;
             var y = ++x;
             x = (x + y) * 2;
             x += 1;
             return x++;
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("9"));
+        Assert.That(result.ToString(), Is.EqualTo("9"));
     }
 
     [Test]
     public void Precedence()
     {
-        Assert.DoesNotThrow(() => _program.Add("script", """
+        Assert.DoesNotThrow(() => _program.Add("index.js", """
             if((1 + 1 * 2) != 3) { throw "* before +"; }
             if(!(false || true && true)) { throw "&& before ||"; }
             if(1 < 2 && false) { throw "< before &&"; }
@@ -153,31 +155,31 @@ public class LanguageTests
     [Test]
     public void Strings()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             return "a" + 2 + true;
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("a2true"));
+        Assert.That(result.ToString(), Is.EqualTo("a2true"));
     }
 
     [Test]
     public void ConditionsAndThrow()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             if(false) { throw "false"; }
             if(!true) { throw "!true"; }
             if(false) throw "no brackets";
             if(true) throw "success";
             """);
-        var exc = Assert.Throws<ScripterRuntimeException>(() => _program.Run("script"));
+        var exc = Assert.Throws<ScripterRuntimeException>(() => _program.Run());
         Assert.That(exc?.Message, Is.EqualTo("success"));
     }
 
     [Test]
     public void Loops()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             var x = 0;
             while(x < 5) {
                 x++;
@@ -187,9 +189,9 @@ public class LanguageTests
             }
             return x;
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("10"));
+        Assert.That(result.ToString(), Is.EqualTo("10"));
     }
 
     [Test]
@@ -199,13 +201,13 @@ public class LanguageTests
             var x = 1;
             return x;
             """;
-        _program.Add("script", source);
-        _program.Add("script", source);
-        var result1 = _program.Run("script");
-        var result2 = _program.Run("script");
+        _program.Add("index.js", source);
+        _program.Add("index.js", source);
+        var result1 = _program.Run();
+        var result2 = _program.Run();
 
-        Assert.That(result1.Returned.ToString(), Is.EqualTo("1"));
-        Assert.That(result2.Returned.ToString(), Is.EqualTo("1"));
+        Assert.That(result1.ToString(), Is.EqualTo("1"));
+        Assert.That(result2.ToString(), Is.EqualTo("1"));
     }
 
     #warning Replace static by export or bind to event, e.g. param.onChange(function() { ... }), plugin
@@ -213,7 +215,7 @@ public class LanguageTests
     [Test]
     public void Functions()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             var x = 0;
             run();
             function run() {
@@ -229,22 +231,22 @@ public class LanguageTests
             wrap();
             return x;
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("4"));
+        Assert.That(result.ToString(), Is.EqualTo("4"));
     }
 
     [Test]
     public void ArrowFunctions()
     {
-        _program.Add("script", """
+        _program.Add("index.js", """
             var x = (i) => { return i + 1; };
             var y = i => i + 1;
             return x(2) + y(10);
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("14"));
+        Assert.That(result.ToString(), Is.EqualTo("14"));
     }
 
     #warning No unary operators (+1, -2)
@@ -253,7 +255,7 @@ public class LanguageTests
     public void Arrays()
     {
         _program.GlobalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
-        _program.Add("script", """
+        _program.Add("index.js", """
             var x = [];
             x.add(1);
             x[0] = x[0] + 1;
@@ -262,16 +264,16 @@ public class LanguageTests
             x[0] = ++x[0];
             return [x[0], x.length];
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("[5, 1]"));
+        Assert.That(result.ToString(), Is.EqualTo("[5, 1]"));
     }
 
     [Test]
     public void Objects()
     {
         _program.GlobalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
-        _program.Add("script", """
+        _program.Add("index.js", """
             var x = getThing(10);
             var o = getThing(1);
             o.value = o.value + 1;
@@ -283,9 +285,9 @@ public class LanguageTests
                     .createAndAdd(100)
                     .increment(1);
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("134"));
+        Assert.That(result.ToString(), Is.EqualTo("134"));
     }
 
     [Test]
@@ -305,74 +307,74 @@ public class LanguageTests
             }
         };
         _program.GlobalContext.DeclareHoisted("getThing", Value.CreateFunction((context, args) => thing));
-        _program.Add("script", """
+        _program.Add("index.js", """
             var o = getThing(1);
             o.deep.deep.deep.value = o.deep.deep.deep.value + 1;
             o.deep.deep.deep.increment(1);
             o.deep.deep.deep.value += 1;
             return o.deep.deep.deep.value;
             """);
-        var result = _program.Run("script");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("4"));
+        Assert.That(result.ToString(), Is.EqualTo("4"));
     }
 
     [Test]
     public void ImportExport()
     {
-        _program.Add("lib", """
+        _program.Add("lib.js", """
             export var x = 1;
             export function fn(y) { return x + y; }
             """);
-        _program.Add("main", """
-            import { x, fn } from "lib";
+        _program.Add("index.js", """
+            import { x, fn } from "./lib.js";
             return x + fn(1);
             """);
-        var result = _program.Run("main");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("3"));
+        Assert.That(result.ToString(), Is.EqualTo("3"));
     }
 
     [Test]
     public void ImportExportNoOrder()
     {
-        _program.Add("main", """
-            import { x } from "lib";
+        _program.Add("index.js", """
+            import { x } from "./lib.js";
             return x;
             """);
-        _program.Add("lib", """
+        _program.Add("lib.js", """
             export var x = 1;
             """);
-        var result = _program.Run("main");
+        var result = _program.Run();
 
-        Assert.That(result.Returned.ToString(), Is.EqualTo("1"));
+        Assert.That(result.ToString(), Is.EqualTo("1"));
     }
 
     [Test]
     public void RefreshScripts()
     {
-        _program.Add("main", """
-            import { x } from "lib";
+        _program.Add("index.js", """
+            import { x } from "./lib.js";
             return x;
             """);
-        _program.Add("lib", """
+        _program.Add("lib.js", """
             export var x = 1;
             """);
-        var result1 = _program.Run("main");
-        Assert.That(result1.Returned.ToString(), Is.EqualTo("1"));
+        var result1 = _program.Run();
+        Assert.That(result1.ToString(), Is.EqualTo("1"));
 
-        _program.Add("main", """
-            import { x } from "lib";
+        _program.Add("index.js", """
+            import { x } from "./lib.js";
             return x * 3;
             """);
-        var result2 = _program.Run("main");
-        Assert.That(result2.Returned.ToString(), Is.EqualTo("3"));
+        var result2 = _program.Run();
+        Assert.That(result2.ToString(), Is.EqualTo("3"));
 
-        _program.Add("lib", """
+        _program.Add("lib.js", """
             export var x = 2;
             """);
-        var result3 = _program.Run("main");
-        Assert.That(result3.Returned.ToString(), Is.EqualTo("6"));
+        var result3 = _program.Run();
+        Assert.That(result3.ToString(), Is.EqualTo("6"));
     }
 
     private class MyThing : ObjectReference
@@ -421,23 +423,34 @@ public class LanguageTests
     [Test]
     public void PerfTestStructure()
     {
-        _program.Add("script", """
-            var x1 = 1;
-            function test(x2) {
-                for(var i = 0; i < 5; i++) {
-                    x2++;
+        var module = _program.Add("index.js", """
+            var x1 = 0;
+            export function run() {
+                function test(x2) {
+                    for(var i = 0; i < 100; i++) {
+                        x2++;
+                    }
+                    return x2;
                 }
-                return x2;
-            }
-            {
-                for(var i = 0; i < 5; i++) {
-                    x1 = test(x1);
+                {
+                    for(var j = 0; j < 100; j++) {
+                        x1 = test(x1);
+                    }
                 }
+                return x1;
             }
-            return x1;
             """);
-        var result = _program.Run("script");
+        var ns = module.Import();
+        var args = Array.Empty<Value>();
+        var run = ns.Exports["run"].AsFunction;
 
-        Assert.That(result.Returned.RawInt, Is.EqualTo(26));
+        var sw = new Stopwatch();
+        sw.Start();
+        for (var i = 0; i < 100; i++)
+        {
+            run(null, args);
+        }
+        sw.Stop();
+        Console.WriteLine("Elapsed: " + sw.ElapsedMilliseconds + "ms");
     }
 }

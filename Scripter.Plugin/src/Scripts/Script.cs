@@ -1,32 +1,47 @@
 ﻿using System;
-using ScripterLang;
 using SimpleJSON;
+using UnityEngine.Events;
+
+public class LogEvent : UnityEvent<ScriptLog>
+{
+}
+
+public struct ScriptLog
+{
+    public bool Error;
+    public string Message;
+}
 
 public class Script
 {
+    private readonly Scripter _scripter;
     public readonly HistoryManager History;
-    public readonly JSONStorableString SourceJSON = new JSONStorableString("Source", "// Write some code!");
-    public readonly JSONStorableString ConsoleJSON = new JSONStorableString("Console", "");
-    public ScriptTrigger Trigger;
+    public readonly JSONStorableString NameJSON = new JSONStorableString("Module", "");
+    public readonly JSONStorableString SourceJSON = new JSONStorableString("Source", "");
+    public readonly LogEvent Log = new LogEvent();
 
-    private readonly Program _program = new Program();
-    private Expression _expression;
+    private string _previousName;
 
-    public Script(string source = null)
+    public Script(string moduleName, string source, Scripter scripter)
     {
-        GlobalFunctions.Register(_program.GlobalContext);
+        _scripter = scripter;
 
         History = new HistoryManager(SourceJSON);
+
+        _previousName = moduleName;
+        NameJSON.val = moduleName;
+        NameJSON.setCallbackFunction = val =>
+        {
+            scripter.Scripts.Program.Remove(_previousName);
+            _previousName = val;
+        };
 
         SourceJSON.setCallbackFunction = val =>
         {
             History.Update(val);
             Parse(val);
         };
-        if (source != null)
-            SourceJSON.val = source;
-        else
-            ConsoleJSON.val = "This script is empty.";
+        SourceJSON.val = source;
     }
 
     private void Parse(string val)
@@ -34,39 +49,26 @@ public class Script
         #warning Add globals for Init (shared variables)
         try
         {
-            _program.Add("", val);
-            ConsoleJSON.val = "<color=green>Code parsed successfully</color>";
+            _scripter.Scripts.Program.Add(NameJSON.val, val);
+            Log.Invoke(new ScriptLog
+            {
+                Error = false,
+                Message = "<color=green>Code parsed successfully</color>"
+            });
         }
         catch (Exception exc)
         {
-            _expression = null;
-            ConsoleJSON.val = $"<color=red>Failed to compile.\n{exc}</color>";
-        }
-    }
-
-    public void Run(Value value)
-    {
-        if (_expression == null) return;
-
-        try
-        {
-            #warning Change to onEvent
-            // if (value.Type != ValueTypes.Uninitialized)
-            //     _domain.Variables["value"] = value;
-            _expression.Evaluate();
-        }
-        catch (Exception exc)
-        {
-            if (ConsoleJSON.dynamicText == null || !ConsoleJSON.dynamicText.isActiveAndEnabled)
-                SuperController.LogError($"Scripter: There was an error executing the script.\n{exc.Message}");
-            ConsoleJSON.val = $"<color=red>{exc}</color>";
+            Log.Invoke(new ScriptLog
+            {
+                Error = false,
+                Message = $"<color=red>Failed to compile.\n{exc}</color>"
+            });
         }
     }
 
     public static Script FromJSON(JSONNode json, Scripter plugin)
     {
-        var s = new Script(json["Source"].Value);
-        s.Trigger = ScriptTrigger.FromJSON(json["Trigger"], s.Run, plugin);
+        var s = new Script(json["Module"].Value, json["Source"].Value, plugin);
         return s;
     }
 
@@ -74,7 +76,7 @@ public class Script
     {
         return new JSONClass
         {
-            { "Trigger", Trigger.GetJSON() },
+            { "Module", NameJSON.val },
             { "Source", SourceJSON.val },
         };
     }

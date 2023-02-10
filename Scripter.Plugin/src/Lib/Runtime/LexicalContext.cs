@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace ScripterLang
 {
@@ -47,14 +46,16 @@ namespace ScripterLang
             return value;
         }
 
-        [MethodImpl(0x0100)]
-        public void ClearVariable(string name)
-        {
-            Variables.Remove(name);
-        }
-
         public abstract GlobalLexicalContext GetGlobalContext();
         public abstract ModuleLexicalContext GetModuleContext();
         public abstract FunctionLexicalContext GetFunctionContext();
+
+        public virtual void Exit()
+        {
+            for (var i = 0; i < Declarations.Count; i++)
+            {
+                Variables.Remove(Declarations[i]);
+            }
+        }
     }
 }

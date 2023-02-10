@@ -1,23 +1,23 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using SimpleJSON;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Scripter : MVRScript
 {
-    private readonly ScriptsManager _scripts;
-    private ScreenManager _screens;
+    public readonly ScriptsManager Scripts;
+
     private bool _loading;
     private bool _restored;
 
-    public List<ScriptUpdateTrigger> UpdateTriggers { get; } = new List<ScriptUpdateTrigger>();
-    public List<ScriptLoadTrigger> LoadTriggers { get; } = new List<ScriptLoadTrigger>();
-    public List<ScriptKeybindingsTrigger> KeybindingsTriggers { get; } = new List<ScriptKeybindingsTrigger>();
+    public UnityEvent OnUpdate = new UnityEvent();
+    public UnityEvent OnSceneLoaded = new UnityEvent();
+    public Dictionary<string, UnityEvent> KeybindingsTriggers { get; } = new Dictionary<string, UnityEvent>();
 
     public Scripter()
     {
-        _scripts = new ScriptsManager(this);
+        Scripts = new ScriptsManager(this);
     }
 
     public override void Init()
@@ -33,8 +33,10 @@ public class Scripter : MVRScript
         if (!_restored)
             containingAtom.RestoreFromLast(this);
 
-        foreach (var trigger in LoadTriggers)
-            trigger.Run();
+        OnSceneLoaded.Invoke();
+
+        if (!_restored)
+            Scripts.CreateIndex();
     }
 
     public override void InitUI()
@@ -42,30 +44,18 @@ public class Scripter : MVRScript
         base.InitUI();
         if (UITransform == null) return;
         leftUIContent.anchorMax = new Vector2(1, 1);
-        _screens = new ScreenManager(UITransform, leftUIContent, manager, _scripts);
-        _screens.EditScriptsList();
+        ScripterUI.Create(leftUIContent, this);
     }
 
     public void Update()
     {
-        for (var i = 0; i < UpdateTriggers.Count; i++)
-        {
-            try
-            {
-                UpdateTriggers[i].Run();
-            }
-            catch(Exception exc)
-            {
-                UpdateTriggers[i].EnabledJSON.val = false;
-                SuperController.LogError($"Scripter: An Update trigger failed and was disabled: {exc}");
-            }
-        }
+        OnUpdate.Invoke();
     }
 
     public override JSONClass GetJSON(bool includePhysical = true, bool includeAppearance = true, bool forceStore = false)
     {
         var json = base.GetJSON(includePhysical, includeAppearance, forceStore);
-        json["Scripts"] = _scripts.GetJSON();
+        json["Scripts"] = Scripts.GetJSON();
         needsStore = true;
         return json;
     }
@@ -74,7 +64,7 @@ public class Scripter : MVRScript
     {
         base.RestoreFromJSON(jc, restorePhysical, restoreAppearance, presetAtoms, setMissingToDefault);
         _loading = true;
-        _scripts.RestoreFromJSON(jc["Scripts"]);
+        Scripts.RestoreFromJSON(jc["Scripts"]);
         _loading = false;
         _restored = true;
         UpdateKeybindings();
@@ -95,9 +85,9 @@ public class Scripter : MVRScript
 
         foreach (var trigger in KeybindingsTriggers)
         {
-            var n = trigger.NameJSON.val;
+            var n = trigger.Key;
             if (n == "") continue;
-            bindings.Add(new JSONStorableAction(n, trigger.Run));
+            bindings.Add(new JSONStorableAction(n, trigger.Value.Invoke));
         }
     }
 

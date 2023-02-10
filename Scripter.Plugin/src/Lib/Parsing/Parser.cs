@@ -56,6 +56,7 @@ namespace ScripterLang
                 if (token.Value == "for") return ParseForStatement(lexicalContext);
                 if (token.Value == "while") return ParseWhileStatement(lexicalContext);
                 if (token.Value == "return") return ParseReturnStatement(lexicalContext);
+                #warning const
                 if (token.Value == "var" || token.Value == "let") return ParseVariableDeclaration(lexicalContext);
                 if (token.Value == "throw") return ParseThrowDeclaration(lexicalContext);
                 if (token.Value == "function") return ParseFunctionDeclaration(lexicalContext, true);

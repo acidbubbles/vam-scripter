@@ -31,10 +31,7 @@ namespace ScripterLang
             }
             finally
             {
-                for (var i = 0; i < _context.Declarations.Count; i++)
-                {
-                    _context.ClearVariable(_context.Declarations[i]);
-                }
+                _context.Exit();
             }
         }
 

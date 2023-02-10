@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ScripterLang;
 using SimpleJSON;
 using UnityEngine.Events;
 
@@ -9,36 +10,24 @@ public class ScriptsManager
     private readonly Scripter _plugin;
     public readonly UnityEvent ScriptsUpdated = new UnityEvent();
     public readonly List<Script> Scripts = new List<Script>();
+    public readonly Program Program;
+
+    public readonly JSONStorableString ConsoleJSON = new JSONStorableString("Console", "");
 
     public ScriptsManager(Scripter plugin)
     {
         _plugin = plugin;
-    }
-
-    public void Create(string type)
-    {
-        var name = NewName();
-        var script = new Script();
-        script.Trigger = ScriptTrigger.Create(type, name, script.Run, _plugin);
-        Scripts.Add(script);
-        script.Trigger.Register();
-        ScriptsUpdated.Invoke();
-    }
-
-    public void Delete(Script script)
-    {
-        script.Trigger.Deregister();
-        Scripts.Remove(script);
-        ScriptsUpdated.Invoke();
+        Program = new Program();
+        GlobalFunctions.Register(Program.GlobalContext);
     }
 
     private string NewName()
     {
-        const string prefix = "Untitled ";
+        const string prefix = "lib";
         for (var i = 1; i < 9999; i++)
         {
-            var name = $"{prefix}{i}";
-            if (Scripts.All(s => s.Trigger.NameJSON.val != name))
+            var name = $"{prefix}{i}.js";
+            if (Scripts.All(s => s.NameJSON.val != name))
                 return name;
         }
         throw new InvalidOperationException("You're creating way too many scripts!");
@@ -61,8 +50,19 @@ public class ScriptsManager
         {
             var script = Script.FromJSON(scriptJSON, _plugin);
             Scripts.Add(script);
-            script.Trigger.Register();
         }
         ScriptsUpdated.Invoke();
+    }
+
+    public void CreateIndex()
+    {
+        const string defaultScript = @"import { scripter } from ""scripter""
+
+let action = scripter.registerAction(""Say Hello"");
+action.onTrigger(() => {
+  console.log(""Hello, world!"");
+});
+";
+        Scripts.Add(new Script("index.js", defaultScript, _plugin));
     }
 }
