@@ -62,7 +62,6 @@
                     break;
                 default:
                     throw MakeUnsupportedOperandsException(value, right);
-                    break;
             }
             _accessor.SetAndRelease(result);
             return result;

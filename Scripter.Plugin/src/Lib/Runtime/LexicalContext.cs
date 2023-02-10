@@ -31,8 +31,6 @@ namespace ScripterLang
             return variable;
         }
 
-        public abstract GlobalLexicalContext GetGlobalContext();
-        public abstract ModuleLexicalContext GetModuleContext();
         public abstract FunctionLexicalContext GetFunctionContext();
 
         public virtual void Exit()

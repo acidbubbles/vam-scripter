@@ -22,12 +22,12 @@ namespace ScripterLang
 
         public virtual Value GetIndex(Value index)
         {
-            throw new ScripterRuntimeException($"Object has no indexer");
+            throw new ScripterRuntimeException("Object has no indexer");
         }
 
         public virtual void SetIndex(Value index, Value value)
         {
-            throw new ScripterRuntimeException($"Object has no indexer");
+            throw new ScripterRuntimeException("Object has no indexer");
         }
 
         protected static Value Func(FunctionReference f) => Value.CreateFunction(f);

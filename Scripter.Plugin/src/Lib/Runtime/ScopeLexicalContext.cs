@@ -31,8 +31,6 @@
             return base.GetVariable(name);
         }
 
-        public override ModuleLexicalContext GetModuleContext() => _parent.GetModuleContext();
         public override FunctionLexicalContext GetFunctionContext() => _parent.GetFunctionContext();
-        public override GlobalLexicalContext GetGlobalContext() => _parent.GetGlobalContext();
     }
 }

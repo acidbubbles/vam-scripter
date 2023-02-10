@@ -42,11 +42,22 @@ namespace ScripterLang
             var lexicalContext = new ModuleLexicalContext(globalLexicalContext);
             while (!IsAtEnd())
             {
-                expressions.Add(ParseExpression(lexicalContext));
+                expressions.Add(ParseRootExpression(lexicalContext));
             }
             var module = new ModuleExpression(expressions, moduleName, lexicalContext);
             module.Bind();
             return module;
+        }
+
+        private Expression ParseRootExpression(ModuleLexicalContext lexicalContext)
+        {
+            var token = Peek();
+            if (token.Match(TokenType.Keyword))
+            {
+                if (token.Value == "import") return ParseImportDeclaration(lexicalContext);
+                if (token.Value == "export") return ParseExportDeclaration(lexicalContext);
+            }
+            return ParseExpression(lexicalContext);
         }
 
         private Expression ParseExpression(ScopeLexicalContext lexicalContext)
@@ -62,8 +73,6 @@ namespace ScripterLang
                 if (token.Value == "const") return ParseVariableDeclaration(lexicalContext, true);
                 if (token.Value == "throw") return ParseThrowDeclaration(lexicalContext);
                 if (token.Value == "function") return ParseFunctionDeclaration(lexicalContext, true);
-                if (token.Value == "import") return ParseImportDeclaration(lexicalContext);
-                if (token.Value == "export") return ParseExportDeclaration(lexicalContext);
                 throw new ScripterParsingException($"Unexpected keyword: {token.Value}", token.Location);
             }
 
@@ -86,7 +95,7 @@ namespace ScripterLang
             throw new ScripterParsingException($"Unexpected token: '{token.Value}'", token.Location);
         }
 
-        private Expression ParseExportDeclaration(ScopeLexicalContext lexicalContext)
+        private Expression ParseExportDeclaration(ModuleLexicalContext lexicalContext)
         {
             MoveNext();
             var token = Peek();
@@ -102,7 +111,7 @@ namespace ScripterLang
             return new ExportExpression(expression, lexicalContext);
         }
 
-        private Expression ParseImportDeclaration(ScopeLexicalContext lexicalContext)
+        private Expression ParseImportDeclaration(ModuleLexicalContext lexicalContext)
         {
             MoveNext();
             Consume().Expect(TokenType.LeftBrace);
@@ -326,14 +335,6 @@ namespace ScripterLang
 
         private Expression ParseValueStatementExpression(ScopeLexicalContext lexicalContext)
         {
-            #warning Should be lower
-            if (Peek().Match(TokenType.LeftBracket))
-            {
-                MoveNext();
-                var values = ParseArgumentList(lexicalContext, TokenType.RightBracket);
-                Consume().Expect(TokenType.RightBracket);
-                return new ArrayDeclarationExpression(values);
-            }
             return ParseValueStatementExpression(lexicalContext, 0);
         }
 
@@ -368,7 +369,7 @@ namespace ScripterLang
             return ParseVariableExpression(lexicalContext, accessor);
         }
 
-        private int GetOperatorPrecedence(string op)
+        private static int GetOperatorPrecedence(string op)
         {
             // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#table
             switch (op)
@@ -449,7 +450,7 @@ namespace ScripterLang
                     return ParseIncrementDecrementExpression(lexicalContext, Consume());
                 case TokenType.LeftParenthesis:
                 {
-                    if(IsArrowFunction())
+                    if (IsArrowFunction())
                         return ParseArrowFunctionExpression(lexicalContext);
 
                     MoveNext();
@@ -458,7 +459,7 @@ namespace ScripterLang
                     return new ParenthesesExpression(expression);
                 }
                 case TokenType.Identifier:
-                    if(IsArrowFunction())
+                    if (IsArrowFunction())
                         return ParseArrowFunctionExpression(lexicalContext);
 
                     return ParseVariableExpression(lexicalContext, new ScopedVariableAccessor(Consume().Value, lexicalContext));
@@ -466,6 +467,11 @@ namespace ScripterLang
                     if (token.Value == "function")
                         return ParseFunctionDeclaration(lexicalContext, false);
                     throw new ScripterParsingException("Unexpected token " + token.Value, token.Location);
+                case TokenType.LeftBracket:
+                    MoveNext();
+                    var values = ParseArgumentList(lexicalContext, TokenType.RightBracket);
+                    Consume().Expect(TokenType.RightBracket);
+                    return new ArrayDeclarationExpression(values);
                 default:
                     throw new ScripterParsingException("Unexpected token " + token.Value, token.Location);
             }

@@ -5,10 +5,10 @@
         private readonly DeclarationExpression _expression;
         private readonly ModuleLexicalContext _moduleLexicalContext;
 
-        public ExportExpression(DeclarationExpression expression, LexicalContext lexicalContext)
+        public ExportExpression(DeclarationExpression expression, ModuleLexicalContext lexicalContext)
         {
             _expression = expression;
-            _moduleLexicalContext = lexicalContext.GetModuleContext();
+            _moduleLexicalContext = lexicalContext;
         }
 
         public override void Bind()

@@ -49,13 +49,6 @@ namespace ScripterLang
             }
         }
 
-        public override GlobalLexicalContext GetGlobalContext() => this;
-
-        public override ModuleLexicalContext GetModuleContext()
-        {
-            throw new ScripterRuntimeException("Cannot access module context from the global context");
-        }
-
         public override FunctionLexicalContext GetFunctionContext()
         {
             throw new ScripterRuntimeException("Cannot access function context from the global context");

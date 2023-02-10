@@ -31,7 +31,7 @@
             const float maxTime = 5;
             var max = Time.time + maxTime;
             #endif
-            for (_start.Evaluate(); _end.Evaluate().AsBool; _increment.Evaluate())
+            for (_start.Evaluate(); _end.Evaluate().Boolify; _increment.Evaluate())
             {
                 _body.Evaluate();
                 #if SCRIPTER_DUMMY_MODE

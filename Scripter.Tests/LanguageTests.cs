@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics;
 using ScripterLang;
 
 namespace Scripter.Tests;
@@ -210,8 +208,6 @@ public class LanguageTests
         Assert.That(result1.ToString(), Is.EqualTo("1"));
         Assert.That(result2.ToString(), Is.EqualTo("1"));
     }
-
-    #warning Replace static by export or bind to event, e.g. param.onChange(function() { ... }), plugin
 
     [Test]
     public void Functions()

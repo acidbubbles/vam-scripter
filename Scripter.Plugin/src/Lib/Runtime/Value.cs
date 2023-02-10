@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -6,6 +7,8 @@ using System.Runtime.InteropServices;
 namespace ScripterLang
 {
     [StructLayout(LayoutKind.Explicit, Size=16)]
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public struct Value
     {
         public const float Epsilon = 1.17549435E-38f;

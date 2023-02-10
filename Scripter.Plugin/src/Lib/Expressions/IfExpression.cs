@@ -23,7 +23,7 @@
         public override Value Evaluate()
         {
             var condition = _condition.Evaluate();
-            if (condition.AsBool)
+            if (condition.Boolify)
                 return _trueBranch.Evaluate();
             if (_falseBranch != null)
                 return _falseBranch.Evaluate();

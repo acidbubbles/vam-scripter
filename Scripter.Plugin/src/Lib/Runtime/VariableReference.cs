@@ -38,7 +38,7 @@ namespace ScripterLang
         public void SetValue(Value value)
         {
             if (Constant)
-                throw new ScripterRuntimeException($"Cannot assign to constant variable", Location);
+                throw new ScripterRuntimeException($"Cannot assign to constant variable {Name}", Location);
             Value = value;
             Initialized = true;
         }

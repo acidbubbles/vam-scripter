@@ -19,7 +19,7 @@ namespace ScripterLang
 
         public override Value Evaluate()
         {
-            while (_condition.Evaluate().AsBool)
+            while (_condition.Evaluate().Boolify)
             {
                 _body.Evaluate();
             }

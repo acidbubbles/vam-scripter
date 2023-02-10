@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Diagnostics;
+﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using ScripterLang;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
