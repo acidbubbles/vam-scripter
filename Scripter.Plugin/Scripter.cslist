@@ -63,6 +63,7 @@ src\Lib\Runtime\ScopeLexicalContext.cs
 src\Lib\Runtime\ScripterParsingException.cs
 src\Lib\Runtime\Value.cs
 src\Lib\Runtime\ValueTypes.cs
+src\Lib\Tests\PerfTest.cs
 src\Lib\Types\ListReference.cs
 src\Scripts\Script.cs
 src\Scripts\ScriptsManager.cs
@@ -72,6 +73,5 @@ src\UI\HistoryManager.cs
 src\UI\Screen.cs
 src\UI\ScriptEditScreen.cs
 src\UI\ScripterUI.cs
-src\PerfTest.cs
 src\Scripter.cs
 src\ScripterPluginException.cs

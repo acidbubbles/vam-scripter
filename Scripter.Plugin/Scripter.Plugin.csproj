@@ -136,6 +136,7 @@
     <Compile Include="src\Lib\Runtime\ScripterParsingException.cs" />
     <Compile Include="src\Lib\Runtime\Value.cs" />
     <Compile Include="src\Lib\Runtime\ValueTypes.cs" />
+    <Compile Include="src\Lib\Tests\PerfTest.cs" />
     <Compile Include="src\Lib\Types\ListReference.cs" />
     <Compile Include="src\Scripts\Script.cs" />
     <Compile Include="src\Scripts\ScriptsManager.cs" />
@@ -145,7 +146,6 @@
     <Compile Include="src\UI\Screen.cs" />
     <Compile Include="src\UI\ScriptEditScreen.cs" />
     <Compile Include="src\UI\ScripterUI.cs" />
-    <Compile Include="src\PerfTest.cs" />
     <Compile Include="src\Scripter.cs" />
     <Compile Include="src\ScripterPluginException.cs" />
     <!-- /ScripterSource -->

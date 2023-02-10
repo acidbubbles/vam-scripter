@@ -421,36 +421,8 @@ public class LanguageTests
     }
 
     [Test]
-    public void PerfTestStructure()
+    public void PerfTests()
     {
-        var module = _program.Add("index.js", """
-            var x1 = 0;
-            export function run() {
-                function test(x2) {
-                    for(var i = 0; i < 100; i++) {
-                        x2++;
-                    }
-                    return x2;
-                }
-                {
-                    for(var j = 0; j < 100; j++) {
-                        x1 = test(x1);
-                    }
-                }
-                return x1;
-            }
-            """);
-        var ns = module.Import();
-        var args = Array.Empty<Value>();
-        var run = ns.Exports["run"].AsFunction;
-
-        var sw = new Stopwatch();
-        sw.Start();
-        for (var i = 0; i < 100; i++)
-        {
-            run(null, args);
-        }
-        sw.Stop();
-        Console.WriteLine("Elapsed: " + sw.ElapsedMilliseconds + "ms");
+        PerfTest.Run();
     }
 }

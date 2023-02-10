@@ -74,6 +74,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\ScripterParsingException.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\Value.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Runtime\\ValueTypes.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Tests\\PerfTest.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Types\\ListReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripts\\Script.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripts\\ScriptsManager.cs",
@@ -83,7 +84,6 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\Screen.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\ScriptEditScreen.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\ScripterUI.cs",
-    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\PerfTest.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripter.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\ScripterPluginException.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\Scripter.cslist"
