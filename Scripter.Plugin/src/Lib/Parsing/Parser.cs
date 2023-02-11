@@ -446,6 +446,11 @@ namespace ScripterLang
                 case TokenType.Negation:
                     MoveNext();
                     return new NegateExpression(ParsePureValueExpression(lexicalContext));
+                case TokenType.Operator:
+                    var op = Consume();
+                    if(op.Value != "-")
+                        throw new ScripterParsingException("Unexpected token " + token.Value, token.Location);
+                    return new UnaryOperatorExpression(op.Value, ParsePureValueExpression(lexicalContext));
                 case TokenType.IncrementDecrement:
                     return ParseIncrementDecrementExpression(lexicalContext, Consume());
                 case TokenType.LeftParenthesis:

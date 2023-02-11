@@ -114,6 +114,7 @@
     <Compile Include="src\Lib\Expressions\ScopedVariableAccessor.cs" />
     <Compile Include="src\Lib\Expressions\StringExpression.cs" />
     <Compile Include="src\Lib\Expressions\ThrowExpression.cs" />
+    <Compile Include="src\Lib\Expressions\UnaryOperatorExpression.cs" />
     <Compile Include="src\Lib\Expressions\UndefinedExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableAccessor.cs" />
     <Compile Include="src\Lib\Expressions\VariableDeclarationExpression.cs" />

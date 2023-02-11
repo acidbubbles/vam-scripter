@@ -246,7 +246,16 @@ public class LanguageTests
         Assert.That(result.ToString(), Is.EqualTo("14"));
     }
 
-    #warning No unary operators (+1, -2)
+    [Test]
+    public void UnaryOperators()
+    {
+        _program.Add("index.js", """
+            return -1 + -2;
+            """);
+        var result = _program.Run();
+
+        Assert.That(result.ToString(), Is.EqualTo("-3"));
+    }
 
     [Test]
     public void Arrays()
