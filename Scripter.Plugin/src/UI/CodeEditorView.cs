@@ -5,16 +5,20 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-public class ScriptEditor : MonoBehaviour
+public class CodeEditorView : MonoBehaviour
 {
-    public static ScriptEditor Create(Transform parent, Script script)
+    public static CodeEditorView Create(Transform parent, Script script)
     {
         var go = new GameObject();
         go.transform.SetParent(parent, false);
 
-        var layout = go.AddComponent<LayoutElement>();
-        layout.preferredHeight = 1200f;
-        layout.flexibleWidth = 1;
+        var rect = go.AddComponent<RectTransform>();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.anchoredPosition = new Vector2(0, 0);
+        rect.sizeDelta = new Vector2(0, 0);
+        rect.offsetMin = new Vector2(0, 0);
+        rect.offsetMax = new Vector2(0, 0);
 
         var bg = go.AddComponent<Image>();
         bg.raycastTarget = false;
@@ -28,7 +32,7 @@ public class ScriptEditor : MonoBehaviour
         // var fitter = go.AddComponent<ContentSizeFitter>();
         // fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-        var screen = go.AddComponent<ScriptEditor>();
+        var screen = go.AddComponent<CodeEditorView>();
         //
         // var button = Instantiate(manager.Prefabs.configurableButtonPrefab, screen.transform).GetComponent<UIDynamicButton>();
         // button.label = "Run";

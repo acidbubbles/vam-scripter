@@ -8,6 +8,8 @@ public class ScripterUI : MonoBehaviour
         var go = new GameObject();
         go.transform.SetParent(parent, false);
 
+        var ui = go.AddComponent<ScripterUI>();
+
         var rect = go.AddComponent<RectTransform>();
         rect.anchorMin = Vector2.zero;
         rect.anchorMax = Vector2.one;
@@ -33,10 +35,32 @@ public class ScripterUI : MonoBehaviour
         // var fitter = go.AddComponent<ContentSizeFitter>();
         // fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-        var tabs = ScriptsTabs.Create(go.transform);
+        ui._tabs = ScripterTabsList.Create(go.transform);
 
-        var editor = ScriptEditor.Create(go.transform, null);
+        var content = new GameObject();
+        content.transform.SetParent(go.transform, false);
 
-        return go.AddComponent<ScripterUI>();
+        var layout = content.AddComponent<LayoutElement>();
+        layout.preferredHeight = 1200f;
+        layout.flexibleWidth = 1;
+
+        ui._content = content;
+
+        return ui;
+    }
+
+    private ScripterTabsList _tabs;
+    private GameObject _content;
+
+    public void AddWelcomeTab()
+    {
+        _tabs.AddTab("Welcome").Selected = true;
+        var welcome = WelcomeView.Create(_content.transform);
+    }
+
+    public void AddScriptTab()
+    {
+        _tabs.AddTab("index.js");
+        var editor = CodeEditorView.Create(_content.transform, null);
     }
 }

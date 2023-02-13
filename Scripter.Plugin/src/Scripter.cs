@@ -16,6 +16,7 @@ public class Scripter : MVRScript
 
     public UnityEvent OnUpdate = new UnityEvent();
     public UnityEvent OnSceneLoaded = new UnityEvent();
+    private ScripterUI _ui;
     public Dictionary<string, UnityEvent> KeybindingsTriggers { get; } = new Dictionary<string, UnityEvent>();
 
     public Scripter()
@@ -48,7 +49,8 @@ public class Scripter : MVRScript
         base.InitUI();
         if (UITransform == null) return;
         leftUIContent.anchorMax = new Vector2(1, 1);
-        ScripterUI.Create(UITransform, this);
+        _ui = ScripterUI.Create(UITransform, this);
+        _ui.AddWelcomeTab();
     }
 
     public void Update()

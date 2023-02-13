@@ -1,55 +1,23 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-public class ScriptsTabs : MonoBehaviour
+public class ScripterTab : MonoBehaviour
 {
-    public static ScriptsTabs Create(Transform parent)
+    public static ScripterTab Create(Transform parent, string label)
     {
         var go = new GameObject();
         go.transform.SetParent(parent, false);
 
-        var layout = go.AddComponent<LayoutElement>();
-        layout.preferredHeight = 30;
-        layout.flexibleWidth = 1;
-
-        var group = go.AddComponent<HorizontalLayoutGroup>();
-        group.spacing = 10f;
-        group.childControlWidth = true;
-        group.childForceExpandWidth = false;
-        group.childControlHeight = true;
-        group.childForceExpandHeight = false;
-        group.childAlignment = TextAnchor.UpperLeft;
-
-        //
-        AddTab(go.transform);
-        //
-        // var fitter = go.AddComponent<ContentSizeFitter>();
-        // fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-        var tabs = go.AddComponent<ScriptsTabs>();
-
-        var bg = go.AddComponent<Image>();
-        bg.color = new Color(59 / 255f, 59 / 255f, 59 / 255f);
-
-        return tabs;
-    }
-
-    private static void AddTab(Transform parent)
-    {
-        var go = new GameObject();
-        go.transform.SetParent(parent, false);
+        var tab = go.AddComponent<ScripterTab>();
 
         {
             var layout = go.AddComponent<LayoutElement>();
             layout.minHeight = layout.preferredHeight = 70;
-            layout.minWidth = layout.preferredWidth = 340;
+            layout.minWidth = layout.preferredWidth = 200;
 
             var tabBg = go.AddComponent<Image>();
             tabBg.raycastTarget = true;
-            tabBg.color = new Color(50f / 255f, 50f / 255f, 50f / 255f);
+            tab.bg = tabBg;
         }
 
         {
@@ -62,15 +30,15 @@ public class ScriptsTabs : MonoBehaviour
             rect.anchoredPosition = new Vector2(0, 0);
             rect.pivot = new Vector2(0, 0);
             rect.sizeDelta = new Vector2(0, 0);
-            rect.offsetMin = new Vector2(0, 10);
+            rect.offsetMin = new Vector2(20, 5);
 
             var text = filename.AddComponent<Text>();
             text.font = SuperController.singleton.dynamicButtonPrefab.GetComponentInChildren<Text>(true).font;
             text.fontSize = 28;
-            text.text = " index.js";
+            text.text = label;
             text.alignment = TextAnchor.MiddleLeft;
-            text.color = new Color(192 / 255f, 192 / 255f, 198 / 255f);
             text.raycastTarget = false;
+            tab.text = text;
         }
 
         {
@@ -86,7 +54,48 @@ public class ScriptsTabs : MonoBehaviour
 
             var bg = selected.AddComponent<Image>();
             bg.raycastTarget = false;
-            bg.color = new Color(96f / 255f, 100f / 255f, 105f / 255f);
+            tab.underline = bg;
         }
+
+        tab.SetUnselected();
+
+        return tab;
+    }
+
+    public Image bg;
+
+    public Text text;
+
+    public Image underline;
+
+    private bool _selected;
+
+    public bool Selected
+    {
+        get { return _selected; }
+        set
+        {
+            if (_selected == value) return;
+            _selected = value;
+            if(value)
+                SetSelected();
+            else
+                SetUnselected();
+
+        }
+    }
+
+    public void SetSelected()
+    {
+        text.color = new Color(192 / 255f, 192 / 255f, 198 / 255f);
+        bg.color = new Color(50f / 255f, 50f / 255f, 50f / 255f);
+        underline.color = new Color(76 / 255f, 103 / 255f, 158 / 255f);
+    }
+
+    public void SetUnselected()
+    {
+        text.color = new Color(192 / 255f, 192 / 255f, 198 / 255f);
+        bg.color = new Color(59 / 255f, 59 / 255f, 59 / 255f);
+        underline.color = new Color(59 / 255f, 59 / 255f, 59 / 255f);
     }
 }

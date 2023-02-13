@@ -71,11 +71,13 @@ src\Lib\Types\ListReference.cs
 src\Scripts\Script.cs
 src\Scripts\ScriptsManager.cs
 src\UI\Clickable.cs
+src\UI\CodeEditorView.cs
 src\UI\CodeInputField.cs
 src\UI\HistoryManager.cs
 src\UI\Screen.cs
-src\UI\ScriptEditor.cs
+src\UI\ScripterTab.cs
+src\UI\ScripterTabsList.cs
 src\UI\ScripterUI.cs
-src\UI\ScriptsTabs.cs
+src\UI\WelcomeView.cs
 src\Scripter.cs
 src\ScripterPluginException.cs
