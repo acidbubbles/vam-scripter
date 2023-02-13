@@ -7,6 +7,8 @@ using UnityEngine.Events;
 
 public class Scripter : MVRScript
 {
+    public static Scripter Singleton;
+
     public readonly ScriptsManager Scripts;
 
     private bool _loading;
@@ -19,6 +21,7 @@ public class Scripter : MVRScript
     public Scripter()
     {
         Scripts = new ScriptsManager(this);
+        Singleton = this;
     }
 
     public override void Init()
@@ -45,7 +48,7 @@ public class Scripter : MVRScript
         base.InitUI();
         if (UITransform == null) return;
         leftUIContent.anchorMax = new Vector2(1, 1);
-        ScripterUI.Create(leftUIContent, this);
+        ScripterUI.Create(UITransform, this);
     }
 
     public void Update()

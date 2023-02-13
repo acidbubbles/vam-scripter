@@ -74,7 +74,8 @@ src\UI\Clickable.cs
 src\UI\CodeInputField.cs
 src\UI\HistoryManager.cs
 src\UI\Screen.cs
-src\UI\ScriptEditScreen.cs
+src\UI\ScriptEditor.cs
 src\UI\ScripterUI.cs
+src\UI\ScriptsTabs.cs
 src\Scripter.cs
 src\ScripterPluginException.cs
