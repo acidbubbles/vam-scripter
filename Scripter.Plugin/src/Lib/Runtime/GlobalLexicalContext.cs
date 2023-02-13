@@ -49,9 +49,14 @@ namespace ScripterLang
             }
         }
 
+        public override LoopLexicalContext GetLoopContext()
+        {
+            return null;
+        }
+
         public override FunctionLexicalContext GetFunctionContext()
         {
-            throw new ScripterRuntimeException("Cannot access function context from the global context");
+            return null;
         }
     }
 }

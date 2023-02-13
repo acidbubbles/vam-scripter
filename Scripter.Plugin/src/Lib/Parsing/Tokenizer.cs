@@ -307,6 +307,8 @@ namespace ScripterLang
                                 case "const":
                                 case "for":
                                 case "while":
+                                case "break":
+                                case "continue":
                                 case "if":
                                 case "else":
                                 case "return":

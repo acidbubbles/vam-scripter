@@ -263,6 +263,14 @@ namespace ScripterLang
             }
         }
 
+        public string ToCodeString()
+        {
+            if (Type == ValueTypes.StringType)
+                return "\"" + RawString + "\"";
+            else
+                return ToString();
+        }
+
         [MethodImpl(0x0100)]
         public static implicit operator Value(string value) => CreateString(value);
 

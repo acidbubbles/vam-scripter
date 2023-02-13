@@ -5,14 +5,16 @@
         private readonly Expression _start;
         private readonly Expression _end;
         private readonly Expression _increment;
-        private readonly Expression _body;
+        private readonly CodeBlockExpression _body;
+        private readonly LoopLexicalContext _context;
 
-        public ForExpression(Expression start, Expression end, Expression increment, Expression body)
+        public ForExpression(Expression start, Expression end, Expression increment, CodeBlockExpression body, LoopLexicalContext context)
         {
             _start = start;
             _end = end;
             _increment = increment;
             _body = body;
+            _context = context;
         }
 
         public override void Bind()
@@ -25,20 +27,29 @@
 
         public override Value Evaluate()
         {
-            #warning break and continue statements;
-            #warning foreach
-            #if SCRIPTER_DUMMY_MODE
-            const float maxTime = 5;
-            var max = Time.time + maxTime;
-            #endif
-            for (_start.Evaluate(); _end.Evaluate().Boolify; _increment.Evaluate())
+            try
             {
-                _body.Evaluate();
-                #if SCRIPTER_DUMMY_MODE
-                if (Time.time > max)
-                    throw new ScripterRuntimeException($"Spent more than {maxTime} seconds in the for loop");
-                #endif
+                for (_start.Evaluate(); _end.Evaluate().Boolify; _increment.Evaluate())
+                {
+                    _body.Evaluate();
+                    if (_context.IsContinue)
+                    {
+                        _context.IsContinue = false;
+                        continue;
+                    }
+                    if (_context.IsBreak)
+                    {
+                        _context.IsBreak = false;
+                        break;
+                    }
+                }
             }
+            finally
+            {
+                _context.IsBreak = false;
+                _context.IsContinue = false;
+            }
+
             return Value.Void;
         }
     }

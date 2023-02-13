@@ -31,6 +31,8 @@
             return base.GetVariable(name);
         }
 
+        public override LoopLexicalContext GetLoopContext() => _parent.GetLoopContext();
+
         public override FunctionLexicalContext GetFunctionContext() => _parent.GetFunctionContext();
     }
 }

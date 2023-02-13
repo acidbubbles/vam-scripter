@@ -31,6 +31,7 @@ namespace ScripterLang
             return variable;
         }
 
+        public abstract LoopLexicalContext GetLoopContext();
         public abstract FunctionLexicalContext GetFunctionContext();
 
         public virtual void Exit()

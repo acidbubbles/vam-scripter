@@ -61,7 +61,8 @@ export function run() {
                 run(null, args);
             }
             sw.Stop();
-            SuperController.LogMessage($"Scripter: {sw.Elapsed.TotalSeconds:0.0000}ms");
+            var scripterTime = sw.Elapsed.TotalSeconds;
+            SuperController.LogMessage($"Scripter: {scripterTime:0.0000}ms");
 
             var dotnet = new PerfTestDotNet();
             dotnet.Run();
@@ -73,7 +74,10 @@ export function run() {
             }
             sw.Stop();
 
-            SuperController.LogMessage($"Native: {sw.Elapsed.TotalSeconds:0.0000}ms");
+            var nativeTime = sw.Elapsed.TotalSeconds;
+            SuperController.LogMessage($"Native: {nativeTime:0.0000}ms");
+
+            SuperController.LogMessage($"Ratio: {scripterTime / nativeTime:0.0} times slower ({nativeTime / scripterTime * 100.0:0.00}% of native speed)");
         }
     }
 }

@@ -33,6 +33,7 @@ src\Lib\Expressions\ImportExpression.cs
 src\Lib\Expressions\IncrementDecrementExpression.cs
 src\Lib\Expressions\IndexerAccessor.cs
 src\Lib\Expressions\IntegerExpression.cs
+src\Lib\Expressions\LoopControlFlowExpression.cs
 src\Lib\Expressions\ModuleExpression.cs
 src\Lib\Expressions\NegateExpression.cs
 src\Lib\Expressions\ParenthesesExpression.cs
@@ -41,6 +42,7 @@ src\Lib\Expressions\ReturnExpression.cs
 src\Lib\Expressions\ScopedVariableAccessor.cs
 src\Lib\Expressions\StringExpression.cs
 src\Lib\Expressions\ThrowExpression.cs
+src\Lib\Expressions\UnaryOperatorExpression.cs
 src\Lib\Expressions\UndefinedExpression.cs
 src\Lib\Expressions\VariableAccessor.cs
 src\Lib\Expressions\VariableDeclarationExpression.cs
@@ -56,6 +58,7 @@ src\Lib\Runtime\FunctionLexicalContext.cs
 src\Lib\Runtime\FunctionReference.cs
 src\Lib\Runtime\GlobalLexicalContext.cs
 src\Lib\Runtime\LexicalContext.cs
+src\Lib\Runtime\LoopLexicalContext.cs
 src\Lib\Runtime\ModuleLexicalContext.cs
 src\Lib\Runtime\ObjectReference.cs
 src\Lib\Runtime\ScopeLexicalContext.cs

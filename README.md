@@ -11,7 +11,7 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 - String concatenation (`+`)
 - Assignment operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`)
 - Comments (`//`, `/* */`)
-- Keywords (`if`, `else`, `for`, `while`, `throw`)
+- Keywords (`if`, `else`, `for`, `while`, `throw`, `break`, `continue`)
 - Functions (`function`, `return`)
 - Arrow functions (`(x) => { code; }`, `x => code`)
 - Arrays (`var x = []`, `var x = [values]`, `x.add`, `x[index]`, `x.length`)
@@ -22,7 +22,6 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 ## Notable Omissions
 
 - No support for dictionaries (maps)
-- No `break` and `continue` statements
 - No `foreach`
 
 ## Globals

@@ -186,6 +186,15 @@ public class LanguageTests
             for(var y = 0; y < 5; y++) {
                 x++;
             }
+            for(let i= 0; i < 2; i++) {
+                if(i < 1) continue;
+                if(i < 2) break;
+                throw "break failed";
+            }
+            while(true) {
+                break;
+                throw "break failed";
+            }
             return x;
             """);
         var result = _program.Run();
@@ -430,8 +439,9 @@ public class LanguageTests
     public void PerfTests()
     {
         // Latest results:
-        // Scripter: 0.2350ms
-        // Native: 0.0016ms
+        // Scripter: 0.2382ms
+        // Native: 0.0015ms
+        // Ratio: 155.1 times slower (0.64% of native speed)
         PerfTest.Run();
     }
 }

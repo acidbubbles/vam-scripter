@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace ScripterLang
 {
@@ -59,7 +60,7 @@ namespace ScripterLang
 
         public override string ToString()
         {
-            return Value.ToString();
+            return $"{Name} = {Value.ToCodeString()}";
         }
     }
 }

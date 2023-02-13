@@ -8,12 +8,14 @@ namespace ScripterLang
         private readonly List<Expression> _expressions;
         private readonly LexicalContext _context;
         private readonly FunctionLexicalContext _functionContext;
+        private readonly LoopLexicalContext _loopContext;
 
         public CodeBlockExpression(List<Expression> expressions, LexicalContext context)
         {
             _expressions = expressions;
             _context = context;
             _functionContext = _context.GetFunctionContext();
+            _loopContext = _context.GetLoopContext();
         }
 
         public override void Bind()
@@ -32,6 +34,11 @@ namespace ScripterLang
                     var result = expression.Evaluate();
                     if (_functionContext.IsReturn)
                         return result;
+                    if (_loopContext != null)
+                    {
+                        if (_loopContext.IsBreak || _loopContext.IsContinue)
+                            break;
+                    }
                 }
 
                 return Value.Void;

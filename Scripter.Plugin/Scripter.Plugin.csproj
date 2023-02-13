@@ -106,6 +106,7 @@
     <Compile Include="src\Lib\Expressions\IncrementDecrementExpression.cs" />
     <Compile Include="src\Lib\Expressions\IndexerAccessor.cs" />
     <Compile Include="src\Lib\Expressions\IntegerExpression.cs" />
+    <Compile Include="src\Lib\Expressions\LoopControlFlowExpression.cs" />
     <Compile Include="src\Lib\Expressions\ModuleExpression.cs" />
     <Compile Include="src\Lib\Expressions\NegateExpression.cs" />
     <Compile Include="src\Lib\Expressions\ParenthesesExpression.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="src\Lib\Runtime\FunctionReference.cs" />
     <Compile Include="src\Lib\Runtime\GlobalLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\LexicalContext.cs" />
+    <Compile Include="src\Lib\Runtime\LoopLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\ModuleLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\ObjectReference.cs" />
     <Compile Include="src\Lib\Runtime\ScopeLexicalContext.cs" />
