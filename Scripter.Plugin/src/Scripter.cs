@@ -39,9 +39,6 @@ public class Scripter : MVRScript
             containingAtom.RestoreFromLast(this);
 
         OnSceneLoaded.Invoke();
-
-        if (!_restored)
-            Scripts.CreateIndex();
     }
 
     public override void InitUI()
@@ -50,7 +47,8 @@ public class Scripter : MVRScript
         if (UITransform == null) return;
         leftUIContent.anchorMax = new Vector2(1, 1);
         _ui = ScripterUI.Create(UITransform, this);
-        _ui.AddWelcomeTab();
+        var welcome = _ui.AddWelcomeTab();
+        _ui.SelectTab(welcome);
     }
 
     public void Update()

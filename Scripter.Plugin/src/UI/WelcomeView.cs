@@ -10,10 +10,11 @@ public class WelcomeView : MonoBehaviour
 
 Check out these templates to get started.";
 
-    public static WelcomeView Create(Transform parent)
+    public static WelcomeView Create(Transform parent, ScripterUI ui)
     {
         var go = new GameObject();
         go.transform.SetParent(parent, false);
+        go.SetActive(false);
 
         {
             var rect = go.AddComponent<RectTransform>();
@@ -58,9 +59,22 @@ Check out these templates to get started.";
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             AddTemplateButton(templates.transform, "React to a scene trigger", () => { });
-            AddTemplateButton(templates.transform, "Response to a\nKeybindings event", () => { });
+            AddTemplateButton(templates.transform, "Respond to a\nKeybindings event", () => { });
             AddTemplateButton(templates.transform, "Run code every frame", () => { });
-            AddTemplateButton(templates.transform, "Start from scratch", () => { });
+            AddTemplateButton(templates.transform, "Start from scratch", () =>
+            {
+                var script = Scripter.Singleton.Scripts.Create(
+                    "index.js",
+                    @"import { scripter } from ""scripter"";
+
+let action = scripter.registerAction(""Say Hello"");
+action.onTrigger(() => {
+  console.log(""Hello, world!"");
+});
+");
+                var tab = ui.AddScriptTab(script);
+                ui.SelectTab(tab);
+            });
             AddTemplateButton(templates.transform, "Open the documentation\n(web browser)",
                 () => Application.OpenURL("https://github.com/acidbubbles/vam-scripter/blob/master/README.md"));
             AddTemplateButton(templates.transform, "Support this plugin\n(web browser)",

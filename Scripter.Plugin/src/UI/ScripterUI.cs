@@ -52,15 +52,20 @@ public class ScripterUI : MonoBehaviour
     private ScripterTabsList _tabs;
     private GameObject _content;
 
-    public void AddWelcomeTab()
+    public ScripterTab AddWelcomeTab()
     {
-        _tabs.AddTab("Welcome").Selected = true;
-        var welcome = WelcomeView.Create(_content.transform);
+        var welcome = WelcomeView.Create(_content.transform, this);
+        return _tabs.AddTab("Welcome", welcome.transform);
     }
 
-    public void AddScriptTab()
+    public ScripterTab AddScriptTab(Script script)
     {
-        _tabs.AddTab("index.js");
-        var editor = CodeEditorView.Create(_content.transform, null);
+        var editor = CodeEditorView.Create(_content.transform, script);
+        return _tabs.AddTab("index.js", editor.transform);
+    }
+
+    public void SelectTab(ScripterTab tab)
+    {
+        _tabs.SelectTab(tab);
     }
 }

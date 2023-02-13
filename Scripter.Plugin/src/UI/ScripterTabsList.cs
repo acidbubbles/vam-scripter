@@ -1,10 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.UI;
 
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public class ScripterTabsList : MonoBehaviour
 {
+    private readonly List<ScripterTab> _tabs = new List<ScripterTab>();
+
     public static ScripterTabsList Create(Transform parent)
     {
         var go = new GameObject();
@@ -30,8 +33,19 @@ public class ScripterTabsList : MonoBehaviour
         return tabs;
     }
 
-    public ScripterTab AddTab(string label)
+    public ScripterTab AddTab(string label, Transform content)
     {
-        return ScripterTab.Create(transform, label);
+        var tab = ScripterTab.Create(transform, label, content);
+        _tabs.Add(tab);
+        tab.clickable.onClick.AddListener(_ => SelectTab(tab));
+        return tab;
+    }
+
+    public void SelectTab(ScripterTab tab)
+    {
+        foreach (var t in _tabs)
+        {
+            t.Selected = t == tab;
+        }
     }
 }

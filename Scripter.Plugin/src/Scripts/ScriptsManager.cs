@@ -54,15 +54,10 @@ public class ScriptsManager
         ScriptsUpdated.Invoke();
     }
 
-    public void CreateIndex()
+    public Script Create(string filename, string code)
     {
-        const string defaultScript = @"import { scripter } from ""scripter""
-
-let action = scripter.registerAction(""Say Hello"");
-action.onTrigger(() => {
-  console.log(""Hello, world!"");
-});
-";
-        Scripts.Add(new Script("index.js", defaultScript, _plugin));
+        var script = new Script(filename, code, _plugin);
+        Scripts.Add(script);
+        return script;
     }
 }

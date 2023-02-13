@@ -3,12 +3,13 @@ using UnityEngine.UI;
 
 public class ScripterTab : MonoBehaviour
 {
-    public static ScripterTab Create(Transform parent, string label)
+    public static ScripterTab Create(Transform parent, string label, Transform content)
     {
         var go = new GameObject();
         go.transform.SetParent(parent, false);
 
         var tab = go.AddComponent<ScripterTab>();
+        tab.content = content;
 
         {
             var layout = go.AddComponent<LayoutElement>();
@@ -17,7 +18,10 @@ public class ScripterTab : MonoBehaviour
 
             var tabBg = go.AddComponent<Image>();
             tabBg.raycastTarget = true;
-            tab.bg = tabBg;
+            tab._bg = tabBg;
+
+            var clickable = go.AddComponent<Clickable>();
+            tab.clickable = clickable;
         }
 
         {
@@ -38,7 +42,7 @@ public class ScripterTab : MonoBehaviour
             text.text = label;
             text.alignment = TextAnchor.MiddleLeft;
             text.raycastTarget = false;
-            tab.text = text;
+            tab._text = text;
         }
 
         {
@@ -54,7 +58,7 @@ public class ScripterTab : MonoBehaviour
 
             var bg = selected.AddComponent<Image>();
             bg.raycastTarget = false;
-            tab.underline = bg;
+            tab._underline = bg;
         }
 
         tab.SetUnselected();
@@ -62,11 +66,12 @@ public class ScripterTab : MonoBehaviour
         return tab;
     }
 
-    public Image bg;
+    public Transform content;
+    public Clickable clickable;
 
-    public Text text;
-
-    public Image underline;
+    private Image _bg;
+    private Text _text;
+    private Image _underline;
 
     private bool _selected;
 
@@ -87,15 +92,17 @@ public class ScripterTab : MonoBehaviour
 
     public void SetSelected()
     {
-        text.color = new Color(192 / 255f, 192 / 255f, 198 / 255f);
-        bg.color = new Color(50f / 255f, 50f / 255f, 50f / 255f);
-        underline.color = new Color(76 / 255f, 103 / 255f, 158 / 255f);
+        content.gameObject.SetActive(true);
+        _text.color = new Color(192 / 255f, 192 / 255f, 198 / 255f);
+        _bg.color = new Color(50f / 255f, 50f / 255f, 50f / 255f);
+        _underline.color = new Color(76 / 255f, 103 / 255f, 158 / 255f);
     }
 
     public void SetUnselected()
     {
-        text.color = new Color(192 / 255f, 192 / 255f, 198 / 255f);
-        bg.color = new Color(59 / 255f, 59 / 255f, 59 / 255f);
-        underline.color = new Color(59 / 255f, 59 / 255f, 59 / 255f);
+        content.gameObject.SetActive(false);
+        _text.color = new Color(192 / 255f, 192 / 255f, 198 / 255f);
+        _bg.color = new Color(59 / 255f, 59 / 255f, 59 / 255f);
+        _underline.color = new Color(59 / 255f, 59 / 255f, 59 / 255f);
     }
 }
