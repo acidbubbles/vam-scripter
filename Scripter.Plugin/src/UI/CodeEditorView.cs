@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -25,20 +26,49 @@ public class CodeEditorView : MonoBehaviour
         bg.raycastTarget = false;
         bg.color = new Color(30 / 255f, 30 / 255f, 30 / 255f);
 
-
         var screen = go.AddComponent<CodeEditorView>();
         screen.CreateMultilineInput(script.SourceJSON);
-        //
-        // var toolbar = MakeToolbar(screen.transform);
-        // AddToToolbar(toolbar, CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Undo", script.History.Undo));
-        // AddToToolbar(toolbar, CreateButton(toolbar, manager.Prefabs.configurableButtonPrefab, "Redo", script.History.Redo));
-        //
-        // var console = Instantiate(manager.Prefabs.configurableTextFieldPrefab, screen.transform).GetComponent<UIDynamicTextField>();
-        // console.backgroundColor = Color.black;
-        // console.textColor = Color.white;
-        // manager.ConsoleJSON.dynamicText = console;
+
+        var toolbar = MakeToolbar(screen.transform);
+        CreateToolbarButton(toolbar, "\u21BA", script.History.Undo);
+        CreateToolbarButton(toolbar, "\u21BB", script.History.Redo);
 
         return screen;
+    }
+
+    private static Transform MakeToolbar(Transform parent, float height = 50)
+    {
+        var go = new GameObject();
+        go.transform.SetParent(parent, false);
+
+        var rect = go.AddComponent<RectTransform>();
+        rect.anchorMin = new Vector2(1, 1);
+        rect.anchorMax = new Vector2(1, 1);
+        rect.anchoredPosition = new Vector2(1, 1);
+        rect.pivot = new Vector2(1, 1);
+        rect.sizeDelta = new Vector2(180, 72);
+        rect.offsetMax = new Vector2(-20, -20);
+
+        var group = go.gameObject.AddComponent<HorizontalLayoutGroup>();
+        group.spacing = 4f;
+        group.childForceExpandWidth = false;
+        group.childControlWidth = true;
+
+        return go.transform;
+    }
+
+    private static void CreateToolbarButton(Transform parent, string label, UnityAction action)
+    {
+        var button = Instantiate(Scripter.Singleton.manager.configurableButtonPrefab, parent, false);
+
+        var ui = button.GetComponent<UIDynamicButton>();
+        ui.label = label;
+        ui.button.onClick.AddListener(action);
+        ui.buttonText.fontStyle = FontStyle.Bold;
+        ui.buttonText.fontSize = 44;
+
+        var layoutElement = button.GetComponent<LayoutElement>();
+        layoutElement.minWidth = layoutElement.preferredWidth = 40;
     }
 
     private static CodeInputField _input;

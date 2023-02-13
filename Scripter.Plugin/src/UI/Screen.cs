@@ -29,35 +29,4 @@ public abstract class Screen : MonoBehaviour
 
         return go.AddComponent<T>();
     }
-
-    protected static Transform MakeToolbar(Transform parent, float height = 50)
-    {
-        var go = new GameObject();
-        go.transform.SetParent(parent, false);
-        var layout = go.AddComponent<LayoutElement>();
-        layout.minHeight = height;
-        layout.preferredHeight = height;
-        layout.flexibleHeight = 0;
-        var group = go.gameObject.AddComponent<HorizontalLayoutGroup>();
-        group.spacing = 4f;
-        group.childForceExpandWidth = false;
-        group.childControlWidth = true;
-        return go.transform;
-    }
-
-    protected static void AddToToolbar(Transform parent, Transform item)
-    {
-        var layoutElement = item.GetComponent<LayoutElement>();
-        layoutElement.preferredWidth = 0;
-        layoutElement.flexibleWidth = 100;
-    }
-
-    protected static Transform CreateButton(Transform parent, Transform prefab, string label, UnityAction action)
-    {
-        var button = Instantiate(prefab, parent, false);
-        var ui = button.GetComponent<UIDynamicButton>();
-        ui.label = label;
-        ui.button.onClick.AddListener(action);
-        return button;
-    }
 }

@@ -19,6 +19,7 @@ public class ScriptsManager
         _plugin = plugin;
         Program = new Program();
         GlobalFunctions.Register(Program.GlobalContext);
+        ConsoleJSON.valNoCallback = "> <color=cyan>Welcome to Scripter!</color>";
     }
 
     private string NewName()

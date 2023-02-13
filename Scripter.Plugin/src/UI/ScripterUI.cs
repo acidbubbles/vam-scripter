@@ -17,10 +17,6 @@ public class ScripterUI : MonoBehaviour
         rect.sizeDelta = new Vector2(0, 0);
         rect.offsetMin = new Vector2(0, 60);
         rect.offsetMax = new Vector2(0, 0);
-        //
-        // var layout = go.AddComponent<LayoutElement>();
-        // layout.preferredHeight = 1200f;
-        // layout.flexibleWidth = 1;
 
         var group = go.AddComponent<VerticalLayoutGroup>();
         group.spacing = 0f;
@@ -32,21 +28,28 @@ public class ScripterUI : MonoBehaviour
         bg.raycastTarget = false;
         bg.color = Color.black;
 
-        // var fitter = go.AddComponent<ContentSizeFitter>();
-        // fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
         ui._tabs = ScripterTabsList.Create(go.transform);
 
         var content = new GameObject();
         content.transform.SetParent(go.transform, false);
 
         var layout = content.AddComponent<LayoutElement>();
-        layout.preferredHeight = 1200f;
+        layout.preferredHeight = 1000f;
         layout.flexibleWidth = 1;
 
         ui._content = content;
 
+        CreateConsole(go.transform);
+
         return ui;
+    }
+
+    private static void CreateConsole(Transform parent)
+    {
+        var console = Instantiate(Scripter.Singleton.manager.configurableTextFieldPrefab, parent).GetComponent<UIDynamicTextField>();
+        console.backgroundColor = Color.black;
+        console.textColor = Color.white;
+        Scripter.Singleton.Scripts.ConsoleJSON.dynamicText = console;
     }
 
     private ScripterTabsList _tabs;
