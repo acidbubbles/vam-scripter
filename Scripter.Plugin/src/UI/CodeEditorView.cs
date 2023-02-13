@@ -30,8 +30,9 @@ public class CodeEditorView : MonoBehaviour
         screen.CreateMultilineInput(script.SourceJSON);
 
         var toolbar = MakeToolbar(screen.transform);
-        CreateToolbarButton(toolbar, "\u21BA", script.History.Undo);
-        CreateToolbarButton(toolbar, "\u21BB", script.History.Redo);
+        CreateToolbarButton(toolbar, "\u21BA", 40, true, script.History.Undo);
+        CreateToolbarButton(toolbar, "\u21BB", 40, true, script.History.Redo);
+        CreateToolbarButton(toolbar, "Apply", 120, false, () => Scripter.Singleton.Scripts.Apply());
 
         return screen;
     }
@@ -46,7 +47,7 @@ public class CodeEditorView : MonoBehaviour
         rect.anchorMax = new Vector2(1, 1);
         rect.anchoredPosition = new Vector2(1, 1);
         rect.pivot = new Vector2(1, 1);
-        rect.sizeDelta = new Vector2(180, 72);
+        rect.sizeDelta = new Vector2(240, 72);
         rect.offsetMax = new Vector2(-20, -20);
 
         var group = go.gameObject.AddComponent<HorizontalLayoutGroup>();
@@ -57,18 +58,18 @@ public class CodeEditorView : MonoBehaviour
         return go.transform;
     }
 
-    private static void CreateToolbarButton(Transform parent, string label, UnityAction action)
+    private static void CreateToolbarButton(Transform parent, string label, float width, bool icon, UnityAction action)
     {
         var button = Instantiate(Scripter.Singleton.manager.configurableButtonPrefab, parent, false);
 
         var ui = button.GetComponent<UIDynamicButton>();
         ui.label = label;
         ui.button.onClick.AddListener(action);
-        ui.buttonText.fontStyle = FontStyle.Bold;
-        ui.buttonText.fontSize = 44;
+        ui.buttonText.fontStyle = icon ? FontStyle.Bold : FontStyle.Normal;
+        ui.buttonText.fontSize = icon ? 44 : 24;
 
         var layoutElement = button.GetComponent<LayoutElement>();
-        layoutElement.minWidth = layoutElement.preferredWidth = 40;
+        layoutElement.minWidth = layoutElement.preferredWidth = width;
     }
 
     private static CodeInputField _input;

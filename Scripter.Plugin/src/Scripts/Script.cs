@@ -1,16 +1,5 @@
 ﻿using System;
 using SimpleJSON;
-using UnityEngine.Events;
-
-public class LogEvent : UnityEvent<ScriptLog>
-{
-}
-
-public struct ScriptLog
-{
-    public bool Error;
-    public string Message;
-}
 
 public class Script
 {
@@ -18,7 +7,6 @@ public class Script
     public readonly HistoryManager History;
     public readonly JSONStorableString NameJSON = new JSONStorableString("Module", "");
     public readonly JSONStorableString SourceJSON = new JSONStorableString("Source", "");
-    public readonly LogEvent Log = new LogEvent();
 
     private string _previousName;
 
@@ -50,19 +38,11 @@ public class Script
         try
         {
             _scripter.Scripts.Program.Add(NameJSON.val, val);
-            Log.Invoke(new ScriptLog
-            {
-                Error = false,
-                Message = "<color=green>Code parsed successfully</color>"
-            });
+            _scripter.Scripts.Log($"<color=green>{NameJSON.val} parsed successfully</color>");
         }
         catch (Exception exc)
         {
-            Log.Invoke(new ScriptLog
-            {
-                Error = false,
-                Message = $"<color=red>Failed to compile.\n{exc}</color>"
-            });
+            _scripter.Scripts.Log($"<color=red>{NameJSON.val} failed to compile: {exc.Message}</color>");
         }
     }
 

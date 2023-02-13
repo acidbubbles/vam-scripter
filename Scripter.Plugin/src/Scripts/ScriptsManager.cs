@@ -61,4 +61,32 @@ public class ScriptsManager
         Scripts.Add(script);
         return script;
     }
+
+    public void Apply()
+    {
+        try
+        {
+            Program.Run();
+        }
+        catch (Exception exc)
+        {
+            LogError($"Failed to run code: {exc.Message}");
+        }
+    }
+
+    public void Log(string message)
+    {
+        #warning Optimize
+        ConsoleJSON.val += "\n" + message;
+    }
+
+    public void LogError(string message)
+    {
+        #warning Optimize
+        ConsoleJSON.val += "\n<color=red>" + message + "</color>";
+        if (!Scripter.Singleton.Scripts.ConsoleJSON.text.isActiveAndEnabled)
+        {
+            SuperController.LogError("Scripter: " + message);
+        }
+    }
 }
