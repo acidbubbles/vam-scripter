@@ -9,7 +9,7 @@ public class StorableReference : ObjectReference
         _storable = storable;
     }
 
-    public override Value Get(string name)
+    public override Value GetProperty(string name)
     {
         switch (name)
         {
@@ -24,7 +24,7 @@ public class StorableReference : ObjectReference
             case "getBool":
                 return Func(GetBool);
             default:
-                return base.Get(name);
+                return base.GetProperty(name);
         }
     }
 

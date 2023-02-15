@@ -10,12 +10,12 @@ namespace ScripterLang
 
     public abstract class ObjectReference
     {
-        public virtual Value Get(string name)
+        public virtual Value GetProperty(string name)
         {
             throw new ScripterRuntimeException($"Property '{name}' does not exist on the object");
         }
 
-        public virtual void Set(string name, Value value)
+        public virtual void SetProperty(string name, Value value)
         {
             throw new ScripterRuntimeException($"Property '{name}' does not exist or is not writable");
         }

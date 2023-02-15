@@ -15,14 +15,14 @@ public static class GlobalVamFunctions
 
 public class ScripterPluginReference : ObjectReference
 {
-    public override Value Get(string name)
+    public override Value GetProperty(string name)
     {
         switch (name)
         {
             case "declareFloatParam":
                 return Func(DeclareFloatParam);
             default:
-                return base.Get(name);
+                return base.GetProperty(name);
         }
     }
 

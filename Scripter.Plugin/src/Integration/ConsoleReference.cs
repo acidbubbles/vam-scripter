@@ -2,7 +2,7 @@
 
 public class ConsoleReference : ObjectReference
 {
-    public override Value Get(string name)
+    public override Value GetProperty(string name)
     {
         switch (name)
         {
@@ -13,7 +13,7 @@ public class ConsoleReference : ObjectReference
             case "error":
                 return Func(Error);
             default:
-                return base.Get(name);
+                return base.GetProperty(name);
         }
     }
 

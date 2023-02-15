@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RandomReference : ObjectReference
 {
-    public override Value Get(string name)
+    public override Value GetProperty(string name)
     {
         switch (name)
         {
@@ -12,7 +12,7 @@ public class RandomReference : ObjectReference
             case "range":
                 return Func(Range);
             default:
-                return base.Get(name);
+                return base.GetProperty(name);
         }
     }
 

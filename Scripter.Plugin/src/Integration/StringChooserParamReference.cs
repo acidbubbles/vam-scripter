@@ -9,7 +9,7 @@ public class StringChooserParamReference : ObjectReference
         _param = param;
     }
 
-    public override Value Get(string name)
+    public override Value GetProperty(string name)
     {
 #warning choices
         switch (name)
@@ -17,11 +17,11 @@ public class StringChooserParamReference : ObjectReference
             case "val":
                 return _param.val;
             default:
-                return base.Get(name);
+                return base.GetProperty(name);
         }
     }
 
-    public override void Set(string name, Value value)
+    public override void SetProperty(string name, Value value)
     {
         switch (name)
         {
@@ -29,7 +29,7 @@ public class StringChooserParamReference : ObjectReference
                 _param.val = value.AsString;
                 break;
             default:
-                base.Get(name);
+                base.GetProperty(name);
                 break;
         }
     }

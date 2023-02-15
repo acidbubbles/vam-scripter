@@ -397,7 +397,7 @@ public class LanguageTests
         public int Value;
         public MyThing Deep;
 
-        public override Value Get(string name)
+        public override Value GetProperty(string name)
         {
             switch (name)
             {
@@ -405,11 +405,11 @@ public class LanguageTests
                 case "deep": return Deep;
                 case "increment": return Func(Increment);
                 case "createAndAdd": return Func(CreateAndAdd);
-                default: return base.Get(name);
+                default: return base.GetProperty(name);
             }
         }
 
-        public override void Set(string name, Value value)
+        public override void SetProperty(string name, Value value)
         {
             switch (name)
             {
@@ -417,7 +417,7 @@ public class LanguageTests
                     Value = value.AsInt;
                     break;
                 default:
-                    base.Set(name, value);
+                    base.SetProperty(name, value);
                     break;
             }
         }

@@ -2,14 +2,14 @@
 
 public class SceneReference : ObjectReference
 {
-    public override Value Get(string name)
+    public override Value GetProperty(string name)
     {
         switch (name)
         {
             case "getAtom":
                 return Func(GetAtom);
             default:
-                return base.Get(name);
+                return base.GetProperty(name);
         }
     }
 

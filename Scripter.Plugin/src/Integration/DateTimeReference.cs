@@ -10,14 +10,14 @@ public class DateTimeReference : ObjectReference
         _value = value;
     }
 
-    public override Value Get(string name)
+    public override Value GetProperty(string name)
     {
         switch (name)
         {
             case "toString":
                 return Func(ToString);
             default:
-                return base.Get(name);
+                return base.GetProperty(name);
         }
     }
 

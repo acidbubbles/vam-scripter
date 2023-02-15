@@ -12,7 +12,7 @@ namespace ScripterLang
             _values = values;
         }
 
-        public override Value Get(string name)
+        public override Value GetProperty(string name)
         {
             switch (name)
             {
@@ -21,7 +21,7 @@ namespace ScripterLang
                 case "length":
                     return _values.Count;
                 default:
-                    return base.Get(name);
+                    return base.GetProperty(name);
             }
         }
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TimeReference : ObjectReference
 {
-    public override Value Get(string name)
+    public override Value GetProperty(string name)
     {
         switch (name)
         {
@@ -12,7 +12,7 @@ public class TimeReference : ObjectReference
             case "deltaTime":
                 return Func((d, a) => Time.deltaTime);
             default:
-                return base.Get(name);
+                return base.GetProperty(name);
         }
     }
 }

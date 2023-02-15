@@ -9,14 +9,14 @@ public class AtomReference : ObjectReference
         _atom = atom;
     }
 
-    public override Value Get(string name)
+    public override Value GetProperty(string name)
     {
         switch (name)
         {
             case "getStorable":
                 return Func(GetStorable);
             default:
-                return base.Get(name);
+                return base.GetProperty(name);
         }
     }
 

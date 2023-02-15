@@ -9,15 +9,15 @@ public class FloatParamReference : ObjectReference
         _param = param;
     }
 
-    public override Value Get(string name)
+    public override Value GetProperty(string name)
     {
         if (name == "val") return _param.val;
-        return base.Get(name);
+        return base.GetProperty(name);
     }
 
-    public override void Set(string name, Value value)
+    public override void SetProperty(string name, Value value)
     {
         if (name == "val") _param.val = value.AsNumber;
-        else base.Get(name);
+        else base.GetProperty(name);
     }
 }

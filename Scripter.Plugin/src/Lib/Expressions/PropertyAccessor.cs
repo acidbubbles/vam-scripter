@@ -20,18 +20,18 @@
 
         public override Value Evaluate()
         {
-            return _left.Evaluate().AsObject.Get(_property);
+            return _left.Evaluate().AsObject.GetProperty(_property);
         }
 
         public override void SetVariableValue(Value value)
         {
-            _left.Evaluate().AsObject.Set(_property, value);
+            _left.Evaluate().AsObject.SetProperty(_property, value);
         }
 
         public override Value GetAndHold()
         {
             _object = _left.Evaluate().AsObject;
-            return _object.Get(_property);
+            return _object.GetProperty(_property);
         }
 
         public override void Release()
@@ -41,7 +41,7 @@
 
         public override void SetAndRelease(Value value)
         {
-            _object.Set(_property, value);
+            _object.SetProperty(_property, value);
             _object = null;
         }
 
