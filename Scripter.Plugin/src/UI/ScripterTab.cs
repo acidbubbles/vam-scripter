@@ -5,6 +5,8 @@ public class ScripterTab : MonoBehaviour
 {
     public static ScripterTab Create(Transform parent, string label, Transform content)
     {
+        const int padding = 20;
+
         var go = new GameObject();
         go.transform.SetParent(parent, false);
 
@@ -14,7 +16,17 @@ public class ScripterTab : MonoBehaviour
         {
             var layout = go.AddComponent<LayoutElement>();
             layout.minHeight = layout.preferredHeight = 70;
-            layout.minWidth = layout.preferredWidth = 200;
+
+            var group = go.AddComponent<HorizontalLayoutGroup>();
+            group.childControlHeight = true;
+            group.childForceExpandHeight = false;
+            group.childControlWidth = true;
+            group.childForceExpandWidth = false;
+            group.padding = new RectOffset(padding, padding, 0, 0);
+
+            var fitter = go.AddComponent<ContentSizeFitter>();
+            fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             #warning Roll over
             var tabBg = go.AddComponent<Image>();
@@ -37,6 +49,9 @@ public class ScripterTab : MonoBehaviour
             rect.sizeDelta = new Vector2(0, 0);
             rect.offsetMin = new Vector2(20, 5);
 
+            var filenameLayout = filename.AddComponent<LayoutElement>();
+            filenameLayout.minHeight = filenameLayout.preferredHeight = 70;
+
             var text = filename.AddComponent<Text>();
             #warning Link to NameJSON, double-click to edit
             text.font = SuperController.singleton.dynamicButtonPrefab.GetComponentInChildren<Text>(true).font;
@@ -45,22 +60,22 @@ public class ScripterTab : MonoBehaviour
             text.alignment = TextAnchor.MiddleLeft;
             text.raycastTarget = false;
             tab._text = text;
-        }
 
-        {
-            var selected = new GameObject();
-            selected.transform.SetParent(go.transform, false);
+            {
+                var selected = new GameObject();
+                selected.transform.SetParent(filename.transform, false);
 
-            var rect = selected.AddComponent<RectTransform>();
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = new Vector2(1, 0);
-            rect.anchoredPosition = new Vector2(0.5f, 0);
-            rect.pivot = new Vector2(0.5f, 0);
-            rect.sizeDelta = new Vector2(0, 10);
+                var selectedRect = selected.AddComponent<RectTransform>();
+                selectedRect.anchorMin = Vector2.zero;
+                selectedRect.anchorMax = new Vector2(1, 0);
+                selectedRect.anchoredPosition = new Vector2(0.5f, 0);
+                selectedRect.pivot = new Vector2(0.5f, 0);
+                selectedRect.sizeDelta = new Vector2(padding * 2, 10);
 
-            var bg = selected.AddComponent<Image>();
-            bg.raycastTarget = false;
-            tab._underline = bg;
+                var selectedUnderline = selected.AddComponent<Image>();
+                selectedUnderline.raycastTarget = false;
+                tab._underline = selectedUnderline;
+            }
         }
 
         tab.SetUnselected();

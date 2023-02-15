@@ -4,6 +4,8 @@ using SimpleJSON;
 public class Script
 {
     private readonly Scripter _scripter;
+
+    public ScripterTab Tab { get; set; }
     public readonly HistoryManager History;
     public readonly JSONStorableString NameJSON = new JSONStorableString("Module", "");
     public readonly JSONStorableString SourceJSON = new JSONStorableString("Source", "");

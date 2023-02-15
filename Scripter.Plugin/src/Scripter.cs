@@ -10,13 +10,11 @@ public class Scripter : MVRScript
     public static Scripter Singleton;
 
     public readonly ScriptsManager Scripts;
+    public ScripterUI UI;
 
     private bool _loading;
     private bool _restored;
 
-    public UnityEvent OnUpdate = new UnityEvent();
-    public UnityEvent OnSceneLoaded = new UnityEvent();
-    private ScripterUI _ui;
     public Dictionary<string, UnityEvent> KeybindingsTriggers { get; } = new Dictionary<string, UnityEvent>();
 
     public Scripter()
@@ -38,7 +36,10 @@ public class Scripter : MVRScript
         if (!_restored)
             containingAtom.RestoreFromLast(this);
 
-        OnSceneLoaded.Invoke();
+        if (Scripts.Scripts.Count == 0)
+        {
+            UI.SelectTab(UI.AddWelcomeTab());
+        }
     }
 
     public override void InitUI()
@@ -46,14 +47,7 @@ public class Scripter : MVRScript
         base.InitUI();
         if (UITransform == null) return;
         leftUIContent.anchorMax = new Vector2(1, 1);
-        _ui = ScripterUI.Create(UITransform, this);
-        var welcome = _ui.AddWelcomeTab();
-        _ui.SelectTab(welcome);
-    }
-
-    public void Update()
-    {
-        OnUpdate.Invoke();
+        UI = ScripterUI.Create(UITransform, this);
     }
 
     public override JSONClass GetJSON(bool includePhysical = true, bool includeAppearance = true, bool forceStore = false)
@@ -71,6 +65,7 @@ public class Scripter : MVRScript
         _loading = true;
         Triggers_RestoreFromJSON(jc["Triggers"]);
         Scripts.RestoreFromJSON(jc["Scripts"]);
+        Scripts.Apply();
         _loading = false;
         _restored = true;
         UpdateKeybindings();
@@ -78,7 +73,7 @@ public class Scripter : MVRScript
 
     #region Triggers Manager
 
-    private List<ScripterParamBase> _triggers = new List<ScripterParamBase>();
+    private readonly List<ScripterParamBase> _triggers = new List<ScripterParamBase>();
 
     public JSONNode Triggers_GetJSON()
     {

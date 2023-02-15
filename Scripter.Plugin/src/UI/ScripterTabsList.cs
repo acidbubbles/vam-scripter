@@ -36,9 +36,17 @@ public class ScripterTabsList : MonoBehaviour
     public ScripterTab AddTab(string label, Transform content)
     {
         var tab = ScripterTab.Create(transform, label, content);
+        tab.transform.SetSiblingIndex(tab.transform.parent.childCount - 2);
         _tabs.Add(tab);
         tab.clickable.onClick.AddListener(_ => SelectTab(tab));
         return tab;
+    }
+
+    public void SetLastTab(string label, Transform content)
+    {
+        var tab = ScripterTab.Create(transform, label, content);
+        _tabs.Add(tab);
+        tab.clickable.onClick.AddListener(_ => SelectTab(tab));
     }
 
     public void SelectTab(ScripterTab tab)
@@ -47,5 +55,12 @@ public class ScripterTabsList : MonoBehaviour
         {
             t.Selected = t == tab;
         }
+    }
+
+    public void RemoveTab(ScripterTab tab)
+    {
+        #warning Test (add a way to remove something)
+        Destroy(tab.content.gameObject);
+        Destroy(tab.gameObject);
     }
 }

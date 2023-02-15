@@ -60,7 +60,8 @@ Check out these templates to get started.";
 
             AddTemplateButton(templates.transform, "Scene triggers", () =>
             {
-                var script = Scripter.Singleton.Scripts.Create(
+                Scripter.Singleton.Scripts.Clear();
+                Scripter.Singleton.Scripts.Create(
                     "index.js",
                     @"import { self } from ""scripter"";
 
@@ -76,22 +77,18 @@ valueParam.onChange(value => {
     console.log(""Value changed to: "", value);
 });
 ");
-                var tab = ui.AddScriptTab(script);
-                ui.SelectTab(tab);
                 Scripter.Singleton.Scripts.Apply();
             });
             AddTemplateButton(templates.transform, "Respond to a\nKeybindings event", () => { });
             AddTemplateButton(templates.transform, "Run code every frame", () => { });
             AddTemplateButton(templates.transform, "Start from scratch", () =>
             {
-                var script = Scripter.Singleton.Scripts.Create(
+                Scripter.Singleton.Scripts.Create(
                     "index.js",
                     @"import { self } from ""scripter"";
 
 // Start writing your code here!
 ");
-                var tab = ui.AddScriptTab(script);
-                ui.SelectTab(tab);
             });
             AddTemplateButton(templates.transform, "Open the documentation\n(web browser)",
                 () => Application.OpenURL("https://github.com/acidbubbles/vam-scripter/blob/master/README.md"));

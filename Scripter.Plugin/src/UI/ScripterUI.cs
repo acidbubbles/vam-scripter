@@ -39,6 +39,9 @@ public class ScripterUI : MonoBehaviour
 
         ui._content = content;
 
+        var createTab = CreateView.Create(content.transform, ui);
+        ui._tabs.SetLastTab("+", createTab.transform);
+
         CreateConsole(go.transform);
 
         return ui;
@@ -64,11 +67,16 @@ public class ScripterUI : MonoBehaviour
     public ScripterTab AddScriptTab(Script script)
     {
         var editor = CodeEditorView.Create(_content.transform, script);
-        return _tabs.AddTab("index.js", editor.transform);
+        return _tabs.AddTab(script.NameJSON.val, editor.transform);
     }
 
     public void SelectTab(ScripterTab tab)
     {
         _tabs.SelectTab(tab);
+    }
+
+    public void RemoveTab(ScripterTab tab)
+    {
+        _tabs.RemoveTab(tab);
     }
 }

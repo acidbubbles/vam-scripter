@@ -87,6 +87,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\Clickable.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\CodeEditorView.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\CodeInputField.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\CreateView.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\HistoryManager.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\Screen.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\ScripterTab.cs",

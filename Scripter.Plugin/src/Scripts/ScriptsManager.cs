@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using ScripterLang;
 using SimpleJSON;
-using UnityEngine.Events;
 
 public class ScriptsManager
 {
     private readonly Scripter _plugin;
-    public readonly UnityEvent ScriptsUpdated = new UnityEvent();
+
     public readonly List<Script> Scripts = new List<Script>();
     public readonly Program Program;
 
@@ -22,7 +21,7 @@ public class ScriptsManager
         ConsoleJSON.valNoCallback = "> <color=cyan>Welcome to Scripter!</color>";
     }
 
-    private string NewName()
+    public string NewName()
     {
         const string prefix = "lib";
         for (var i = 1; i < 9999; i++)
@@ -51,24 +50,38 @@ public class ScriptsManager
         {
             var script = Script.FromJSON(scriptJSON, _plugin);
             Scripts.Add(script);
+            script.Tab = _plugin.UI.AddScriptTab(script);
+            if(script.NameJSON.val == "index.js")
+                _plugin.UI.SelectTab(script.Tab);
         }
-        ScriptsUpdated.Invoke();
     }
 
     public Script Create(string filename, string code)
     {
         var script = new Script(filename, code, _plugin);
         Scripts.Add(script);
+        script.Tab = _plugin.UI.AddScriptTab(script);
+        _plugin.UI.SelectTab(script.Tab);
         return script;
+    }
+
+    public void Remove(Script script)
+    {
+        Scripts.Remove(script);
+        _plugin.UI.RemoveTab(script.Tab);
+        #warning Unregister listeners?
+    }
+
+    public void Clear()
+    {
     }
 
     public void Apply()
     {
         try
         {
-            Log("Running index.js...");
             Program.Run();
-            Log("index.js is now running!");
+            Log("index.js is now live");
         }
         catch (Exception exc)
         {

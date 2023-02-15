@@ -76,6 +76,7 @@ src\Triggers\ScripterParamFactory.cs
 src\UI\Clickable.cs
 src\UI\CodeEditorView.cs
 src\UI\CodeInputField.cs
+src\UI\CreateView.cs
 src\UI\HistoryManager.cs
 src\UI\Screen.cs
 src\UI\ScripterTab.cs
