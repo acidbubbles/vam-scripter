@@ -58,19 +58,37 @@ Check out these templates to get started.";
             fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            AddTemplateButton(templates.transform, "React to a scene trigger", () => { });
+            AddTemplateButton(templates.transform, "Scene triggers", () =>
+            {
+                var script = Scripter.Singleton.Scripts.Create(
+                    "index.js",
+                    @"import { self } from ""scripter"";
+
+let valueParam = self.declareFloatParam({
+    name: ""Value"",
+    default: 0,
+    min: 0,
+    max: 1,
+    constrain: true
+});
+
+valueParam.onChange(value => {
+    console.log(""Value changed to: "", value);
+});
+");
+                var tab = ui.AddScriptTab(script);
+                ui.SelectTab(tab);
+                Scripter.Singleton.Scripts.Apply();
+            });
             AddTemplateButton(templates.transform, "Respond to a\nKeybindings event", () => { });
             AddTemplateButton(templates.transform, "Run code every frame", () => { });
             AddTemplateButton(templates.transform, "Start from scratch", () =>
             {
                 var script = Scripter.Singleton.Scripts.Create(
                     "index.js",
-                    @"import { scripter } from ""scripter"";
+                    @"import { self } from ""scripter"";
 
-let action = scripter.registerAction(""Say Hello"");
-action.onTrigger(() => {
-  console.log(""Hello, world!"");
-});
+// Start writing your code here!
 ");
                 var tab = ui.AddScriptTab(script);
                 ui.SelectTab(tab);

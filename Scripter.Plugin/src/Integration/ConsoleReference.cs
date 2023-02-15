@@ -1,4 +1,5 @@
-﻿using ScripterLang;
+﻿using System.Linq;
+using ScripterLang;
 
 public class ConsoleReference : ObjectReference
 {
@@ -25,8 +26,16 @@ public class ConsoleReference : ObjectReference
 
     private static Value Log(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(Log), args, 1);
-        Scripter.Singleton.Scripts.Log(args[0].Stringify);
+        if (args.Length == 0)
+            return Value.Void;
+        if (args.Length == 1)
+        {
+            Scripter.Singleton.Scripts.Log(args[0].Stringify);
+            return Value.Void;
+        }
+
+        #warning All .Select().ToArray() should reuse a single string join util that has pre-created arrays
+        Scripter.Singleton.Scripts.Log(string.Join(" ", args.Select(x => x.Stringify).ToArray()));
         return Value.Void;
     }
 

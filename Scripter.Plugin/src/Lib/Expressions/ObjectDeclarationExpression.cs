@@ -13,9 +13,9 @@ namespace ScripterLang
 
         public override void Bind()
         {
-            foreach (var value in _values.Values)
+            foreach (var value in _values)
             {
-                value.Bind();
+                value.Value.Bind();
             }
         }
 

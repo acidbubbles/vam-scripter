@@ -4,10 +4,7 @@ src\Integration\ConsoleReference.cs
 src\Integration\DateTimeClassReference.cs
 src\Integration\DateTimeReference.cs
 src\Integration\FloatParamReference.cs
-src\Integration\GlobalDotNetFunctions.cs
 src\Integration\GlobalFunctions.cs
-src\Integration\GlobalUnityFunctions.cs
-src\Integration\GlobalVamFunctions.cs
 src\Integration\RandomReference.cs
 src\Integration\SceneReference.cs
 src\Integration\ScripterModule.cs

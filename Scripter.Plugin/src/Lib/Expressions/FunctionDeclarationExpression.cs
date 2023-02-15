@@ -23,12 +23,14 @@ namespace ScripterLang
 
         public override void Bind()
         {
-            foreach (var arg in _arguments)
+            for (var i = 0; i < _arguments.Count; i++)
             {
+                var arg = _arguments[i];
                 var variable = _context.GetVariable(arg);
                 _argumentsVariables.Add(variable);
                 variable.Bound = true;
             }
+
             _body.Bind();
         }
 
