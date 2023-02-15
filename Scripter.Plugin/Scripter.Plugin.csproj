@@ -110,6 +110,7 @@
     <Compile Include="src\Lib\Expressions\LoopControlFlowExpression.cs" />
     <Compile Include="src\Lib\Expressions\ModuleExpression.cs" />
     <Compile Include="src\Lib\Expressions\NegateExpression.cs" />
+    <Compile Include="src\Lib\Expressions\ObjectDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\ParenthesesExpression.cs" />
     <Compile Include="src\Lib\Expressions\PropertyAccessor.cs" />
     <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="src\Lib\Runtime\VariableReference.cs" />
     <Compile Include="src\Lib\Tests\PerfTest.cs" />
     <Compile Include="src\Lib\Types\ListReference.cs" />
+    <Compile Include="src\Lib\Types\MapReference.cs" />
     <Compile Include="src\Scripts\Script.cs" />
     <Compile Include="src\Scripts\ScriptsManager.cs" />
     <Compile Include="src\Triggers\ScripterFloatParam.cs" />

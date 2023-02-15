@@ -487,9 +487,28 @@ namespace ScripterLang
                     var values = ParseArgumentList(lexicalContext, TokenType.RightBracket);
                     Consume().Expect(TokenType.RightBracket);
                     return new ArrayDeclarationExpression(values);
+                case TokenType.LeftBrace:
+                    return ParseObjectDeclarationExpression(lexicalContext);
                 default:
                     throw new ScripterParsingException("Unexpected token " + token.Value, token.Location);
             }
+        }
+
+        private Expression ParseObjectDeclarationExpression(ScopeLexicalContext lexicalContext)
+        {
+            Consume().Expect(TokenType.LeftBrace);
+            var values = new Dictionary<string, Expression>();
+            while (!Peek().Match(TokenType.RightBrace))
+            {
+                var key = Consume().Expect(TokenType.Identifier);
+                Consume().Expect(TokenType.Colon);
+                var value = ParseValueStatementExpression(lexicalContext);
+                values.Add(key.Value, value);
+                if (Peek().Match(TokenType.Comma))
+                    MoveNext();
+            }
+            Consume().Expect(TokenType.RightBrace);
+            return new ObjectDeclarationExpression(values);
         }
 
         private Expression ParseArrowFunctionExpression(ScopeLexicalContext lexicalContext)

@@ -285,6 +285,22 @@ public class LanguageTests
     }
 
     [Test]
+    public void Maps()
+    {
+        _program.Add("index.js", """
+            var x = {};
+            var y = { key1: 1, key2: "2", key3: x };
+            y.key1 = y.key1 + 1;
+            y["key2"] = y["key2"] + "!";
+            y.key3.test = "ok";
+            return y;
+            """);
+        var result = _program.Run();
+
+        Assert.That(result.ToString(), Is.EqualTo("{ key1: 2, key2: \"2!\", key3: { test: \"ok\" } }"));
+    }
+
+    [Test]
     public void Objects()
     {
         _program.GlobalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));

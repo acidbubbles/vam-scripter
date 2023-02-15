@@ -37,6 +37,7 @@ src\Lib\Expressions\IntegerExpression.cs
 src\Lib\Expressions\LoopControlFlowExpression.cs
 src\Lib\Expressions\ModuleExpression.cs
 src\Lib\Expressions\NegateExpression.cs
+src\Lib\Expressions\ObjectDeclarationExpression.cs
 src\Lib\Expressions\ParenthesesExpression.cs
 src\Lib\Expressions\PropertyAccessor.cs
 src\Lib\Expressions\ReturnExpression.cs
@@ -69,6 +70,7 @@ src\Lib\Runtime\ValueTypes.cs
 src\Lib\Runtime\VariableReference.cs
 src\Lib\Tests\PerfTest.cs
 src\Lib\Types\ListReference.cs
+src\Lib\Types\MapReference.cs
 src\Scripts\Script.cs
 src\Scripts\ScriptsManager.cs
 src\Triggers\ScripterFloatParam.cs
