@@ -93,6 +93,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\ScripterTab.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\ScripterTabsList.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\ScripterUI.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\UIUtils.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\UI\\WelcomeView.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Scripter.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\ScripterPluginException.cs",

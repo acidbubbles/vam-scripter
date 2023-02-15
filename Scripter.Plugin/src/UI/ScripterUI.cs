@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ScripterUI : MonoBehaviour
@@ -49,10 +50,13 @@ public class ScripterUI : MonoBehaviour
 
     private static void CreateConsole(Transform parent)
     {
-        var console = Instantiate(Scripter.Singleton.manager.configurableTextFieldPrefab, parent).GetComponent<UIDynamicTextField>();
+        var console = Instantiate(Scripter.Singleton.manager.configurableTextFieldPrefab, parent, false).GetComponent<UIDynamicTextField>();
         console.backgroundColor = Color.black;
         console.textColor = Color.white;
         Scripter.Singleton.Scripts.ConsoleJSON.dynamicText = console;
+
+        var toolbar = UIUtils.MakeToolbar(console.transform, 100);
+        UIUtils.CreateToolbarButton(toolbar, "Clear", 40, false, () => { Scripter.Singleton.Scripts.ConsoleJSON.val = ""; });
     }
 
     private ScripterTabsList _tabs;

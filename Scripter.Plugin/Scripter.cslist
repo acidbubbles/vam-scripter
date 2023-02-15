@@ -82,6 +82,7 @@ src\UI\Screen.cs
 src\UI\ScripterTab.cs
 src\UI\ScripterTabsList.cs
 src\UI\ScripterUI.cs
+src\UI\UIUtils.cs
 src\UI\WelcomeView.cs
 src\Scripter.cs
 src\ScripterPluginException.cs

@@ -155,6 +155,7 @@
     <Compile Include="src\UI\ScripterTab.cs" />
     <Compile Include="src\UI\ScripterTabsList.cs" />
     <Compile Include="src\UI\ScripterUI.cs" />
+    <Compile Include="src\UI\UIUtils.cs" />
     <Compile Include="src\UI\WelcomeView.cs" />
     <Compile Include="src\Scripter.cs" />
     <Compile Include="src\ScripterPluginException.cs" />
