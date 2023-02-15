@@ -10,6 +10,7 @@ src\Integration\GlobalUnityFunctions.cs
 src\Integration\GlobalVamFunctions.cs
 src\Integration\RandomReference.cs
 src\Integration\SceneReference.cs
+src\Integration\ScripterModule.cs
 src\Integration\StorableReference.cs
 src\Integration\StringChooserParamReference.cs
 src\Integration\StringParamReference.cs
@@ -70,6 +71,9 @@ src\Lib\Tests\PerfTest.cs
 src\Lib\Types\ListReference.cs
 src\Scripts\Script.cs
 src\Scripts\ScriptsManager.cs
+src\Triggers\ScripterFloatParam.cs
+src\Triggers\ScripterParamBase.cs
+src\Triggers\ScripterParamFactory.cs
 src\UI\Clickable.cs
 src\UI\CodeEditorView.cs
 src\UI\CodeInputField.cs

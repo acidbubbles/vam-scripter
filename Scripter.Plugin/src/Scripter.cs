@@ -59,6 +59,7 @@ public class Scripter : MVRScript
     public override JSONClass GetJSON(bool includePhysical = true, bool includeAppearance = true, bool forceStore = false)
     {
         var json = base.GetJSON(includePhysical, includeAppearance, forceStore);
+        json["Triggers"] = Triggers_GetJSON();
         json["Scripts"] = Scripts.GetJSON();
         needsStore = true;
         return json;
@@ -68,11 +69,39 @@ public class Scripter : MVRScript
     {
         base.RestoreFromJSON(jc, restorePhysical, restoreAppearance, presetAtoms, setMissingToDefault);
         _loading = true;
+        Triggers_RestoreFromJSON(jc["Triggers"]);
         Scripts.RestoreFromJSON(jc["Scripts"]);
         _loading = false;
         _restored = true;
         UpdateKeybindings();
     }
+
+    #region Triggers Manager
+
+    private List<ScripterParamBase> _triggers = new List<ScripterParamBase>();
+
+    public JSONNode Triggers_GetJSON()
+    {
+        var json = new JSONClass();
+        foreach (var trigger in _triggers)
+        {
+            json.Add(trigger.GetJSON());
+        }
+        return json;
+    }
+
+    public void Triggers_RestoreFromJSON(JSONNode json)
+    {
+        var array = json.AsArray;
+        if (array == null) return;
+        foreach (JSONNode triggerJSON in array)
+        {
+            var trigger = ScripterParamFactory.FromJSON(triggerJSON);
+            _triggers.Add(trigger);
+        }
+    }
+
+    #endregion
 
     public void UpdateKeybindings()
     {

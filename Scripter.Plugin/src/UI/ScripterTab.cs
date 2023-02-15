@@ -16,6 +16,7 @@ public class ScripterTab : MonoBehaviour
             layout.minHeight = layout.preferredHeight = 70;
             layout.minWidth = layout.preferredWidth = 200;
 
+            #warning Roll over
             var tabBg = go.AddComponent<Image>();
             tabBg.raycastTarget = true;
             tab._bg = tabBg;
@@ -37,6 +38,7 @@ public class ScripterTab : MonoBehaviour
             rect.offsetMin = new Vector2(20, 5);
 
             var text = filename.AddComponent<Text>();
+            #warning Link to NameJSON, double-click to edit
             text.font = SuperController.singleton.dynamicButtonPrefab.GetComponentInChildren<Text>(true).font;
             text.fontSize = 28;
             text.text = label;

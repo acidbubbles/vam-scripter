@@ -38,7 +38,7 @@ public class Script
         try
         {
             _scripter.Scripts.Program.Add(NameJSON.val, val);
-            _scripter.Scripts.Log($"<color=green>{NameJSON.val} parsed successfully</color>");
+            _scripter.Scripts.Log($"<color=green>{NameJSON.val} parsed successfully; press apply to run.</color>");
         }
         catch (Exception exc)
         {

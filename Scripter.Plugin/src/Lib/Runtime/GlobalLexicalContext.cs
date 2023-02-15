@@ -19,10 +19,10 @@ namespace ScripterLang
             });
         }
 
-        public void DeclareModule(string module, IModule context)
+        public void DeclareModule(IModule context)
         {
-            RemoveModule(module);
-            _modules[module] = context;
+            RemoveModule(context.ModuleName);
+            _modules[context.ModuleName] = context;
         }
 
         public void RemoveModule(string moduleName)

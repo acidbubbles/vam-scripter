@@ -21,7 +21,7 @@ namespace ScripterLang
 
         public void Add(IModule module)
         {
-            GlobalContext.DeclareModule(module.ModuleName, module);
+            GlobalContext.DeclareModule(module);
             if (module.ModuleName == IndexModuleName)
                 _index = module;
             GlobalContext.InvalidateModules();

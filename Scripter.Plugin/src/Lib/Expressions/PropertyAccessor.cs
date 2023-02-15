@@ -9,6 +9,7 @@
         public PropertyAccessor(Expression left, string property)
         {
             _left = left;
+            #warning Should Intern?
             _property = property;
         }
 

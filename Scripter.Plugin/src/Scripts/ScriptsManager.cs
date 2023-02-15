@@ -66,7 +66,9 @@ public class ScriptsManager
     {
         try
         {
+            Log("Running index.js...");
             Program.Run();
+            Log("index.js is now running!");
         }
         catch (Exception exc)
         {
@@ -78,6 +80,7 @@ public class ScriptsManager
     {
         #warning Optimize
         ConsoleJSON.val += "\n" + message;
+        #warning Auto scroll the text
     }
 
     public void LogError(string message)

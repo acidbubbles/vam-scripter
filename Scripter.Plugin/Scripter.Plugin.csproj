@@ -83,6 +83,7 @@
     <Compile Include="src\Integration\GlobalVamFunctions.cs" />
     <Compile Include="src\Integration\RandomReference.cs" />
     <Compile Include="src\Integration\SceneReference.cs" />
+    <Compile Include="src\Integration\ScripterModule.cs" />
     <Compile Include="src\Integration\StorableReference.cs" />
     <Compile Include="src\Integration\StringChooserParamReference.cs" />
     <Compile Include="src\Integration\StringParamReference.cs" />
@@ -143,6 +144,9 @@
     <Compile Include="src\Lib\Types\ListReference.cs" />
     <Compile Include="src\Scripts\Script.cs" />
     <Compile Include="src\Scripts\ScriptsManager.cs" />
+    <Compile Include="src\Triggers\ScripterFloatParam.cs" />
+    <Compile Include="src\Triggers\ScripterParamBase.cs" />
+    <Compile Include="src\Triggers\ScripterParamFactory.cs" />
     <Compile Include="src\UI\Clickable.cs" />
     <Compile Include="src\UI\CodeEditorView.cs" />
     <Compile Include="src\UI\CodeInputField.cs" />

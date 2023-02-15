@@ -32,6 +32,7 @@ public class CodeEditorView : MonoBehaviour
         var toolbar = MakeToolbar(screen.transform);
         CreateToolbarButton(toolbar, "\u21BA", 40, true, script.History.Undo);
         CreateToolbarButton(toolbar, "\u21BB", 40, true, script.History.Redo);
+        #warning Make bright (pulsating?) color when apply is needed, gray out when not
         CreateToolbarButton(toolbar, "Apply", 120, false, () => Scripter.Singleton.Scripts.Apply());
 
         return screen;
