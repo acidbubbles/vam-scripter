@@ -8,7 +8,7 @@
 
         public ScopedVariableAccessor(string name, LexicalContext context)
         {
-            _name = name;
+            _name = string.Intern(name);
             _context = context;
         }
 

@@ -59,7 +59,6 @@ public class ScripterAction : ScripterParamBase, IDisposable
     {
         ValidateArgumentsLength(nameof(OnChange), args, 1);
         var fn = args[0].AsFunction;
-        SuperController.LogMessage("Mapped");
         _valueJSON.actionCallback = () =>
         {
             fn(context, _callbackArgs);
@@ -69,7 +68,6 @@ public class ScripterAction : ScripterParamBase, IDisposable
 
     public void Dispose()
     {
-        SuperController.LogMessage("Disposed");
         _valueJSON.actionCallback = null;
     }
 }

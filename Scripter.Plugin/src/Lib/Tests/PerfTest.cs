@@ -8,10 +8,13 @@ namespace ScripterLang
     {
         private int x1;
 
-        public void Run()
+        public void Run(PerfObject obj)
         {
-            for(var j = 0; j < 100; j++) {
-                x1 = test(x1);
+            for(var j = 0; j < 100; j++)
+            {
+                var x2 = x1 + obj.Value;
+                x2 = test(x2);
+                x1 = x2;
             }
         }
 
@@ -22,6 +25,25 @@ namespace ScripterLang
             }
             return x2;
         }
+
+        public class PerfObject
+        {
+            public int Value => 1;
+        }
+    }
+
+    public class PerfObject : ObjectReference
+    {
+        public override Value GetProperty(string name)
+        {
+            switch (name)
+            {
+                case "value":
+                    return 1;
+                default:
+                    return base.GetProperty(name);
+            }
+        }
     }
 
     public static class PerfTest
@@ -29,14 +51,15 @@ namespace ScripterLang
         public static void Run()
         {
             const string code = @"
-export function run() {
+export function run(obj) {
     var x1 = 0;
 
     {
         for(var j = 0; j < 100; j++) {
-            var x2 = x1;
+            var x2 = x1 + obj.value;
             for(var i = 0; i < 100; i++) {
                 x2++;
+                x2 = x2;
             }
             x1 = x2;
         }
@@ -50,27 +73,29 @@ export function run() {
             var module = program.Register("index.js", code);
             var ns = module.Import();
             var run = ns.Exports["run"].AsFunction;
-            var args = new Value[0];
+            var jsObj = new PerfObject();
+            var jsArgs = new Value[] { jsObj };
             for (var i = 0; i < 100; i++)
             {
-                run(null, args);
+                run(null, jsArgs);
             }
             sw.Start();
             for (var i = 0; i < 100; i++)
             {
-                run(null, args);
+                run(null, jsArgs);
             }
             sw.Stop();
             var scripterTime = sw.Elapsed.TotalSeconds;
             SuperController.LogMessage($"Scripter: {scripterTime:0.0000}ms");
 
             var dotnet = new PerfTestDotNet();
-            dotnet.Run();
+            var dnObj = new PerfTestDotNet.PerfObject();
+            dotnet.Run(dnObj);
             sw.Reset();
             sw.Start();
             for (var i = 0; i < 100; i++)
             {
-                dotnet.Run();
+                dotnet.Run(dnObj);
             }
             sw.Stop();
 

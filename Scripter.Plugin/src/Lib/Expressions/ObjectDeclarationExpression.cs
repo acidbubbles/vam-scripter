@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ScripterLang
 {
     public class ObjectDeclarationExpression : Expression
     {
-        private readonly Dictionary<string, Expression> _values;
+        private readonly KeyValuePair<string, Expression>[] _values;
 
         public ObjectDeclarationExpression(Dictionary<string, Expression> values)
         {
-            _values = values;
+            _values = values.Select(x =>
+                new KeyValuePair<string, Expression>(string.Intern(x.Key), x.Value)
+            ).ToArray();
         }
 
         public override void Bind()
@@ -22,8 +25,9 @@ namespace ScripterLang
         public override Value Evaluate()
         {
             var dict = new Dictionary<string, Value>();
-            foreach (var kvp in _values)
+            for (var i = 0; i < _values.Length; i++)
             {
+                var kvp = _values[i];
                 var value = kvp.Value.Evaluate();
                 dict.Add(kvp.Key, value);
             }
