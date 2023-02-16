@@ -8,6 +8,7 @@ src\Integration\GlobalFunctions.cs
 src\Integration\RandomReference.cs
 src\Integration\SceneReference.cs
 src\Integration\ScripterModule.cs
+src\Integration\ScripterPluginReference.cs
 src\Integration\StorableReference.cs
 src\Integration\StringChooserParamReference.cs
 src\Integration\StringParamReference.cs
@@ -59,6 +60,7 @@ src\Lib\Runtime\GlobalLexicalContext.cs
 src\Lib\Runtime\LexicalContext.cs
 src\Lib\Runtime\LoopLexicalContext.cs
 src\Lib\Runtime\ModuleLexicalContext.cs
+src\Lib\Runtime\ModuleNamespace.cs
 src\Lib\Runtime\ObjectReference.cs
 src\Lib\Runtime\ScopeLexicalContext.cs
 src\Lib\Runtime\ScripterRuntimeException.cs

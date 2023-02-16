@@ -1,8 +1,9 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using ScripterLang;
 using SimpleJSON;
 
-public class ScripterStringParam : ScripterParamBase
+public class ScripterStringParam : ScripterParamBase, IDisposable
 {
     public const string Type = "StringParam";
 
@@ -83,5 +84,10 @@ public class ScripterStringParam : ScripterParamBase
             fn(context, _callbackArgs);
         };
         return Value.Void;
+    }
+
+    public void Dispose()
+    {
+        _valueJSON.setCallbackFunction = null;
     }
 }

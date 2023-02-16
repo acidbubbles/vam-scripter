@@ -28,7 +28,7 @@ namespace ScripterLang
             }
         }
 
-        public ModuleReference Import()
+        public ModuleNamespace Import()
         {
             if (_evaluated) return _context.Module;
             var value = Evaluate();
@@ -42,6 +42,11 @@ namespace ScripterLang
             _context.Module.Returned = Value.Undefined;
             _context.Module.Exports.Clear();
             _evaluated = false;
+        }
+
+        public void Dispose()
+        {
+            _context.Dispose();
         }
     }
 }

@@ -62,8 +62,9 @@ public class ProgramFilesManager
         return script;
     }
 
-    public void Remove(Script script)
+    public void Unregister(Script script)
     {
+        Program.Unregister(script.NameJSON.val);
         Files.Remove(script);
         _plugin.UI.RemoveTab(script.Tab);
         #warning Unregister listeners?
@@ -71,6 +72,10 @@ public class ProgramFilesManager
 
     public void Clear()
     {
+        foreach (var script in Files.ToArray())
+        {
+            Unregister(script);
+        }
     }
 
     public void Apply()

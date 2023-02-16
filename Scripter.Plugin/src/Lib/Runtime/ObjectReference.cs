@@ -1,13 +1,5 @@
-﻿using System.Collections.Generic;
-
-namespace ScripterLang
+﻿namespace ScripterLang
 {
-    public class ModuleReference : ObjectReference
-    {
-        public Value Returned;
-        public readonly Dictionary<string, Value> Exports = new Dictionary<string, Value>();
-    }
-
     public abstract class ObjectReference
     {
         public virtual Value GetProperty(string name)

@@ -22,7 +22,7 @@ public class Script
         NameJSON.val = moduleName;
         NameJSON.setCallbackFunction = val =>
         {
-            scripter.ProgramFiles.Program.Remove(_previousName);
+            scripter.ProgramFiles.Program.Unregister(_previousName);
             _previousName = val;
         };
 

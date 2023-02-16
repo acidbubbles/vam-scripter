@@ -1,8 +1,9 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using ScripterLang;
 using SimpleJSON;
 
-public class ScripterFloatParam : ScripterParamBase
+public class ScripterFloatParam : ScripterParamBase, IDisposable
 {
     public const string Type = "FloatParam";
 
@@ -93,5 +94,10 @@ public class ScripterFloatParam : ScripterParamBase
             fn(context, _callbackArgs);
         };
         return Value.Void;
+    }
+
+    public void Dispose()
+    {
+        _valueJSON.setCallbackFunction = null;
     }
 }

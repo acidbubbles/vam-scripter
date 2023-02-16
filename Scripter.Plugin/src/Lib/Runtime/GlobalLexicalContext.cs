@@ -19,17 +19,21 @@ namespace ScripterLang
             });
         }
 
-        public void DeclareModule(IModule context)
+        public void DeclareModule(IModule module)
         {
-            RemoveModule(context.ModuleName);
-            _modules[context.ModuleName] = context;
+            RemoveModule(module.ModuleName);
+            SuperController.LogMessage("Registering " + module.ModuleName + " from source");
+            _modules[module.ModuleName] = module;
         }
 
         public void RemoveModule(string moduleName)
         {
+            SuperController.LogMessage("Removing " + moduleName + " from global context");
             IModule module;
             if (!_modules.TryGetValue(moduleName, out module))
                 return;
+            SuperController.LogMessage("Disposing " + moduleName + " from global context");
+            module.Dispose();
             _modules.Remove(moduleName);
         }
 

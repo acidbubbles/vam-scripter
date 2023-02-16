@@ -34,5 +34,6 @@
         public override LoopLexicalContext GetLoopContext() => _parent.GetLoopContext();
 
         public override FunctionLexicalContext GetFunctionContext() => _parent.GetFunctionContext();
+        public override ModuleLexicalContext GetModuleContext() => _parent.GetModuleContext();
     }
 }

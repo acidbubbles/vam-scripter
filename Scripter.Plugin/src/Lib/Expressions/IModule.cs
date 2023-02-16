@@ -1,9 +1,11 @@
-﻿namespace ScripterLang
+﻿using System;
+
+namespace ScripterLang
 {
-    public interface IModule
+    public interface IModule : IDisposable
     {
         string ModuleName { get; }
-        ModuleReference Import();
+        ModuleNamespace Import();
         void Invalidate();
     }
 }

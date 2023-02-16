@@ -27,13 +27,13 @@ public class HistoryManager
     {
         if (_index == 0) return;
         _index--;
-        _storable.valNoCallback = _history[_index];
+        _storable.val = _history[_index];
     }
 
     public void Redo()
     {
         if (_index >= _history.Count - 1) return;
         _index++;
-        _storable.valNoCallback = _history[_index];
+        _storable.val = _history[_index];
     }
 }

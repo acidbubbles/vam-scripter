@@ -21,13 +21,14 @@ namespace ScripterLang
 
         public void Register(IModule module)
         {
+            GlobalContext.RemoveModule(module.ModuleName);
             GlobalContext.DeclareModule(module);
             if (module.ModuleName == _indexModuleName)
                 _index = module;
             GlobalContext.InvalidateModules();
         }
 
-        public void Remove(string moduleName)
+        public void Unregister(string moduleName)
         {
             GlobalContext.RemoveModule(moduleName);
             GlobalContext.InvalidateModules();

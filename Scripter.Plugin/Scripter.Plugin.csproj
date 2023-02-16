@@ -81,6 +81,7 @@
     <Compile Include="src\Integration\RandomReference.cs" />
     <Compile Include="src\Integration\SceneReference.cs" />
     <Compile Include="src\Integration\ScripterModule.cs" />
+    <Compile Include="src\Integration\ScripterPluginReference.cs" />
     <Compile Include="src\Integration\StorableReference.cs" />
     <Compile Include="src\Integration\StringChooserParamReference.cs" />
     <Compile Include="src\Integration\StringParamReference.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="src\Lib\Runtime\LexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\LoopLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\ModuleLexicalContext.cs" />
+    <Compile Include="src\Lib\Runtime\ModuleNamespace.cs" />
     <Compile Include="src\Lib\Runtime\ObjectReference.cs" />
     <Compile Include="src\Lib\Runtime\ScopeLexicalContext.cs" />
     <Compile Include="src\Lib\Runtime\ScripterRuntimeException.cs" />

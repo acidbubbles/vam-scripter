@@ -1,7 +1,8 @@
-﻿using ScripterLang;
+﻿using System;
+using ScripterLang;
 using SimpleJSON;
 
-public class ScripterAction : ScripterParamBase
+public class ScripterAction : ScripterParamBase, IDisposable
 {
     public const string Type = "Action";
 
@@ -58,10 +59,17 @@ public class ScripterAction : ScripterParamBase
     {
         ValidateArgumentsLength(nameof(OnChange), args, 1);
         var fn = args[0].AsFunction;
+        SuperController.LogMessage("Mapped");
         _valueJSON.actionCallback = () =>
         {
             fn(context, _callbackArgs);
         };
         return Value.Void;
+    }
+
+    public void Dispose()
+    {
+        SuperController.LogMessage("Disposed");
+        _valueJSON.actionCallback = null;
     }
 }

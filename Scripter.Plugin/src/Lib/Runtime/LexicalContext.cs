@@ -33,6 +33,7 @@ namespace ScripterLang
 
         public abstract LoopLexicalContext GetLoopContext();
         public abstract FunctionLexicalContext GetFunctionContext();
+        public abstract ModuleLexicalContext GetModuleContext();
 
         public virtual void Exit()
         {
