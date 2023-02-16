@@ -29,7 +29,7 @@ public class ScripterPluginReference : ObjectReference
         var min = config.GetProperty("min").AsNumber;
         var max = config.GetProperty("max").AsNumber;
         var constrain = config.GetProperty("constrain").AsBool;
-        var param = new ScripterFloatParam(name, start, min, max, constrain);
+        var param = new ScripterFloatParamDeclaration(name, start, min, max, constrain);
         context.GetModuleContext().RegisterDisposable(param);
         return param;
     }
@@ -40,7 +40,7 @@ public class ScripterPluginReference : ObjectReference
         var config = args[0].AsObject;
         var name = config.GetProperty("name").AsString;
         var start = config.GetProperty("default").AsString;
-        var param = new ScripterStringParam(name, start);
+        var param = new ScripterStringParamDeclaration(name, start);
         context.GetModuleContext().RegisterDisposable(param);
         return param;
     }
@@ -51,7 +51,7 @@ public class ScripterPluginReference : ObjectReference
         var config = args[0].AsObject;
         var name = config.GetProperty("name").AsString;
         var start = config.GetProperty("default").AsBool;
-        var param = new ScripterBoolParam(name, start);
+        var param = new ScripterBoolParamDeclaration(name, start);
         context.GetModuleContext().RegisterDisposable(param);
         return param;
     }
@@ -62,7 +62,7 @@ public class ScripterPluginReference : ObjectReference
 #warning Allow just passing the name instead
         var config = args[0].AsObject;
         var name = config.GetProperty("name").AsString;
-        var param = new ScripterAction(name);
+        var param = new ScripterActionDeclaration(name);
         context.GetModuleContext().RegisterDisposable(param);
         return param;
     }

@@ -80,6 +80,11 @@ public class ProgramFilesManager
 
     public void Apply()
     {
+        if (Files.All(f => f.NameJSON.val != "index.js"))
+        {
+            return;
+        }
+
         try
         {
             Program.Run();

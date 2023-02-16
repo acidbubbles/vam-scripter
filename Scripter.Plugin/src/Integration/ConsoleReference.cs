@@ -36,7 +36,7 @@ public class ConsoleReference : ObjectReference
             return Value.Void;
         }
 
-        #warning All .Select().ToArray() should reuse a single string join util that has pre-created arrays
+        //TODO: All .Select().ToArray() should reuse a single string join util that has pre-created arrays
         _console.Log(string.Join(" ", args.Select(x => x.Stringify).ToArray()));
         return Value.Void;
     }

@@ -3,35 +3,41 @@ using System.Globalization;
 using ScripterLang;
 using SimpleJSON;
 
-public class ScripterBoolParam : ScripterParamBase, IDisposable
+public class ScripterFloatParamDeclaration : ScripterParamDeclarationBase, IDisposable
 {
-    public const string Type = "BoolParam";
+    public const string Type = "FloatParam";
 
-    private readonly JSONStorableBool _valueJSON;
+    private readonly JSONStorableFloat _valueJSON;
 
-    public ScripterBoolParam(string name, bool startingValue)
+    public ScripterFloatParamDeclaration(string name, float startingValue, float minValue, float maxValue, bool constrain)
     {
         var scripter = Scripter.Singleton;
-        var existing = scripter.GetBoolJSONParam(name);
+        var existing = scripter.GetFloatJSONParam(name);
         if (existing == null)
         {
-            _valueJSON = new JSONStorableBool(name, startingValue);
-            scripter.RegisterBool(_valueJSON);
+            _valueJSON = new JSONStorableFloat(name, startingValue, minValue, maxValue, constrain);
+            scripter.RegisterFloat(_valueJSON);
         }
         else
         {
             _valueJSON = existing;
             _valueJSON.defaultVal = startingValue;
+            _valueJSON.min = minValue;
+            _valueJSON.max = maxValue;
+            _valueJSON.constrained = constrain;
         }
     }
 
-    public static ScripterParamBase FromJSONImpl(JSONNode json)
+    public static ScripterParamDeclarationBase FromJSONImpl(JSONNode json)
     {
-        var trigger = new ScripterBoolParam(
+        var trigger = new ScripterFloatParamDeclaration(
             json["Name"],
-            json["StartingValue"].AsBool
+            json["StartingValue"].AsFloat,
+            json["MinValue"].AsFloat,
+            json["MaxValue"].AsFloat,
+            json["Constrain"].AsBool
         );
-        trigger._valueJSON.val = json["Val"].AsBool;
+        trigger._valueJSON.val = json["Val"].AsFloat;
         return trigger;
     }
 
@@ -42,6 +48,9 @@ public class ScripterBoolParam : ScripterParamBase, IDisposable
             { "Type", Type },
             { "Name", _valueJSON.name },
             { "StartingValue", _valueJSON.defaultVal.ToString(CultureInfo.InvariantCulture) },
+            { "MinValue", _valueJSON.min.ToString(CultureInfo.InvariantCulture) },
+            { "MaxValue", _valueJSON.max.ToString(CultureInfo.InvariantCulture) },
+            { "Constrain", _valueJSON.constrained.ToString() },
             { "Val", _valueJSON.val.ToString(CultureInfo.InvariantCulture) },
         };
         return json;
@@ -65,7 +74,7 @@ public class ScripterBoolParam : ScripterParamBase, IDisposable
         switch (name)
         {
             case "val":
-                _valueJSON.valNoCallback = value.AsBool;
+                _valueJSON.valNoCallback = value.AsNumber;
                 break;
             default:
                 base.SetProperty(name, value);
@@ -78,6 +87,7 @@ public class ScripterBoolParam : ScripterParamBase, IDisposable
     {
         ValidateArgumentsLength(nameof(OnChange), args, 1);
         var fn = args[0].AsFunction;
+        #warning Check if we can add more of those to avoid allocations in function calls whenever possible
         _valueJSON.setCallbackFunction = val =>
         {
             _callbackArgs[0] = val;

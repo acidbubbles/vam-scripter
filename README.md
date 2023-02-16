@@ -26,14 +26,31 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 - No classes, prototypes
 - No `try`/`catch`
 - No way to use http, tcp, udp, etc.
+- No string interpolation (`${value}`)
 
 ## Globals
 
 - [`console`](#console)
-- [`scene`](#scene)
-- [`Time`](#time)
-- [`Random`](#random)
-- [`DateTime`](#dateTime)
+
+## Modules
+
+### Scripter
+
+```js
+import {
+    self,
+    time,
+    random,
+    scene,
+    datetime
+} from "scripter";
+```
+
+- [`self: ScripterPlugin`](#scripterplugin)
+- [`time: Time`](#time)
+- [`random: Random`](#random)
+- [`scene: Scene`](#scene)
+- [`datetime: DateTime`](#datetime)
 
 ## Classes
 
@@ -44,6 +61,42 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 | `log`    | function(string) => `void` | Uses `SuperController.LogMessage`                 |
 | `error`  | function(string) => `void` | Uses `SuperController.LogError`                   |
 | `clear`  | function() => `void`       | Uses `SuperController.singleton.ClearMessages();` |
+
+### `ScripterPlugin`
+
+| Property      | Type                                                                                                                                        | Notes                          |
+|---------------|---------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| declareFloat  | function({ name: string, default: number, min: number, max: number, constrain: bool }) => [`FloatParamDeclaration`](#floatparamdeclaration) | Param trigger by ID            |
+| declareString | function({ name: string, default: string }}) => [`StringParamDeclaration`](#stringparamdeclaration)                                         | Param trigger by ID            |
+| declareBool   | function({ name: string, default: string }) => [`BoolParamDeclaration`](#boolparamdeclaration)                                              | Param trigger by ID            |
+| declareAction | function(string, function) => [`ActionDeclaration`](#actionparamdeclaration)                                                                | Invoke an action trigger by ID |
+
+### `FloatParamDeclaration`
+
+| Property | Type                                       | Notes           |
+|----------|--------------------------------------------|-----------------|
+| val      | number                                     | The param value |
+| onChange | function(function(number) => void) => void | The param value |
+
+### `StringParamDeclaration`
+
+| Property | Type                                       | Notes           |
+|----------|--------------------------------------------|-----------------|
+| val      | string                                     | The param value |
+| onChange | function(function(string) => void) => void | The param value |
+
+### `BoolParamDeclaration`
+
+| Property | Type                                     | Notes           |
+|----------|------------------------------------------|-----------------|
+| val      | bool                                     | The param value |
+| onChange | function(function(bool) => void) => void | The param value |
+
+### `ActionParamDeclaration`
+
+| Property | Type | Notes |
+|----------|------|-------|
+| N/A      | N/A  | N/A   |
 
 ### `Scene`
 
@@ -65,7 +118,7 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 | getString        | function(string) => [`StringParam`](#stringParam)               | Param trigger by ID            |
 | getBool          | function(string) => [`BoolParam`](#boolParam)                   | Param trigger by ID            |
 | getStringChooser | function(string) => [`StringChooserParam`](#stringChooserParam) | Param trigger by ID            |
-| trigger          | function(string) => `void`                                      | Invoke an action trigger by ID |
+| invokeTrigger    | function(string) => `void`                                      | Invoke an action trigger by ID |
 
 ### `FloatParam`
 
@@ -103,7 +156,7 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 | Property | Type                            | Notes                                                                      |
 |----------|---------------------------------|----------------------------------------------------------------------------|
 | `value`  | float                           | [Random.value](https://docs.unity3d.com/ScriptReference/Random-value.html) |
-| `Range`  | function(float, float) => float | [Random.Range](https://docs.unity3d.com/ScriptReference/Random.Range.html) |
+| `range`  | function(float, float) => float | [Random.Range](https://docs.unity3d.com/ScriptReference/Random.Range.html) |
 
 ### `DateTime`
 
@@ -117,25 +170,64 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 Here is a simple example to get you started with the kind of code you can write:
 
 ```js
-// Welcome to Scripter!
-static var alpha = scene.getAtom("Cube").getStorable("CubeMat").getFloat("Alpha Adjust");
+import { scene } from "scripter";
+
+var alpha = scene.getAtom("Cube").getStorable("CubeMat").getFloat("Alpha Adjust");
 if (alpha.val == 0) {
-    logMessage("The cube is fully transparent");
+    console.log("The cube is fully transparent");
 } else {
-    logMessage("The cube alpha is: " + alpha.val);
+    console.log("The cube alpha is: " + alpha.val);
 }
 ```
 
 You can also declare functions:
 
 ```js
-static var bubbleText = scene.getAtom("Person").getStorable("SpeechBubble").getString("bubbleText");
+import { scene } from "scripter";
+
+var bubbleText = scene.getAtom("Person").getStorable("SpeechBubble").getString("bubbleText");
 
 function say(message) {
     bubbleText.val = message;
 }
 
 say("Hello, world!");
+```
+
+You can declare storables:
+
+```js
+import { self } from "scripter";
+
+self.declareAction("Say", function(message) {
+    say(message);
+});
+
+let intensity = self.declareFloatParam({
+    name: "Intensity",
+    default: 0,
+    min: 0,
+    max: 1,
+    constrain: true
+});
+
+intensity.onChange(function(value) {
+    say("Intensity is now: " + value);
+});
+```
+
+You can use external modules:
+
+```js
+import { say } from "./lib1.js";
+
+say("Hello, world!");
+```
+
+```js
+export function say(message) {
+    console.log("The user said: " + message);
+}
 ```
 
 # License

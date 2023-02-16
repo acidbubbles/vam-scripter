@@ -3,20 +3,20 @@ using System.Globalization;
 using ScripterLang;
 using SimpleJSON;
 
-public class ScripterStringParam : ScripterParamBase, IDisposable
+public class ScripterBoolParamDeclaration : ScripterParamDeclarationBase, IDisposable
 {
-    public const string Type = "StringParam";
+    public const string Type = "BoolParam";
 
-    private readonly JSONStorableString _valueJSON;
+    private readonly JSONStorableBool _valueJSON;
 
-    public ScripterStringParam(string name, string startingValue)
+    public ScripterBoolParamDeclaration(string name, bool startingValue)
     {
         var scripter = Scripter.Singleton;
-        var existing = scripter.GetStringJSONParam(name);
+        var existing = scripter.GetBoolJSONParam(name);
         if (existing == null)
         {
-            _valueJSON = new JSONStorableString(name, startingValue);
-            scripter.RegisterString(_valueJSON);
+            _valueJSON = new JSONStorableBool(name, startingValue);
+            scripter.RegisterBool(_valueJSON);
         }
         else
         {
@@ -25,13 +25,13 @@ public class ScripterStringParam : ScripterParamBase, IDisposable
         }
     }
 
-    public static ScripterParamBase FromJSONImpl(JSONNode json)
+    public static ScripterParamDeclarationBase FromJSONImpl(JSONNode json)
     {
-        var trigger = new ScripterStringParam(
+        var trigger = new ScripterBoolParamDeclaration(
             json["Name"],
-            json["StartingValue"].Value
+            json["StartingValue"].AsBool
         );
-        trigger._valueJSON.val = json["Val"].Value;
+        trigger._valueJSON.val = json["Val"].AsBool;
         return trigger;
     }
 
@@ -42,7 +42,7 @@ public class ScripterStringParam : ScripterParamBase, IDisposable
             { "Type", Type },
             { "Name", _valueJSON.name },
             { "StartingValue", _valueJSON.defaultVal.ToString(CultureInfo.InvariantCulture) },
-            { "Val", _valueJSON.val },
+            { "Val", _valueJSON.val.ToString(CultureInfo.InvariantCulture) },
         };
         return json;
     }
@@ -65,7 +65,7 @@ public class ScripterStringParam : ScripterParamBase, IDisposable
         switch (name)
         {
             case "val":
-                _valueJSON.valNoCallback = value.AsString;
+                _valueJSON.valNoCallback = value.AsBool;
                 break;
             default:
                 base.SetProperty(name, value);

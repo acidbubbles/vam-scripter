@@ -16,6 +16,8 @@ public class Scripter : MVRScript
     private bool _loading;
     private bool _restored;
 
+    #warning TODO: Update, FixedUpdate, basic MoveTo and LookAt commands, check if an atom exists, list atoms
+    #warning TODO: Keybindings
     public Dictionary<string, UnityEvent> KeybindingsTriggers { get; } = new Dictionary<string, UnityEvent>();
 
     public Scripter()
@@ -76,7 +78,7 @@ public class Scripter : MVRScript
 
     #region Triggers Manager
 
-    private readonly List<ScripterParamBase> _triggers = new List<ScripterParamBase>();
+    private readonly List<ScripterParamDeclarationBase> _triggers = new List<ScripterParamDeclarationBase>();
 
     public JSONNode Triggers_GetJSON()
     {
@@ -94,7 +96,7 @@ public class Scripter : MVRScript
         if (array == null) return;
         foreach (JSONNode triggerJSON in array)
         {
-            var trigger = ScripterParamFactory.FromJSON(triggerJSON);
+            var trigger = ScripterParamDeclarationFactory.FromJSON(triggerJSON);
             _triggers.Add(trigger);
         }
     }

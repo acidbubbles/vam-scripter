@@ -121,6 +121,7 @@ namespace ScripterLang
 
         private Expression ParseImportDeclaration(ModuleLexicalContext lexicalContext)
         {
+            #warning allow import from ""; without specific values
             MoveNext();
             Consume().Expect(TokenType.LeftBrace);
             var arguments = new List<string>();
