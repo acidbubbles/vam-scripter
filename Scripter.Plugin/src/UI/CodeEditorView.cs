@@ -33,7 +33,7 @@ public class CodeEditorView : MonoBehaviour
         UIUtils.CreateToolbarButton(toolbar, "\u21BA", 40, true, script.History.Undo);
         UIUtils.CreateToolbarButton(toolbar, "\u21BB", 40, true, script.History.Redo);
         #warning Make bright (pulsating?) color when apply is needed, gray out when not
-        UIUtils.CreateToolbarButton(toolbar, "Apply", 120, false, () => Scripter.Singleton.Scripts.Apply());
+        UIUtils.CreateToolbarButton(toolbar, "Apply", 120, false, () => Scripter.Singleton.ProgramFiles.Apply());
 
         return screen;
     }

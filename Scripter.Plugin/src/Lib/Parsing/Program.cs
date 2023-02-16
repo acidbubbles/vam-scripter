@@ -5,24 +5,24 @@ namespace ScripterLang
 {
     public class Program
     {
-        public const string IndexModuleName = "./index.js";
+        private const string _indexModuleName = "./index.js";
 
         public readonly GlobalLexicalContext GlobalContext = new GlobalLexicalContext();
 
         private IModule _index;
 
-        public IModule Add(string moduleName, string source)
+        public IModule Register(string moduleName, string source)
         {
             var tokens = new List<Token>(Tokenizer.Tokenize(source));
             var module = new Parser(tokens).Parse(GlobalContext, "./" + moduleName);
-            Add(module);
+            Register(module);
             return module;
         }
 
-        public void Add(IModule module)
+        public void Register(IModule module)
         {
             GlobalContext.DeclareModule(module);
-            if (module.ModuleName == IndexModuleName)
+            if (module.ModuleName == _indexModuleName)
                 _index = module;
             GlobalContext.InvalidateModules();
         }

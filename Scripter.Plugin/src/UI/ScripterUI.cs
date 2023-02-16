@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ScripterUI : MonoBehaviour
@@ -43,24 +42,42 @@ public class ScripterUI : MonoBehaviour
         var createTab = CreateView.Create(content.transform, ui);
         ui._tabs.SetLastTab("+", createTab.transform);
 
-        CreateConsole(go.transform);
+        ui.CreateConsole(go.transform);
 
         return ui;
     }
 
-    private static void CreateConsole(Transform parent)
-    {
-        var console = Instantiate(Scripter.Singleton.manager.configurableTextFieldPrefab, parent, false).GetComponent<UIDynamicTextField>();
-        console.backgroundColor = Color.black;
-        console.textColor = Color.white;
-        Scripter.Singleton.Scripts.ConsoleJSON.dynamicText = console;
+    private ScripterTabsList _tabs;
 
-        var toolbar = UIUtils.MakeToolbar(console.transform, 100);
-        UIUtils.CreateToolbarButton(toolbar, "Clear", 40, false, () => { Scripter.Singleton.Scripts.ConsoleJSON.val = ""; });
+    private void CreateConsole(Transform parent)
+    {
+        _console = Instantiate(Scripter.Singleton.manager.configurableTextFieldPrefab, parent, false).GetComponent<UIDynamicTextField>();
+        _console.backgroundColor = Color.black;
+        _console.textColor = Color.white;
+        Scripter.Singleton.Console.Init(_console);
+
+        _scrollRect = _console.transform.Find("Scroll View").GetComponent<ScrollRect>();
+
+        Scripter.Singleton.Console.ConsoleJSON.setCallbackFunction = OnConsoleChange;
+
+        // ReSharper disable once Unity.InefficientPropertyAccess
+        var toolbar = UIUtils.MakeToolbar(_console.transform, 100);
+        UIUtils.CreateToolbarButton(toolbar, "Clear", 40, false, () => { Scripter.Singleton.Console.Clear(); });
     }
 
-    private ScripterTabsList _tabs;
+    private void OnConsoleChange(string val)
+    {
+        Invoke(nameof(ScrollToBottom), 0);
+    }
+
+    private void ScrollToBottom()
+    {
+        _scrollRect.verticalNormalizedPosition = 0;
+    }
+
     private GameObject _content;
+    private UIDynamicTextField _console;
+    private ScrollRect _scrollRect;
 
     public ScripterTab AddWelcomeTab()
     {

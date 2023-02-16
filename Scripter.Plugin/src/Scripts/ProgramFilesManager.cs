@@ -4,21 +4,18 @@ using System.Linq;
 using ScripterLang;
 using SimpleJSON;
 
-public class ScriptsManager
+public class ProgramFilesManager
 {
     private readonly Scripter _plugin;
 
-    public readonly List<Script> Scripts = new List<Script>();
+    public readonly List<Script> Files = new List<Script>();
     public readonly Program Program;
 
-    public readonly JSONStorableString ConsoleJSON = new JSONStorableString("Console", "");
-
-    public ScriptsManager(Scripter plugin)
+    public ProgramFilesManager(Scripter plugin)
     {
         _plugin = plugin;
         Program = new Program();
         GlobalFunctions.Register(Program.GlobalContext);
-        ConsoleJSON.valNoCallback = "> <color=cyan>Welcome to Scripter!</color>";
     }
 
     public string NewName()
@@ -27,7 +24,7 @@ public class ScriptsManager
         for (var i = 1; i < 9999; i++)
         {
             var name = $"{prefix}{i}.js";
-            if (Scripts.All(s => s.NameJSON.val != name))
+            if (Files.All(s => s.NameJSON.val != name))
                 return name;
         }
         throw new InvalidOperationException("You're creating way too many scripts!");
@@ -36,7 +33,7 @@ public class ScriptsManager
     public JSONNode GetJSON()
     {
         var json = new JSONArray();
-        foreach (var script in Scripts)
+        foreach (var script in Files)
         {
             json.Add(script.GetJSON());
         }
@@ -49,7 +46,7 @@ public class ScriptsManager
         foreach (JSONNode scriptJSON in array)
         {
             var script = Script.FromJSON(scriptJSON, _plugin);
-            Scripts.Add(script);
+            Files.Add(script);
             script.Tab = _plugin.UI.AddScriptTab(script);
             if(script.NameJSON.val == "index.js")
                 _plugin.UI.SelectTab(script.Tab);
@@ -59,7 +56,7 @@ public class ScriptsManager
     public Script Create(string filename, string code)
     {
         var script = new Script(filename, code, _plugin);
-        Scripts.Add(script);
+        Files.Add(script);
         script.Tab = _plugin.UI.AddScriptTab(script);
         _plugin.UI.SelectTab(script.Tab);
         return script;
@@ -67,7 +64,7 @@ public class ScriptsManager
 
     public void Remove(Script script)
     {
-        Scripts.Remove(script);
+        Files.Remove(script);
         _plugin.UI.RemoveTab(script.Tab);
         #warning Unregister listeners?
     }
@@ -81,28 +78,11 @@ public class ScriptsManager
         try
         {
             Program.Run();
-            Log("index.js is now live");
+            _plugin.Console.Log("index.js is now live");
         }
         catch (Exception exc)
         {
-            LogError($"Failed to run code: {exc.Message}");
-        }
-    }
-
-    public void Log(string message)
-    {
-        #warning Optimize
-        ConsoleJSON.val += "\n" + message;
-        #warning Auto scroll the text
-    }
-
-    public void LogError(string message)
-    {
-        #warning Optimize
-        ConsoleJSON.val += "\n<color=red>" + message + "</color>";
-        if (!Scripter.Singleton.Scripts.ConsoleJSON.text.isActiveAndEnabled)
-        {
-            SuperController.LogError("Scripter: " + message);
+            _plugin.Console.LogError($"Failed to run code: {exc.Message}");
         }
     }
 }

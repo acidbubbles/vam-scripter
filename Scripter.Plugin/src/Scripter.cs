@@ -9,7 +9,8 @@ public class Scripter : MVRScript
 {
     public static Scripter Singleton;
 
-    public readonly ScriptsManager Scripts;
+    public readonly ConsoleBuffer Console;
+    public readonly ProgramFilesManager ProgramFiles;
     public ScripterUI UI;
 
     private bool _loading;
@@ -19,8 +20,9 @@ public class Scripter : MVRScript
 
     public Scripter()
     {
-        Scripts = new ScriptsManager(this);
         Singleton = this;
+        Console = new ConsoleBuffer();
+        ProgramFiles = new ProgramFilesManager(this);
     }
 
     public override void Init()
@@ -36,9 +38,10 @@ public class Scripter : MVRScript
         if (!_restored)
             containingAtom.RestoreFromLast(this);
 
-        if (Scripts.Scripts.Count == 0)
+        if (ProgramFiles.Files.Count == 0)
         {
             UI.SelectTab(UI.AddWelcomeTab());
+            Console.Log("> <color=cyan>Welcome to Scripter!</color>");
         }
     }
 
@@ -54,7 +57,7 @@ public class Scripter : MVRScript
     {
         var json = base.GetJSON(includePhysical, includeAppearance, forceStore);
         json["Triggers"] = Triggers_GetJSON();
-        json["Scripts"] = Scripts.GetJSON();
+        json["Scripts"] = ProgramFiles.GetJSON();
         needsStore = true;
         return json;
     }
@@ -64,8 +67,8 @@ public class Scripter : MVRScript
         base.RestoreFromJSON(jc, restorePhysical, restoreAppearance, presetAtoms, setMissingToDefault);
         _loading = true;
         Triggers_RestoreFromJSON(jc["Triggers"]);
-        Scripts.RestoreFromJSON(jc["Scripts"]);
-        Scripts.Apply();
+        ProgramFiles.RestoreFromJSON(jc["Scripts"]);
+        ProgramFiles.Apply();
         _loading = false;
         _restored = true;
         UpdateKeybindings();

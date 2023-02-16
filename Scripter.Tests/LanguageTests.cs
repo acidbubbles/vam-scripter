@@ -15,7 +15,7 @@ public class LanguageTests
     [Test]
     public void Variables()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var x = 1;
             const y = 2;
             return x + y;
@@ -29,7 +29,7 @@ public class LanguageTests
     public void Globals()
     {
         _program.GlobalContext.DeclareGlobal("v", 1);
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             return v + 1;
             """);
         var result = _program.Run();
@@ -40,7 +40,7 @@ public class LanguageTests
     [Test]
     public void Undefined()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var x = undefined;
             return undefined == undefined;
             """);
@@ -52,7 +52,7 @@ public class LanguageTests
     [Test]
     public void ControlFlow()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var x = 1 + 1;
             var result;
             if(x == 1) {
@@ -70,7 +70,7 @@ public class LanguageTests
     [Test]
     public void ReturnExits()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             {
                 return "ok";
             }
@@ -84,7 +84,7 @@ public class LanguageTests
     [Test]
     public void ReturnExitsNoStatement()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             {
                 return;
             }
@@ -106,7 +106,7 @@ public class LanguageTests
             Assert.That(args[2].ToString(), Is.EqualTo("true"));
             return Value.CreateString("ok");
         }));
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var x = 1;
             return MyFunction(1 * 1, "a" + "b", true == true);
             """);
@@ -118,7 +118,7 @@ public class LanguageTests
     [Test]
     public void Errors()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             throw "Error!";
             """);
 
@@ -129,7 +129,7 @@ public class LanguageTests
     [Test]
     public void Maths()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var x = 1;
             var y = ++x;
             x = (x + y) * 2;
@@ -144,7 +144,7 @@ public class LanguageTests
     [Test]
     public void Precedence()
     {
-        Assert.DoesNotThrow(() => _program.Add("index.js", """
+        Assert.DoesNotThrow(() => _program.Register("index.js", """
             if((1 + 1 * 2) != 3) { throw "* before +"; }
             if(!(false || true && true)) { throw "&& before ||"; }
             if(1 < 2 && false) { throw "< before &&"; }
@@ -154,7 +154,7 @@ public class LanguageTests
     [Test]
     public void Strings()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             return "a" + 2 + true;
             """);
         var result = _program.Run();
@@ -165,7 +165,7 @@ public class LanguageTests
     [Test]
     public void ConditionsAndThrow()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             if(false) { throw "false"; }
             if(!true) { throw "!true"; }
             if(false) throw "no brackets";
@@ -178,7 +178,7 @@ public class LanguageTests
     [Test]
     public void Loops()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var x = 0;
             while(x < 5) {
                 x++;
@@ -209,8 +209,8 @@ public class LanguageTests
             var x = 1;
             return x;
             """;
-        _program.Add("index.js", source);
-        _program.Add("index.js", source);
+        _program.Register("index.js", source);
+        _program.Register("index.js", source);
         var result1 = _program.Run();
         var result2 = _program.Run();
 
@@ -221,7 +221,7 @@ public class LanguageTests
     [Test]
     public void Functions()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var x = 0;
             run();
             function run() {
@@ -245,7 +245,7 @@ public class LanguageTests
     [Test]
     public void ArrowFunctions()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var x = (i) => { return i + 1; };
             var y = i => i + 1;
             return x(2) + y(10);
@@ -258,7 +258,7 @@ public class LanguageTests
     [Test]
     public void UnaryOperators()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             return -1 + -2;
             """);
         var result = _program.Run();
@@ -270,7 +270,7 @@ public class LanguageTests
     public void Arrays()
     {
         _program.GlobalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var x = [];
             x.add(1);
             x[0] = x[0] + 1;
@@ -287,7 +287,7 @@ public class LanguageTests
     [Test]
     public void Maps()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var x = {};
             var y = { key1: 1, key2: "2", key3: x };
             y.key1 = y.key1 + 1;
@@ -304,7 +304,7 @@ public class LanguageTests
     public void Objects()
     {
         _program.GlobalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var x = getThing(10);
             var o = getThing(1);
             o.value = o.value + 1;
@@ -338,7 +338,7 @@ public class LanguageTests
             }
         };
         _program.GlobalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => thing));
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             var o = getThing(1);
             o.deep.deep.deep.value = o.deep.deep.deep.value + 1;
             o.deep.deep.deep.increment(1);
@@ -353,11 +353,11 @@ public class LanguageTests
     [Test]
     public void ImportExport()
     {
-        _program.Add("lib.js", """
+        _program.Register("lib.js", """
             export var x = 1;
             export function fn(y) { return x + y; }
             """);
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             import { x, fn } from "./lib.js";
             return x + fn(1);
             """);
@@ -369,11 +369,11 @@ public class LanguageTests
     [Test]
     public void ImportExportNoOrder()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             import { x } from "./lib.js";
             return x;
             """);
-        _program.Add("lib.js", """
+        _program.Register("lib.js", """
             export var x = 1;
             """);
         var result = _program.Run();
@@ -384,24 +384,24 @@ public class LanguageTests
     [Test]
     public void RefreshScripts()
     {
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             import { x } from "./lib.js";
             return x;
             """);
-        _program.Add("lib.js", """
+        _program.Register("lib.js", """
             export var x = 1;
             """);
         var result1 = _program.Run();
         Assert.That(result1.ToString(), Is.EqualTo("1"));
 
-        _program.Add("index.js", """
+        _program.Register("index.js", """
             import { x } from "./lib.js";
             return x * 3;
             """);
         var result2 = _program.Run();
         Assert.That(result2.ToString(), Is.EqualTo("3"));
 
-        _program.Add("lib.js", """
+        _program.Register("lib.js", """
             export var x = 2;
             """);
         var result3 = _program.Run();

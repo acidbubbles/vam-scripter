@@ -37,13 +37,13 @@ public class CreateView : MonoBehaviour
 
         view._createIndex = AddButton(go.transform, "Create index (main) script", () =>
         {
-            Scripter.Singleton.Scripts.Create("index.js", "import { self } from \"scripter\";\n\n// Write your code here!");
+            Scripter.Singleton.ProgramFiles.Create("index.js", "import { self } from \"scripter\";\n\n// Write your code here!");
         });
 
         AddButton(go.transform, "Create new library script", () =>
         {
-            var name = Scripter.Singleton.Scripts.NewName();
-            Scripter.Singleton.Scripts.Create(name, "export function myFunction() {\n  // Write your code here!\n}");
+            var name = Scripter.Singleton.ProgramFiles.NewName();
+            Scripter.Singleton.ProgramFiles.Create(name, "export function myFunction() {\n  // Write your code here!\n}");
         });
 
         return view;
@@ -66,6 +66,6 @@ public class CreateView : MonoBehaviour
 
     private void OnEnable()
     {
-        _createIndex.button.interactable = Scripter.Singleton.Scripts.Scripts.All(s => s.NameJSON.val != "index.js");
+        _createIndex.button.interactable = Scripter.Singleton.ProgramFiles.Files.All(s => s.NameJSON.val != "index.js");
     }
 }

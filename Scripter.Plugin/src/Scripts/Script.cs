@@ -22,7 +22,7 @@ public class Script
         NameJSON.val = moduleName;
         NameJSON.setCallbackFunction = val =>
         {
-            scripter.Scripts.Program.Remove(_previousName);
+            scripter.ProgramFiles.Program.Remove(_previousName);
             _previousName = val;
         };
 
@@ -39,12 +39,12 @@ public class Script
         #warning Add globals for Init (shared variables)
         try
         {
-            _scripter.Scripts.Program.Add(NameJSON.val, val);
-            _scripter.Scripts.Log($"<color=green>{NameJSON.val} parsed successfully; press apply to run.</color>");
+            _scripter.ProgramFiles.Program.Register(NameJSON.val, val);
+            _scripter.Console.Log($"<color=green>{NameJSON.val} parsed successfully; press apply to run.</color>");
         }
         catch (Exception exc)
         {
-            _scripter.Scripts.Log($"<color=red>{NameJSON.val} failed to compile: {exc.Message}</color>");
+            _scripter.Console.Log($"<color=red>{NameJSON.val} failed to compile: {exc.Message}</color>");
         }
     }
 

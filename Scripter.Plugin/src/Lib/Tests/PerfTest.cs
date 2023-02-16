@@ -47,7 +47,7 @@ export function run() {
             SuperController.singleton.ClearMessages();
 
             var program = new Program();
-            var module = program.Add("index.js", code);
+            var module = program.Register("index.js", code);
             var ns = module.Import();
             var run = ns.Exports["run"].AsFunction;
             var args = new Value[0];

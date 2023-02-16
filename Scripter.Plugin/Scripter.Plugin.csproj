@@ -141,8 +141,9 @@
     <Compile Include="src\Lib\Tests\PerfTest.cs" />
     <Compile Include="src\Lib\Types\ListReference.cs" />
     <Compile Include="src\Lib\Types\MapReference.cs" />
+    <Compile Include="src\Scripts\ConsoleBuffer.cs" />
+    <Compile Include="src\Scripts\ProgramFilesManager.cs" />
     <Compile Include="src\Scripts\Script.cs" />
-    <Compile Include="src\Scripts\ScriptsManager.cs" />
     <Compile Include="src\Triggers\ScripterFloatParam.cs" />
     <Compile Include="src\Triggers\ScripterParamBase.cs" />
     <Compile Include="src\Triggers\ScripterParamFactory.cs" />

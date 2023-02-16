@@ -60,8 +60,8 @@ Check out these templates to get started.";
 
             AddTemplateButton(templates.transform, "Scene triggers", () =>
             {
-                Scripter.Singleton.Scripts.Clear();
-                Scripter.Singleton.Scripts.Create(
+                Scripter.Singleton.ProgramFiles.Clear();
+                Scripter.Singleton.ProgramFiles.Create(
                     "index.js",
                     @"import { self } from ""scripter"";
 
@@ -77,13 +77,13 @@ valueParam.onChange(value => {
     console.log(""Value changed to: "", value);
 });
 ");
-                Scripter.Singleton.Scripts.Apply();
+                Scripter.Singleton.ProgramFiles.Apply();
             });
             AddTemplateButton(templates.transform, "Respond to a\nKeybindings event", () => { });
             AddTemplateButton(templates.transform, "Run code every frame", () => { });
             AddTemplateButton(templates.transform, "Start from scratch", () =>
             {
-                Scripter.Singleton.Scripts.Create(
+                Scripter.Singleton.ProgramFiles.Create(
                     "index.js",
                     @"import { self } from ""scripter"";
 
