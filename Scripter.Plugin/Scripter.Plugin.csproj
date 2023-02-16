@@ -144,9 +144,12 @@
     <Compile Include="src\Scripts\ConsoleBuffer.cs" />
     <Compile Include="src\Scripts\ProgramFilesManager.cs" />
     <Compile Include="src\Scripts\Script.cs" />
+    <Compile Include="src\Triggers\ScripterAction.cs" />
+    <Compile Include="src\Triggers\ScripterBoolParam.cs" />
     <Compile Include="src\Triggers\ScripterFloatParam.cs" />
     <Compile Include="src\Triggers\ScripterParamBase.cs" />
     <Compile Include="src\Triggers\ScripterParamFactory.cs" />
+    <Compile Include="src\Triggers\ScripterStringParam.cs" />
     <Compile Include="src\UI\Clickable.cs" />
     <Compile Include="src\UI\CodeEditorView.cs" />
     <Compile Include="src\UI\CodeInputField.cs" />

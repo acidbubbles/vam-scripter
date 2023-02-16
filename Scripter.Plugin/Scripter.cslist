@@ -71,9 +71,12 @@ src\Lib\Types\MapReference.cs
 src\Scripts\ConsoleBuffer.cs
 src\Scripts\ProgramFilesManager.cs
 src\Scripts\Script.cs
+src\Triggers\ScripterAction.cs
+src\Triggers\ScripterBoolParam.cs
 src\Triggers\ScripterFloatParam.cs
 src\Triggers\ScripterParamBase.cs
 src\Triggers\ScripterParamFactory.cs
+src\Triggers\ScripterStringParam.cs
 src\UI\Clickable.cs
 src\UI\CodeEditorView.cs
 src\UI\CodeInputField.cs

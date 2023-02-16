@@ -9,6 +9,12 @@ public static class ScripterParamFactory
         {
             case ScripterFloatParam.Type:
                 return ScripterFloatParam.FromJSONImpl(json);
+            case ScripterBoolParam.Type:
+                return ScripterBoolParam.FromJSONImpl(json);
+            case ScripterStringParam.Type:
+                return ScripterStringParam.FromJSONImpl(json);
+            case ScripterAction.Type:
+                return ScripterAction.FromJSONImpl(json);
             default:
                 throw new NotSupportedException($"Trigger type {json["Type"].Value} is not supported. Maybe you're running an old version of Scripter?");
         }
