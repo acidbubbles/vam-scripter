@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ScripterUI : MonoBehaviour
@@ -48,6 +49,8 @@ public class ScripterUI : MonoBehaviour
     }
 
     private ScripterTabsList _tabs;
+    private Coroutine _scrollCoroutine;
+    private int _scrollFrames;
 
     private void CreateConsole(Transform parent)
     {
@@ -67,12 +70,19 @@ public class ScripterUI : MonoBehaviour
 
     private void OnConsoleChange(string val)
     {
-        Invoke(nameof(ScrollToBottom), 0);
+        _scrollFrames = 10;
+        if (_scrollCoroutine != null) return;
+        _scrollCoroutine = StartCoroutine(ScrollToBottom());
     }
 
-    private void ScrollToBottom()
+    private IEnumerator ScrollToBottom()
     {
-        _scrollRect.verticalNormalizedPosition = 0;
+        while (--_scrollFrames > 0)
+        {
+            yield return 0;
+            _scrollRect.verticalNormalizedPosition = 0;
+        }
+        _scrollCoroutine = null;
     }
 
     private GameObject _content;
