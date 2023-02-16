@@ -10,6 +10,7 @@
   "programVersion": "1.21.1.0",
   "contentList": [
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\AtomReference.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\AudioActionReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\BoolParamReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\ConsoleReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\DateTimeClassReference.cs",
@@ -17,6 +18,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\FloatParamReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\FunctionLink.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\GlobalFunctions.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\NamedAudioClipReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\RandomReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\SceneReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\ScripterModule.cs",

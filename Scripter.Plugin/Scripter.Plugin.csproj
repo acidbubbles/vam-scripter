@@ -72,6 +72,7 @@
   <ItemGroup>
     <!-- ScripterSource -->
     <Compile Include="src\Integration\AtomReference.cs" />
+    <Compile Include="src\Integration\AudioActionReference.cs" />
     <Compile Include="src\Integration\BoolParamReference.cs" />
     <Compile Include="src\Integration\ConsoleReference.cs" />
     <Compile Include="src\Integration\DateTimeClassReference.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="src\Integration\FloatParamReference.cs" />
     <Compile Include="src\Integration\FunctionLink.cs" />
     <Compile Include="src\Integration\GlobalFunctions.cs" />
+    <Compile Include="src\Integration\NamedAudioClipReference.cs" />
     <Compile Include="src\Integration\RandomReference.cs" />
     <Compile Include="src\Integration\SceneReference.cs" />
     <Compile Include="src\Integration\ScripterModule.cs" />

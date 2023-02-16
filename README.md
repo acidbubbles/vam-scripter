@@ -100,9 +100,10 @@ import {
 
 ### `Scene`
 
-| Property | Type                                | Notes      |
-|----------|-------------------------------------|------------|
-| getAtom  | function(string) => [`Atom`](#atom) | Atom by ID |
+| Property     | Type                                          | Notes      |
+|--------------|-----------------------------------------------|------------|
+| getAtom      | function(string) => [`Atom`](#atom)           | Atom by ID |
+| getAudioClip | function(string) => [`AudioClip`](#audioclip) | Atom by ID |
 
 ### `Atom`
 
@@ -114,11 +115,12 @@ import {
 
 | Property         | Type                                                            | Notes                          |
 |------------------|-----------------------------------------------------------------|--------------------------------|
-| getFloat         | function(string) => [`FloatParam`](#floatParam)                 | Param trigger by ID            |
-| getString        | function(string) => [`StringParam`](#stringParam)               | Param trigger by ID            |
-| getBool          | function(string) => [`BoolParam`](#boolParam)                   | Param trigger by ID            |
-| getStringChooser | function(string) => [`StringChooserParam`](#stringChooserParam) | Param trigger by ID            |
 | invokeTrigger    | function(string) => `void`                                      | Invoke an action trigger by ID |
+| getFloat         | function(string) => [`FloatParam`](#floatparam)                 | Param trigger by ID            |
+| getString        | function(string) => [`StringParam`](#stringparam)               | Param trigger by ID            |
+| getBool          | function(string) => [`BoolParam`](#boolparam)                   | Param trigger by ID            |
+| getStringChooser | function(string) => [`StringChooserParam`](#stringchooserparam) | Param trigger by ID            |
+| getAudioAction   | function(string) => [`AudioActionParam`](#audioactionparam)     | Param trigger by ID            |
 
 ### `FloatParam`
 
@@ -143,6 +145,18 @@ import {
 | Property | Type   | Notes           |
 |----------|--------|-----------------|
 | val      | string | The param value |
+
+### `AudioActionParam`
+
+| Property | Type                              | Notes                  |
+|----------|-----------------------------------|------------------------|
+| play     | function(clip: AudioClip) => void | The audio clip to play |
+
+### `AudioClip`
+
+| Property | Type | Notes                                       |
+|----------|------|---------------------------------------------|
+| N/A      | N/A  | A named audio clip from the Scene Audio tab |
 
 ### `Time`
 
@@ -224,6 +238,21 @@ import { self, time } from "scripter";
 self.onUpdate(function() {
     console.log(time.time, "ding");
 });
+```
+
+Play audio:
+
+```js
+import { scene } from "scripter";
+
+var laugh = scene.getAudioClip("URL", "web", "laugh.wav");
+var music = scene.getAudioClip("Embedded", "Music", "CyberPetrifiedFull");
+
+var speaker = scene.getAtom("AudioSource").getStorable("AudioSource").getAudioAction("PlayNow");
+var person = scene.getAtom("Person").getStorable("HeadAudioSource").getAudioAction("PlayNow");
+
+speaker.play(music);
+person.play(laugh);
 ```
 
 You can use external modules:

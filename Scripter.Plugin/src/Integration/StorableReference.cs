@@ -15,6 +15,8 @@ public class StorableReference : ObjectReference
         {
             case "invokeTrigger":
                 return Func(InvokeTrigger);
+            case "getAudioAction":
+                return Func(GetAudioAction);
             case "getFloat":
                 return Func(GetFloat);
             case "getString":
@@ -36,14 +38,21 @@ public class StorableReference : ObjectReference
         return Value.Void;
     }
 
+    public Value GetAudioAction(LexicalContext context, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(GetAudioAction), args, 1);
+        var paramName = args[0].AsString;
+        var action = _storable.GetAudioClipAction(paramName);
+        if(action == null) throw new ScripterRuntimeException($"Could not find an audio clip action named {paramName} in storable {_storable.storeId} in atom {_storable.containingAtom.storeId}.");
+        return new AudioActionReference(action);
+    }
+
     public Value GetFloat(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetFloat), args, 1);
         var paramName = args[0].AsString;
         var param = _storable.GetFloatJSONParam(paramName);
-        if (param == null)
-            throw new ScripterPluginException(
-                $"Could not find a float param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
+        if (param == null) throw new ScripterPluginException($"Could not find a float param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
         return new FloatParamReference(param);
     }
 
@@ -52,9 +61,7 @@ public class StorableReference : ObjectReference
         ValidateArgumentsLength(nameof(GetString), args, 1);
         var paramName = args[0].AsString;
         var param = _storable.GetStringJSONParam(paramName);
-        if (param == null)
-            throw new ScripterPluginException(
-                $"Could not find a float param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
+        if (param == null) throw new ScripterPluginException($"Could not find a float param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
         return new StringParamReference(param);
     }
 
@@ -63,9 +70,7 @@ public class StorableReference : ObjectReference
         ValidateArgumentsLength(nameof(GetStringChooser), args, 1);
         var paramName = args[0].AsString;
         var param = _storable.GetStringChooserJSONParam(paramName);
-        if (param == null)
-            throw new ScripterPluginException(
-                $"Could not find a float param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
+        if (param == null) throw new ScripterPluginException($"Could not find a float param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
         return new StringChooserParamReference(param);
     }
 
@@ -74,9 +79,7 @@ public class StorableReference : ObjectReference
         ValidateArgumentsLength(nameof(GetBool), args, 1);
         var paramName = args[0].AsString;
         var param = _storable.GetBoolJSONParam(paramName);
-        if (param == null)
-            throw new ScripterPluginException(
-                $"Could not find a float param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
+        if (param == null) throw new ScripterPluginException($"Could not find a float param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
         return new BoolParamReference(param);
     }
 }

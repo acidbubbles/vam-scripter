@@ -1,4 +1,5 @@
 src\Integration\AtomReference.cs
+src\Integration\AudioActionReference.cs
 src\Integration\BoolParamReference.cs
 src\Integration\ConsoleReference.cs
 src\Integration\DateTimeClassReference.cs
@@ -6,6 +7,7 @@ src\Integration\DateTimeReference.cs
 src\Integration\FloatParamReference.cs
 src\Integration\FunctionLink.cs
 src\Integration\GlobalFunctions.cs
+src\Integration\NamedAudioClipReference.cs
 src\Integration\RandomReference.cs
 src\Integration\SceneReference.cs
 src\Integration\ScripterModule.cs
