@@ -216,6 +216,16 @@ intensity.onChange(function(value) {
 });
 ```
 
+Run every frame:
+
+```js
+import { self, time } from "scripter";
+
+self.onUpdate(function() {
+    console.log(time.time, "ding");
+});
+```
+
 You can use external modules:
 
 ```js

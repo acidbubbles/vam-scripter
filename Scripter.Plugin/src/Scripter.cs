@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ScripterLang;
@@ -8,6 +9,7 @@ using UnityEngine.Events;
 public class Scripter : MVRScript
 {
     public static Scripter Singleton;
+    private static readonly Value[] _emptyArgs = new Value[0];
 
     public readonly ConsoleBuffer Console;
     public readonly ProgramFilesManager ProgramFiles;
@@ -19,6 +21,7 @@ public class Scripter : MVRScript
     #warning TODO: Update, FixedUpdate, basic MoveTo and LookAt commands, check if an atom exists, list atoms
     #warning TODO: Keybindings
     public Dictionary<string, UnityEvent> KeybindingsTriggers { get; } = new Dictionary<string, UnityEvent>();
+    public readonly List<FunctionLink> OnUpdateFunctions = new List<FunctionLink>();
 
     public Scripter()
     {
@@ -74,6 +77,15 @@ public class Scripter : MVRScript
         _loading = false;
         _restored = true;
         UpdateKeybindings();
+    }
+
+    private void Update()
+    {
+        for (var i = 0; i < OnUpdateFunctions.Count; i++)
+        {
+            var fn = OnUpdateFunctions[i];
+            fn.Fn.Invoke(fn.Context, _emptyArgs);
+        }
     }
 
     #region Triggers Manager

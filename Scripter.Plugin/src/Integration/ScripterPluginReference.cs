@@ -1,11 +1,14 @@
 ﻿using ScripterLang;
 
+
 public class ScripterPluginReference : ObjectReference
 {
     public override Value GetProperty(string name)
     {
         switch (name)
         {
+            case "onUpdate":
+                return Func(OnUpdate);
             case "declareFloatParam":
                 return Func(DeclareFloatParam);
             case "declareStringParam":
@@ -17,6 +20,15 @@ public class ScripterPluginReference : ObjectReference
             default:
                 return base.GetProperty(name);
         }
+    }
+
+    private Value OnUpdate(LexicalContext context, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(OnUpdate), args, 1);
+        var fn = args[0].AsFunction;
+        var link = new FunctionLink(Scripter.Singleton.OnUpdateFunctions, context, fn);
+        context.GetModuleContext().RegisterDisposable(link);
+        return Value.Void;
     }
 
     private Value DeclareFloatParam(LexicalContext context, Value[] args)

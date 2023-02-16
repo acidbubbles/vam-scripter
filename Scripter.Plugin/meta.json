@@ -15,6 +15,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\DateTimeClassReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\DateTimeReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\FloatParamReference.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\FunctionLink.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\GlobalFunctions.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\RandomReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\SceneReference.cs",
