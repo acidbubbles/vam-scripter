@@ -138,7 +138,10 @@ public class Scripter : MVRScript
             {"Namespace", "Scripter"}
         });
 
-        bindings.AddRange(KeybindingsTriggers);
+        foreach (var trigger in KeybindingsTriggers)
+        {
+            bindings.Add(trigger);
+        }
     }
 
     public void OnDestroy()

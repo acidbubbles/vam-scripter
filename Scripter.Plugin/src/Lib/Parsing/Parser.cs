@@ -407,7 +407,7 @@ namespace ScripterLang
                 }
                 else
                 {
-                    throw new ScripterParsingException($"Unexpected token {operatorToken.Value}");
+                    throw new ScripterParsingException($"Unexpected operator '{operatorToken.Value}'");
                 }
             }
 
@@ -501,7 +501,7 @@ namespace ScripterLang
                 case TokenType.Operator:
                     var op = Consume();
                     if(op.Value != "-")
-                        throw new ScripterParsingException("Unexpected token " + token.Value, token.Location);
+                        throw new ScripterParsingException($"Unexpected unary operator token '{token.Value}'", token.Location);
                     return new UnaryOperatorExpression(op.Value, ParsePureValueExpression(lexicalContext));
                 case TokenType.IncrementDecrement:
                     return ParseIncrementDecrementExpression(lexicalContext, Consume());
@@ -523,7 +523,7 @@ namespace ScripterLang
                 case TokenType.Keyword:
                     if (token.Value == "function")
                         return ParseFunctionDeclaration(lexicalContext, false);
-                    throw new ScripterParsingException("Unexpected token " + token.Value, token.Location);
+                    throw new ScripterParsingException($"Unexpected keyword '{token.Value}'", token.Location);
                 case TokenType.LeftBracket:
                     MoveNext();
                     var values = ParseArgumentList(lexicalContext, TokenType.RightBracket);
@@ -532,7 +532,7 @@ namespace ScripterLang
                 case TokenType.LeftBrace:
                     return ParseObjectDeclarationExpression(lexicalContext);
                 default:
-                    throw new ScripterParsingException("Unexpected token " + token.Value, token.Location);
+                    throw new ScripterParsingException($"Unexpected token '{token.Value}' in value expression", token.Location);
             }
         }
 

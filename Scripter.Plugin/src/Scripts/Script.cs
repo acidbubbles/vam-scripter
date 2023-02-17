@@ -31,7 +31,6 @@ public class Script
         SourceJSON.setCallbackFunction = val =>
         {
             History.Update(val);
-            Parse(val);
         };
         SourceJSON.valNoCallback = source;
         if (!string.IsNullOrEmpty(source))

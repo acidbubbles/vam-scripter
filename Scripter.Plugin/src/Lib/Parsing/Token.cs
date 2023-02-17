@@ -5,7 +5,7 @@ namespace ScripterLang
 {
     public class Token
     {
-        public static readonly Token None = new Token(TokenType.None, null, new Location());
+        public static readonly Token None = new Token(TokenType.None, "EOF", new Location());
 
         public readonly int Type;
         public readonly string Value;
@@ -50,7 +50,7 @@ namespace ScripterLang
         public void Expect(int type, string value)
         {
             if (Type != type && value != Value)
-                throw new ScripterParsingException($"Unexpected token '{Value}'; expected {value}", Location);
+                throw new ScripterParsingException($"Unexpected token '{Value}'; expected '{value}'", Location);
         }
 
         public override string ToString()

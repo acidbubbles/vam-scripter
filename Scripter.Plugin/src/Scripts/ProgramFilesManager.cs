@@ -93,7 +93,6 @@ public class ProgramFilesManager
         try
         {
             _program.Run();
-            _plugin.Console.Log("index.js is now live");
         }
         catch (Exception exc)
         {
