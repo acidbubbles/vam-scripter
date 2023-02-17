@@ -60,7 +60,7 @@ Check out these templates to get started.";
 
             AddTemplateButton(templates.transform, "Scene triggers", () =>
             {
-                Scripter.Singleton.ProgramFiles.Clear();
+                Scripter.Singleton.ProgramFiles.DeleteAll();
                 Scripter.Singleton.ProgramFiles.Create(
                     "index.js",
                     @"import { self } from ""scripter"";
@@ -77,7 +77,7 @@ valueParam.onChange(value => {
     console.log(""Value changed to: "", value);
 });
 ");
-                Scripter.Singleton.ProgramFiles.Apply();
+                Scripter.Singleton.ProgramFiles.Run();
             });
             AddTemplateButton(templates.transform, "Respond to a\nKeybindings event", () => { });
             AddTemplateButton(templates.transform, "Run code every frame", () => { });

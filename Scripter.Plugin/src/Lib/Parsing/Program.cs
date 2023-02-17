@@ -39,5 +39,10 @@ namespace ScripterLang
             if (_index == null) throw new NullReferenceException("There was no index.js script registered in the program");
             return _index.Import().Returned;
         }
+
+        public bool CanRun()
+        {
+            return _index != null;
+        }
     }
 }

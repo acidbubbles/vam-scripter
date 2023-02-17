@@ -25,7 +25,7 @@ public class UIUtils
         return go.transform;
     }
 
-    public static void CreateToolbarButton(Transform parent, string label, float width, bool icon, UnityAction action)
+    public static UIDynamicButton CreateToolbarButton(Transform parent, string label, float width, bool icon, UnityAction action)
     {
         var button = Object.Instantiate(Scripter.Singleton.manager.configurableButtonPrefab, parent, false);
 
@@ -37,5 +37,7 @@ public class UIUtils
 
         var layoutElement = button.GetComponent<LayoutElement>();
         layoutElement.minWidth = layoutElement.preferredWidth = width;
+
+        return ui;
     }
 }

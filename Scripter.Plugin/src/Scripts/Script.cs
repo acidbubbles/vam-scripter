@@ -22,8 +22,9 @@ public class Script
         NameJSON.val = moduleName;
         NameJSON.setCallbackFunction = val =>
         {
-            scripter.ProgramFiles.Program.Unregister(_previousName);
+            scripter.ProgramFiles.Unregister(this);
             _previousName = val;
+            Parse();
         };
 
         SourceJSON.setCallbackFunction = val =>
@@ -31,7 +32,14 @@ public class Script
             History.Update(val);
             Parse(val);
         };
-        SourceJSON.val = source;
+        SourceJSON.valNoCallback = source;
+        if (!string.IsNullOrEmpty(source))
+            Parse();
+    }
+
+    public void Parse()
+    {
+        Parse(SourceJSON.val);
     }
 
     private void Parse(string val)
@@ -39,8 +47,12 @@ public class Script
         #warning Add globals for Init (shared variables)
         try
         {
-            _scripter.ProgramFiles.Program.Register(NameJSON.val, val);
-            _scripter.Console.Log($"<color=green>{NameJSON.val} parsed successfully; press apply to run.</color>");
+            _scripter.ProgramFiles.Register(NameJSON.val, val);
+            if (_scripter.IsLoading) return;
+            var canRun = _scripter.ProgramFiles.CanRun();
+            _scripter.Console.Log($"<color=green>Parsed `{NameJSON.val}` successfully; {(canRun ? "Running" : "Waiting for index.js")}.</color>");
+            if (canRun)
+                _scripter.ProgramFiles.Run();
         }
         catch (Exception exc)
         {

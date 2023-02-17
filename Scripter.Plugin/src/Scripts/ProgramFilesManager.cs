@@ -7,15 +7,18 @@ using SimpleJSON;
 public class ProgramFilesManager
 {
     private readonly Scripter _plugin;
+    private readonly Program _program;
 
     public readonly List<Script> Files = new List<Script>();
-    public readonly Program Program;
+
+    public bool IsDirty;
+    public UIDynamicButton ApplyButton;
 
     public ProgramFilesManager(Scripter plugin)
     {
         _plugin = plugin;
-        Program = new Program();
-        GlobalFunctions.Register(Program.GlobalContext);
+        _program = new Program();
+        GlobalFunctions.Register(_program.GlobalContext);
     }
 
     public string NewName()
@@ -62,37 +65,58 @@ public class ProgramFilesManager
         return script;
     }
 
-    public void Unregister(Script script)
+    public void Delete(Script script)
     {
-        Program.Unregister(script.NameJSON.val);
+        Unregister(script);
         Files.Remove(script);
         _plugin.UI.RemoveTab(script.Tab);
-        #warning Unregister listeners?
     }
 
-    public void Clear()
+    public void DeleteAll()
     {
         foreach (var script in Files.ToArray())
         {
-            Unregister(script);
+            Delete(script);
         }
     }
 
-    public void Apply()
+    public void Run()
     {
-        if (Files.All(f => f.NameJSON.val != "index.js"))
+        IsDirty = false;
+        if (!ReferenceEquals(ApplyButton, null)) ApplyButton.button.interactable = IsDirty;
+
+        if (!_program.CanRun())
         {
             return;
         }
 
         try
         {
-            Program.Run();
+            _program.Run();
             _plugin.Console.Log("index.js is now live");
         }
         catch (Exception exc)
         {
             _plugin.Console.LogError($"Failed to run code: {exc.Message}");
         }
+    }
+
+    public void Register(string name, string val)
+    {
+        _program.Register(name, val);
+        IsDirty = true;
+        if (!ReferenceEquals(ApplyButton, null)) ApplyButton.button.interactable = IsDirty;
+    }
+
+    public void Unregister(Script script)
+    {
+        IsDirty = true;
+        if (!ReferenceEquals(ApplyButton, null)) ApplyButton.button.interactable = IsDirty;
+        _program.Unregister(script.NameJSON.val);
+    }
+
+    public bool CanRun()
+    {
+        return _program.CanRun();
     }
 }

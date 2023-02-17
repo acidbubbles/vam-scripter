@@ -8,13 +8,15 @@ using UnityEngine.Events;
 public class Scripter : MVRScript
 {
     public static Scripter Singleton;
+
     private static readonly Value[] _emptyArgs = new Value[0];
 
     public readonly ConsoleBuffer Console;
     public readonly ProgramFilesManager ProgramFiles;
-    public ScripterUI UI;
 
-    private bool _loading;
+    public ScripterUI UI;
+    public bool IsLoading;
+
     private bool _restored;
 
     #warning TODO: Update, FixedUpdate, basic MoveTo and LookAt commands, check if an atom exists, list atoms
@@ -47,6 +49,10 @@ public class Scripter : MVRScript
             UI.SelectTab(UI.AddWelcomeTab());
             Console.Log("> <color=cyan>Welcome to Scripter!</color>");
         }
+        else if (ProgramFiles.CanRun())
+        {
+            ProgramFiles.Run();
+        }
     }
 
     public override void InitUI()
@@ -69,11 +75,10 @@ public class Scripter : MVRScript
     public override void RestoreFromJSON(JSONClass jc, bool restorePhysical = true, bool restoreAppearance = true, JSONArray presetAtoms = null, bool setMissingToDefault = true)
     {
         base.RestoreFromJSON(jc, restorePhysical, restoreAppearance, presetAtoms, setMissingToDefault);
-        _loading = true;
+        IsLoading = true;
         Triggers_RestoreFromJSON(jc["Triggers"]);
         ProgramFiles.RestoreFromJSON(jc["Scripts"]);
-        ProgramFiles.Apply();
-        _loading = false;
+        IsLoading = false;
         _restored = true;
         UpdateKeybindings();
     }
@@ -116,7 +121,7 @@ public class Scripter : MVRScript
 
     public void UpdateKeybindings()
     {
-        if(_loading) return;
+        if(IsLoading) return;
         SuperController.singleton.BroadcastMessage("OnActionsProviderAvailable", this, SendMessageOptions.DontRequireReceiver);
     }
 

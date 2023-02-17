@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.Events;
@@ -29,11 +30,15 @@ public class CodeEditorView : MonoBehaviour
         var screen = go.AddComponent<CodeEditorView>();
         screen.CreateMultilineInput(script.SourceJSON);
 
-        var toolbar = UIUtils.MakeToolbar(screen.transform, 240);
-        UIUtils.CreateToolbarButton(toolbar, "\u21BA", 40, true, script.History.Undo);
-        UIUtils.CreateToolbarButton(toolbar, "\u21BB", 40, true, script.History.Redo);
-        #warning Make bright (pulsating?) color when apply is needed, gray out when not
-        UIUtils.CreateToolbarButton(toolbar, "Apply", 120, false, () => Scripter.Singleton.ProgramFiles.Apply());
+        var toolbar = UIUtils.MakeToolbar(screen.transform, 270);
+        script.History.UndoButton = UIUtils.CreateToolbarButton(toolbar, "\u21BA", 40, true, script.History.Undo);
+        script.History.RedoButton = UIUtils.CreateToolbarButton(toolbar, "\u21BB", 40, true, script.History.Redo);
+        script.History.UpdateButtons();
+        UIUtils.CreateToolbarButton(toolbar, "Validate", 120, false, () =>
+        {
+            script.Parse();
+            Scripter.Singleton.ProgramFiles.Run();
+        });
 
         return screen;
     }
