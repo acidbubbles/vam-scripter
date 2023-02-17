@@ -13,8 +13,8 @@ public class StorableReference : ObjectReference
     {
         switch (name)
         {
-            case "invokeTrigger":
-                return Func(InvokeTrigger);
+            case "invokeAction":
+                return Func(InvokeAction);
             case "getAudioAction":
                 return Func(GetAudioAction);
             case "getFloat":
@@ -30,9 +30,9 @@ public class StorableReference : ObjectReference
         }
     }
 
-    public Value InvokeTrigger(LexicalContext context, Value[] args)
+    public Value InvokeAction(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(InvokeTrigger), args, 1);
+        ValidateArgumentsLength(nameof(InvokeAction), args, 1);
         var paramName = args[0].AsString;
         _storable.CallAction(paramName);
         return Value.Void;

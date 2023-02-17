@@ -154,7 +154,7 @@ clearTimeout(timeout);
 
 | Property         | Type                                                            | Notes                          |
 |------------------|-----------------------------------------------------------------|--------------------------------|
-| invokeTrigger    | function(string) => `void`                                      | Invoke an action trigger by ID |
+| invokeAction     | function(string) => `void`                                      | Invoke an action trigger by ID |
 | getFloat         | function(string) => [`FloatParam`](#floatparam)                 | Param trigger by ID            |
 | getString        | function(string) => [`StringParam`](#stringparam)               | Param trigger by ID            |
 | getBool          | function(string) => [`BoolParam`](#boolparam)                   | Param trigger by ID            |
@@ -213,10 +213,10 @@ clearTimeout(timeout);
 
 ### `Keybindings`
 
-| Property          | Type                                                                             | Notes                                                                           |
-|-------------------|----------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
-| invokeCommand     | function(commandName: string) => void                                            | Invoke a Keybinding command, if it exists                                       |
-| declareKeybinding | function(string, function) => [`KeybindingDeclaration`](#keybindingdeclaration)  | Invoke a [Keybindings](https://github.com/acidbubbles/vam-keybindings) trigger  |
+| Property        | Type                                                                                         | Notes                                                                           |
+|-----------------|----------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| invokeCommand   | function(commandName: string) => void                                                        | Invoke a Keybinding command, if it exists                                       |
+| declareCommand  | function(commandName: string, function) => [`KeybindingDeclaration`](#keybindingdeclaration) | Invoke a [Keybindings](https://github.com/acidbubbles/vam-keybindings) trigger  |
 
 ### `KeybindingDeclaration`
 
@@ -226,10 +226,11 @@ clearTimeout(timeout);
 
 ### `Time`
 
-| Property    | Type  | Notes                                                                          |
-|-------------|-------|--------------------------------------------------------------------------------|
-| `time`      | float | [Time.time](https://docs.unity3d.com/ScriptReference/Time-time.html)           |
-| `deltaTime` | float | [Time.deltaTime](https://docs.unity3d.com/ScriptReference/Time-deltaTime.html) |
+| Property         | Type  | Notes                                                                                 |
+|------------------|-------|---------------------------------------------------------------------------------------|
+| `time`           | float | [Time.time](https://docs.unity3d.com/ScriptReference/Time-time.html)                  |
+| `deltaTime`      | float | [Time.deltaTime](https://docs.unity3d.com/ScriptReference/Time-deltaTime.html)        |
+| `fixedDeltaTime` | float | [Time.deltaTime](https://docs.unity3d.com/ScriptReference/Time-fixedDeltaTime.html)   |
 
 ### `Random`
 

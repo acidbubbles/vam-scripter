@@ -29,6 +29,7 @@ public class CodeEditorView : MonoBehaviour
         screen.CreateMultilineInput(script.sourceJSON);
 
         var toolbar = UIUtils.MakeToolbar(screen.transform, 270);
+        // TODO: Undo, Redo
         script.history.undoButton = UIUtils.CreateToolbarButton(toolbar, "\u21BA", 40, true, script.history.Undo);
         script.history.redoButton = UIUtils.CreateToolbarButton(toolbar, "\u21BB", 40, true, script.history.Redo);
         script.history.UpdateButtons();

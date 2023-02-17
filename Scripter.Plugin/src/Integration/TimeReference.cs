@@ -11,6 +11,8 @@ public class TimeReference : ObjectReference
                 return Time.time;
             case "deltaTime":
                 return Time.deltaTime;
+            case "fixedDeltaTime":
+                return Time.fixedDeltaTime;
             default:
                 return base.GetProperty(name);
         }

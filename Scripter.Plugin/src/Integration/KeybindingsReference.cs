@@ -9,8 +9,8 @@ public class KeybindingsReference : ObjectReference
         {
             case "invokeCommand":
                 return Func(InvokeCommand);
-            case "declareKeybinding":
-                return Func(DeclareKeybinding);
+            case "declareCommand":
+                return Func(DeclareCommand);
             default:
                 return base.GetProperty(name);
         }
@@ -24,14 +24,14 @@ public class KeybindingsReference : ObjectReference
         return Value.Void;
     }
 
-    private Value DeclareKeybinding(LexicalContext context, Value[] args)
+    private Value DeclareCommand(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(DeclareKeybinding), args, 2);
+        ValidateArgumentsLength(nameof(DeclareCommand), args, 2);
         var name = args[0].AsString;
         var fn = args[1].AsFunction;
         var param = new ScripterKeybindingDeclaration(name);
-        param.OnTrigger(context, fn);
         context.GetModuleContext().RegisterDisposable(param);
+        param.OnTrigger(context, fn);
         return param;
     }
 }

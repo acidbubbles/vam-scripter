@@ -58,29 +58,79 @@ Check out these templates to get started.";
             fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
+            // Scene triggers
             AddTemplateButton(templates.transform, "Scene triggers", () =>
             {
                 Scripter.singleton.programFiles.DeleteAll();
                 Scripter.singleton.programFiles.Create(
                     "index.js",
-                    @"import { self } from ""scripter"";
+                    @"import { self, scene } from ""scripter"";
 
+// Get triggers from another atom
+const timeline = scene
+    .getAtom(""Person"")
+    .getStorable(""plugin#0_VamTimeline.AtomPlugin"");
+
+// Call a trigger
+timeline.invokeAction(""Play Anim 1"");
+
+// Get a float param
+var speed = timeline.getFloat(""Speed"");
+
+// Get and set the value
+speed.val = speed.val + 0.1;
+
+// Create a float trigger and react to events
 let valueParam = self.declareFloatParam({
     name: ""Value"",
-    default: 0,
     min: 0,
     max: 1,
-    constrain: true
-});
-
-valueParam.onChange(value => {
-    console.log(""Value changed to: "", value);
+    onChange: value => {
+        console.log(""Value changed to: "", value);
+    }
 });
 ");
                 Scripter.singleton.programFiles.Run();
             });
-            AddTemplateButton(templates.transform, "Respond to a\nKeybindings event", () => { });
-            AddTemplateButton(templates.transform, "Run code every frame", () => { });
+
+            // Keybindings
+            AddTemplateButton(templates.transform, "Respond to a\nKeybindings event", () =>
+            {
+                Scripter.singleton.programFiles.DeleteAll();
+                Scripter.singleton.programFiles.Create(
+                    "index.js",
+                    @"import { keybindings } from ""scripter"";
+
+// Creates a Keybindings named ""Scripter.HelloWorld""
+keybindings.declareCommand(""HelloWorld"", () => {
+    console.log(""Hello from Keybindings!"");
+
+    // You can also call other commands
+    keybindings.invokeCommand(""Scripter.OpenUI"");
+});");
+            });
+
+            // TODO: Use RotateTowards and MoveTo
+            AddTemplateButton(templates.transform, "Run code every frame", () =>
+            {
+                Scripter.singleton.programFiles.DeleteAll();
+                Scripter.singleton.programFiles.Create(
+                    "index.js",
+                    @"import { self, scene, time } from ""scripter"";
+
+var person = scene.getAtom(""Person"");
+var head = person.getController(""headControl"");
+var hand = person.getController(""lHandControl"");
+
+self.onFixedUpdate(() => {
+    head.lookAt(hand, time.fixedDeltaTime * 30);
+});
+
+self.onUpdate(() => {
+    console.log(""Update: "" + time.time);
+});
+");
+            });
             AddTemplateButton(templates.transform, "Start from scratch", () =>
             {
                 Scripter.singleton.programFiles.Create(

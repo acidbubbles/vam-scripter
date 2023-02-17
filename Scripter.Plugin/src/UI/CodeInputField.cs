@@ -122,6 +122,7 @@ public class CodeInputField : InputField
     private bool _ignoreOnValidateInput;
     private char OnDirectValidateInput(string inputText, int pos, char input)
     {
+        // TODO: CTRL+Left, CTRL+Right, CTRL+SHIFT+Left, etc.
         if (_ignoreOnValidateInput) return input;
         if (input == '\t')
         {
@@ -132,8 +133,8 @@ public class CodeInputField : InputField
                 var selected = inputText.Substring(selectionAnchorPosition, selectionFocusPosition - selectionAnchorPosition);
                 var after = inputText.Substring(selectionFocusPosition, inputText.Length - selectionFocusPosition);
                 selected = Input.GetKey(KeyCode.LeftShift)
-                    ? selected.Replace("\n  ", "\n")
-                    : selected.Replace("\n", "\n  ");
+                    ? selected.Replace("\n    ", "\n")
+                    : selected.Replace("\n", "\n    ");
                 _ignoreOnValidateInput = true;
                 text = before + selected + after;
                 _ignoreOnValidateInput = false;
@@ -146,7 +147,7 @@ public class CodeInputField : InputField
                 _ignoreOnValidateInput = true;
                 text = inputText.Insert(pos, "  ");
                 _ignoreOnValidateInput = false;
-                caretPosition = pos + 2;
+                caretPosition = pos + 4;
             }
             return '\0';
         }
@@ -160,7 +161,7 @@ public class CodeInputField : InputField
             while (indent < line.Length && line[indent] == ' ')
                 indent++;
             if(line.Length > 0 && line[line.Length - 1] == '{')
-                indent += 2;
+                indent += 4;
             var newLineIndent = "\n" + new string(' ', indent);
 
             _ignoreOnValidateInput = true;
@@ -184,12 +185,12 @@ public class CodeInputField : InputField
                     break;
                 }
             }
-            if (whitespace && line.Length >= 2)
+            if (whitespace && line.Length >= 4)
             {
                 _ignoreOnValidateInput = true;
-                text = inputText.Remove(pos - 2, 2);
+                text = inputText.Remove(pos - 4, 4);
                 _ignoreOnValidateInput = false;
-                caretPosition = pos - 2;
+                caretPosition = pos - 4;
             }
         }
         return input;

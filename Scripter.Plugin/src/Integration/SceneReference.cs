@@ -14,6 +14,8 @@ public class SceneReference : ObjectReference
                 return Func(GetAtomIds);
             case "getAudioClip":
                 return Func(GetAudioClip);
+            // TODO: Find the player camera (look at eyes, for example)
+            // TODO: Create Transform object (a target that the user can move and look at)
             default:
                 return base.GetProperty(name);
         }

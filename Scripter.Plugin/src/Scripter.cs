@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ScripterLang;
@@ -128,11 +129,80 @@ public class Scripter : MVRScript
             {"Namespace", "Scripter"}
         });
 
+        bindings.Add(new JSONStorableAction("OpenUI", SelectAndOpenUI));
+
         foreach (var trigger in KeybindingsTriggers)
         {
-            bindings.Add(trigger);
+            if (trigger.actionJSON == null) throw new NullReferenceException("Null keybindings action JSON");
+            bindings.Add(trigger.actionJSON);
         }
     }
+
+    #region Show UI
+
+    private void SelectAndOpenUI()
+    {
+        if (containingAtom == null) return;
+        if (UITransform != null && UITransform.gameObject.activeInHierarchy) return;
+        if (SuperController.singleton.gameMode != SuperController.GameMode.Edit)
+            SuperController.singleton.gameMode = SuperController.GameMode.Edit;
+
+        if (containingAtom.type == "SessionPluginManager")
+        {
+            SuperController.singleton.activeUI = SuperController.ActiveUI.MainMenu;
+            SuperController.singleton.SetMainMenuTab("TabSessionPlugins");
+            OpenThisCustomUI();
+        }
+        else if (containingAtom.type == "ScenePluginManager")
+        {
+            SuperController.singleton.activeUI = SuperController.ActiveUI.MainMenu;
+            SuperController.singleton.SetMainMenuTab("TabScenePlugins");
+            OpenThisCustomUI();
+        }
+        else
+        {
+#if (VAM_GT_1_20)
+            SuperController.singleton.SelectController(containingAtom.mainController, false, false, true);
+#else
+            SuperController.singleton.SelectController(containingAtom.mainController);
+#endif
+            SuperController.singleton.ShowMainHUDAuto();
+            StartCoroutine(WaitForUI());
+        }
+    }
+
+    private IEnumerator WaitForUI()
+    {
+        var expiration = Time.unscaledTime + 1f;
+        while (Time.unscaledTime < expiration)
+        {
+            yield return 0;
+            var selector = containingAtom.gameObject.GetComponentInChildren<UITabSelector>();
+            if (selector == null) continue;
+            selector.SetActiveTab("Plugins");
+            if (UITransform == null) continue;
+        }
+
+        if (UITransform.gameObject.activeSelf) yield break;
+
+        OpenThisCustomUI();
+    }
+
+    private void OpenThisCustomUI()
+    {
+        foreach (Transform scriptController in manager.pluginContainer)
+        {
+            var script = scriptController.gameObject.GetComponent<MVRScript>();
+            if (script != null && script != this)
+            {
+                script.UITransform.gameObject.SetActive(false);
+            }
+        }
+
+        UITransform.gameObject.SetActive(true);
+    }
+
+    #endregion
 
     public void OnDestroy()
     {

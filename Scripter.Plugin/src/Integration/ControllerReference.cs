@@ -16,8 +16,8 @@ public class ControllerReference : ObjectReference
         {
             case "distance":
                 return Func(Distance);
-            case "rotateTowards":
-                return Func(RotateTowards);
+            case "lookAt":
+                return Func(LookAt);
             case "moveTowards":
                 return Func(MoveTowards);
             default:
@@ -33,23 +33,34 @@ public class ControllerReference : ObjectReference
         return Vector3.Distance(_controller.control.position, other._controller.control.position);
     }
 
-    private Value RotateTowards(LexicalContext context, Value[] args)
+    private Value LookAt(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(RotateTowards), args, 1);
+        if (_controller.isGrabbing) return Value.Void;
         var other = args[0].AsObject as ControllerReference;
-        if (ReferenceEquals(other, null)) throw new ScripterRuntimeException($"Expected a ControllerReference as argument to {nameof(RotateTowards)}");
-        var maxDistanceDelta = args[1].AsNumber;
-        _controller.control.position = Vector3.MoveTowards(_controller.control.position, other._controller.control.position, maxDistanceDelta);
+        if (ReferenceEquals(other, null)) throw new ScripterRuntimeException($"Expected a ControllerReference as argument to {nameof(LookAt)}");
+        var target = other._controller.control.position - _controller.control.position;
+        var targetRotation = Quaternion.LookRotation(target, Vector3.up);
+        if (args.Length > 1)
+        {
+            var maxDegreesDelta = args[1].AsNumber;
+            targetRotation = Quaternion.RotateTowards(_controller.control.rotation, targetRotation, maxDegreesDelta);
+        }
+        _controller.control.rotation = targetRotation;
         return Value.Void;
     }
 
     private Value MoveTowards(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(MoveTowards), args, 1);
+        if (_controller.isGrabbing) return Value.Void;
         var other = args[0].AsObject as ControllerReference;
         if (ReferenceEquals(other, null)) throw new ScripterRuntimeException($"Expected a ControllerReference as argument to {nameof(MoveTowards)}");
-        var maxDegreesDelta = args[1].AsNumber;
-        _controller.control.rotation = Quaternion.RotateTowards(_controller.control.rotation, other._controller.control.rotation, maxDegreesDelta);
+        var targetPosition = other._controller.control.position;
+        if (args.Length > 1)
+        {
+            var maxDistanceDelta = args[1].AsNumber;
+            targetPosition = Vector3.MoveTowards(_controller.control.position, targetPosition, maxDistanceDelta);
+        }
+        _controller.control.position = targetPosition;
         return Value.Void;
     }
 }

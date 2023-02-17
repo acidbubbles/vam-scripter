@@ -52,8 +52,8 @@ public class ScripterPluginReference : ObjectReference
         var max = config.GetPropertyWithDefault("max", 1f).AsNumber;
         var constrain = config.GetPropertyWithDefault("constrain", true).AsBool;
         var param = new ScripterFloatParamDeclaration(name, start, min, max, constrain);
-        var fn = config.GetProperty("onChange");
         context.GetModuleContext().RegisterDisposable(param);
+        var fn = config.GetProperty("onChange");
         if (!fn.IsUndefined)
         {
             param.OnChange(context, fn.AsFunction);
@@ -70,7 +70,6 @@ public class ScripterPluginReference : ObjectReference
         var param = new ScripterStringParamDeclaration(name, start);
         context.GetModuleContext().RegisterDisposable(param);
         var fn = config.GetProperty("onChange");
-        context.GetModuleContext().RegisterDisposable(param);
         if (!fn.IsUndefined)
         {
             param.OnChange(context, fn.AsFunction);
@@ -87,7 +86,6 @@ public class ScripterPluginReference : ObjectReference
         var param = new ScripterBoolParamDeclaration(name, start);
         context.GetModuleContext().RegisterDisposable(param);
         var fn = config.GetProperty("onChange");
-        context.GetModuleContext().RegisterDisposable(param);
         if (!fn.IsUndefined)
         {
             param.OnChange(context, fn.AsFunction);

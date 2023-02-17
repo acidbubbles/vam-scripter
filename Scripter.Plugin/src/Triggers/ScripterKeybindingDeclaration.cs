@@ -4,14 +4,14 @@ using SimpleJSON;
 
 public class ScripterKeybindingDeclaration : ScripterParamDeclarationBase, IDisposable
 {
-    private readonly JSONStorableAction _valueJSON;
+    public readonly JSONStorableAction actionJSON;
 
     public ScripterKeybindingDeclaration(string name)
     {
+        actionJSON = new JSONStorableAction(name, null);
         var scripter = Scripter.singleton;
         scripter.KeybindingsTriggers.Add(this);
         Scripter.singleton.UpdateKeybindings();
-        _valueJSON = new JSONStorableAction(name, () => { });
     }
 
     public override JSONClass GetJSON()
@@ -40,12 +40,12 @@ public class ScripterKeybindingDeclaration : ScripterParamDeclarationBase, IDisp
 
     public void OnTrigger(LexicalContext context, FunctionReference fn)
     {
-        _valueJSON.actionCallback = () => { fn(context, Value.EmptyValues); };
+        actionJSON.actionCallback = () => { fn(context, Value.EmptyValues); };
     }
 
     public void Dispose()
     {
-        _valueJSON.actionCallback = null;
+        actionJSON.actionCallback = null;
         Scripter.singleton.KeybindingsTriggers.Remove(this);
         Scripter.singleton.UpdateKeybindings();
     }
