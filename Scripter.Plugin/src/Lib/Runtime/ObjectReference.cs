@@ -1,4 +1,6 @@
-﻿namespace ScripterLang
+﻿using System.Runtime.CompilerServices;
+
+namespace ScripterLang
 {
     public abstract class ObjectReference
     {
@@ -7,6 +9,7 @@
             throw new ScripterRuntimeException($"Property '{name}' does not exist on the object");
         }
 
+        [MethodImpl(0x0100)]
         public Value GetPropertyWithDefault(string name, Value defaultValue)
         {
             var value = GetProperty(name);
@@ -30,8 +33,10 @@
             throw new ScripterRuntimeException("Object has no indexer");
         }
 
+        [MethodImpl(0x0100)]
         protected static Value Func(FunctionReference f) => Value.CreateFunction(f);
 
+        [MethodImpl(0x0100)]
         protected static void ValidateArgumentsLength(string name, Value[] args, int expectedLength)
         {
             if (args.Length < expectedLength) throw new ScripterRuntimeException($"Method {name} Expected {expectedLength} arguments, received {args.Length}");

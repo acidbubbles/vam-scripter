@@ -198,9 +198,11 @@ clearTimeout(timeout);
 
 ### `Controller`
 
-| Property | Type                             | Notes                                          |
-|----------|----------------------------------|------------------------------------------------|
-| distance | function(Controller) => `number` | Finds out the distance between two controllers |
+| Property      | Type                                             | Notes                                          |
+|---------------|--------------------------------------------------|------------------------------------------------|
+| distance      | function(Controller) => `number`                 | Finds out the distance between two controllers |
+| moveTowards   | function(Controller, maxDistanceDelta) => `void` | Moves towards another control                  |
+| rotateTowards | function(Controller, maxDegreesDelta) => `void`  | Rotates towards another control                |
 
 ### `Environment`
 

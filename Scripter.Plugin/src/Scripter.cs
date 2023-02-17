@@ -16,8 +16,6 @@ public class Scripter : MVRScript
 
     private bool _restored;
 
-    #warning TODO: basic MoveTo and LookAt commands, check if an atom exists
-    #warning TODO: isVR
     #warning TODO: Keybindings send
     public List<ScripterKeybindingDeclaration> KeybindingsTriggers { get; } = new List<ScripterKeybindingDeclaration>();
     public readonly List<FunctionLink> OnUpdateFunctions = new List<FunctionLink>();
