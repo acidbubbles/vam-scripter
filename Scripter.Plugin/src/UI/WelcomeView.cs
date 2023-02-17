@@ -6,9 +6,9 @@ using UnityEngine.UI;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public class WelcomeView : MonoBehaviour
 {
-    private const string _welcomeText = @"Welcome to Scripter! Don't worry, if you have some basic understanding of JavaScript, you'll be able to use this plugin in no time.
+    private const string _welcomeText = @"Welcome to Scripter! Ff you have some basic understanding of JavaScript, you'll be able to use this plugin in no time.
 
-Check out these templates to get started.";
+Press the + button to create a file, or check out these templates to get started.";
 
     public static WelcomeView Create(Transform parent)
     {
@@ -131,13 +131,20 @@ self.onUpdate(() => {
 });
 ");
             });
-            AddTemplateButton(templates.transform, "Start from scratch", () =>
+            AddTemplateButton(templates.transform, "Play sounds", () =>
             {
                 Scripter.singleton.programFiles.Create(
                     "index.js",
-                    @"import { self } from ""scripter"";
+                    @"import { scene } from ""scripter"";
 
-// Start writing your code here!
+// You can also use your own sounds with ""URL"", ""web"", ""yoursound.wav""
+var music = scene.getAudioClip(""Embedded"", ""Music"", ""CyberPetrifiedFull"");
+
+// Create an AudioSource atom that will play the music
+var speaker = scene.getAtom(""AudioSource"").getStorable(""AudioSource"").getAudioAction(""PlayNow"");
+
+// Play the music
+speaker.play(music);
 ");
             });
             AddTemplateButton(templates.transform, "Open the documentation\n(web browser)",
