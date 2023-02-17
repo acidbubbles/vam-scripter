@@ -114,6 +114,7 @@
     <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
     <Compile Include="src\Lib\Expressions\ScopedVariableAccessor.cs" />
     <Compile Include="src\Lib\Expressions\ThrowExpression.cs" />
+    <Compile Include="src\Lib\Expressions\TryCatchExpression.cs" />
     <Compile Include="src\Lib\Expressions\UnaryOperatorExpression.cs" />
     <Compile Include="src\Lib\Expressions\UndefinedExpression.cs" />
     <Compile Include="src\Lib\Expressions\ValueExpression.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="src\Lib\Runtime\ValueTypes.cs" />
     <Compile Include="src\Lib\Runtime\VariableReference.cs" />
     <Compile Include="src\Lib\Tests\PerfTest.cs" />
+    <Compile Include="src\Lib\Types\ExceptionReference.cs" />
     <Compile Include="src\Lib\Types\ListReference.cs" />
     <Compile Include="src\Lib\Types\MapReference.cs" />
     <Compile Include="src\Scripts\ConsoleBuffer.cs" />

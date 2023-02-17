@@ -6,8 +6,6 @@ public class LanguageTests
 {
     private Program _program;
 
-    #warning Tests for try/catch, easier way  to deal with missing storables
-
     [SetUp]
     public void SetUp()
     {
@@ -121,11 +119,21 @@ public class LanguageTests
     public void Errors()
     {
         _program.Register("index.js", """
-            throw "Error!";
+            let previous;
+            try {
+                throw "Previous";
+            } catch(e) {
+                previous = e.message;
+            } finally {
+                previous += "!";
+            }
+            try {} catch {}
+            try {} finally {}
+            throw "Error: " + previous;
             """);
 
         var exc = Assert.Throws<ScripterRuntimeException>(() => _program.Run());
-        Assert.That(exc!.Message, Is.EqualTo("Error!"));
+        Assert.That(exc!.Message, Is.EqualTo("Error: Previous!"));
     }
 
     [Test]

@@ -41,6 +41,7 @@ src\Lib\Expressions\PropertyAccessor.cs
 src\Lib\Expressions\ReturnExpression.cs
 src\Lib\Expressions\ScopedVariableAccessor.cs
 src\Lib\Expressions\ThrowExpression.cs
+src\Lib\Expressions\TryCatchExpression.cs
 src\Lib\Expressions\UnaryOperatorExpression.cs
 src\Lib\Expressions\UndefinedExpression.cs
 src\Lib\Expressions\ValueExpression.cs
@@ -68,6 +69,7 @@ src\Lib\Runtime\Value.cs
 src\Lib\Runtime\ValueTypes.cs
 src\Lib\Runtime\VariableReference.cs
 src\Lib\Tests\PerfTest.cs
+src\Lib\Types\ExceptionReference.cs
 src\Lib\Types\ListReference.cs
 src\Lib\Types\MapReference.cs
 src\Scripts\ConsoleBuffer.cs

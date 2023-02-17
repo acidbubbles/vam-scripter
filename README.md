@@ -17,14 +17,13 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 - Arrays (`var x = []`, `var x = [values]`, `x.add`, `x[index]`, `x.length`)
 - Maps (`var x = {}`, `x["key"] = value`, `x.key = value`)
 - Code blocks and lexical scopes (`{`, `}`)
-- DateTime (`DateTime.now.format("")`)
+- Try blocks (`try`, `catch`, `finally`)
 - Export and import values (`import { x } from "Script Name"`, `export var x = 0;`)
 
 ## Notable Omissions
 
 - No `foreach`
 - No classes, prototypes
-- No `try`/`catch`
 - No way to use http, tcp, udp, etc.
 - No string interpolation (`${value}`)
 

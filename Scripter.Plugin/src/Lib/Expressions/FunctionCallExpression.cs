@@ -32,7 +32,15 @@ namespace ScripterLang
             var fn = value.AsFunction;
             for(var i = 0; i < _arguments.Length; i++)
                 _argumentValues[i] = _arguments[i].Evaluate();
-            return fn(_context, _argumentValues);
+            try
+            {
+                return fn(_context, _argumentValues);
+            }
+            finally
+            {
+                for (var i = 0; i < _arguments.Length; i++)
+                    _argumentValues[i] = Value.Undefined;
+            }
         }
 
         public override string ToString()

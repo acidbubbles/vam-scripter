@@ -72,6 +72,7 @@ namespace ScripterLang
                 if (token.Value == "var" || token.Value == "let") return ParseVariableDeclaration(lexicalContext, false);
                 if (token.Value == "const") return ParseVariableDeclaration(lexicalContext, true);
                 if (token.Value == "throw") return ParseThrowDeclaration(lexicalContext);
+                if (token.Value == "try") return TryCatchDeclaration(lexicalContext);
                 if (token.Value == "function") return ParseFunctionDeclaration(lexicalContext, true);
                 if (token.Value == "break" || token.Value == "continue") return ParseLoopControlFlowDeclaration(lexicalContext);
                 throw new ScripterParsingException($"Unexpected keyword: {token.Value}", token.Location);
@@ -95,6 +96,45 @@ namespace ScripterLang
             }
 
             throw new ScripterParsingException($"Unexpected token: '{token.Value}'", token.Location);
+        }
+
+        private Expression TryCatchDeclaration(ScopeLexicalContext lexicalContext)
+        {
+            Consume().Expect(TokenType.Keyword, "try");
+            var tryContext = new ScopeLexicalContext(lexicalContext);
+            var tryBlock = ParseCodeBlock(tryContext);
+
+            CodeBlockExpression catchBlock = null;
+            VariableReference errorReference = null;
+            if (Peek().Match(TokenType.Keyword, "catch"))
+            {
+                MoveNext();
+                var catchContext = new ScopeLexicalContext(lexicalContext);
+
+                if (Peek().Match(TokenType.LeftParenthesis))
+                {
+                    MoveNext();
+                    if (Peek().Match(TokenType.Identifier))
+                    {
+                        var errorVariable = Consume();
+                        errorReference = new VariableReference(errorVariable.Value, errorVariable.Location) { Constant = true, Local = true };
+                        catchContext.Declare(errorReference);
+                    }
+
+                    Consume().Expect(TokenType.RightParenthesis);
+                }
+                catchBlock = ParseCodeBlock(catchContext);
+            }
+
+            CodeBlockExpression finallyBlock = null;
+            if (Peek().Match(TokenType.Keyword, "finally"))
+            {
+                MoveNext();
+                var finallyContext = new ScopeLexicalContext(lexicalContext);
+                finallyBlock = ParseCodeBlock(finallyContext);
+            }
+
+            return new TryCatchExpression(tryBlock, catchBlock, finallyBlock, errorReference);
         }
 
         private LoopControlFlowExpression ParseLoopControlFlowDeclaration(ScopeLexicalContext lexicalContext)
@@ -294,8 +334,6 @@ namespace ScripterLang
             var next = Peek();
             if (next.Match(TokenType.Keyword) && (next.Value == "var" || next.Value == "let"))
                 initializer = ParseVariableDeclaration(loopLexicalContext, false);
-            else if (next.Match(TokenType.Keyword) && (next.Value == "var" || next.Value == "let"))
-                initializer = ParseVariableDeclaration(loopLexicalContext, true);
             else
                 initializer = ParseValueStatementExpression(loopLexicalContext);
             var condition = ParseValueStatementExpression(loopLexicalContext);

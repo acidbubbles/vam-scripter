@@ -51,6 +51,7 @@ namespace ScripterLang
             return Value;
         }
 
+        [MethodImpl(0x0100)]
         public void EnsureBound()
         {
             if(Bound) return;
@@ -60,6 +61,13 @@ namespace ScripterLang
         public override string ToString()
         {
             return $"{Name} = {Value.ToCodeString()}";
+        }
+
+        [MethodImpl(0x0100)]
+        public void Clear()
+        {
+            Value = Value.Undefined;
+            Initialized = false;
         }
     }
 }
