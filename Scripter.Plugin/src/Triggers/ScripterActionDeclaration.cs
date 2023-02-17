@@ -59,11 +59,13 @@ public class ScripterActionDeclaration : ScripterParamDeclarationBase, IDisposab
     {
         ValidateArgumentsLength(nameof(OnChange), args, 1);
         var fn = args[0].AsFunction;
-        _valueJSON.actionCallback = () =>
-        {
-            fn(context, _callbackArgs);
-        };
+        OnChange(context, fn);
         return Value.Void;
+    }
+
+    public void OnChange(LexicalContext context, FunctionReference fn)
+    {
+        _valueJSON.actionCallback = () => { fn(context, _callbackArgs); };
     }
 
     public void Dispose()

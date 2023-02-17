@@ -78,12 +78,17 @@ public class ScripterStringParamDeclaration : ScripterParamDeclarationBase, IDis
     {
         ValidateArgumentsLength(nameof(OnChange), args, 1);
         var fn = args[0].AsFunction;
+        OnChange(context, fn);
+        return Value.Void;
+    }
+
+    public void OnChange(LexicalContext context, FunctionReference fn)
+    {
         _valueJSON.setCallbackFunction = val =>
         {
             _callbackArgs[0] = val;
             fn(context, _callbackArgs);
         };
-        return Value.Void;
     }
 
     public void Dispose()

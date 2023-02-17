@@ -87,13 +87,17 @@ public class ScripterFloatParamDeclaration : ScripterParamDeclarationBase, IDisp
     {
         ValidateArgumentsLength(nameof(OnChange), args, 1);
         var fn = args[0].AsFunction;
-        #warning Check if we can add more of those to avoid allocations in function calls whenever possible
+        OnChange(context, fn);
+        return Value.Void;
+    }
+
+    public void OnChange(LexicalContext context, FunctionReference fn)
+    {
         _valueJSON.setCallbackFunction = val =>
         {
             _callbackArgs[0] = val;
             fn(context, _callbackArgs);
         };
-        return Value.Void;
     }
 
     public void Dispose()

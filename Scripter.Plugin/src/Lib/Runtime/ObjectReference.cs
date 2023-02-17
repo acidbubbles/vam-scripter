@@ -7,6 +7,14 @@
             throw new ScripterRuntimeException($"Property '{name}' does not exist on the object");
         }
 
+        public Value GetPropertyWithDefault(string name, Value defaultValue)
+        {
+            var value = GetProperty(name);
+            if (value.IsUndefined)
+                return defaultValue;
+            return value;
+        }
+
         public virtual void SetProperty(string name, Value value)
         {
             throw new ScripterRuntimeException($"Property '{name}' does not exist or is not writable");

@@ -64,12 +64,12 @@ import {
 
 ### `ScripterPlugin`
 
-| Property      | Type                                                                                                                                        | Notes                          |
-|---------------|---------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
-| declareFloat  | function({ name: string, default: number, min: number, max: number, constrain: bool }) => [`FloatParamDeclaration`](#floatparamdeclaration) | Param trigger by ID            |
-| declareString | function({ name: string, default: string }}) => [`StringParamDeclaration`](#stringparamdeclaration)                                         | Param trigger by ID            |
-| declareBool   | function({ name: string, default: string }) => [`BoolParamDeclaration`](#boolparamdeclaration)                                              | Param trigger by ID            |
-| declareAction | function(string, function) => [`ActionDeclaration`](#actionparamdeclaration)                                                                | Invoke an action trigger by ID |
+| Property           | Type                                                                                                                                                                                | Notes                          |
+|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| declareFloatParam  | function({ name: string, default?: number, min?: number, max?: number, constrain?: bool, onChange: function(number) => void }) => [`FloatParamDeclaration`](#floatparamdeclaration) | Param trigger by ID            |
+| declareStringParam | function({ name: string, default?: string, onChange: function(string) => void }}) => [`StringParamDeclaration`](#stringparamdeclaration)                                            | Param trigger by ID            |
+| declareBoolParam   | function({ name: string, default?: string, onChange: function(bool) => void }) => [`BoolParamDeclaration`](#boolparamdeclaration)                                                   | Param trigger by ID            |
+| declareActionParam | function(string, function) => [`ActionDeclaration`](#actionparamdeclaration)                                                                                                        | Invoke an action trigger by ID |
 
 ### `FloatParamDeclaration`
 
@@ -208,15 +208,19 @@ function say(message) {
 say("Hello, world!");
 ```
 
-You can declare storables:
+You can declare action triggers:
 
 ```js
 import { self } from "scripter";
 
-self.declareAction("Say", function(message) {
-    say(message);
+self.declareAction("Click", () => {
+    console.log("Hello, world!");
 });
+```
 
+You can declare params:
+
+```js
 let intensity = self.declareFloatParam({
     name: "Intensity",
     default: 0,
@@ -225,8 +229,21 @@ let intensity = self.declareFloatParam({
     constrain: true
 });
 
-intensity.onChange(function(value) {
-    say("Intensity is now: " + value);
+intensity.onChange(value => {
+    console.log("Intensity is now: " + value);
+});
+```
+
+Or simply:
+
+```js
+let intensity = self.declareFloatParam({
+    name: "Intensity",
+    min: 0,
+    max: 1,
+    onChange: value => {
+        console.log("Intensity is now: " + value);
+    }
 });
 ```
 

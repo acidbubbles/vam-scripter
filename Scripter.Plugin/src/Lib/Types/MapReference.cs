@@ -16,7 +16,7 @@ namespace ScripterLang
         {
             Value value;
             if (!_values.TryGetValue(name, out value))
-                throw new ScripterRuntimeException("Property " + name + " does not exist on object.");
+                return Value.Undefined;
             return value;
         }
 

@@ -21,6 +21,12 @@ namespace ScripterLang
         [FieldOffset(4)] private int _intValue;
         [FieldOffset(8)] private object _objectValue;
 
+        public bool IsUndefined
+        {
+            [MethodImpl(0x0100)]
+            get { return Type == ValueTypes.UndefinedType; }
+        }
+
         public bool IsBool
         {
             [MethodImpl(0x0100)]

@@ -37,12 +37,17 @@ public class ScripterPluginReference : ObjectReference
 #warning Default values (HasProperty)
         var config = args[0].AsObject;
         var name = config.GetProperty("name").AsString;
-        var start = config.GetProperty("default").AsNumber;
-        var min = config.GetProperty("min").AsNumber;
-        var max = config.GetProperty("max").AsNumber;
-        var constrain = config.GetProperty("constrain").AsBool;
+        var start = config.GetPropertyWithDefault("default", 0f).AsNumber;
+        var min = config.GetPropertyWithDefault("min", 0f).AsNumber;
+        var max = config.GetPropertyWithDefault("max", 1f).AsNumber;
+        var constrain = config.GetPropertyWithDefault("constrain", true).AsBool;
         var param = new ScripterFloatParamDeclaration(name, start, min, max, constrain);
+        var fn = config.GetProperty("onChange");
         context.GetModuleContext().RegisterDisposable(param);
+        if (!fn.IsUndefined)
+        {
+            param.OnChange(context, fn.AsFunction);
+        }
         return param;
     }
 
@@ -51,9 +56,15 @@ public class ScripterPluginReference : ObjectReference
         ValidateArgumentsLength(nameof(DeclareStringParam), args, 1);
         var config = args[0].AsObject;
         var name = config.GetProperty("name").AsString;
-        var start = config.GetProperty("default").AsString;
+        var start = config.GetPropertyWithDefault("default", "").AsString;
         var param = new ScripterStringParamDeclaration(name, start);
         context.GetModuleContext().RegisterDisposable(param);
+        var fn = config.GetProperty("onChange");
+        context.GetModuleContext().RegisterDisposable(param);
+        if (!fn.IsUndefined)
+        {
+            param.OnChange(context, fn.AsFunction);
+        }
         return param;
     }
 
@@ -62,19 +73,25 @@ public class ScripterPluginReference : ObjectReference
         ValidateArgumentsLength(nameof(DeclareBoolParam), args, 1);
         var config = args[0].AsObject;
         var name = config.GetProperty("name").AsString;
-        var start = config.GetProperty("default").AsBool;
+        var start = config.GetPropertyWithDefault("default", false).AsBool;
         var param = new ScripterBoolParamDeclaration(name, start);
         context.GetModuleContext().RegisterDisposable(param);
+        var fn = config.GetProperty("onChange");
+        context.GetModuleContext().RegisterDisposable(param);
+        if (!fn.IsUndefined)
+        {
+            param.OnChange(context, fn.AsFunction);
+        }
         return param;
     }
 
     private Value DeclareAction(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(DeclareAction), args, 1);
-#warning Allow just passing the name instead
-        var config = args[0].AsObject;
-        var name = config.GetProperty("name").AsString;
+        ValidateArgumentsLength(nameof(DeclareAction), args, 2);
+        var name = args[0].AsString;
+        var fn = args[1].AsFunction;
         var param = new ScripterActionDeclaration(name);
+        param.OnChange(context, fn);
         context.GetModuleContext().RegisterDisposable(param);
         return param;
     }
