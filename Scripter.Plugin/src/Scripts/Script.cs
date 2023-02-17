@@ -49,7 +49,6 @@ public class Script
 
     private void Parse(string val)
     {
-        #warning Add globals for Init (shared variables)
         try
         {
             _scripter.ProgramFiles.Register(NameJSON.val, val);

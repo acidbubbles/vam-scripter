@@ -11,7 +11,7 @@ public class StringChooserParamReference : ObjectReference
 
     public override Value GetProperty(string name)
     {
-#warning choices
+        // TODO: Choices
         switch (name)
         {
             case "val":

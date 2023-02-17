@@ -17,7 +17,7 @@ public class Scripter : MVRScript
 
     private bool _restored;
 
-    #warning TODO: Update, FixedUpdate, basic MoveTo and LookAt commands, check if an atom exists, list atoms
+    #warning TODO: FixedUpdate, basic MoveTo and LookAt commands, check if an atom exists
     #warning TODO: Keybindings
     public Dictionary<string, UnityEvent> KeybindingsTriggers { get; } = new Dictionary<string, UnityEvent>();
     public readonly List<FunctionLink> OnUpdateFunctions = new List<FunctionLink>();
