@@ -1,5 +1,6 @@
 ﻿using System;
 using SimpleJSON;
+using UnityEngine;
 
 public class Script
 {
@@ -37,8 +38,12 @@ public class Script
             Parse();
     }
 
+    private int _lastParsed;
     public void Parse()
     {
+        // To prevent clicking on Validate running the script twice
+        if (_lastParsed == Time.frameCount) return;
+        _lastParsed = Time.frameCount;
         Parse(SourceJSON.val);
     }
 

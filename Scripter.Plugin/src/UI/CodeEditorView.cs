@@ -37,7 +37,6 @@ public class CodeEditorView : MonoBehaviour
         UIUtils.CreateToolbarButton(toolbar, "Validate", 120, false, () =>
         {
             script.Parse();
-            Scripter.Singleton.ProgramFiles.Run();
         });
 
         return screen;

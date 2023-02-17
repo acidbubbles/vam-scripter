@@ -15,6 +15,7 @@ public class CodeInputField : InputField
     {
         base.Awake();
         lineType = LineType.MultiLineNewline;
+        onValidateInput = OnDirectValidateInput;
     }
 
     public override void Rebuild(CanvasUpdate update)
@@ -116,6 +117,83 @@ public class CodeInputField : InputField
                 selectionFocusPosition = newCaretPosition;
             }
         }
+    }
+
+    private bool _ignoreOnValidateInput;
+    private char OnDirectValidateInput(string inputText, int pos, char input)
+    {
+        if (_ignoreOnValidateInput) return input;
+        if (input == '\t')
+        {
+            if (selectionAnchorPosition != selectionFocusPosition)
+            {
+                // Change indentation
+                var before = inputText.Substring(0, selectionAnchorPosition);
+                var selected = inputText.Substring(selectionAnchorPosition, selectionFocusPosition - selectionAnchorPosition);
+                var after = inputText.Substring(selectionFocusPosition, inputText.Length - selectionFocusPosition);
+                if(Input.GetKey(KeyCode.LeftShift))
+                    selected = selected.Replace("\n  ", "\n");
+                else
+                    selected = selected.Replace("\n", "\n  ");
+                _ignoreOnValidateInput = true;
+                text = before + selected + after;
+                _ignoreOnValidateInput = false;
+                selectionAnchorPosition = before.Length;
+                selectionFocusPosition = before.Length + selected.Length;
+            }
+            else
+            {
+                // Insert two spaces
+                _ignoreOnValidateInput = true;
+                text = inputText.Insert(pos, "  ");
+                _ignoreOnValidateInput = false;
+                caretPosition = pos + 2;
+            }
+            return '\0';
+        }
+        if (input == '\n')
+        {
+            if (pos <= 0) return input;
+            var startOfLine = FindStartOfLine(pos);
+            var line = inputText.Substring(startOfLine, pos - startOfLine);
+            // Find the indentation of line
+            var indent = 0;
+            while (indent < line.Length && line[indent] == ' ')
+                indent++;
+            if(line.Length > 0 && line[line.Length - 1] == '{')
+                indent += 2;
+            var newLineIndent = "\n" + new string(' ', indent);
+
+            _ignoreOnValidateInput = true;
+            text = inputText.Insert(pos, newLineIndent);
+            _ignoreOnValidateInput = false;
+            caretPosition = pos + newLineIndent.Length;
+            return '\0';
+        }
+        if (input == '}')
+        {
+            // Deindent
+            if (pos == 0) return input;
+            var startOfLine = FindStartOfLine(pos);
+            var line = inputText.Substring(startOfLine, pos - startOfLine);
+            var whitespace = true;
+            for (var i = 0; i < line.Length; i++)
+            {
+                if (line[i] != ' ')
+                {
+                    whitespace = false;
+                    break;
+                }
+            }
+            if (whitespace && line.Length >= 2)
+            {
+                _ignoreOnValidateInput = true;
+                text = inputText.Remove(pos - 2, 2);
+                _ignoreOnValidateInput = false;
+                caretPosition = pos - 2;
+            }
+        }
+        return input;
     }
 
     private int FindStartOfLine(int startIndex)
