@@ -203,6 +203,7 @@ namespace ScripterLang
                     case '=':
                         if (MoveNext() && Current == '=')
                         {
+                            if (Peek() == '=') MoveNext();
                             yield return new Token(TokenType.Operator, "==", Location);
                             MoveNext();
                         }
@@ -220,6 +221,7 @@ namespace ScripterLang
                     case '!':
                         if (MoveNext() && Current == '=')
                         {
+                            if (Peek() == '=') MoveNext();
                             yield return new Token(TokenType.Operator, "!=", Location);
                             MoveNext();
                         }

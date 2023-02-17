@@ -34,7 +34,6 @@ public class ScripterPluginReference : ObjectReference
     private Value DeclareFloatParam(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(DeclareFloatParam), args, 1);
-#warning Default values (HasProperty)
         var config = args[0].AsObject;
         var name = config.GetProperty("name").AsString;
         var start = config.GetPropertyWithDefault("default", 0f).AsNumber;
