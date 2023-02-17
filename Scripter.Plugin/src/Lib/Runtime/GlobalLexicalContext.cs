@@ -14,8 +14,8 @@ namespace ScripterLang
         {
             Declare(new VariableReference(name, value, Location.Empty)
             {
-                Constant = true,
-                Bound = true,
+                constant = true,
+                bound = true,
             });
         }
 

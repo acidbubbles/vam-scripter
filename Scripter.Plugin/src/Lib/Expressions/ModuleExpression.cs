@@ -24,23 +24,23 @@ namespace ScripterLang
             }
             finally
             {
-                _context.IsReturn = false;
+                _context.isReturn = false;
             }
         }
 
         public ModuleNamespace Import()
         {
-            if (_evaluated) return _context.Module;
+            if (_evaluated) return _context.module;
             var value = Evaluate();
-            _context.Module.Returned = value;
+            _context.module.returned = value;
             _evaluated = true;
-            return _context.Module;
+            return _context.module;
         }
 
         public void Invalidate()
         {
-            _context.Module.Returned = Value.Undefined;
-            _context.Module.Exports.Clear();
+            _context.module.returned = Value.Undefined;
+            _context.module.exports.Clear();
             _evaluated = false;
         }
 

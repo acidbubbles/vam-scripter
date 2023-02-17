@@ -19,7 +19,7 @@
         public override Value Evaluate()
         {
             var value = _expression.Evaluate();
-            _moduleLexicalContext.Module.Exports.Add(_expression.Name, value);
+            _moduleLexicalContext.module.exports.Add(_expression.name, value);
             return Value.Void;
         }
 

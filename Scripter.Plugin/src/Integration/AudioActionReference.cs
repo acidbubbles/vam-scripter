@@ -25,7 +25,7 @@ public class AudioActionReference : ObjectReference
         ValidateArgumentsLength(nameof(Play), args, 1);
         var nac = args[0].AsObject as NamedAudioClipReference;
         if(nac == null) throw new ScripterRuntimeException($"Expected a NamedAudioClip in {nameof(Play)}");
-        _param.actionCallback(nac.Nac);
+        _param.actionCallback(nac.nac);
         return Value.Void;
     }
 }

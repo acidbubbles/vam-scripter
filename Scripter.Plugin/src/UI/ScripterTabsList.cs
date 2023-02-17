@@ -53,7 +53,7 @@ public class ScripterTabsList : MonoBehaviour
     {
         foreach (var t in _tabs)
         {
-            t.Selected = t == tab;
+            t.SetSelected(t == tab);
         }
     }
 

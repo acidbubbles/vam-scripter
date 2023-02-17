@@ -11,7 +11,7 @@ public class ScripterBoolParamDeclaration : ScripterParamDeclarationBase, IDispo
 
     public ScripterBoolParamDeclaration(string name, bool startingValue)
     {
-        var scripter = Scripter.Singleton;
+        var scripter = Scripter.singleton;
         var existing = scripter.GetBoolJSONParam(name);
         if (existing == null)
         {

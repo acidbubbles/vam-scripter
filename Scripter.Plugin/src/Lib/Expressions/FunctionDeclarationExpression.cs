@@ -8,7 +8,7 @@ namespace ScripterLang
         private readonly CodeBlockExpression _body;
         private readonly FunctionLexicalContext _context;
 
-        public readonly Value FunctionValue;
+        public readonly Value functionValue;
         private readonly List<VariableReference> _argumentsVariables;
 
         public FunctionDeclarationExpression(string name, List<string> arguments, CodeBlockExpression body, FunctionLexicalContext context)
@@ -17,7 +17,7 @@ namespace ScripterLang
             _arguments = arguments;
             _body = body;
             _context = context;
-            FunctionValue = Value.CreateFunction(Invoke);
+            functionValue = Value.CreateFunction(Invoke);
             _argumentsVariables = new List<VariableReference>(arguments.Count);
         }
 
@@ -28,7 +28,7 @@ namespace ScripterLang
                 var arg = _arguments[i];
                 var variable = _context.GetVariable(arg);
                 _argumentsVariables.Add(variable);
-                variable.Bound = true;
+                variable.bound = true;
             }
 
             _body.Bind();
@@ -36,13 +36,13 @@ namespace ScripterLang
 
         public override Value Evaluate()
         {
-            return FunctionValue;
+            return functionValue;
         }
 
         private Value Invoke(LexicalContext _, Value[] args)
         {
             if (args.Length != _arguments.Count)
-                throw new ScripterRuntimeException($"Function {Name} requires {_arguments.Count} arguments, but only {args.Length} where provided");
+                throw new ScripterRuntimeException($"Function {name} requires {_arguments.Count} arguments, but only {args.Length} where provided");
 
             for (var i = 0; i < args.Length; i++)
             {
@@ -57,13 +57,13 @@ namespace ScripterLang
             finally
             {
                 _context.Exit();
-                _context.IsReturn = false;
+                _context.isReturn = false;
             }
         }
 
         public override string ToString()
         {
-            return $"function {Name}({string.Join(", ", _arguments.ToArray())}) {{ {_body} }}";
+            return $"function {name}({string.Join(", ", _arguments.ToArray())}) {{ {_body} }}";
         }
     }
 }

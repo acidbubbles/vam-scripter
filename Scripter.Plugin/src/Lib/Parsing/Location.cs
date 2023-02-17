@@ -2,13 +2,13 @@
 {
     public struct Location
     {
-        public static readonly Location Empty = new Location { Line = -1 };
+        public static readonly Location Empty = new Location { line = -1 };
 
-        public int Line;
+        public int line;
 
         public override string ToString()
         {
-            return $"line {Line}";
+            return $"line {line}";
         }
     }
 }

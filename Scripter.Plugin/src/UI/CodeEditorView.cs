@@ -26,16 +26,13 @@ public class CodeEditorView : MonoBehaviour
         bg.color = new Color(30 / 255f, 30 / 255f, 30 / 255f);
 
         var screen = go.AddComponent<CodeEditorView>();
-        screen.CreateMultilineInput(script.SourceJSON);
+        screen.CreateMultilineInput(script.sourceJSON);
 
         var toolbar = UIUtils.MakeToolbar(screen.transform, 270);
-        script.History.UndoButton = UIUtils.CreateToolbarButton(toolbar, "\u21BA", 40, true, script.History.Undo);
-        script.History.RedoButton = UIUtils.CreateToolbarButton(toolbar, "\u21BB", 40, true, script.History.Redo);
-        script.History.UpdateButtons();
-        UIUtils.CreateToolbarButton(toolbar, "Validate", 120, false, () =>
-        {
-            script.Parse();
-        });
+        script.history.undoButton = UIUtils.CreateToolbarButton(toolbar, "\u21BA", 40, true, script.history.Undo);
+        script.history.redoButton = UIUtils.CreateToolbarButton(toolbar, "\u21BB", 40, true, script.history.Redo);
+        script.history.UpdateButtons();
+        UIUtils.CreateToolbarButton(toolbar, "Validate", 120, false, script.Parse);
 
         return screen;
     }
@@ -44,7 +41,7 @@ public class CodeEditorView : MonoBehaviour
 
     private void CreateMultilineInput(JSONStorableString jss)
     {
-        var textfield = Instantiate(Scripter.Singleton.manager.configurableTextFieldPrefab, transform).GetComponent<UIDynamicTextField>();
+        var textfield = Instantiate(Scripter.singleton.manager.configurableTextFieldPrefab, transform).GetComponent<UIDynamicTextField>();
         textfield.backgroundColor = new Color(30 / 255f, 30 / 255f, 30 / 255f);
         textfield.textColor = new Color(156 / 255f, 220 / 255f, 254 / 255f);
         jss.dynamicText = textfield;

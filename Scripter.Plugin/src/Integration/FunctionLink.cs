@@ -5,14 +5,14 @@ using ScripterLang;
 public class FunctionLink : IDisposable
 {
     private readonly List<FunctionLink> _list;
-    public readonly LexicalContext Context;
-    public readonly FunctionReference Fn;
+    public readonly LexicalContext context;
+    public readonly FunctionReference fn;
 
     public FunctionLink(List<FunctionLink> list, LexicalContext context, FunctionReference fn)
     {
         _list = list;
-        Context = context;
-        Fn = fn;
+        this.context = context;
+        this.fn = fn;
         _list.Add(this);
     }
 

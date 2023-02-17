@@ -5,8 +5,8 @@ public class HistoryManager
     private readonly JSONStorableString _storable;
     private readonly List<string> _history = new List<string>();
     private int _index;
-    public UIDynamicButton UndoButton;
-    public UIDynamicButton RedoButton;
+    public UIDynamicButton undoButton;
+    public UIDynamicButton redoButton;
     private bool _isNavigating;
 
     public HistoryManager(JSONStorableString storable)
@@ -71,8 +71,8 @@ public class HistoryManager
 
     public void UpdateButtons()
     {
-        if (ReferenceEquals(UndoButton, null)) return;
-        UndoButton.button.interactable = _index > 0;
-        RedoButton.button.interactable = _index < _history.Count - 1;
+        if (ReferenceEquals(undoButton, null)) return;
+        undoButton.button.interactable = _index > 0;
+        redoButton.button.interactable = _index < _history.Count - 1;
     }
 }

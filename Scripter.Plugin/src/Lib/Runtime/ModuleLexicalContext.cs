@@ -5,15 +5,15 @@ namespace ScripterLang
 {
     public class ModuleLexicalContext : FunctionLexicalContext, IDisposable
     {
-        public readonly GlobalLexicalContext GlobalContext;
+        public readonly GlobalLexicalContext globalContext;
 
-        public readonly ModuleNamespace Module = new ModuleNamespace();
+        public readonly ModuleNamespace module = new ModuleNamespace();
         private readonly List<IDisposable> _disposables = new List<IDisposable>();
 
         public ModuleLexicalContext(GlobalLexicalContext globalContext)
             : base(globalContext)
         {
-            GlobalContext = globalContext;
+            this.globalContext = globalContext;
         }
 
         public override ModuleLexicalContext GetModuleContext() => this;

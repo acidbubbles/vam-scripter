@@ -14,8 +14,8 @@
             var scope = this;
             while((scope = scope._parent) != null)
             {
-                if (scope.IsDeclared(variable.Name))
-                    throw new ScripterParsingException($"Variable {variable.Name} was already declared in an outer scope", variable.Location);
+                if (scope.IsDeclared(variable.name))
+                    throw new ScripterParsingException($"Variable {variable.name} was already declared in an outer scope", variable.location);
             }
             base.Declare(variable);
         }

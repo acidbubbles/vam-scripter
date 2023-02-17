@@ -10,7 +10,7 @@ public class ScripterActionDeclaration : ScripterParamDeclarationBase, IDisposab
 
     public ScripterActionDeclaration(string name)
     {
-        var scripter = Scripter.Singleton;
+        var scripter = Scripter.singleton;
         var existing = scripter.GetAction(name);
         if (existing == null)
         {

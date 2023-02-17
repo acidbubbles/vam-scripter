@@ -28,7 +28,7 @@ public class ScripterPluginReference : ObjectReference
     {
         ValidateArgumentsLength(nameof(OnUpdate), args, 1);
         var fn = args[0].AsFunction;
-        var link = new FunctionLink(Scripter.Singleton.OnUpdateFunctions, context, fn);
+        var link = new FunctionLink(Scripter.singleton.onUpdateFunctions, context, fn);
         context.GetModuleContext().RegisterDisposable(link);
         return Value.Void;
     }
@@ -37,7 +37,7 @@ public class ScripterPluginReference : ObjectReference
     {
         ValidateArgumentsLength(nameof(OnFixedUpdate), args, 1);
         var fn = args[0].AsFunction;
-        var link = new FunctionLink(Scripter.Singleton.OnFixedUpdateFunctions, context, fn);
+        var link = new FunctionLink(Scripter.singleton.onFixedUpdateFunctions, context, fn);
         context.GetModuleContext().RegisterDisposable(link);
         return Value.Void;
     }

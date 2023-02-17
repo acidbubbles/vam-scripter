@@ -29,7 +29,7 @@ namespace ScripterLang
         }
         private char Current => _input[_position];
         private char Peek(int c = 1) => _input[_position + c];
-        private Location Location => new Location { Line = _line };
+        private Location Location => new Location { line = _line };
         private bool IsAtEnd() => _position == _length;
 
         private bool MoveNext(int c = 1)

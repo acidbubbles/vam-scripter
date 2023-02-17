@@ -18,7 +18,7 @@
 
         public override Value Evaluate()
         {
-            _context.GetFunctionContext().IsReturn = true;
+            _context.GetFunctionContext().isReturn = true;
             return _expression.Evaluate();
         }
 

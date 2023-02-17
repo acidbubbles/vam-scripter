@@ -55,7 +55,7 @@ internal class CoroutineReference : ObjectReference, IDisposable
 
     public void Start()
     {
-        _co = Scripter.Singleton.StartCoroutine(RunLater(_context, _fn, _delay));
+        _co = Scripter.singleton.StartCoroutine(RunLater(_context, _fn, _delay));
     }
 
     private IEnumerator RunLater(LexicalContext context, FunctionReference fn, float delay)
@@ -71,6 +71,6 @@ internal class CoroutineReference : ObjectReference, IDisposable
     public void Dispose()
     {
         if (_co != null)
-            Scripter.Singleton.StopCoroutine(_co);
+            Scripter.singleton.StopCoroutine(_co);
     }
 }

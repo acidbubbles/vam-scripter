@@ -32,11 +32,11 @@ namespace ScripterLang
                 {
                     var expression = _expressions[i];
                     var result = expression.Evaluate();
-                    if (_functionContext.IsReturn)
+                    if (_functionContext.isReturn)
                         return result;
                     if (_loopContext != null)
                     {
-                        if (_loopContext.IsBreak || _loopContext.IsContinue)
+                        if (_loopContext.isBreak || _loopContext.isContinue)
                             break;
                     }
                 }

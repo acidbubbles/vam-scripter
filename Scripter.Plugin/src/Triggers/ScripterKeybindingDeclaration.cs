@@ -4,15 +4,13 @@ using SimpleJSON;
 
 public class ScripterKeybindingDeclaration : ScripterParamDeclarationBase, IDisposable
 {
-    public const string Type = "Action";
-
     private readonly JSONStorableAction _valueJSON;
 
     public ScripterKeybindingDeclaration(string name)
     {
-        var scripter = Scripter.Singleton;
+        var scripter = Scripter.singleton;
         scripter.KeybindingsTriggers.Add(this);
-        Scripter.Singleton.UpdateKeybindings();
+        Scripter.singleton.UpdateKeybindings();
         _valueJSON = new JSONStorableAction(name, () => { });
     }
 
@@ -48,7 +46,7 @@ public class ScripterKeybindingDeclaration : ScripterParamDeclarationBase, IDisp
     public void Dispose()
     {
         _valueJSON.actionCallback = null;
-        Scripter.Singleton.KeybindingsTriggers.Remove(this);
-        Scripter.Singleton.UpdateKeybindings();
+        Scripter.singleton.KeybindingsTriggers.Remove(this);
+        Scripter.singleton.UpdateKeybindings();
     }
 }

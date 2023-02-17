@@ -11,7 +11,7 @@ public class ScripterStringParamDeclaration : ScripterParamDeclarationBase, IDis
 
     public ScripterStringParamDeclaration(string name, string startingValue)
     {
-        var scripter = Scripter.Singleton;
+        var scripter = Scripter.singleton;
         var existing = scripter.GetStringJSONParam(name);
         if (existing == null)
         {

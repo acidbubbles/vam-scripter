@@ -17,13 +17,13 @@ public class ScripterModule : IModule
     private static ModuleNamespace Initialize()
     {
         var module = new ModuleNamespace();
-        module.Exports.Add("self", _pluginReference);
-        module.Exports.Add("scene", _sceneReference);
-        module.Exports.Add("time", _timeReference);
-        module.Exports.Add("random", _randomReference);
-        module.Exports.Add("datetime", _dateTimeClassReference);
-        module.Exports.Add("environment", _environmentReference);
-        module.Exports.Add("keybindings", _keybindingsReference);
+        module.exports.Add("self", _pluginReference);
+        module.exports.Add("scene", _sceneReference);
+        module.exports.Add("time", _timeReference);
+        module.exports.Add("random", _randomReference);
+        module.exports.Add("datetime", _dateTimeClassReference);
+        module.exports.Add("environment", _environmentReference);
+        module.exports.Add("keybindings", _keybindingsReference);
         return module;
     }
 

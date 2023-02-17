@@ -3,7 +3,7 @@ using ScripterLang;
 
 public class ConsoleReference : ObjectReference
 {
-    private readonly ConsoleBuffer _console = Scripter.Singleton.Console;
+    private readonly ConsoleBuffer _console = Scripter.singleton.console;
 
     public override Value GetProperty(string name)
     {

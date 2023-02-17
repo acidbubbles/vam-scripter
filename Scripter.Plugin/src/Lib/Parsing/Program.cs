@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ScripterLang
 {
@@ -7,37 +8,38 @@ namespace ScripterLang
     {
         private const string _indexModuleName = "./index.js";
 
-        public readonly GlobalLexicalContext GlobalContext = new GlobalLexicalContext();
+        public readonly GlobalLexicalContext globalContext = new GlobalLexicalContext();
 
         private IModule _index;
 
         public IModule Register(string moduleName, string source)
         {
             var tokens = new List<Token>(Tokenizer.Tokenize(source));
-            var module = new Parser(tokens).Parse(GlobalContext, "./" + moduleName);
+            var module = new Parser(tokens).Parse(globalContext, "./" + moduleName);
             Register(module);
             return module;
         }
 
-        public void Register(IModule module)
+        private void Register(IModule module)
         {
-            GlobalContext.RemoveModule(module.ModuleName);
-            GlobalContext.DeclareModule(module);
+            globalContext.RemoveModule(module.ModuleName);
+            globalContext.DeclareModule(module);
             if (module.ModuleName == _indexModuleName)
                 _index = module;
-            GlobalContext.InvalidateModules();
+            globalContext.InvalidateModules();
         }
 
         public void Unregister(string moduleName)
         {
-            GlobalContext.RemoveModule(moduleName);
-            GlobalContext.InvalidateModules();
+            globalContext.RemoveModule(moduleName);
+            globalContext.InvalidateModules();
         }
 
+        [SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global")]
         public Value Run()
         {
             if (_index == null) throw new NullReferenceException("There was no index.js script registered in the program");
-            return _index.Import().Returned;
+            return _index.Import().returned;
         }
 
         public bool CanRun()

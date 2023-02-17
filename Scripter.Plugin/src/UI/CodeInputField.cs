@@ -131,10 +131,9 @@ public class CodeInputField : InputField
                 var before = inputText.Substring(0, selectionAnchorPosition);
                 var selected = inputText.Substring(selectionAnchorPosition, selectionFocusPosition - selectionAnchorPosition);
                 var after = inputText.Substring(selectionFocusPosition, inputText.Length - selectionFocusPosition);
-                if(Input.GetKey(KeyCode.LeftShift))
-                    selected = selected.Replace("\n  ", "\n");
-                else
-                    selected = selected.Replace("\n", "\n  ");
+                selected = Input.GetKey(KeyCode.LeftShift)
+                    ? selected.Replace("\n  ", "\n")
+                    : selected.Replace("\n", "\n  ");
                 _ignoreOnValidateInput = true;
                 text = before + selected + after;
                 _ignoreOnValidateInput = false;
@@ -172,7 +171,7 @@ public class CodeInputField : InputField
         }
         if (input == '}')
         {
-            // Deindent
+            // De-indent
             if (pos == 0) return input;
             var startOfLine = FindStartOfLine(pos);
             var line = inputText.Substring(startOfLine, pos - startOfLine);

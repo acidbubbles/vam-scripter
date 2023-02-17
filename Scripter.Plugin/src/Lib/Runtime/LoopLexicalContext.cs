@@ -2,8 +2,8 @@
 {
     public class LoopLexicalContext : ScopeLexicalContext
     {
-        public bool IsBreak;
-        public bool IsContinue;
+        public bool isBreak;
+        public bool isContinue;
 
         public LoopLexicalContext(ScopeLexicalContext lexicalContext)
             : base(lexicalContext)

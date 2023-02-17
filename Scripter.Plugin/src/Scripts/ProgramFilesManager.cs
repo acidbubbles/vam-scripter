@@ -9,16 +9,13 @@ public class ProgramFilesManager
     private readonly Scripter _plugin;
     private readonly Program _program;
 
-    public readonly List<Script> Files = new List<Script>();
-
-    public bool IsDirty;
-    public UIDynamicButton ApplyButton;
+    public readonly List<Script> files = new List<Script>();
 
     public ProgramFilesManager(Scripter plugin)
     {
         _plugin = plugin;
         _program = new Program();
-        GlobalFunctions.Register(_program.GlobalContext);
+        GlobalFunctions.Register(_program.globalContext);
     }
 
     public string NewName()
@@ -27,7 +24,7 @@ public class ProgramFilesManager
         for (var i = 1; i < 9999; i++)
         {
             var name = $"{prefix}{i}.js";
-            if (Files.All(s => s.NameJSON.val != name))
+            if (files.All(s => s.nameJSON.val != name))
                 return name;
         }
         throw new InvalidOperationException("You're creating way too many scripts!");
@@ -36,7 +33,7 @@ public class ProgramFilesManager
     public JSONNode GetJSON()
     {
         var json = new JSONArray();
-        foreach (var script in Files)
+        foreach (var script in files)
         {
             json.Add(script.GetJSON());
         }
@@ -49,32 +46,31 @@ public class ProgramFilesManager
         foreach (JSONNode scriptJSON in array)
         {
             var script = Script.FromJSON(scriptJSON, _plugin);
-            Files.Add(script);
-            script.Tab = _plugin.UI.AddScriptTab(script);
-            if(script.NameJSON.val == "index.js")
-                _plugin.UI.SelectTab(script.Tab);
+            files.Add(script);
+            script.Tab = _plugin.ui.AddScriptTab(script);
+            if(script.nameJSON.val == "index.js")
+                _plugin.ui.SelectTab(script.Tab);
         }
     }
 
-    public Script Create(string filename, string code)
+    public void Create(string filename, string code)
     {
         var script = new Script(filename, code, _plugin);
-        Files.Add(script);
-        script.Tab = _plugin.UI.AddScriptTab(script);
-        _plugin.UI.SelectTab(script.Tab);
-        return script;
+        files.Add(script);
+        script.Tab = _plugin.ui.AddScriptTab(script);
+        _plugin.ui.SelectTab(script.Tab);
     }
 
-    public void Delete(Script script)
+    private void Delete(Script script)
     {
         Unregister(script);
-        Files.Remove(script);
-        _plugin.UI.RemoveTab(script.Tab);
+        files.Remove(script);
+        _plugin.ui.RemoveTab(script.Tab);
     }
 
     public void DeleteAll()
     {
-        foreach (var script in Files.ToArray())
+        foreach (var script in files.ToArray())
         {
             Delete(script);
         }
@@ -82,9 +78,6 @@ public class ProgramFilesManager
 
     public void Run()
     {
-        IsDirty = false;
-        if (!ReferenceEquals(ApplyButton, null)) ApplyButton.button.interactable = IsDirty;
-
         if (!_program.CanRun())
         {
             return;
@@ -96,22 +89,18 @@ public class ProgramFilesManager
         }
         catch (Exception exc)
         {
-            _plugin.Console.LogError($"Failed to run code: {exc.Message}");
+            _plugin.console.LogError($"Failed to run code: {exc.Message}");
         }
     }
 
     public void Register(string name, string val)
     {
         _program.Register(name, val);
-        IsDirty = true;
-        if (!ReferenceEquals(ApplyButton, null)) ApplyButton.button.interactable = IsDirty;
     }
 
     public void Unregister(Script script)
     {
-        IsDirty = true;
-        if (!ReferenceEquals(ApplyButton, null)) ApplyButton.button.interactable = IsDirty;
-        _program.Unregister(script.NameJSON.val);
+        _program.Unregister(script.nameJSON.val);
     }
 
     public bool CanRun()

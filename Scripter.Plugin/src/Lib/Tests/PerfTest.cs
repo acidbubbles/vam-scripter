@@ -72,7 +72,7 @@ export function run(obj) {
             var program = new Program();
             var module = program.Register("index.js", code);
             var ns = module.Import();
-            var run = ns.Exports["run"].AsFunction;
+            var run = ns.exports["run"].AsFunction;
             var jsObj = new PerfObject();
             var jsArgs = new Value[] { jsObj };
             for (var i = 0; i < 100; i++)

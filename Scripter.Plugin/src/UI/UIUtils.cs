@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class UIUtils
+public static class UIUtils
 {
     public static Transform MakeToolbar(Transform parent, float width)
     {
@@ -27,7 +27,7 @@ public class UIUtils
 
     public static UIDynamicButton CreateToolbarButton(Transform parent, string label, float width, bool icon, UnityAction action)
     {
-        var button = Object.Instantiate(Scripter.Singleton.manager.configurableButtonPrefab, parent, false);
+        var button = Object.Instantiate(Scripter.singleton.manager.configurableButtonPrefab, parent, false);
 
         var ui = button.GetComponent<UIDynamicButton>();
         ui.label = label;

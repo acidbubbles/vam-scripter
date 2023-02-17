@@ -10,7 +10,7 @@ public class WelcomeView : MonoBehaviour
 
 Check out these templates to get started.";
 
-    public static WelcomeView Create(Transform parent, ScripterUI ui)
+    public static WelcomeView Create(Transform parent)
     {
         var go = new GameObject();
         go.transform.SetParent(parent, false);
@@ -60,8 +60,8 @@ Check out these templates to get started.";
 
             AddTemplateButton(templates.transform, "Scene triggers", () =>
             {
-                Scripter.Singleton.ProgramFiles.DeleteAll();
-                Scripter.Singleton.ProgramFiles.Create(
+                Scripter.singleton.programFiles.DeleteAll();
+                Scripter.singleton.programFiles.Create(
                     "index.js",
                     @"import { self } from ""scripter"";
 
@@ -77,13 +77,13 @@ valueParam.onChange(value => {
     console.log(""Value changed to: "", value);
 });
 ");
-                Scripter.Singleton.ProgramFiles.Run();
+                Scripter.singleton.programFiles.Run();
             });
             AddTemplateButton(templates.transform, "Respond to a\nKeybindings event", () => { });
             AddTemplateButton(templates.transform, "Run code every frame", () => { });
             AddTemplateButton(templates.transform, "Start from scratch", () =>
             {
-                Scripter.Singleton.ProgramFiles.Create(
+                Scripter.singleton.programFiles.Create(
                     "index.js",
                     @"import { self } from ""scripter"";
 

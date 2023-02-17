@@ -16,7 +16,7 @@ namespace ScripterLang
             _imports = imports;
             _module = path;
             _context = context;
-            _globalContext = _context.GlobalContext;
+            _globalContext = _context.globalContext;
         }
 
         public override void Bind()
@@ -25,7 +25,7 @@ namespace ScripterLang
             foreach (var import in _imports)
             {
                 var variable = _context.GetVariable(import);
-                variable.Bound = true;
+                variable.bound = true;
                 _importVariables.Add(variable);
             }
         }
@@ -39,7 +39,7 @@ namespace ScripterLang
                 var name = _imports[i];
                 var variable = _importVariables[i];
                 Value value;
-                if (!ns.Exports.TryGetValue(name, out value))
+                if (!ns.exports.TryGetValue(name, out value))
                     throw new ScripterRuntimeException($"Module '{module.ModuleName}' does not export '{variable}'");
                 variable.Initialize(value);
             }

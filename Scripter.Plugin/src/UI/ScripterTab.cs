@@ -92,19 +92,14 @@ public class ScripterTab : MonoBehaviour
 
     private bool _selected;
 
-    public bool Selected
+    public void SetSelected(bool value)
     {
-        get { return _selected; }
-        set
-        {
-            if (_selected == value) return;
-            _selected = value;
-            if(value)
-                SetSelected();
-            else
-                SetUnselected();
-
-        }
+        if (_selected == value) return;
+        _selected = value;
+        if (value)
+            SetSelected();
+        else
+            SetUnselected();
     }
 
     public void SetSelected()

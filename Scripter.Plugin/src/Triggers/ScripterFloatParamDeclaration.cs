@@ -11,7 +11,7 @@ public class ScripterFloatParamDeclaration : ScripterParamDeclarationBase, IDisp
 
     public ScripterFloatParamDeclaration(string name, float startingValue, float minValue, float maxValue, bool constrain)
     {
-        var scripter = Scripter.Singleton;
+        var scripter = Scripter.singleton;
         var existing = scripter.GetFloatJSONParam(name);
         if (existing == null)
         {

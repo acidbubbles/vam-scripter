@@ -2,8 +2,8 @@
 {
     public class UnaryOperatorExpression : Expression
     {
-        public string _op;
-        public Expression _expression;
+        private readonly string _op;
+        private readonly Expression _expression;
 
         public UnaryOperatorExpression(string op, Expression expression)
         {

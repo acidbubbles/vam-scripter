@@ -2,11 +2,11 @@
 {
     public abstract class DeclarationExpression : Expression
     {
-        public readonly string Name;
+        public readonly string name;
 
         protected DeclarationExpression(string name)
         {
-            Name = name;
+            this.name = name;
         }
     }
 }

@@ -7,40 +7,40 @@ namespace ScripterLang
     {
         public static readonly Token None = new Token(TokenType.None, "EOF", new Location());
 
-        public readonly int Type;
-        public readonly string Value;
-        public readonly Location Location;
+        public readonly int type;
+        public readonly string value;
+        public readonly Location location;
 
         public Token(int type, string value, Location location)
         {
-            Type = type;
-            Value = value;
-            Location = location;
+            this.type = type;
+            this.value = value;
+            this.location = location;
         }
 
         [MethodImpl(0x0100)]
         public bool Match(int type)
         {
-            return Type == type;
+            return this.type == type;
         }
 
         [MethodImpl(0x0100)]
         public bool Match(int type, string value)
         {
-            return Type == type && Value == value;
+            return this.type == type && this.value == value;
         }
 
         [SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Global")]
         [MethodImpl(0x0100)]
         public Token Expect(int type)
         {
-            if (Type != type)
+            if (this.type != type)
             {
                 if (type==TokenType.SemiColon)
                 {
-                    throw new ScripterParsingException($"Expected semicolon, found token '{Value}'", Location);
+                    throw new ScripterParsingException($"Expected semicolon, found token '{value}'", location);
                 }
-                throw new ScripterParsingException($"Unexpected token '{Value}'", Location);
+                throw new ScripterParsingException($"Unexpected token '{value}'", location);
             }
             return this;
         }
@@ -49,13 +49,13 @@ namespace ScripterLang
         [MethodImpl(0x0100)]
         public void Expect(int type, string value)
         {
-            if (Type != type && value != Value)
-                throw new ScripterParsingException($"Unexpected token '{Value}'; expected '{value}'", Location);
+            if (this.type != type && value != this.value)
+                throw new ScripterParsingException($"Unexpected token '{this.value}'; expected '{value}'", location);
         }
 
         public override string ToString()
         {
-            return Value;
+            return value;
         }
     }
 }

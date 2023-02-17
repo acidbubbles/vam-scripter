@@ -26,22 +26,22 @@ namespace ScripterLang
                 while (_condition.Evaluate().Boolify)
                 {
                     _body.Evaluate();
-                    if (_context.IsContinue)
+                    if (_context.isContinue)
                     {
-                        _context.IsContinue = false;
+                        _context.isContinue = false;
                         continue;
                     }
-                    if (_context.IsBreak)
+                    if (_context.isBreak)
                     {
-                        _context.IsBreak = false;
+                        _context.isBreak = false;
                         break;
                     }
                 }
             }
             finally
             {
-                _context.IsBreak = false;
-                _context.IsContinue = false;
+                _context.isBreak = false;
+                _context.isContinue = false;
             }
 
             return Value.Void;

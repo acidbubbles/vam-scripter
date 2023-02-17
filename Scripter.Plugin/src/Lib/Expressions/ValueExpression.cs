@@ -16,6 +16,7 @@
 
         public override string ToString()
         {
+            // ReSharper disable once PossiblyImpureMethodCallOnReadonlyVariable
             return _value.ToCodeString();
         }
     }

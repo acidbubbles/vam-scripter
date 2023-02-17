@@ -2,10 +2,10 @@
 
 public class NamedAudioClipReference : ObjectReference
 {
-    public NamedAudioClip Nac;
+    public readonly NamedAudioClip nac;
 
     public NamedAudioClipReference(NamedAudioClip nac)
     {
-        Nac = nac;
+        this.nac = nac;
     }
 }

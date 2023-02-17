@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ScripterUI : MonoBehaviour
 {
-    public static ScripterUI Create(Transform parent, Scripter scripter)
+    public static ScripterUI Create(Transform parent)
     {
         var go = new GameObject();
         go.transform.SetParent(parent, false);
@@ -40,7 +40,7 @@ public class ScripterUI : MonoBehaviour
 
         ui._content = content;
 
-        var createTab = CreateView.Create(content.transform, ui);
+        var createTab = CreateView.Create(content.transform);
         ui._tabs.SetLastTab("+", createTab.transform);
 
         ui.CreateConsole(go.transform);
@@ -54,18 +54,18 @@ public class ScripterUI : MonoBehaviour
 
     private void CreateConsole(Transform parent)
     {
-        _console = Instantiate(Scripter.Singleton.manager.configurableTextFieldPrefab, parent, false).GetComponent<UIDynamicTextField>();
+        _console = Instantiate(Scripter.singleton.manager.configurableTextFieldPrefab, parent, false).GetComponent<UIDynamicTextField>();
         _console.backgroundColor = Color.black;
         _console.textColor = Color.white;
-        Scripter.Singleton.Console.Init(_console);
+        Scripter.singleton.console.Init(_console);
 
         _scrollRect = _console.transform.Find("Scroll View").GetComponent<ScrollRect>();
 
-        Scripter.Singleton.Console.ConsoleJSON.setCallbackFunction = OnConsoleChange;
+        Scripter.singleton.console.consoleJSON.setCallbackFunction = OnConsoleChange;
 
         // ReSharper disable once Unity.InefficientPropertyAccess
         var toolbar = UIUtils.MakeToolbar(_console.transform, 100);
-        UIUtils.CreateToolbarButton(toolbar, "Clear", 40, false, () => { Scripter.Singleton.Console.Clear(); });
+        UIUtils.CreateToolbarButton(toolbar, "Clear", 40, false, () => { Scripter.singleton.console.Clear(); });
     }
 
     private void OnConsoleChange(string val)
@@ -91,14 +91,14 @@ public class ScripterUI : MonoBehaviour
 
     public ScripterTab AddWelcomeTab()
     {
-        var welcome = WelcomeView.Create(_content.transform, this);
+        var welcome = WelcomeView.Create(_content.transform);
         return _tabs.AddTab("Welcome", welcome.transform);
     }
 
     public ScripterTab AddScriptTab(Script script)
     {
         var editor = CodeEditorView.Create(_content.transform, script);
-        return _tabs.AddTab(script.NameJSON.val, editor.transform);
+        return _tabs.AddTab(script.nameJSON.val, editor.transform);
     }
 
     public void SelectTab(ScripterTab tab)

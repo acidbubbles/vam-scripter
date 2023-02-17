@@ -4,70 +4,70 @@ namespace ScripterLang
 {
     public class VariableReference
     {
-        public readonly string Name;
-        public readonly Location Location;
-        public bool Bound;
-        public bool Initialized;
-        public bool Constant;
-        public Value Value;
-        public bool Local;
+        public readonly string name;
+        public readonly Location location;
+        public bool bound;
+        public bool initialized;
+        public bool constant;
+        public Value value;
+        public bool local;
 
         public VariableReference(string name, Location location)
         {
-            Name = name;
-            Location = location;
+            this.name = name;
+            this.location = location;
         }
 
         public VariableReference(string name, Value value, Location location)
         {
-            Name = name;
-            Value = value;
-            Initialized = true;
-            Constant = true;
-            Location = location;
+            this.name = name;
+            this.value = value;
+            initialized = true;
+            constant = true;
+            this.location = location;
         }
 
         [MethodImpl(0x0100)]
         public void Initialize(Value value)
         {
-            Value = value;
-            Initialized = true;
+            this.value = value;
+            initialized = true;
         }
 
         [MethodImpl(0x0100)]
         public void SetValue(Value value)
         {
-            if (Constant)
-                throw new ScripterRuntimeException($"Cannot assign to constant variable {Name}", Location);
-            Value = value;
-            Initialized = true;
+            if (constant)
+                throw new ScripterRuntimeException($"Cannot assign to constant variable {name}", location);
+            this.value = value;
+            initialized = true;
         }
 
         [MethodImpl(0x0100)]
         public Value GetValue()
         {
-            if (!Initialized)
-                throw new ScripterRuntimeException($"Variable {Name} was not initialized", Location);
-            return Value;
+            if (!initialized)
+                throw new ScripterRuntimeException($"Variable {name} was not initialized", location);
+            return value;
         }
 
         [MethodImpl(0x0100)]
         public void EnsureBound()
         {
-            if(Bound) return;
-            throw new ScripterParsingException($"Variable {Name} was used before it was declared", Location);
+            if(bound) return;
+            throw new ScripterParsingException($"Variable {name} was used before it was declared", location);
         }
 
         public override string ToString()
         {
-            return $"{Name} = {Value.ToCodeString()}";
+            return $"{name} = {value.ToCodeString()}";
         }
 
         [MethodImpl(0x0100)]
         public void Clear()
         {
-            Value = Value.Undefined;
-            Initialized = false;
+            value = Value.Undefined;
+            initialized = false;
         }
     }
 }

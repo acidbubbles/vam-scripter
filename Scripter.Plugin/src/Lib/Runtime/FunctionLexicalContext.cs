@@ -2,7 +2,7 @@
 {
     public class FunctionLexicalContext : ScopeLexicalContext
     {
-        public bool IsReturn;
+        public bool isReturn;
 
         public FunctionLexicalContext(ScopeLexicalContext lexicalContext)
             : base(lexicalContext)

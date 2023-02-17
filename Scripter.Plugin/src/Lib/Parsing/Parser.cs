@@ -20,7 +20,7 @@ namespace ScripterLang
 
         private Token Peek()
         {
-            if (IsAtEnd()) return new Token(TokenType.None, "EOF", new Location { Line = _tokens[_tokens.Count - 1].Location.Line + 1 });
+            if (IsAtEnd()) return new Token(TokenType.None, "EOF", new Location { line = _tokens[_tokens.Count - 1].location.line + 1 });
             return _tokens[_position];
         }
 
@@ -54,8 +54,8 @@ namespace ScripterLang
             var token = Peek();
             if (token.Match(TokenType.Keyword))
             {
-                if (token.Value == "import") return ParseImportDeclaration(lexicalContext);
-                if (token.Value == "export") return ParseExportDeclaration(lexicalContext);
+                if (token.value == "import") return ParseImportDeclaration(lexicalContext);
+                if (token.value == "export") return ParseExportDeclaration(lexicalContext);
             }
             return ParseExpression(lexicalContext);
         }
@@ -65,17 +65,17 @@ namespace ScripterLang
             var token = Peek();
             if (token.Match(TokenType.Keyword))
             {
-                if (token.Value == "if") return ParseIfStatement(lexicalContext);
-                if (token.Value == "for") return ParseForStatement(lexicalContext);
-                if (token.Value == "while") return ParseWhileStatement(lexicalContext);
-                if (token.Value == "return") return ParseReturnStatement(lexicalContext);
-                if (token.Value == "var" || token.Value == "let") return ParseVariableDeclaration(lexicalContext, false);
-                if (token.Value == "const") return ParseVariableDeclaration(lexicalContext, true);
-                if (token.Value == "throw") return ParseThrowDeclaration(lexicalContext);
-                if (token.Value == "try") return TryCatchDeclaration(lexicalContext);
-                if (token.Value == "function") return ParseFunctionDeclaration(lexicalContext, true);
-                if (token.Value == "break" || token.Value == "continue") return ParseLoopControlFlowDeclaration(lexicalContext);
-                throw new ScripterParsingException($"Unexpected keyword: {token.Value}", token.Location);
+                if (token.value == "if") return ParseIfStatement(lexicalContext);
+                if (token.value == "for") return ParseForStatement(lexicalContext);
+                if (token.value == "while") return ParseWhileStatement(lexicalContext);
+                if (token.value == "return") return ParseReturnStatement(lexicalContext);
+                if (token.value == "var" || token.value == "let") return ParseVariableDeclaration(lexicalContext, false);
+                if (token.value == "const") return ParseVariableDeclaration(lexicalContext, true);
+                if (token.value == "throw") return ParseThrowDeclaration(lexicalContext);
+                if (token.value == "try") return TryCatchDeclaration(lexicalContext);
+                if (token.value == "function") return ParseFunctionDeclaration(lexicalContext, true);
+                if (token.value == "break" || token.value == "continue") return ParseLoopControlFlowDeclaration(lexicalContext);
+                throw new ScripterParsingException($"Unexpected keyword: {token.value}", token.location);
             }
 
             if (token.Match(TokenType.Identifier))
@@ -95,7 +95,7 @@ namespace ScripterLang
                 return UndefinedExpression.Instance;
             }
 
-            throw new ScripterParsingException($"Unexpected token: '{token.Value}'", token.Location);
+            throw new ScripterParsingException($"Unexpected token: '{token.value}'", token.location);
         }
 
         private Expression TryCatchDeclaration(ScopeLexicalContext lexicalContext)
@@ -117,7 +117,7 @@ namespace ScripterLang
                     if (Peek().Match(TokenType.Identifier))
                     {
                         var errorVariable = Consume();
-                        errorReference = new VariableReference(errorVariable.Value, errorVariable.Location) { Constant = true, Local = true };
+                        errorReference = new VariableReference(errorVariable.value, errorVariable.location) { constant = true, local = true };
                         catchContext.Declare(errorReference);
                     }
 
@@ -140,7 +140,7 @@ namespace ScripterLang
         private LoopControlFlowExpression ParseLoopControlFlowDeclaration(ScopeLexicalContext lexicalContext)
         {
             var token = Consume();
-            return new LoopControlFlowExpression(token.Value, lexicalContext);
+            return new LoopControlFlowExpression(token.value, lexicalContext);
         }
 
         private Expression ParseExportDeclaration(ModuleLexicalContext lexicalContext)
@@ -150,9 +150,9 @@ namespace ScripterLang
             DeclarationExpression expression;
             if (!token.Match(TokenType.Keyword))
                 throw new ScripterParsingException("Expected var or function after export");
-            if (token.Value == "var" || token.Value == "let" || token.Value == "const")
+            if (token.value == "var" || token.value == "let" || token.value == "const")
                 expression = ParseVariableDeclaration(lexicalContext, true);
-            else if (token.Value == "function")
+            else if (token.value == "function")
                 expression = ParseFunctionDeclaration(lexicalContext, true);
             else
                 throw new ScripterParsingException("Expected var or function after export");
@@ -169,10 +169,10 @@ namespace ScripterLang
                 while (!Peek().Match(TokenType.RightBrace))
                 {
                     var arg = Consume().Expect(TokenType.Identifier);
-                    if (arguments.Contains(arg.Value))
-                        throw new ScripterParsingException($"Imported binding {arg.Value} was declared more than once", arg.Location);
-                    arguments.Add(arg.Value);
-                    lexicalContext.Declare(new VariableReference(arg.Value, arg.Location) { Constant = true });
+                    if (arguments.Contains(arg.value))
+                        throw new ScripterParsingException($"Imported binding {arg.value} was declared more than once", arg.location);
+                    arguments.Add(arg.value);
+                    lexicalContext.Declare(new VariableReference(arg.value, arg.location) { constant = true });
                     if (Peek().Match(TokenType.Comma))
                         MoveNext();
                 }
@@ -182,13 +182,13 @@ namespace ScripterLang
             }
             var module = Consume().Expect(TokenType.String);
             Consume().Expect(TokenType.SemiColon);
-            return new ImportExpression(arguments, module.Value, lexicalContext);
+            return new ImportExpression(arguments, module.value, lexicalContext);
         }
 
         private Expression ParseVariableStatement(ScopeLexicalContext lexicalContext, Token token)
         {
             MoveNext();
-            var expression = ParseVariableExpression(lexicalContext, new ScopedVariableAccessor(token.Value, lexicalContext));
+            var expression = ParseVariableExpression(lexicalContext, new ScopedVariableAccessor(token.value, lexicalContext));
             Consume().Expect(TokenType.SemiColon);
             return expression;
         }
@@ -199,7 +199,7 @@ namespace ScripterLang
             {
                 var next = Peek();
 
-                switch (next.Type)
+                switch (next.type)
                 {
                     case TokenType.LeftBracket:
                     {
@@ -226,11 +226,11 @@ namespace ScripterLang
                     {
                         MoveNext();
                         var right = ParseValueStatementExpression(lexicalContext);
-                        return new AssignmentOperatorExpression(accessor, next.Value, right);
+                        return new AssignmentOperatorExpression(accessor, next.value, right);
                     }
                     case TokenType.IncrementDecrement:
                         MoveNext();
-                        return new IncrementDecrementExpression(accessor, next.Value, true);
+                        return new IncrementDecrementExpression(accessor, next.value, true);
                     case TokenType.Dot:
                         MoveNext();
                         return ParseDotRightExpression(lexicalContext, accessor);
@@ -258,12 +258,12 @@ namespace ScripterLang
                 name = Peek().Match(TokenType.Identifier) ? Consume() : Token.None;
             var functionLexicalContext = new FunctionLexicalContext(lexicalContext);
             Consume().Expect(TokenType.LeftParenthesis);
-            var arguments = ParseFunctionArguments(name.Value, functionLexicalContext);
+            var arguments = ParseFunctionArguments(name.value, functionLexicalContext);
             Consume().Expect(TokenType.RightParenthesis);
             var body = ParseFunctionBody(functionLexicalContext);
-            var function = new FunctionDeclarationExpression(name.Value, arguments, body, functionLexicalContext);
-            if (name.Type == TokenType.Identifier)
-                lexicalContext.Declare(new VariableReference(name.Value, function.FunctionValue, name.Location) { Constant = true, Bound = true});
+            var function = new FunctionDeclarationExpression(name.value, arguments, body, functionLexicalContext);
+            if (name.type == TokenType.Identifier)
+                lexicalContext.Declare(new VariableReference(name.value, function.functionValue, name.location) { constant = true, bound = true});
             return function;
         }
 
@@ -289,10 +289,10 @@ namespace ScripterLang
             while (!Peek().Match(TokenType.RightParenthesis))
             {
                 var arg = Consume().Expect(TokenType.Identifier);
-                functionLexicalContext.Declare(new VariableReference(arg.Value, arg.Location) { Local = true });
-                if (arguments.Contains(arg.Value))
-                    throw new ScripterParsingException($"Argument {arg.Value} of function {name} was declared more than once", arg.Location);
-                arguments.Add(arg.Value);
+                functionLexicalContext.Declare(new VariableReference(arg.value, arg.location) { local = true });
+                if (arguments.Contains(arg.value))
+                    throw new ScripterParsingException($"Argument {arg.value} of function {name} was declared more than once", arg.location);
+                arguments.Add(arg.value);
                 if (Peek().Match(TokenType.Comma))
                     MoveNext();
             }
@@ -332,7 +332,7 @@ namespace ScripterLang
             Consume().Expect(TokenType.LeftParenthesis);
             Expression initializer;
             var next = Peek();
-            if (next.Match(TokenType.Keyword) && (next.Value == "var" || next.Value == "let"))
+            if (next.Match(TokenType.Keyword) && (next.value == "var" || next.value == "let"))
                 initializer = ParseVariableDeclaration(loopLexicalContext, false);
             else
                 initializer = ParseValueStatementExpression(loopLexicalContext);
@@ -370,7 +370,7 @@ namespace ScripterLang
             MoveNext();
             var nameToken = Consume();
             nameToken.Expect(TokenType.Identifier);
-            lexicalContext.Declare(new VariableReference(nameToken.Value, nameToken.Location) { Local = true, Constant = isConstant });
+            lexicalContext.Declare(new VariableReference(nameToken.value, nameToken.location) { local = true, constant = isConstant });
             var next = Peek();
 
             if (next.Match(TokenType.Assignment))
@@ -378,36 +378,31 @@ namespace ScripterLang
                 MoveNext();
                 var initialValue = ParseValueStatementExpression(lexicalContext);
                 Consume().Expect(TokenType.SemiColon);
-                return new VariableDeclarationExpression(nameToken.Value, initialValue, lexicalContext);
+                return new VariableDeclarationExpression(nameToken.value, initialValue, lexicalContext);
             }
 
             Consume().Expect(TokenType.SemiColon);
-            return new VariableDeclarationExpression(nameToken.Value, UndefinedExpression.Instance, lexicalContext);
+            return new VariableDeclarationExpression(nameToken.value, UndefinedExpression.Instance, lexicalContext);
         }
 
-        private Expression ParseValueStatementExpression(ScopeLexicalContext lexicalContext)
-        {
-            return ParseValueStatementExpression(lexicalContext, 0);
-        }
-
-        private Expression ParseValueStatementExpression(ScopeLexicalContext lexicalContext, int precedence)
+        private Expression ParseValueStatementExpression(ScopeLexicalContext lexicalContext, int precedence = 0)
         {
             var left = ParsePureValueExpression(lexicalContext);
 
-            while (precedence < GetOperatorPrecedence(Peek().Value)) {
+            while (precedence < GetOperatorPrecedence(Peek().value)) {
                 var operatorToken = Consume();
-                if (operatorToken.Type == TokenType.Operator)
+                if (operatorToken.type == TokenType.Operator)
                 {
-                    var right = ParseValueStatementExpression(lexicalContext, GetOperatorPrecedence(operatorToken.Value));
-                    left = new BinaryExpression(left, operatorToken.Value, right);
+                    var right = ParseValueStatementExpression(lexicalContext, GetOperatorPrecedence(operatorToken.value));
+                    left = new BinaryExpression(left, operatorToken.value, right);
                 }
-                else if (operatorToken.Type == TokenType.Dot)
+                else if (operatorToken.type == TokenType.Dot)
                 {
                     left = ParseDotRightExpression(lexicalContext, left);
                 }
                 else
                 {
-                    throw new ScripterParsingException($"Unexpected operator '{operatorToken.Value}'");
+                    throw new ScripterParsingException($"Unexpected operator '{operatorToken.value}'");
                 }
             }
 
@@ -417,7 +412,7 @@ namespace ScripterLang
         private Expression ParseDotRightExpression(ScopeLexicalContext lexicalContext, Expression left)
         {
             var property = Consume().Expect(TokenType.Identifier);
-            var accessor = new PropertyAccessor(left, property.Value);
+            var accessor = new PropertyAccessor(left, property.value);
             return ParseVariableExpression(lexicalContext, accessor);
         }
 
@@ -482,16 +477,16 @@ namespace ScripterLang
         private Expression ParsePureValueExpression(ScopeLexicalContext lexicalContext)
         {
             var token = Peek();
-            switch (token.Type)
+            switch (token.type)
             {
                 case TokenType.Float:
-                    return new ValueExpression(float.Parse(Consume().Value));
+                    return new ValueExpression(float.Parse(Consume().value));
                 case TokenType.Integer:
-                    return new ValueExpression(int.Parse(Consume().Value));
+                    return new ValueExpression(int.Parse(Consume().value));
                 case TokenType.String:
-                    return new ValueExpression(Consume().Value);
+                    return new ValueExpression(Consume().value);
                 case TokenType.Boolean:
-                    return new ValueExpression(bool.Parse(Consume().Value));
+                    return new ValueExpression(bool.Parse(Consume().value));
                 case TokenType.Undefined:
                     MoveNext();
                     return new UndefinedExpression();
@@ -500,9 +495,9 @@ namespace ScripterLang
                     return new NegateExpression(ParsePureValueExpression(lexicalContext));
                 case TokenType.Operator:
                     var op = Consume();
-                    if(op.Value != "-")
-                        throw new ScripterParsingException($"Unexpected unary operator token '{token.Value}'", token.Location);
-                    return new UnaryOperatorExpression(op.Value, ParsePureValueExpression(lexicalContext));
+                    if(op.value != "-")
+                        throw new ScripterParsingException($"Unexpected unary operator token '{token.value}'", token.location);
+                    return new UnaryOperatorExpression(op.value, ParsePureValueExpression(lexicalContext));
                 case TokenType.IncrementDecrement:
                     return ParseIncrementDecrementExpression(lexicalContext, Consume());
                 case TokenType.LeftParenthesis:
@@ -519,11 +514,11 @@ namespace ScripterLang
                     if (IsArrowFunction())
                         return ParseArrowFunctionExpression(lexicalContext);
 
-                    return ParseVariableExpression(lexicalContext, new ScopedVariableAccessor(Consume().Value, lexicalContext));
+                    return ParseVariableExpression(lexicalContext, new ScopedVariableAccessor(Consume().value, lexicalContext));
                 case TokenType.Keyword:
-                    if (token.Value == "function")
+                    if (token.value == "function")
                         return ParseFunctionDeclaration(lexicalContext, false);
-                    throw new ScripterParsingException($"Unexpected keyword '{token.Value}'", token.Location);
+                    throw new ScripterParsingException($"Unexpected keyword '{token.value}'", token.location);
                 case TokenType.LeftBracket:
                     MoveNext();
                     var values = ParseArgumentList(lexicalContext, TokenType.RightBracket);
@@ -532,7 +527,7 @@ namespace ScripterLang
                 case TokenType.LeftBrace:
                     return ParseObjectDeclarationExpression(lexicalContext);
                 default:
-                    throw new ScripterParsingException($"Unexpected token '{token.Value}' in value expression", token.Location);
+                    throw new ScripterParsingException($"Unexpected token '{token.value}' in value expression", token.location);
             }
         }
 
@@ -545,7 +540,7 @@ namespace ScripterLang
                 var key = Consume().Expect(TokenType.Identifier);
                 Consume().Expect(TokenType.Colon);
                 var value = ParseValueStatementExpression(lexicalContext);
-                values.Add(key.Value, value);
+                values.Add(key.value, value);
                 if (Peek().Match(TokenType.Comma))
                     MoveNext();
             }
@@ -567,8 +562,8 @@ namespace ScripterLang
             else
             {
                 var arg = Consume();
-                functionLexicalContext.Declare(new VariableReference(arg.Value, arg.Location) { Local = true });
-                arguments = new List<string> { arg.Value };
+                functionLexicalContext.Declare(new VariableReference(arg.value, arg.location) { local = true });
+                arguments = new List<string> { arg.value };
             }
             Consume().Expect(TokenType.Arrow);
             CodeBlockExpression body;
@@ -583,9 +578,9 @@ namespace ScripterLang
         private Expression ParseIncrementDecrementExpression(ScopeLexicalContext lexicalContext, Token op)
         {
             var next = Consume();
-            VariableAccessor accessor = new ScopedVariableAccessor(next.Value, lexicalContext);
+            VariableAccessor accessor = new ScopedVariableAccessor(next.value, lexicalContext);
             if (!next.Match(TokenType.Identifier))
-                throw new ScripterParsingException($"Unexpected token {next.Value}", next.Location);
+                throw new ScripterParsingException($"Unexpected token {next.value}", next.location);
             if (Peek().Match(TokenType.LeftBracket))
             {
                 MoveNext();
@@ -594,7 +589,7 @@ namespace ScripterLang
                 accessor = new IndexerAccessor(accessor, index);
             }
 
-            return new IncrementDecrementExpression(accessor, op.Value, false);
+            return new IncrementDecrementExpression(accessor, op.value, false);
         }
 
         private CodeBlockExpression ParseCodeBlock(ScopeLexicalContext lexicalContext)

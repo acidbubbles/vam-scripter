@@ -16,10 +16,10 @@ namespace ScripterLang
 
         public virtual void Declare(VariableReference variable)
         {
-            if (_variables.ContainsKey(variable.Name))
-                throw new ScripterParsingException($"Variable {variable.Name} was already declared", variable.Location);
-            _variables.Add(variable.Name, variable);
-            if (variable.Local)
+            if (_variables.ContainsKey(variable.name))
+                throw new ScripterParsingException($"Variable {variable.name} was already declared", variable.location);
+            _variables.Add(variable.name, variable);
+            if (variable.local)
                 _localReferences.Add(variable);
         }
 
@@ -40,8 +40,8 @@ namespace ScripterLang
             for (var i = 0; i < _localReferences.Count; i++)
             {
                 var variable = _localReferences[i];
-                variable.Value = Value.Undefined;
-                variable.Initialized = false;
+                variable.value = Value.Undefined;
+                variable.initialized = false;
             }
         }
     }

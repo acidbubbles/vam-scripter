@@ -13,7 +13,7 @@ public class TokenizerTests
             var x = 12.34;
             """);
 
-        Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "var", "x", "=", "12.34", ";" }));
+        Assert.That(tokens.Select(t => t.value), Is.EqualTo(new[] { "var", "x", "=", "12.34", ";" }));
     }
 
     [Test]
@@ -24,7 +24,7 @@ public class TokenizerTests
             y = 2;
             """);
 
-        Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "x", "=", "1", ";", "y", "=", "2", ";" }));
+        Assert.That(tokens.Select(t => t.value), Is.EqualTo(new[] { "x", "=", "1", ";", "y", "=", "2", ";" }));
     }
 
     [Test]
@@ -34,7 +34,7 @@ public class TokenizerTests
             log("something", 56, false);
             """);
 
-        Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "log", "(", "something", ",", "56", ",", "false", ")", ";" }));
+        Assert.That(tokens.Select(t => t.value), Is.EqualTo(new[] { "log", "(", "something", ",", "56", ",", "false", ")", ";" }));
     }
 
     [Test]
@@ -48,7 +48,7 @@ public class TokenizerTests
             }
             """);
 
-        Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "if", "(", "x", "==", "1", ")", "{", "ok", "(", ")", ";", "}", "else", "if", "(", "!", "x", ")", "{", "fail", "(", ")", ";", "}" }));
+        Assert.That(tokens.Select(t => t.value), Is.EqualTo(new[] { "if", "(", "x", "==", "1", ")", "{", "ok", "(", ")", ";", "}", "else", "if", "(", "!", "x", ")", "{", "fail", "(", ")", ";", "}" }));
     }
 
     [Test]
@@ -63,7 +63,7 @@ public class TokenizerTests
             return x;
             """);
 
-        Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "var", "x", "=", "1", ";", "return", "x", ";" }));
+        Assert.That(tokens.Select(t => t.value), Is.EqualTo(new[] { "var", "x", "=", "1", ";", "return", "x", ";" }));
     }
 
     [Test]
@@ -73,6 +73,6 @@ public class TokenizerTests
             x /= 2.3;
             """);
 
-        Assert.That(tokens.Select(t => t.Value), Is.EqualTo(new[] { "x", "/=", "2.3", ";" }));
+        Assert.That(tokens.Select(t => t.value), Is.EqualTo(new[] { "x", "/=", "2.3", ";" }));
     }
 }

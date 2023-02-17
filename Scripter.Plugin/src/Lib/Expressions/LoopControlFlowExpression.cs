@@ -25,9 +25,9 @@
         public override Value Evaluate()
         {
             if(_isBreak)
-                _context.IsBreak = true;
+                _context.isBreak = true;
             else
-                _context.IsContinue = true;
+                _context.isContinue = true;
             return Value.Void;
         }
 

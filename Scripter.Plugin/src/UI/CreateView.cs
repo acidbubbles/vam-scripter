@@ -7,7 +7,7 @@ using UnityEngine.UI;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public class CreateView : MonoBehaviour
 {
-    public static CreateView Create(Transform parent, ScripterUI ui)
+    public static CreateView Create(Transform parent)
     {
         var go = new GameObject();
         go.transform.SetParent(parent, false);
@@ -36,13 +36,13 @@ public class CreateView : MonoBehaviour
 
         view._createIndex = AddButton(go.transform, "Create index (main) script", () =>
         {
-            Scripter.Singleton.ProgramFiles.Create("index.js", "import { self } from \"scripter\";\n\n// Write your code here!");
+            Scripter.singleton.programFiles.Create("index.js", "import { self } from \"scripter\";\n\n// Write your code here!");
         });
 
         AddButton(go.transform, "Create new library script", () =>
         {
-            var name = Scripter.Singleton.ProgramFiles.NewName();
-            Scripter.Singleton.ProgramFiles.Create(name, "export function myFunction() {\n  // Write your code here!\n}");
+            var name = Scripter.singleton.programFiles.NewName();
+            Scripter.singleton.programFiles.Create(name, "export function myFunction() {\n  // Write your code here!\n}");
         });
 
         return view;
@@ -52,7 +52,7 @@ public class CreateView : MonoBehaviour
 
     private static UIDynamicButton AddButton(Transform parent, string label, UnityAction action)
     {
-        var button = Instantiate(Scripter.Singleton.manager.configurableButtonPrefab, parent, false);
+        var button = Instantiate(Scripter.singleton.manager.configurableButtonPrefab, parent, false);
 
         var ui = button.GetComponent<UIDynamicButton>();
 
@@ -65,6 +65,6 @@ public class CreateView : MonoBehaviour
 
     private void OnEnable()
     {
-        _createIndex.button.interactable = Scripter.Singleton.ProgramFiles.Files.All(s => s.NameJSON.val != "index.js");
+        _createIndex.button.interactable = Scripter.singleton.programFiles.files.All(s => s.nameJSON.val != "index.js");
     }
 }

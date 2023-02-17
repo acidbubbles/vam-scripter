@@ -16,8 +16,8 @@
         public override void Bind()
         {
             _expression.Bind();
-            _variable = _context.GetVariable(Name);
-            _variable.Bound = true;
+            _variable = _context.GetVariable(name);
+            _variable.bound = true;
         }
 
         public override Value Evaluate()
@@ -29,7 +29,7 @@
 
         public override string ToString()
         {
-            return $"var {Name} = {_expression}";
+            return $"var {name} = {_expression}";
         }
     }
 }

@@ -28,7 +28,7 @@ public class LanguageTests
     [Test]
     public void Globals()
     {
-        _program.GlobalContext.DeclareGlobal("v", 1);
+        _program.globalContext.DeclareGlobal("v", 1);
         _program.Register("index.js", """
             return v + 1;
             """);
@@ -98,7 +98,7 @@ public class LanguageTests
     [Test]
     public void CustomFunctions()
     {
-        _program.GlobalContext.DeclareGlobal("MyFunction", Value.CreateFunction((context, args) =>
+        _program.globalContext.DeclareGlobal("MyFunction", Value.CreateFunction((context, args) =>
         {
             Assert.That(context.GetVariable("x").GetValue().RawInt, Is.EqualTo(1));
             Assert.That(args[0].ToString(), Is.EqualTo("1"));
@@ -279,7 +279,7 @@ public class LanguageTests
     [Test]
     public void Arrays()
     {
-        _program.GlobalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
+        _program.globalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => new MyThing { value = args[0].AsInt }));
         _program.Register("index.js", """
             var x = [];
             x.add(1);
@@ -313,7 +313,7 @@ public class LanguageTests
     [Test]
     public void Objects()
     {
-        _program.GlobalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => new MyThing { Value = args[0].AsInt }));
+        _program.globalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => new MyThing { value = args[0].AsInt }));
         _program.Register("index.js", """
             var x = getThing(10);
             var o = getThing(1);
@@ -336,18 +336,18 @@ public class LanguageTests
     {
         var thing = new MyThing
         {
-            Deep = new MyThing
+            deep = new MyThing
             {
-                Deep = new MyThing
+                deep = new MyThing
                 {
-                    Deep = new MyThing
+                    deep = new MyThing
                     {
-                        Value = 1
+                        value = 1
                     }
                 }
             }
         };
-        _program.GlobalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => thing));
+        _program.globalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => thing));
         _program.Register("index.js", """
             var o = getThing(1);
             o.deep.deep.deep.value = o.deep.deep.deep.value + 1;
@@ -380,7 +380,7 @@ public class LanguageTests
     public void ImportNoVariables()
     {
         var called = Value.Undefined;
-        _program.GlobalContext.DeclareGlobal("test", new FunctionReference((context, args) => called = args[0]));
+        _program.globalContext.DeclareGlobal("test", new FunctionReference((context, args) => called = args[0]));
         _program.Register("lib.js", """
             test("ok");
             """);
@@ -436,15 +436,15 @@ public class LanguageTests
 
     private class MyThing : ObjectReference
     {
-        public int Value;
-        public MyThing Deep;
+        public int value;
+        public MyThing deep;
 
         public override Value GetProperty(string name)
         {
             switch (name)
             {
-                case "value": return Value;
-                case "deep": return Deep;
+                case "value": return value;
+                case "deep": return deep;
                 case "increment": return Func(Increment);
                 case "createAndAdd": return Func(CreateAndAdd);
                 default: return base.GetProperty(name);
@@ -456,7 +456,7 @@ public class LanguageTests
             switch (name)
             {
                 case "value":
-                    Value = value.AsInt;
+                    this.value = value.AsInt;
                     break;
                 default:
                     base.SetProperty(name, value);
@@ -467,13 +467,13 @@ public class LanguageTests
         private Value Increment(LexicalContext context, Value[] args)
         {
             ValidateArgumentsLength(nameof(Increment), args, 1);
-            return  (Value = Value + args[0].AsInt);
+            return  (value = value + args[0].AsInt);
         }
 
         private Value CreateAndAdd(LexicalContext context, Value[] args)
         {
             ValidateArgumentsLength(nameof(CreateAndAdd), args, 1);
-            return new MyThing { Value = Value + args[0].AsInt };
+            return new MyThing { value = value + args[0].AsInt };
         }
     }
 

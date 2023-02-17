@@ -21,7 +21,7 @@ namespace ScripterLang
         {
             _tryBlock.Bind();
             if (_catchVariable != null)
-                _catchVariable.Bound = true;
+                _catchVariable.bound = true;
             _catchBlock?.Bind();
             _finallyBlock?.Bind();
         }
