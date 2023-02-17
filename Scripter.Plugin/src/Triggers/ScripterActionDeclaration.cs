@@ -53,8 +53,6 @@ public class ScripterActionDeclaration : ScripterParamDeclarationBase, IDisposab
         }
     }
 
-
-    private readonly Value[] _callbackArgs = new Value[0];
     private Value OnChange(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(OnChange), args, 1);
@@ -65,7 +63,7 @@ public class ScripterActionDeclaration : ScripterParamDeclarationBase, IDisposab
 
     public void OnChange(LexicalContext context, FunctionReference fn)
     {
-        _valueJSON.actionCallback = () => { fn(context, _callbackArgs); };
+        _valueJSON.actionCallback = () => { fn(context, Value.EmptyValues); };
     }
 
     public void Dispose()

@@ -15,6 +15,7 @@ namespace ScripterLang
 
         public static readonly Value Undefined = new Value { Type = ValueTypes.UndefinedType };
         public static readonly Value Void = new Value { Type = ValueTypes.Uninitialized };
+        public static readonly Value[] EmptyValues = new Value[0];
 
         [FieldOffset(0)] public ushort Type;
         [FieldOffset(4)] private float _floatValue;

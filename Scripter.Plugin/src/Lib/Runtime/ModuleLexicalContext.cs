@@ -37,5 +37,10 @@ namespace ScripterLang
 
             _disposables.Clear();
         }
+
+        public void UnregisterDisposable(IDisposable disposable)
+        {
+            _disposables.Remove(disposable);
+        }
     }
 }

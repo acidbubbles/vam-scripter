@@ -31,6 +31,8 @@ A scripting engine to write some code inside Virt-A-Mate without having to write
 ## Globals
 
 - [`console`](#console)
+- [`setTimeout`](#settimeout)
+- [`clearTimeout`](#settimeout)
 
 ## Modules
 
@@ -56,11 +58,29 @@ import {
 
 ### `Console`
 
-| Property | Type                       | Notes                                             |
-|----------|----------------------------|---------------------------------------------------|
-| `log`    | function(string) => `void` | Uses `SuperController.LogMessage`                 |
-| `error`  | function(string) => `void` | Uses `SuperController.LogError`                   |
-| `clear`  | function() => `void`       | Uses `SuperController.singleton.ClearMessages();` |
+Writes to the Scripter log window. If the log window is not visible, errors will be sent to the Virt-A-Mate errors window.
+
+```js
+console.log("Hello World");
+console.log("Hello", 1);
+```
+
+| Property | Type                            | Notes                           |
+|----------|---------------------------------|---------------------------------|
+| `log`    | function(string, ...) => `void` | Logs information to the console |
+| `error`  | function(string, ...) => `void` | Writes logs in red              |
+| `clear`  | function() => `void`            | Clears the console              |
+
+### `setTimeout`
+
+```js
+// Calls the function later
+var timeout = setTimeout(() => {
+    console.log("Shown a second later");
+}, 1000);
+// Cancels the timeout
+clearTimeout(timeout);
+```
 
 ### `ScripterPlugin`
 

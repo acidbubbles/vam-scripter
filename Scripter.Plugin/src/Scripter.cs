@@ -9,8 +9,6 @@ public class Scripter : MVRScript
 {
     public static Scripter Singleton;
 
-    private static readonly Value[] _emptyArgs = new Value[0];
-
     public readonly ConsoleBuffer Console;
     public readonly ProgramFilesManager ProgramFiles;
 
@@ -88,7 +86,7 @@ public class Scripter : MVRScript
         for (var i = 0; i < OnUpdateFunctions.Count; i++)
         {
             var fn = OnUpdateFunctions[i];
-            fn.Fn.Invoke(fn.Context, _emptyArgs);
+            fn.Fn.Invoke(fn.Context, Value.EmptyValues);
         }
     }
 

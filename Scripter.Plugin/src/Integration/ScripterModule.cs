@@ -20,7 +20,6 @@ public class ScripterModule : IModule
         module.Exports.Add("time", _timeReference);
         module.Exports.Add("random", _randomReference);
         module.Exports.Add("datetime", _dateTimeClassReference);
-        #warning Call later
         return module;
     }
 
