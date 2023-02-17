@@ -279,11 +279,11 @@ public class LanguageTests
             x[0]++;
             x[0] += 1;
             x[0] = ++x[0];
-            return [x[0], x.length];
+            return [x[0], x.length, x.indexOf(5), x.indexOf(3)];
             """);
         var result = _program.Run();
 
-        Assert.That(result.ToString(), Is.EqualTo("[5, 1]"));
+        Assert.That(result.ToString(), Is.EqualTo("[5, 1, 0, -1]"));
     }
 
     [Test]

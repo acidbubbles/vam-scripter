@@ -10,6 +10,8 @@ public class SceneReference : ObjectReference
         {
             case "getAtom":
                 return Func(GetAtom);
+            case "getAtomIds":
+                return Func(GetAtomIds);
             case "getAudioClip":
                 return Func(GetAudioClip);
             default:
@@ -24,6 +26,18 @@ public class SceneReference : ObjectReference
         var atom = SuperController.singleton.GetAtomByUid(atomName);
         if (atom == null) throw new ScripterPluginException($"Could not find an atom named '{atomName}'");
         return new AtomReference(atom);
+    }
+
+    private static Value GetAtomIds(LexicalContext context, Value[] args)
+    {
+        var raw = SuperController.singleton.GetAtomUIDs();
+        var values = new List<Value>(raw.Count);
+        for (var i = 0; i < raw.Count; i++)
+        {
+            values[i] = raw[i];
+        }
+
+        return new ListReference(values);
     }
 
     private static Value GetAudioClip(LexicalContext context, Value[] args)

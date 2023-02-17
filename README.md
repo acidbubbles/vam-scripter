@@ -54,9 +54,9 @@ import {
 - [`scene: Scene`](#scene)
 - [`datetime: DateTime`](#datetime)
 
-## Classes
+## Native
 
-### `Console`
+### `console`
 
 Writes to the Scripter log window. If the log window is not visible, errors will be sent to the Virt-A-Mate errors window.
 
@@ -81,6 +81,17 @@ var timeout = setTimeout(() => {
 // Cancels the timeout
 clearTimeout(timeout);
 ```
+
+### `[]`
+
+| Property  | Type                      | Notes                                             |
+|-----------|---------------------------|---------------------------------------------------|
+| `length`  | number                    | How many entries in the array                     |
+| `add`     | function(value) => void   | Add a new value to the list                       |
+| `indexOf` | function(value) => number | Returns the index in the list, or -1 if not found |
+| `[]`      | `[number] => any`         | Get or set a value in the array                   |
+
+## Classes
 
 ### `ScripterPlugin`
 
@@ -123,6 +134,7 @@ clearTimeout(timeout);
 | Property     | Type                                          | Notes      |
 |--------------|-----------------------------------------------|------------|
 | getAtom      | function(string) => [`Atom`](#atom)           | Atom by ID |
+| getAtomIds   | function() => `string[]`                      | Atom by ID |
 | getAudioClip | function(string) => [`AudioClip`](#audioclip) | Atom by ID |
 
 ### `Atom`

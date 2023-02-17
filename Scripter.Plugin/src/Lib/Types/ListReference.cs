@@ -20,6 +20,8 @@ namespace ScripterLang
                     return Func(Add);
                 case "length":
                     return _values.Count;
+                case "indexOf":
+                    return Func(IndexOf);
                 default:
                     return base.GetProperty(name);
             }
@@ -40,6 +42,18 @@ namespace ScripterLang
             ValidateArgumentsLength(nameof(Add), args, 1);
             _values.Add(args[0]);
             return Value.Void;
+        }
+
+        private Value IndexOf(LexicalContext context, Value[] args)
+        {
+            ValidateArgumentsLength(nameof(IndexOf), args, 1);
+            var expected = args[0];
+            for(var i = 0; i < _values.Count; i++)
+            {
+                if (_values[i].Equals(expected))
+                    return i;
+            }
+            return -1;
         }
 
         public override string ToString()
