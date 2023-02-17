@@ -93,12 +93,10 @@
     <Compile Include="src\Lib\Expressions\AssignmentExpression.cs" />
     <Compile Include="src\Lib\Expressions\AssignmentOperatorExpression.cs" />
     <Compile Include="src\Lib\Expressions\BinaryExpression.cs" />
-    <Compile Include="src\Lib\Expressions\BooleanExpression.cs" />
     <Compile Include="src\Lib\Expressions\CodeBlockExpression.cs" />
     <Compile Include="src\Lib\Expressions\DeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\ExportExpression.cs" />
     <Compile Include="src\Lib\Expressions\Expression.cs" />
-    <Compile Include="src\Lib\Expressions\FloatExpression.cs" />
     <Compile Include="src\Lib\Expressions\ForExpression.cs" />
     <Compile Include="src\Lib\Expressions\FunctionCallExpression.cs" />
     <Compile Include="src\Lib\Expressions\FunctionDeclarationExpression.cs" />
@@ -107,7 +105,6 @@
     <Compile Include="src\Lib\Expressions\ImportExpression.cs" />
     <Compile Include="src\Lib\Expressions\IncrementDecrementExpression.cs" />
     <Compile Include="src\Lib\Expressions\IndexerAccessor.cs" />
-    <Compile Include="src\Lib\Expressions\IntegerExpression.cs" />
     <Compile Include="src\Lib\Expressions\LoopControlFlowExpression.cs" />
     <Compile Include="src\Lib\Expressions\ModuleExpression.cs" />
     <Compile Include="src\Lib\Expressions\NegateExpression.cs" />
@@ -116,10 +113,10 @@
     <Compile Include="src\Lib\Expressions\PropertyAccessor.cs" />
     <Compile Include="src\Lib\Expressions\ReturnExpression.cs" />
     <Compile Include="src\Lib\Expressions\ScopedVariableAccessor.cs" />
-    <Compile Include="src\Lib\Expressions\StringExpression.cs" />
     <Compile Include="src\Lib\Expressions\ThrowExpression.cs" />
     <Compile Include="src\Lib\Expressions\UnaryOperatorExpression.cs" />
     <Compile Include="src\Lib\Expressions\UndefinedExpression.cs" />
+    <Compile Include="src\Lib\Expressions\ValueExpression.cs" />
     <Compile Include="src\Lib\Expressions\VariableAccessor.cs" />
     <Compile Include="src\Lib\Expressions\VariableDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\WhileExpression.cs" />

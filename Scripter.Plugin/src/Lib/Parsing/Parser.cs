@@ -447,13 +447,13 @@ namespace ScripterLang
             switch (token.Type)
             {
                 case TokenType.Float:
-                    return new FloatExpression(float.Parse(Consume().Value));
+                    return new ValueExpression(float.Parse(Consume().Value));
                 case TokenType.Integer:
-                    return new IntegerExpression(int.Parse(Consume().Value));
+                    return new ValueExpression(int.Parse(Consume().Value));
                 case TokenType.String:
-                    return new StringExpression(Consume().Value);
+                    return new ValueExpression(Consume().Value);
                 case TokenType.Boolean:
-                    return new BooleanExpression(bool.Parse(Consume().Value));
+                    return new ValueExpression(bool.Parse(Consume().Value));
                 case TokenType.Undefined:
                     MoveNext();
                     return new UndefinedExpression();

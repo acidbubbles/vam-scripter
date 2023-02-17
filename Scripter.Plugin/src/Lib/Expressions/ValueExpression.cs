@@ -1,22 +1,22 @@
 ﻿namespace ScripterLang
 {
-    public class FloatExpression : Expression
+    public class ValueExpression : Expression
     {
-        private readonly float _value;
+        private readonly Value _value;
 
-        public FloatExpression(float value)
+        public ValueExpression(Value value)
         {
             _value = value;
         }
 
         public override Value Evaluate()
         {
-            return Value.CreateFloat(_value);
+            return _value;
         }
 
         public override string ToString()
         {
-            return $"{_value}";
+            return _value.ToCodeString();
         }
     }
 }
