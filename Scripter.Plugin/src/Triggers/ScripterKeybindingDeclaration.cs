@@ -2,44 +2,23 @@
 using ScripterLang;
 using SimpleJSON;
 
-public class ScripterActionDeclaration : ScripterParamDeclarationBase, IDisposable
+public class ScripterKeybindingDeclaration : ScripterParamDeclarationBase, IDisposable
 {
     public const string Type = "Action";
 
     private readonly JSONStorableAction _valueJSON;
 
-    public ScripterActionDeclaration(string name)
+    public ScripterKeybindingDeclaration(string name)
     {
         var scripter = Scripter.Singleton;
-        var existing = scripter.GetAction(name);
-        if (existing == null)
-        {
-            _valueJSON = new JSONStorableAction(name, () => { });
-            scripter.RegisterAction(_valueJSON);
-        }
-        else
-        {
-            _valueJSON = existing;
-            _valueJSON.actionCallback = () => { };
-        }
-    }
-
-    public static ScripterParamDeclarationBase FromJSONImpl(JSONNode json)
-    {
-        var trigger = new ScripterActionDeclaration(
-            json["Name"]
-        );
-        return trigger;
+        scripter.KeybindingsTriggers.Add(this);
+        Scripter.Singleton.UpdateKeybindings();
+        _valueJSON = new JSONStorableAction(name, () => { });
     }
 
     public override JSONClass GetJSON()
     {
-        var json = new JSONClass
-        {
-            { "Type", Type },
-            { "Name", _valueJSON.name },
-        };
-        return json;
+        throw new NotSupportedException("No JSON serialization for keybindings.");
     }
 
     public override Value GetProperty(string name)
@@ -69,5 +48,7 @@ public class ScripterActionDeclaration : ScripterParamDeclarationBase, IDisposab
     public void Dispose()
     {
         _valueJSON.actionCallback = null;
+        Scripter.Singleton.KeybindingsTriggers.Remove(this);
+        Scripter.Singleton.UpdateKeybindings();
     }
 }

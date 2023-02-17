@@ -9,6 +9,8 @@ public class ScripterPluginReference : ObjectReference
         {
             case "onUpdate":
                 return Func(OnUpdate);
+            case "onFixedUpdate":
+                return Func(OnFixedUpdate);
             case "declareFloatParam":
                 return Func(DeclareFloatParam);
             case "declareStringParam":
@@ -17,6 +19,8 @@ public class ScripterPluginReference : ObjectReference
                 return Func(DeclareBoolParam);
             case "declareAction":
                 return Func(DeclareAction);
+            case "declareKeybinding":
+                return Func(DeclareKeybinding);
             default:
                 return base.GetProperty(name);
         }
@@ -99,7 +103,18 @@ public class ScripterPluginReference : ObjectReference
         var name = args[0].AsString;
         var fn = args[1].AsFunction;
         var param = new ScripterActionDeclaration(name);
-        param.OnChange(context, fn);
+        param.OnTrigger(context, fn);
+        context.GetModuleContext().RegisterDisposable(param);
+        return param;
+    }
+
+    private Value DeclareKeybinding(LexicalContext context, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(DeclareAction), args, 2);
+        var name = args[0].AsString;
+        var fn = args[1].AsFunction;
+        var param = new ScripterKeybindingDeclaration(name);
+        param.OnTrigger(context, fn);
         context.GetModuleContext().RegisterDisposable(param);
         return param;
     }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ScripterLang;
 using SimpleJSON;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Scripter : MVRScript
 {
@@ -18,8 +17,10 @@ public class Scripter : MVRScript
     private bool _restored;
 
     #warning TODO: basic MoveTo and LookAt commands, check if an atom exists
-    #warning TODO: Keybindings
-    public Dictionary<string, UnityEvent> KeybindingsTriggers { get; } = new Dictionary<string, UnityEvent>();
+    #warning TODO: Distance (get controller)
+    #warning TODO: isVR
+    #warning TODO: Keybindings send
+    public List<ScripterKeybindingDeclaration> KeybindingsTriggers { get; } = new List<ScripterKeybindingDeclaration>();
     public readonly List<FunctionLink> OnUpdateFunctions = new List<FunctionLink>();
     public readonly List<FunctionLink> OnFixedUpdateFunctions = new List<FunctionLink>();
 
@@ -140,12 +141,7 @@ public class Scripter : MVRScript
             {"Namespace", "Scripter"}
         });
 
-        foreach (var trigger in KeybindingsTriggers)
-        {
-            var n = trigger.Key;
-            if (n == "") continue;
-            bindings.Add(new JSONStorableAction(n, trigger.Value.Invoke));
-        }
+        bindings.AddRange(KeybindingsTriggers);
     }
 
     public void OnDestroy()

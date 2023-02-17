@@ -89,6 +89,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Triggers\\ScripterActionDeclaration.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Triggers\\ScripterBoolParamDeclaration.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Triggers\\ScripterFloatParamDeclaration.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Triggers\\ScripterKeybindingDeclaration.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Triggers\\ScripterParamDeclarationBase.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Triggers\\ScripterParamDeclarationFactory.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Triggers\\ScripterStringParamDeclaration.cs",

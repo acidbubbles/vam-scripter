@@ -78,6 +78,7 @@ src\Scripts\Script.cs
 src\Triggers\ScripterActionDeclaration.cs
 src\Triggers\ScripterBoolParamDeclaration.cs
 src\Triggers\ScripterFloatParamDeclaration.cs
+src\Triggers\ScripterKeybindingDeclaration.cs
 src\Triggers\ScripterParamDeclarationBase.cs
 src\Triggers\ScripterParamDeclarationFactory.cs
 src\Triggers\ScripterStringParamDeclaration.cs

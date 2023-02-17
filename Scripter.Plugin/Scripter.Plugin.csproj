@@ -151,6 +151,7 @@
     <Compile Include="src\Triggers\ScripterActionDeclaration.cs" />
     <Compile Include="src\Triggers\ScripterBoolParamDeclaration.cs" />
     <Compile Include="src\Triggers\ScripterFloatParamDeclaration.cs" />
+    <Compile Include="src\Triggers\ScripterKeybindingDeclaration.cs" />
     <Compile Include="src\Triggers\ScripterParamDeclarationBase.cs" />
     <Compile Include="src\Triggers\ScripterParamDeclarationFactory.cs" />
     <Compile Include="src\Triggers\ScripterStringParamDeclaration.cs" />
