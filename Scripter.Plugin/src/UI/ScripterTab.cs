@@ -28,7 +28,7 @@ public class ScripterTab : MonoBehaviour
             fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            #warning Roll over
+            // TODO: Add rollover effect
             var tabBg = go.AddComponent<Image>();
             tabBg.raycastTarget = true;
             tab._bg = tabBg;
@@ -53,7 +53,7 @@ public class ScripterTab : MonoBehaviour
             filenameLayout.minHeight = filenameLayout.preferredHeight = 70;
 
             var text = filename.AddComponent<Text>();
-            #warning Link to NameJSON, double-click to edit
+            // TODO: Rename a script (double-click on the tab)
             text.font = SuperController.singleton.dynamicButtonPrefab.GetComponentInChildren<Text>(true).font;
             text.fontSize = 28;
             text.text = label;

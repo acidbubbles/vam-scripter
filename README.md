@@ -44,6 +44,7 @@ import {
     random,
     scene,
     environment,
+    keybindings,
     datetime
 } from "scripter";
 ```
@@ -53,6 +54,7 @@ import {
 - [`random: Random`](#random)
 - [`scene: Scene`](#scene)
 - [`environment: Environment`](#environment)
+- [`keybindings: Keybindings`](#environment)
 - [`datetime: DateTime`](#datetime)
 
 ## Native
@@ -102,7 +104,6 @@ clearTimeout(timeout);
 | declareStringParam | function({ name: string, default?: string, onChange: function(string) => void }}) => [`StringParamDeclaration`](#stringparamdeclaration)                                            | Param trigger by ID                                                            |
 | declareBoolParam   | function({ name: string, default?: string, onChange: function(bool) => void }) => [`BoolParamDeclaration`](#boolparamdeclaration)                                                   | Param trigger by ID                                                            |
 | declareAction      | function(string, function) => [`ActionDeclaration`](#actionparamdeclaration)                                                                                                        | Invoke an action trigger by ID                                                 |
-| declareKeybinding  | function(string, function) => [`KeybindingDeclaration`](#keybindingdeclaration)                                                                                                     | Invoke a [Keybindings](https://github.com/acidbubbles/vam-keybindings) trigger |
 | onUpdate           | function(function) => void                                                                                                                                                          | Called every frame                                                             |
 | onFixedUpdate      | function(function) => void                                                                                                                                                          | Called every physics frame                                                     |
 
@@ -209,6 +210,19 @@ clearTimeout(timeout);
 | Property     | Type                                          | Notes                                         |
 |--------------|-----------------------------------------------|-----------------------------------------------|
 | isVR         | boolean                                       | Whether the user currently wears a VR headset |
+
+### `Keybindings`
+
+| Property          | Type                                                                             | Notes                                                                           |
+|-------------------|----------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| invokeCommand     | function(commandName: string) => void                                            | Invoke a Keybinding command, if it exists                                       |
+| declareKeybinding | function(string, function) => [`KeybindingDeclaration`](#keybindingdeclaration)  | Invoke a [Keybindings](https://github.com/acidbubbles/vam-keybindings) trigger  |
+
+### `KeybindingDeclaration`
+
+| Property | Type | Notes |
+|----------|------|-------|
+| N/A      | N/A  | N/A   |
 
 ### `Time`
 

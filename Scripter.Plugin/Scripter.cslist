@@ -9,6 +9,7 @@ src\Integration\EnvironmentReference.cs
 src\Integration\FloatParamReference.cs
 src\Integration\FunctionLink.cs
 src\Integration\GlobalFunctions.cs
+src\Integration\KeybindingsReference.cs
 src\Integration\NamedAudioClipReference.cs
 src\Integration\RandomReference.cs
 src\Integration\SceneReference.cs

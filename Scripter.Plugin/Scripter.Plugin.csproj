@@ -82,6 +82,7 @@
     <Compile Include="src\Integration\FloatParamReference.cs" />
     <Compile Include="src\Integration\FunctionLink.cs" />
     <Compile Include="src\Integration\GlobalFunctions.cs" />
+    <Compile Include="src\Integration\KeybindingsReference.cs" />
     <Compile Include="src\Integration\NamedAudioClipReference.cs" />
     <Compile Include="src\Integration\RandomReference.cs" />
     <Compile Include="src\Integration\SceneReference.cs" />

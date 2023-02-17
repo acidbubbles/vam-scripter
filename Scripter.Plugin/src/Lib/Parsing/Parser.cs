@@ -20,7 +20,7 @@ namespace ScripterLang
 
         private Token Peek()
         {
-            if (IsAtEnd()) return Token.None;
+            if (IsAtEnd()) return new Token(TokenType.None, "EOF", new Location { Line = _tokens[_tokens.Count - 1].Location.Line + 1 });
             return _tokens[_position];
         }
 

@@ -10,6 +10,7 @@ public class ScripterModule : IModule
     private static readonly RandomReference _randomReference = new RandomReference();
     private static readonly DateTimeClassReference _dateTimeClassReference = new DateTimeClassReference();
     private static readonly EnvironmentReference _environmentReference = new EnvironmentReference();
+    private static readonly KeybindingsReference _keybindingsReference = new KeybindingsReference();
 
     private static readonly ModuleNamespace _ns = Initialize();
 
@@ -22,6 +23,7 @@ public class ScripterModule : IModule
         module.Exports.Add("random", _randomReference);
         module.Exports.Add("datetime", _dateTimeClassReference);
         module.Exports.Add("environment", _environmentReference);
+        module.Exports.Add("keybindings", _keybindingsReference);
         return module;
     }
 

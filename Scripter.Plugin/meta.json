@@ -20,6 +20,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\FloatParamReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\FunctionLink.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\GlobalFunctions.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\KeybindingsReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\NamedAudioClipReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\RandomReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\SceneReference.cs",

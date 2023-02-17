@@ -11,7 +11,6 @@ public static class GlobalFunctions
         lexicalContext.DeclareGlobal("setTimeout", Value.CreateFunction(SetTimeout));
         lexicalContext.DeclareGlobal("clearTimeout", Value.CreateFunction(ClearTimeout));
         lexicalContext.DeclareModule(new ScripterModule());
-        #warning Add Keybindings invoke
     }
 
     private static Value SetTimeout(LexicalContext context, Value[] args)

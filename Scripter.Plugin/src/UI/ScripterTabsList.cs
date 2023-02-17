@@ -59,7 +59,7 @@ public class ScripterTabsList : MonoBehaviour
 
     public void RemoveTab(ScripterTab tab)
     {
-        #warning Test (add a way to remove something)
+        // TODO: Remove a file (and the tab)
         Destroy(tab.content.gameObject);
         Destroy(tab.gameObject);
     }

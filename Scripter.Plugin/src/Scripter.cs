@@ -16,7 +16,6 @@ public class Scripter : MVRScript
 
     private bool _restored;
 
-    #warning TODO: Keybindings send
     public List<ScripterKeybindingDeclaration> KeybindingsTriggers { get; } = new List<ScripterKeybindingDeclaration>();
     public readonly List<FunctionLink> OnUpdateFunctions = new List<FunctionLink>();
     public readonly List<FunctionLink> OnFixedUpdateFunctions = new List<FunctionLink>();
