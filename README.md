@@ -43,6 +43,7 @@ import {
     time,
     random,
     scene,
+    environment,
     datetime
 } from "scripter";
 ```
@@ -51,6 +52,7 @@ import {
 - [`time: Time`](#time)
 - [`random: Random`](#random)
 - [`scene: Scene`](#scene)
+- [`environment: Environment`](#environment)
 - [`datetime: DateTime`](#datetime)
 
 ## Native
@@ -192,6 +194,12 @@ clearTimeout(timeout);
 | Property | Type | Notes                                       |
 |----------|------|---------------------------------------------|
 | N/A      | N/A  | A named audio clip from the Scene Audio tab |
+
+### `Environment`
+
+| Property     | Type                                          | Notes                                         |
+|--------------|-----------------------------------------------|-----------------------------------------------|
+| isVR         | boolean                                       | Whether the user currently wears a VR headset |
 
 ### `Time`
 
