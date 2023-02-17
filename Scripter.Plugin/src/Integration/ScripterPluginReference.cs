@@ -31,6 +31,15 @@ public class ScripterPluginReference : ObjectReference
         return Value.Void;
     }
 
+    private Value OnFixedUpdate(LexicalContext context, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(OnFixedUpdate), args, 1);
+        var fn = args[0].AsFunction;
+        var link = new FunctionLink(Scripter.Singleton.OnFixedUpdateFunctions, context, fn);
+        context.GetModuleContext().RegisterDisposable(link);
+        return Value.Void;
+    }
+
     private Value DeclareFloatParam(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(DeclareFloatParam), args, 1);

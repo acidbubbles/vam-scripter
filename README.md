@@ -94,12 +94,15 @@ clearTimeout(timeout);
 
 ### `ScripterPlugin`
 
-| Property           | Type                                                                                                                                                                                | Notes                          |
-|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
-| declareFloatParam  | function({ name: string, default?: number, min?: number, max?: number, constrain?: bool, onChange: function(number) => void }) => [`FloatParamDeclaration`](#floatparamdeclaration) | Param trigger by ID            |
-| declareStringParam | function({ name: string, default?: string, onChange: function(string) => void }}) => [`StringParamDeclaration`](#stringparamdeclaration)                                            | Param trigger by ID            |
-| declareBoolParam   | function({ name: string, default?: string, onChange: function(bool) => void }) => [`BoolParamDeclaration`](#boolparamdeclaration)                                                   | Param trigger by ID            |
-| declareActionParam | function(string, function) => [`ActionDeclaration`](#actionparamdeclaration)                                                                                                        | Invoke an action trigger by ID |
+| Property           | Type                                                                                                                                                                                | Notes                                                   |
+|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| declareFloatParam  | function({ name: string, default?: number, min?: number, max?: number, constrain?: bool, onChange: function(number) => void }) => [`FloatParamDeclaration`](#floatparamdeclaration) | Param trigger by ID                                     |
+| declareStringParam | function({ name: string, default?: string, onChange: function(string) => void }}) => [`StringParamDeclaration`](#stringparamdeclaration)                                            | Param trigger by ID                                     |
+| declareBoolParam   | function({ name: string, default?: string, onChange: function(bool) => void }) => [`BoolParamDeclaration`](#boolparamdeclaration)                                                   | Param trigger by ID                                     |
+| declareActionParam | function(string, function) => [`ActionDeclaration`](#actionparamdeclaration)                                                                                                        | Invoke an action trigger by ID                          |
+| onUpdate           | function(function) => void                                                                                                                                                          | Called every frame                                      |
+| onFixedUpdate      | function(function) => void                                                                                                                                                          | Called every physics frame                              |
+
 
 ### `FloatParamDeclaration`
 

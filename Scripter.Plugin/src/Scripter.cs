@@ -17,10 +17,11 @@ public class Scripter : MVRScript
 
     private bool _restored;
 
-    #warning TODO: FixedUpdate, basic MoveTo and LookAt commands, check if an atom exists
+    #warning TODO: basic MoveTo and LookAt commands, check if an atom exists
     #warning TODO: Keybindings
     public Dictionary<string, UnityEvent> KeybindingsTriggers { get; } = new Dictionary<string, UnityEvent>();
     public readonly List<FunctionLink> OnUpdateFunctions = new List<FunctionLink>();
+    public readonly List<FunctionLink> OnFixedUpdateFunctions = new List<FunctionLink>();
 
     public Scripter()
     {
@@ -86,6 +87,15 @@ public class Scripter : MVRScript
         for (var i = 0; i < OnUpdateFunctions.Count; i++)
         {
             var fn = OnUpdateFunctions[i];
+            fn.Fn.Invoke(fn.Context, Value.EmptyValues);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        for (var i = 0; i < OnFixedUpdateFunctions.Count; i++)
+        {
+            var fn = OnFixedUpdateFunctions[i];
             fn.Fn.Invoke(fn.Context, Value.EmptyValues);
         }
     }
