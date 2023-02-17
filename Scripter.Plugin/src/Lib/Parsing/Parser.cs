@@ -121,22 +121,25 @@ namespace ScripterLang
 
         private Expression ParseImportDeclaration(ModuleLexicalContext lexicalContext)
         {
-            #warning allow import from ""; without specific values
             MoveNext();
-            Consume().Expect(TokenType.LeftBrace);
             var arguments = new List<string>();
-            while (!Peek().Match(TokenType.RightBrace))
+            if (Peek().Match(TokenType.LeftBrace))
             {
-                var arg = Consume().Expect(TokenType.Identifier);
-                if (arguments.Contains(arg.Value))
-                    throw new ScripterParsingException($"Imported binding {arg.Value} was declared more than once", arg.Location);
-                arguments.Add(arg.Value);
-                lexicalContext.Declare(new VariableReference(arg.Value, arg.Location) { Constant = true });
-                if (Peek().Match(TokenType.Comma))
-                    MoveNext();
+                MoveNext();
+                while (!Peek().Match(TokenType.RightBrace))
+                {
+                    var arg = Consume().Expect(TokenType.Identifier);
+                    if (arguments.Contains(arg.Value))
+                        throw new ScripterParsingException($"Imported binding {arg.Value} was declared more than once", arg.Location);
+                    arguments.Add(arg.Value);
+                    lexicalContext.Declare(new VariableReference(arg.Value, arg.Location) { Constant = true });
+                    if (Peek().Match(TokenType.Comma))
+                        MoveNext();
+                }
+
+                Consume().Expect(TokenType.RightBrace);
+                Consume().Expect(TokenType.Keyword, "from");
             }
-            Consume().Expect(TokenType.RightBrace);
-            Consume().Expect(TokenType.Keyword, "from");
             var module = Consume().Expect(TokenType.String);
             Consume().Expect(TokenType.SemiColon);
             return new ImportExpression(arguments, module.Value, lexicalContext);

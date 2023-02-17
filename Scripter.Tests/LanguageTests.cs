@@ -369,6 +369,22 @@ public class LanguageTests
     }
 
     [Test]
+    public void ImportNoVariables()
+    {
+        var called = Value.Undefined;
+        _program.GlobalContext.DeclareGlobal("test", new FunctionReference((context, args) => called = args[0]));
+        _program.Register("lib.js", """
+            test("ok");
+            """);
+        _program.Register("index.js", """
+            import "./lib.js";
+            """);
+        _program.Run();
+
+        Assert.That(called.ToString(), Is.EqualTo("ok"));
+    }
+
+    [Test]
     public void ImportExportNoOrder()
     {
         _program.Register("index.js", """
