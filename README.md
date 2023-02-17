@@ -144,9 +144,10 @@ clearTimeout(timeout);
 
 ### `Atom`
 
-| Property    | Type                                        | Notes          |
-|-------------|---------------------------------------------|----------------|
-| getStorable | function(string) => [`Storable`](#storable) | Storable by ID |
+| Property      | Type                                            | Notes          |
+|---------------|-------------------------------------------------|----------------|
+| getStorable   | function(string) => [`Storable`](#storable)     | Storable by ID |
+| getController | function(string) => [`Controller`](#controller) | Storable by ID |
 
 ### `Storable`
 
@@ -194,6 +195,12 @@ clearTimeout(timeout);
 | Property | Type | Notes                                       |
 |----------|------|---------------------------------------------|
 | N/A      | N/A  | A named audio clip from the Scene Audio tab |
+
+### `Controller`
+
+| Property | Type                             | Notes                                          |
+|----------|----------------------------------|------------------------------------------------|
+| distance | function(Controller) => `number` | Finds out the distance between two controllers |
 
 ### `Environment`
 
@@ -313,6 +320,18 @@ var person = scene.getAtom("Person").getStorable("HeadAudioSource").getAudioActi
 
 speaker.play(music);
 person.play(laugh);
+```
+
+Find out the distance between two objects
+
+```js
+import { scene } from "scripter";
+
+var rightHand = scene.getAtom("Person").getController("rHandControl");
+var ball = scene.getAtom("SPhere").getController("control");
+var distance = rightHand.distance(ball);
+
+console.log("The distance between the hand and the ball is " + distance);
 ```
 
 Create an event that you can call from [Keybindings](https://github.com/acidbubbles/vam-keybindings):

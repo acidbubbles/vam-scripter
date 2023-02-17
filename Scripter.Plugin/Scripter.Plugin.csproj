@@ -75,6 +75,7 @@
     <Compile Include="src\Integration\AudioActionReference.cs" />
     <Compile Include="src\Integration\BoolParamReference.cs" />
     <Compile Include="src\Integration\ConsoleReference.cs" />
+    <Compile Include="src\Integration\ControllerReference.cs" />
     <Compile Include="src\Integration\DateTimeClassReference.cs" />
     <Compile Include="src\Integration\DateTimeReference.cs" />
     <Compile Include="src\Integration\EnvironmentReference.cs" />
