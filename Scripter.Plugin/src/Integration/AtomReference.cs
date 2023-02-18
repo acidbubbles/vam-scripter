@@ -28,7 +28,7 @@ public class AtomReference : ObjectReference
         ValidateArgumentsLength(nameof(GetStorable), args, 1);
         var storableName = args[0].AsString;
         var storable = _atom.GetStorableByID(storableName);
-        if (storable == null) throw new ScripterPluginException($"Could not find an storable named '{storableName}' in atom '{_atom.storeId}'");
+        if (storable == null) throw new ScripterPluginException($"Could not find an storable named '{storableName}' in atom '{_atom.name}'");
         return new StorableReference(storable);
     }
 
@@ -37,7 +37,7 @@ public class AtomReference : ObjectReference
         ValidateArgumentsLength(nameof(GetStorable), args, 1);
         var controllerName = args[0].AsString;
         var controller = _atom.freeControllers.FirstOrDefault(fc => fc.name == controllerName);
-        if (controller == null) throw new ScripterPluginException($"Could not find an storable named '{controllerName}' in atom '{_atom.storeId}'");
+        if (controller == null) throw new ScripterPluginException($"Could not find an storable named '{controllerName}' in atom '{_atom.name}'");
         return new ControllerReference(controller);
     }
 }
