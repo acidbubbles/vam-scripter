@@ -1,6 +1,6 @@
 ﻿using ScripterLang;
 
-public class EnvironmentReference : ObjectReference
+public class PlayerReference : ObjectReference
 {
     public override Value GetProperty(string name)
     {

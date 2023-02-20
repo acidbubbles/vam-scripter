@@ -78,7 +78,7 @@
     <Compile Include="src\Integration\ControllerReference.cs" />
     <Compile Include="src\Integration\DateTimeClassReference.cs" />
     <Compile Include="src\Integration\DateTimeReference.cs" />
-    <Compile Include="src\Integration\EnvironmentReference.cs" />
+    <Compile Include="src\Integration\PlayerReference.cs" />
     <Compile Include="src\Integration\FloatParamReference.cs" />
     <Compile Include="src\Integration\FunctionLink.cs" />
     <Compile Include="src\Integration\GlobalFunctions.cs" />

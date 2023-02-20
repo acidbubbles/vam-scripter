@@ -1,0 +1,67 @@
+{
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "source": {
+        "include": [
+            "index.js",
+            "src"
+        ],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": true
+    },
+    "opts": {
+        "encoding": "utf8",
+        "destination": "doc/",
+        "recurse": true,
+        "verbose": true,
+        "readme": "../README.md",
+        "template": "node_modules/clean-jsdoc-theme",
+        "theme_opts": {
+            "default_theme": "dark",
+            "search": true,
+            "homepageTitle": "Scripter for Virt-A-Mate",
+            "footer": "By Acidbubbles. Support me on <a href=\"https://www.patreon.com/acidbubbles\">Patreon</a>!",
+            "includeFilesListInHomepage": true,
+            "meta": [
+                {
+                    "name": "author",
+                    "content": "Acidbubbles"
+                },
+                {
+                    "name": "description",
+                    "content": "Virt-A-Mate JavaScript scripting plugin by Acidbubbles"
+                }
+            ],
+            "project": {
+                "title": "vam-scripter",
+                "repo": "https://github.com/acidbubbles/vam-scripter"
+            },
+            "menu": [
+                {
+                    "title": "Download on Virt-A-Mate Hub",
+                    "link": "https://hub.virtamate.com/resources/scripter.30210/",
+                    "target": "_blank"
+                },
+                {
+                    "title": "Support on Patreon",
+                    "link": "https://www.patreon.com/acidbubbles/",
+                    "target": "_blank"
+                },
+                {
+                    "title": "Contribute on GitHub",
+                    "link": "https://github.com/acidbubbles/vam-scripter",
+                    "target": "_blank"
+                }
+            ]
+        }
+    },
+    "markdown": {
+        "hardwrap": false,
+        "idInHeadings": true
+    }
+}

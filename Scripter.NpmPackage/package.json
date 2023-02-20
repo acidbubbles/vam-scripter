@@ -1,0 +1,27 @@
+{
+  "name": "vam-scripter",
+  "version": "0.0.0",
+  "description": "A Virt-A-Mate scripting language that allows automating triggers, keybindings and more.",
+  "main": "index.js",
+  "scripts": {
+    "doc": "npx jsdoc -c jsdoc.json --verbose",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acidbubbles/vam-scripter.git"
+  },
+  "keywords": [
+    "virt-a-mate"
+  ],
+  "author": "acidbubbles",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/acidbubbles/vam-scripter/issues"
+  },
+  "homepage": "https://github.com/acidbubbles/vam-scripter#readme",
+  "devDependencies": {
+    "clean-jsdoc-theme": "^4.2.6",
+    "jsdoc": "^4.0.2"
+  }
+}

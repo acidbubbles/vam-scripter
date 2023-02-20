@@ -2,14 +2,14 @@
 
 public class ScripterModule : IModule
 {
-    public string ModuleName => "scripter";
+    public string ModuleName => "vam-scripter";
 
     private static readonly ScripterPluginReference _pluginReference = new ScripterPluginReference();
     private static readonly SceneReference _sceneReference = new SceneReference();
     private static readonly TimeReference _timeReference = new TimeReference();
     private static readonly RandomReference _randomReference = new RandomReference();
     private static readonly DateTimeClassReference _dateTimeClassReference = new DateTimeClassReference();
-    private static readonly EnvironmentReference _environmentReference = new EnvironmentReference();
+    private static readonly PlayerReference _playerReference = new PlayerReference();
     private static readonly KeybindingsReference _keybindingsReference = new KeybindingsReference();
 
     private static readonly ModuleNamespace _ns = Initialize();
@@ -17,12 +17,12 @@ public class ScripterModule : IModule
     private static ModuleNamespace Initialize()
     {
         var module = new ModuleNamespace();
-        module.exports.Add("self", _pluginReference);
+        module.exports.Add("scripter", _pluginReference);
         module.exports.Add("scene", _sceneReference);
         module.exports.Add("time", _timeReference);
         module.exports.Add("random", _randomReference);
         module.exports.Add("datetime", _dateTimeClassReference);
-        module.exports.Add("environment", _environmentReference);
+        module.exports.Add("player", _playerReference);
         module.exports.Add("keybindings", _keybindingsReference);
         return module;
     }

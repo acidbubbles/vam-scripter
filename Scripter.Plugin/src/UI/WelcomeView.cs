@@ -64,7 +64,7 @@ Press the + button to create a file, or check out these templates to get started
                 Scripter.singleton.programFiles.DeleteAll();
                 Scripter.singleton.programFiles.Create(
                     "index.js",
-                    @"import { self, scene } from ""scripter"";
+                    @"import { self, scene } from ""vam-scripter"";
 
 // Get triggers from another atom
 const timeline = scene
@@ -99,7 +99,7 @@ let valueParam = self.declareFloatParam({
                 Scripter.singleton.programFiles.DeleteAll();
                 Scripter.singleton.programFiles.Create(
                     "index.js",
-                    @"import { keybindings } from ""scripter"";
+                    @"import { keybindings } from ""vam-scripter"";
 
 // Creates a Keybindings named ""Scripter.HelloWorld""
 keybindings.declareCommand(""HelloWorld"", () => {
@@ -116,7 +116,7 @@ keybindings.declareCommand(""HelloWorld"", () => {
                 Scripter.singleton.programFiles.DeleteAll();
                 Scripter.singleton.programFiles.Create(
                     "index.js",
-                    @"import { self, scene, time } from ""scripter"";
+                    @"import { self, scene, time } from ""vam-scripter"";
 
 var person = scene.getAtom(""Person"");
 var head = person.getController(""headControl"");
@@ -135,7 +135,7 @@ self.onUpdate(() => {
             {
                 Scripter.singleton.programFiles.Create(
                     "index.js",
-                    @"import { scene } from ""scripter"";
+                    @"import { scene } from ""vam-scripter"";
 
 // You can also use your own sounds with ""URL"", ""web"", ""yoursound.wav""
 var music = scene.getAudioClip(""Embedded"", ""Music"", ""CyberPetrifiedFull"");

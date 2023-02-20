@@ -43,7 +43,7 @@ import {
     time,
     random,
     scene,
-    environment,
+    player,
     keybindings,
     datetime
 } from "scripter";
@@ -53,8 +53,8 @@ import {
 - [`time: Time`](#time)
 - [`random: Random`](#random)
 - [`scene: Scene`](#scene)
-- [`environment: Environment`](#environment)
-- [`keybindings: Keybindings`](#environment)
+- [`player: Player`](#player)
+- [`keybindings: Keybindings`](#keybindings)
 - [`datetime: DateTime`](#datetime)
 
 ## Native
@@ -205,7 +205,7 @@ clearTimeout(timeout);
 | moveTowards   | function(Controller, maxDistanceDelta) => `void` | Moves towards another control                  |
 | rotateTowards | function(Controller, maxDegreesDelta) => `void`  | Rotates towards another control                |
 
-### `Environment`
+### `Player`
 
 | Property     | Type                                          | Notes                                         |
 |--------------|-----------------------------------------------|-----------------------------------------------|
