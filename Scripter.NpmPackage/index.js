@@ -7,6 +7,10 @@ import { Scripter } from "./src/scripter";
 import { Time } from "./src/time";
 
 /**
+ * @module vam-scripter
+ */
+
+/**
  * Export for accessing the current instance of the Scripter plugin
  * @type {Scripter}
  */

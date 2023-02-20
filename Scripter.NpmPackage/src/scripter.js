@@ -9,7 +9,7 @@ export class Scripter {
      * @param {number} args.min - The minimum value
      * @param {number} args.max - The maximum value
      * @param {boolean} args.constrain - Whether the value can exceed the min/max settings
-     * @param {FloatParamDeclaration~onChange} onChange
+     * @param {function(function(number): void): void} onChange
      * @returns {FloatParamDeclaration}
      */
     declareFloatParam(args) {}
@@ -18,7 +18,7 @@ export class Scripter {
      * @param {Object} args
      * @param {string} args.name - The name of the JSON Storable Param
      * @param {boolean} args.default - The default value
-     * @param {BoolParamDeclaration~onChange} args.onChange
+     * @param {function(function(boolean): void): void} args.onChange
      * @returns {BoolParamDeclaration}
      */
     declareBoolParam(args) {}
@@ -27,63 +27,81 @@ export class Scripter {
      * @param {Object} args
      * @param {string} args.name - The name of the JSON Storable Param
      * @param {string} args.default - The default value
-     * @param {StringParamDeclaration~onChange} args.onChange
+     * @param {function(function(string): void): void} args.onChange
      * @returns {StringParamDeclaration}
      */
     declareStringParam(args) {}
 
     /**
      * @param {string} name
-     * @param {ActionDeclaration~onTrigger} callback
+     * @param {function(function(): void): void} callback
      * @returns {ActionDeclaration}
      */
     declareAction(name, callback) {}
 
     /**
+     * Called every frame
      * @returns void
      */
     onUpdate() {};
 
     /**
+     * Called every physics frame
      * @returns void
      */
     onFixedUpdate() {};
 }
 
 /**
- * @callback FloatParamDeclaration~onChange
- * @param {number} val
+ * Represents a JSONStorableFloat in the Scripter plugin
  */
 export class FloatParamDeclaration {
     /**
-     * @type {float}
+     * @type {number}
      */
-    get val() {}
+    val;
 
     /**
-     * @type {float}
+     * Called when the value is changed
+     * @param {function(number): void} callback 
      */
-    set val(v) {}
+    onChange(callback) {}
 }
 
 /**
- * @callback BoolParamDeclaration~onChange
- * @param {boolean} val
+ * Represents a JSONStorableBool in the Scripter plugin
  */
 export class BoolParamDeclaration {
-
+    /**
+     * @type {boolean}
+     */
+    val;
+        
+    /**
+     * Called when the value is changed
+     * @param {function(boolean): void} callback 
+     */
+    onChange(callback) {}
 }
 
 /**
- * @callback StringParamDeclaration~onChange
- * @param {string} val
+ * Represents a JSONStorableString in the Scripter plugin
  */
 export class StringParamDeclaration {
+    /**
+     * @type {string}
+     */
+    val;
 
+    /**
+     * Called when the value is changed
+     * @param {function(boolean): void} callback 
+     */
+    onChange(callback) {}
 }
 
 /**
- * @callback ActionDeclaration~onTrigger
+ * Represents a JSONStorableAction in the Scripter plugin
  */
 export class ActionDeclaration {
 
