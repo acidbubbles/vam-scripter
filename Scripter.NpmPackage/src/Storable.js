@@ -1,5 +1,11 @@
 export class Storable {
    /**
+    * Get the name of all params of all types
+    * @returns {string[]}
+    */
+   getAllParamNames() {}
+
+   /**
     * Calls a trigger
     * @param {string} name
     * @returns {void}

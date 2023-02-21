@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ScripterLang;
 
 public class AtomReference : ObjectReference
@@ -20,6 +21,8 @@ public class AtomReference : ObjectReference
                 return _atom.type;
             case "on":
                 return _atom.on;
+            case "getStorableIds":
+                return Func(GetStorableIds);
             case "getStorable":
                 return Func(GetStorable);
             case "getController":
@@ -40,6 +43,17 @@ public class AtomReference : ObjectReference
                 base.SetProperty(name, value);
                 break;
         }
+    }
+
+    private Value GetStorableIds(LexicalContext context, Value[] args)
+    {
+        var raw = _atom.GetStorableIDs();
+        var values = new List<Value>(raw.Count);
+        for (var i = 0; i < raw.Count; i++)
+        {
+            values[i] = raw[i];
+        }
+        return new ListReference(values);
     }
 
     private Value GetStorable(LexicalContext context, Value[] args)

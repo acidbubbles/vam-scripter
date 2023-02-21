@@ -1,4 +1,5 @@
-﻿using ScripterLang;
+﻿using System.Collections.Generic;
+using ScripterLang;
 
 public class StorableReference : ObjectReference
 {
@@ -13,6 +14,8 @@ public class StorableReference : ObjectReference
     {
         switch (name)
         {
+            case "getAllParamNames":
+                return Func(GetAllParamNames);
             case "invokeAction":
                 return Func(InvokeAction);
             case "getAudioAction":
@@ -28,6 +31,18 @@ public class StorableReference : ObjectReference
             default:
                 return base.GetProperty(name);
         }
+    }
+
+    private Value GetAllParamNames(LexicalContext context, Value[] args)
+    {
+
+        var raw = _storable.GetAllParamAndActionNames();
+        var values = new List<Value>(raw.Count);
+        for (var i = 0; i < raw.Count; i++)
+        {
+            values[i] = raw[i];
+        }
+        return new ListReference(values);
     }
 
     public Value InvokeAction(LexicalContext context, Value[] args)

@@ -21,8 +21,15 @@ export class Atom {
    on;
 
    /**
+    * Returns the list of all storable IDs
+    * @returns {string[]}
+    */
+   getStorableIds() {}
+
+   /**
     * Returns a storable (e.g. a plugin or a native atom component)
     * @param {string} name - The storable name (for plugins, "plugin#0_YourPluginName")
+    * @returns {Storable}
     */
    getStorable(name) { }
 
