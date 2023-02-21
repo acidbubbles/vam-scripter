@@ -50,4 +50,4 @@ export const keybindings = new Keybindings();
  * Export for accessing .NET DateTime
  * @type {DateTime}
  */
-export const datetime = new DateTime();
+export const datetime = new DateTimeClass();

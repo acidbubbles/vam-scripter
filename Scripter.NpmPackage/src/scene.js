@@ -47,7 +47,7 @@ export class Storable {
     /**
      * Calls a trigger
      * @param {string} name 
-     * @returns void
+     * @returns {void}
      */
     invokeAction(name) {}
 

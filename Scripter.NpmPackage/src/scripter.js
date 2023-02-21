@@ -41,13 +41,13 @@ export class Scripter {
 
     /**
      * Called every frame
-     * @returns void
+     * @returns {void}
      */
     onUpdate() {};
 
     /**
      * Called every physics frame
-     * @returns void
+     * @returns {void}
      */
     onFixedUpdate() {};
 }
