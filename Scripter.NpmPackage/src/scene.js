@@ -1,4 +1,3 @@
-import { Transform } from "./Transform";
 
 /**
  * The Virt-A-Mate scene root
@@ -10,6 +9,12 @@ export class Scene {
      * @returns {Atom}
      */
     getAtom(id) {}
+    
+    /**
+     * Gets a list of all atoms in the scene
+     * @returns {Atom[]}
+     */
+    getAtoms() {}
 
     /**
      * Gets a list of all atom IDs in the scene
@@ -25,171 +30,4 @@ export class Scene {
      * @returns {AudioClip}
      */
     getAudioClip(type, category, clip) {}
-}
-
-/**
- * Represents a Virt-A-Mate atom
- */
-export class Atom {
-    /**
-     * Returns a storable (e.g. a plugin or a native atom component)
-     * @param {string} name - The storable name (for plugins, "plugin#0_YourPluginName")
-     */
-    getStorable(name) {}
-
-    /**
-     * Returns a free controller (the node you can select and move around in 3D)
-     * @param {string} name - The controller name (e.g. "control" or "head")
-     * @returns {Controller}
-     */
-    getController(name) {}
-}
-
-export class Storable {
-    /**
-     * Calls a trigger
-     * @param {string} name 
-     * @returns {void}
-     */
-    invokeAction(name) {}
-
-    /**
-     * Gets a storable float
-     * @param {string} name
-     * @returns {FloatParamReference}
-     */
-    getFloat(name) {}
-
-    /**
-     * Gets a storable bool
-     * @param {string} name
-     * @returns {BoolParamReference}
-     */
-    getBool(name) {}
-
-    /**
-     * Gets a storable string
-     * @param {string} name
-     * @returns {StringParamReference}
-     */
-    getString(name) {}
-
-    /**
-     * Gets a storable string chooser (drop down)
-     * @param {string} name
-     * @returns {StringChooserParamReference}
-     */
-    getStringChooser(name) {}
-
-    /**
-     * Gets a storable audio action
-     * @param {string} name
-     * @returns {AudioActionParamReference}
-     */
-    getAudioAction(name) {}
-}
-
-/**
-* Represents a JSONStorableFloat in the Scripter plugin
-*/
-export class FloatParamReference {
-   /**
-    * @type {number}
-    */
-   val;
-
-   /**
-    * Called when the value is changed
-    * @param {function(number): void} callback 
-    */
-   onChange(callback) {}
-}
-
-/**
-* Represents a JSONStorableBool in the Scripter plugin
-*/
-export class BoolParamReference {
-   /**
-    * @type {boolean}
-    */
-   val;
-       
-   /**
-    * Called when the value is changed
-    * @param {function(boolean): void} callback 
-    */
-   onChange(callback) {}
-}
-
-/**
-* Represents a JSONStorableString in the Scripter plugin
-*/
-export class StringParamReference {
-   /**
-    * @type {string}
-    */
-   val;
-
-   /**
-    * Called when the value is changed
-    * @param {function(boolean): void} callback 
-    */
-   onChange(callback) {}
-}
-
-/**
-* Represents a JSONStorableStringChooser in the Scripter plugin
-*/
-export class StringChooserParamReference {
-   /**
-    * @type {string}
-    */
-   val;
-
-   /**
-    * Called when the value is changed
-    * @param {function(boolean): void} callback 
-    */
-   onChange(callback) {}
-}
-
-/**
-* Represents a JSONStorableAudioAction in the Scripter plugin
-*/
-export class AudioActionParamReference {
-   /**
-    * Plays the specified audio
-    * @param {AudioClip} clip
-    */
-   play(clip) {}
-}
-
-/**
-* Represents a JSONStorableAction in the Scripter plugin
-*/
-export class ActionReference {
-
-}
-
-/**
- * References a Virt-A-Mate audio clip
- */
-export class AudioClip {
-}
-
-/**
- * A free controller (the node you can move around)
- */
-export class Controller extends Transform {
-   /**
-    * @param {Transform} target
-    * @param {number} maxDistanceDelta
-    */
-   moveTowards(target, maxDistanceDelta) { }
-
-   /**
-    * @param {Transform} target
-    * @param {number} maxDegreesDelta
-    */
-   rotateTowards(target, maxDegreesDelta) { }
 }

@@ -1,10 +1,10 @@
-import { DateTime } from "./src/datetime";
-import { Keybindings } from "./src/keybindings";
-import { Player } from "./src/player";
-import { Random } from "./src/random";
-import { Scene } from "./src/scene";
-import { Scripter } from "./src/scripter";
-import { Time } from "./src/time";
+import { DateTime } from "./src/DateTime";
+import { Keybindings } from "./src/Keybindings";
+import { Player } from "./src/Player";
+import { Random } from "./src/Random";
+import { Scene } from "./src/Scene";
+import { Scripter } from "./src/Scripter";
+import { Time } from "./src/Time";
 
 /**
  * @module vam-scripter

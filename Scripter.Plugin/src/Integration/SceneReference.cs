@@ -10,6 +10,8 @@ public class SceneReference : ObjectReference
         {
             case "getAtom":
                 return Func(GetAtom);
+            case "getAtoms":
+                return Func(GetAtoms);
             case "getAtomIds":
                 return Func(GetAtomIds);
             case "getAudioClip":
@@ -30,6 +32,17 @@ public class SceneReference : ObjectReference
         return new AtomReference(atom);
     }
 
+    private static Value GetAtoms(LexicalContext context, Value[] args)
+    {
+        var raw = SuperController.singleton.GetAtoms();
+        var values = new List<Value>(raw.Count);
+        for (var i = 0; i < raw.Count; i++)
+        {
+            values[i] = new AtomReference(raw[i]);
+        }
+        return new ListReference(values);
+    }
+
     private static Value GetAtomIds(LexicalContext context, Value[] args)
     {
         var raw = SuperController.singleton.GetAtomUIDs();
@@ -38,7 +51,6 @@ public class SceneReference : ObjectReference
         {
             values[i] = raw[i];
         }
-
         return new ListReference(values);
     }
 

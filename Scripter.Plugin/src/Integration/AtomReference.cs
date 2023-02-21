@@ -14,12 +14,31 @@ public class AtomReference : ObjectReference
     {
         switch (name)
         {
+            case "name":
+                return _atom.name;
+            case "type":
+                return _atom.type;
+            case "on":
+                return _atom.on;
             case "getStorable":
                 return Func(GetStorable);
             case "getController":
                 return Func(GetController);
             default:
                 return base.GetProperty(name);
+        }
+    }
+
+    public override void SetProperty(string name, Value value)
+    {
+        switch (name)
+        {
+            case "on":
+                _atom.SetBoolParamValue("on", value.AsBool);
+                break;
+            default:
+                base.SetProperty(name, value);
+                break;
         }
     }
 
