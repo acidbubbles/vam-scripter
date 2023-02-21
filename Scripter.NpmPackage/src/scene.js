@@ -1,3 +1,5 @@
+import { Transform } from "./Transform";
+
 /**
  * The Virt-A-Mate scene root
  */
@@ -178,23 +180,16 @@ export class AudioClip {
 /**
  * A free controller (the node you can move around)
  */
-export class Controller {
-    /**
-     * The distance between two controllers
-     * @param {Controller} other 
-     * @return number
-     */
-    distance(other) {}
+export class Controller extends Transform {
+   /**
+    * @param {Transform} target
+    * @param {number} maxDistanceDelta
+    */
+   moveTowards(target, maxDistanceDelta) { }
 
-    /**
-     * @param {Controller} target
-     * @param {number} maxDistanceDelta
-     */
-    moveTowards(target, maxDistanceDelta) {}
-
-    /**
-     * @param {Controller} target
-     * @param {number} maxDegreesDelta
-     */
-    rotateTowards(target, maxDegreesDelta) {}
+   /**
+    * @param {Transform} target
+    * @param {number} maxDegreesDelta
+    */
+   rotateTowards(target, maxDegreesDelta) { }
 }

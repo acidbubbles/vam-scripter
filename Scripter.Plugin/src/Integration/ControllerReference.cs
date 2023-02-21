@@ -1,11 +1,12 @@
 ﻿using ScripterLang;
 using UnityEngine;
 
-public class ControllerReference : ObjectReference
+public class ControllerReference : TransformReference
 {
     private readonly FreeControllerV3 _controller;
 
     public ControllerReference(FreeControllerV3 controller)
+        : base(controller.control)
     {
         _controller = controller;
     }
@@ -14,8 +15,6 @@ public class ControllerReference : ObjectReference
     {
         switch (name)
         {
-            case "distance":
-                return Func(Distance);
             case "lookAt":
                 return Func(LookAt);
             case "moveTowards":
@@ -25,20 +24,12 @@ public class ControllerReference : ObjectReference
         }
     }
 
-    private Value Distance(LexicalContext context, Value[] args)
-    {
-        ValidateArgumentsLength(nameof(Distance), args, 1);
-        var other = args[0].AsObject as ControllerReference;
-        if (ReferenceEquals(other, null)) throw new ScripterRuntimeException($"Expected a ControllerReference as argument to {nameof(Distance)}");
-        return Vector3.Distance(_controller.control.position, other._controller.control.position);
-    }
-
     private Value LookAt(LexicalContext context, Value[] args)
     {
         if (_controller.isGrabbing) return Value.Void;
-        var other = args[0].AsObject as ControllerReference;
+        var other = args[0].AsObject as TransformReference;
         if (ReferenceEquals(other, null)) throw new ScripterRuntimeException($"Expected a ControllerReference as argument to {nameof(LookAt)}");
-        var target = other._controller.control.position - _controller.control.position;
+        var target = other.transform.position - _controller.control.position;
         var targetRotation = Quaternion.LookRotation(target, Vector3.up);
         if (args.Length > 1)
         {
@@ -52,9 +43,9 @@ public class ControllerReference : ObjectReference
     private Value MoveTowards(LexicalContext context, Value[] args)
     {
         if (_controller.isGrabbing) return Value.Void;
-        var other = args[0].AsObject as ControllerReference;
+        var other = args[0].AsObject as TransformReference;
         if (ReferenceEquals(other, null)) throw new ScripterRuntimeException($"Expected a ControllerReference as argument to {nameof(MoveTowards)}");
-        var targetPosition = other._controller.control.position;
+        var targetPosition = other.transform.position;
         if (args.Length > 1)
         {
             var maxDistanceDelta = args[1].AsNumber;

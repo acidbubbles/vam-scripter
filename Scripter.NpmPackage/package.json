@@ -1,8 +1,9 @@
 {
   "name": "vam-scripter",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A Virt-A-Mate scripting language that allows automating triggers, keybindings and more.",
-  "main": "index.js",
+  "main": "index",
+  "typings": "index",
   "scripts": {
     "doc": "npx jsdoc -c jsdoc.json --verbose",
     "test": "echo \"Error: no test specified\" && exit 1"

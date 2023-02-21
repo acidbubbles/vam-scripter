@@ -5,12 +5,12 @@ src\Integration\ConsoleReference.cs
 src\Integration\ControllerReference.cs
 src\Integration\DateTimeClassReference.cs
 src\Integration\DateTimeReference.cs
-src\Integration\EnvironmentReference.cs
 src\Integration\FloatParamReference.cs
 src\Integration\FunctionLink.cs
 src\Integration\GlobalFunctions.cs
 src\Integration\KeybindingsReference.cs
 src\Integration\NamedAudioClipReference.cs
+src\Integration\PlayerReference.cs
 src\Integration\RandomReference.cs
 src\Integration\SceneReference.cs
 src\Integration\ScripterModule.cs
@@ -19,6 +19,7 @@ src\Integration\StorableReference.cs
 src\Integration\StringChooserParamReference.cs
 src\Integration\StringParamReference.cs
 src\Integration\TimeReference.cs
+src\Integration\TransformReference.cs
 src\Lib\Expressions\ArrayDeclarationExpression.cs
 src\Lib\Expressions\AssignmentExpression.cs
 src\Lib\Expressions\AssignmentOperatorExpression.cs

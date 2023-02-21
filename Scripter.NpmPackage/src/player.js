@@ -7,4 +7,22 @@ export class Player {
      * @type boolean
      */
     isVR;
+
+    /**
+     * The player's VR hands
+     * @type {Transform}
+     */
+    lHand;
+
+    /**
+     * The player's VR hands
+     * @type {Transform}
+     */
+    rHand;
+
+    /**
+     * The player's camera (the monitor on Desktop, and the center eye camera in VR)
+     * @type {Transform}
+     */
+    head;
 }

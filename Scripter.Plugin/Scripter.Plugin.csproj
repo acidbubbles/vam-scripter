@@ -78,12 +78,12 @@
     <Compile Include="src\Integration\ControllerReference.cs" />
     <Compile Include="src\Integration\DateTimeClassReference.cs" />
     <Compile Include="src\Integration\DateTimeReference.cs" />
-    <Compile Include="src\Integration\PlayerReference.cs" />
     <Compile Include="src\Integration\FloatParamReference.cs" />
     <Compile Include="src\Integration\FunctionLink.cs" />
     <Compile Include="src\Integration\GlobalFunctions.cs" />
     <Compile Include="src\Integration\KeybindingsReference.cs" />
     <Compile Include="src\Integration\NamedAudioClipReference.cs" />
+    <Compile Include="src\Integration\PlayerReference.cs" />
     <Compile Include="src\Integration\RandomReference.cs" />
     <Compile Include="src\Integration\SceneReference.cs" />
     <Compile Include="src\Integration\ScripterModule.cs" />
@@ -92,6 +92,7 @@
     <Compile Include="src\Integration\StringChooserParamReference.cs" />
     <Compile Include="src\Integration\StringParamReference.cs" />
     <Compile Include="src\Integration\TimeReference.cs" />
+    <Compile Include="src\Integration\TransformReference.cs" />
     <Compile Include="src\Lib\Expressions\ArrayDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\AssignmentExpression.cs" />
     <Compile Include="src\Lib\Expressions\AssignmentOperatorExpression.cs" />
