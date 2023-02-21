@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using ScripterLang;
-using UnityEngine;
+﻿using ScripterLang;
+
 
 public static class GlobalFunctions
 {
@@ -19,7 +17,7 @@ public static class GlobalFunctions
             throw new ScripterRuntimeException($"{nameof(SetTimeout)} requires 2 arguments");
         var fn = args[0].AsFunction;
         var delay = args[1].AsNumber;
-        var coRef = new CoroutineReference(context, fn, delay);
+        var coRef = new SetTimeoutToken(context, fn, delay);
         context.GetModuleContext().RegisterDisposable(coRef);
         coRef.Start();
         return coRef;
@@ -29,48 +27,11 @@ public static class GlobalFunctions
     {
         if(args.Length != 1)
             throw new ScripterRuntimeException($"{nameof(ClearTimeout)} requires 1 argument");
-        var coRef = args[0].AsObject as CoroutineReference;
+        var coRef = args[0].AsObject as SetTimeoutToken;
         if(coRef == null)
             throw new ScripterRuntimeException($"{nameof(ClearTimeout)} requires a CoroutineReference as argument");
         coRef.Dispose();
         context.GetModuleContext().UnregisterDisposable(coRef);
         return Value.Void;
-    }
-}
-
-internal class CoroutineReference : ObjectReference, IDisposable
-{
-    private readonly LexicalContext _context;
-    private readonly FunctionReference _fn;
-    private readonly float _delay;
-
-    private Coroutine _co;
-
-    public CoroutineReference(LexicalContext context, FunctionReference fn, float delay)
-    {
-        _context = context;
-        _fn = fn;
-        _delay = delay;
-    }
-
-    public void Start()
-    {
-        _co = Scripter.singleton.StartCoroutine(RunLater(_context, _fn, _delay));
-    }
-
-    private IEnumerator RunLater(LexicalContext context, FunctionReference fn, float delay)
-    {
-        if (delay == 0)
-            yield return 0;
-        else
-            yield return new WaitForSeconds(delay);
-        fn(context, Value.EmptyValues);
-        context.GetModuleContext().UnregisterDisposable(this);
-    }
-
-    public void Dispose()
-    {
-        if (_co != null)
-            Scripter.singleton.StopCoroutine(_co);
     }
 }

@@ -3,6 +3,7 @@ src\Integration\AudioActionReference.cs
 src\Integration\BoolParamReference.cs
 src\Integration\ConsoleReference.cs
 src\Integration\ControllerReference.cs
+src\Integration\CoroutineReference.cs
 src\Integration\DateTimeClassReference.cs
 src\Integration\DateTimeReference.cs
 src\Integration\FloatParamReference.cs
@@ -15,6 +16,7 @@ src\Integration\RandomReference.cs
 src\Integration\SceneReference.cs
 src\Integration\ScripterModule.cs
 src\Integration\ScripterPluginReference.cs
+src\Integration\SetTimeoutToken.cs
 src\Integration\StorableReference.cs
 src\Integration\StringChooserParamReference.cs
 src\Integration\StringParamReference.cs

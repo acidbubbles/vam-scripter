@@ -76,6 +76,7 @@
     <Compile Include="src\Integration\BoolParamReference.cs" />
     <Compile Include="src\Integration\ConsoleReference.cs" />
     <Compile Include="src\Integration\ControllerReference.cs" />
+    <Compile Include="src\Integration\CoroutineReference.cs" />
     <Compile Include="src\Integration\DateTimeClassReference.cs" />
     <Compile Include="src\Integration\DateTimeReference.cs" />
     <Compile Include="src\Integration\FloatParamReference.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="src\Integration\SceneReference.cs" />
     <Compile Include="src\Integration\ScripterModule.cs" />
     <Compile Include="src\Integration\ScripterPluginReference.cs" />
+    <Compile Include="src\Integration\SetTimeoutToken.cs" />
     <Compile Include="src\Integration\StorableReference.cs" />
     <Compile Include="src\Integration\StringChooserParamReference.cs" />
     <Compile Include="src\Integration\StringParamReference.cs" />

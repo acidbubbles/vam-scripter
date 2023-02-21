@@ -11,6 +11,10 @@ public class ScripterPluginReference : ObjectReference
                 return Func(OnUpdate);
             case "onFixedUpdate":
                 return Func(OnFixedUpdate);
+            case "startCoroutine":
+                return Func(StartCoroutine);
+            case "stopCoroutine":
+                return Func(StopCoroutine);
             case "declareFloatParam":
                 return Func(DeclareFloatParam);
             case "declareStringParam":
@@ -39,6 +43,28 @@ public class ScripterPluginReference : ObjectReference
         var fn = args[0].AsFunction;
         var link = new FunctionLink(Scripter.singleton.onFixedUpdateFunctions, context, fn);
         context.GetModuleContext().RegisterDisposable(link);
+        return Value.Void;
+    }
+
+    private Value StartCoroutine(LexicalContext context, Value[] args)
+    {
+        // TODO: Instead use *function and yield?
+        ValidateArgumentsLength(nameof(StartCoroutine), args, 1);
+        var fn = args[0].AsFunction;
+        var coRef = new CoroutineReference(context, fn, new CoroutineIterator());
+        context.GetModuleContext().RegisterDisposable(coRef);
+        coRef.Start();
+        return coRef;
+    }
+
+    private Value StopCoroutine(LexicalContext context, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(StopCoroutine), args, 1);
+        var coRef = args[0].AsObject as CoroutineReference;
+        if(coRef == null)
+            throw new ScripterRuntimeException($"{nameof(StopCoroutine)} requires a CoroutineReference as argument");
+        coRef.Dispose();
+        context.GetModuleContext().UnregisterDisposable(coRef);
         return Value.Void;
     }
 

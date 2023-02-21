@@ -50,4 +50,18 @@ export class Scripter {
      * @returns {void}
      */
     onFixedUpdate() {};
+
+    /**
+     * Starts a Unity coroutine
+     * @param {function(iterator: CoroutineIterator): Coroutine} fn
+     * @return {Coroutine}
+     */
+    startCoroutine(fn) {}
+
+    /**
+     * Stops an existing coroutine
+     * @param {Coroutine} co
+     * @return {void}
+     */
+    stopCoroutine(co) {}
 }
