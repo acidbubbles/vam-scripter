@@ -2,9 +2,9 @@
 
 public class PlayerReference : ObjectReference
 {
-    private TransformReference _lHand = new TransformReference(SuperController.singleton.leftHand);
-    private TransformReference _rHand = new TransformReference(SuperController.singleton.rightHand);
-    private TransformReference _head = new TransformReference(SuperController.singleton.centerCameraTarget.transform);
+    private readonly TransformReference _lHand = new TransformReference(SuperController.singleton.leftHand);
+    private readonly TransformReference _rHand = new TransformReference(SuperController.singleton.rightHand);
+    private readonly TransformReference _head = new TransformReference(SuperController.singleton.centerCameraTarget.transform);
 
     public override Value GetProperty(string name)
     {

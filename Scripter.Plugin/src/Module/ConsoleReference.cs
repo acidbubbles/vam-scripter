@@ -4,17 +4,27 @@ using ScripterLang;
 public class ConsoleReference : ObjectReference
 {
     private readonly ConsoleBuffer _console = Scripter.singleton.console;
+    private readonly Value _clear;
+    private readonly Value _log;
+    private readonly Value _error;
+
+    public ConsoleReference()
+    {
+        _clear = Func(Clear);
+        _log = Func(Log);
+        _error = Func(Error);
+    }
 
     public override Value GetProperty(string name)
     {
         switch (name)
         {
             case "clear":
-                return Func(Clear);
+                return _clear;
             case "log":
-                return Func(Log);
+                return _log;
             case "error":
-                return Func(Error);
+                return _error;
             default:
                 return base.GetProperty(name);
         }

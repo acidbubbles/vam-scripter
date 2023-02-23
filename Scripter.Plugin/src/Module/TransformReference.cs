@@ -4,10 +4,12 @@ using UnityEngine;
 public class TransformReference : ObjectReference
 {
     public readonly Transform transform;
+    private readonly Value _distance;
 
     public TransformReference(Transform transform)
     {
         this.transform = transform;
+        _distance = Func(Distance);
     }
 
     public override Value GetProperty(string name)
@@ -15,7 +17,7 @@ public class TransformReference : ObjectReference
         switch (name)
         {
             case "distance":
-                return Func(Distance);
+                return _distance;
             default:
                 return base.GetProperty(name);
         }

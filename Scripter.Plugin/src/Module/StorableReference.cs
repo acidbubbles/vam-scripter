@@ -29,7 +29,7 @@ public class StorableReference : ObjectReference
             case "getUrlParam":
                 return Func(GetUrlParam);
             case "getBoolParam":
-                return Func(GetBool);
+                return Func(GetBoolParam);
             default:
                 return base.GetProperty(name);
         }
@@ -47,7 +47,7 @@ public class StorableReference : ObjectReference
         return new ListReference(values);
     }
 
-    public Value InvokeAction(LexicalContext context, Value[] args)
+    private Value InvokeAction(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(InvokeAction), args, 1);
         var paramName = args[0].AsString;
@@ -55,7 +55,7 @@ public class StorableReference : ObjectReference
         return Value.Void;
     }
 
-    public Value GetAudioClipAction(LexicalContext context, Value[] args)
+    private Value GetAudioClipAction(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetAudioClipAction), args, 1);
         var paramName = args[0].AsString;
@@ -64,7 +64,7 @@ public class StorableReference : ObjectReference
         return new AudioActionReference(action);
     }
 
-    public Value GetFloatParam(LexicalContext context, Value[] args)
+    private Value GetFloatParam(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetFloatParam), args, 1);
         var paramName = args[0].AsString;
@@ -73,7 +73,7 @@ public class StorableReference : ObjectReference
         return new FloatParamReference(param);
     }
 
-    public Value GetStringParam(LexicalContext context, Value[] args)
+    private Value GetStringParam(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetStringParam), args, 1);
         var paramName = args[0].AsString;
@@ -82,7 +82,7 @@ public class StorableReference : ObjectReference
         return new StringParamReference(param);
     }
 
-    public Value GetStringChooserParam(LexicalContext context, Value[] args)
+    private Value GetStringChooserParam(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetStringChooserParam), args, 1);
         var paramName = args[0].AsString;
@@ -91,7 +91,7 @@ public class StorableReference : ObjectReference
         return new StringChooserParamReference(param);
     }
 
-    public Value GetUrlParam(LexicalContext context, Value[] args)
+    private Value GetUrlParam(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(GetStringChooserParam), args, 1);
         var paramName = args[0].AsString;
@@ -100,9 +100,9 @@ public class StorableReference : ObjectReference
         return new UrlParamReference(param);
     }
 
-    public Value GetBool(LexicalContext context, Value[] args)
+    private Value GetBoolParam(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(GetBool), args, 1);
+        ValidateArgumentsLength(nameof(GetBoolParam), args, 1);
         var paramName = args[0].AsString;
         var param = _storable.GetBoolJSONParam(paramName);
         if (param == null) throw new ScripterPluginException($"Could not find a bool param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");

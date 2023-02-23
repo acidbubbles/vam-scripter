@@ -4,11 +4,15 @@ using UnityEngine;
 public class ControllerReference : TransformReference
 {
     private readonly FreeControllerV3 _controller;
+    private readonly Value _lookAt;
+    private readonly Value _moveTowards;
 
     public ControllerReference(FreeControllerV3 controller)
         : base(controller.control)
     {
         _controller = controller;
+        _lookAt = Func(LookAt);
+        _moveTowards = Func(MoveTowards);
     }
 
     public override Value GetProperty(string name)
@@ -16,9 +20,9 @@ public class ControllerReference : TransformReference
         switch (name)
         {
             case "lookAt":
-                return Func(LookAt);
+                return _lookAt;
             case "moveTowards":
-                return Func(MoveTowards);
+                return _moveTowards;
             default:
                 return base.GetProperty(name);
         }

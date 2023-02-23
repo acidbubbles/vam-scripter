@@ -11,6 +11,12 @@ public class CoroutineIterator : ObjectReference
 
     public int result = -1;
     public float waitForSecondsValue;
+    private readonly Value _waitForSeconds;
+
+    public CoroutineIterator()
+    {
+        _waitForSeconds = Func(WaitForSecondsImpl);
+    }
 
     public override Value GetProperty(string name)
     {
@@ -21,7 +27,7 @@ public class CoroutineIterator : ObjectReference
             case "nextFrame":
                 return result = NextFrame;
             case "waitForSeconds":
-                return Func(WaitForSecondsImpl);
+                return _waitForSeconds;
             default:
                 return base.GetProperty(name);
         }
