@@ -16,9 +16,9 @@ public class Scripter : MVRScript
     public bool isLoading;
 
     private bool _restored;
-    private readonly List<ScripterParamDeclarationBase> _triggers = new List<ScripterParamDeclarationBase>();
+    private readonly List<ParamDeclarationBase> _triggers = new List<ParamDeclarationBase>();
 
-    public List<ScripterKeybindingDeclaration> KeybindingsTriggers { get; } = new List<ScripterKeybindingDeclaration>();
+    public List<KeybindingDeclaration> KeybindingsTriggers { get; } = new List<KeybindingDeclaration>();
     public readonly List<FunctionLink> onUpdateFunctions = new List<FunctionLink>();
     public readonly List<FunctionLink> onFixedUpdateFunctions = new List<FunctionLink>();
 
@@ -87,7 +87,7 @@ public class Scripter : MVRScript
         {
             foreach (JSONNode triggerJSON in array)
             {
-                var trigger = ScripterParamDeclarationFactory.FromJSON(triggerJSON);
+                var trigger = DeclarationFactory.FromJSON(triggerJSON);
                 _triggers.Add(trigger);
             }
         }

@@ -18,17 +18,17 @@ public class StorableReference : ObjectReference
                 return Func(GetAllParamNames);
             case "invokeAction":
                 return Func(InvokeAction);
-            case "getAudioAction":
-                return Func(GetAudioAction);
-            case "getFloat":
-                return Func(GetFloat);
-            case "getString":
-                return Func(GetString);
-            case "getStringChooser":
-                return Func(GetStringChooser);
-            case "getUrl":
-                return Func(GetUrl);
-            case "getBool":
+            case "getAudioClipAction":
+                return Func(GetAudioClipAction);
+            case "getFloatParam":
+                return Func(GetFloatParam);
+            case "getStringParam":
+                return Func(GetStringParam);
+            case "getStringChooserParam":
+                return Func(GetStringChooserParam);
+            case "getUrlParam":
+                return Func(GetUrlParam);
+            case "getBoolParam":
                 return Func(GetBool);
             default:
                 return base.GetProperty(name);
@@ -55,45 +55,45 @@ public class StorableReference : ObjectReference
         return Value.Void;
     }
 
-    public Value GetAudioAction(LexicalContext context, Value[] args)
+    public Value GetAudioClipAction(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(GetAudioAction), args, 1);
+        ValidateArgumentsLength(nameof(GetAudioClipAction), args, 1);
         var paramName = args[0].AsString;
         var action = _storable.GetAudioClipAction(paramName);
         if(action == null) throw new ScripterRuntimeException($"Could not find an audio clip action named {paramName} in storable {_storable.storeId} in atom {_storable.containingAtom.storeId}.");
         return new AudioActionReference(action);
     }
 
-    public Value GetFloat(LexicalContext context, Value[] args)
+    public Value GetFloatParam(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(GetFloat), args, 1);
+        ValidateArgumentsLength(nameof(GetFloatParam), args, 1);
         var paramName = args[0].AsString;
         var param = _storable.GetFloatJSONParam(paramName);
         if (param == null) throw new ScripterPluginException($"Could not find a float param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
         return new FloatParamReference(param);
     }
 
-    public Value GetString(LexicalContext context, Value[] args)
+    public Value GetStringParam(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(GetString), args, 1);
+        ValidateArgumentsLength(nameof(GetStringParam), args, 1);
         var paramName = args[0].AsString;
         var param = _storable.GetStringJSONParam(paramName);
         if (param == null) throw new ScripterPluginException($"Could not find a string named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
         return new StringParamReference(param);
     }
 
-    public Value GetStringChooser(LexicalContext context, Value[] args)
+    public Value GetStringChooserParam(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(GetStringChooser), args, 1);
+        ValidateArgumentsLength(nameof(GetStringChooserParam), args, 1);
         var paramName = args[0].AsString;
         var param = _storable.GetStringChooserJSONParam(paramName);
         if (param == null) throw new ScripterPluginException($"Could not find a string chooser param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
         return new StringChooserParamReference(param);
     }
 
-    public Value GetUrl(LexicalContext context, Value[] args)
+    public Value GetUrlParam(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(GetStringChooser), args, 1);
+        ValidateArgumentsLength(nameof(GetStringChooserParam), args, 1);
         var paramName = args[0].AsString;
         var param = _storable.GetUrlJSONParam(paramName);
         if (param == null) throw new ScripterPluginException($"Could not find a url param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");

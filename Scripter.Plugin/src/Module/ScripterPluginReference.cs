@@ -77,7 +77,7 @@ public class ScripterPluginReference : ObjectReference
         var min = config.GetPropertyWithDefault("min", 0f).AsNumber;
         var max = config.GetPropertyWithDefault("max", 1f).AsNumber;
         var constrain = config.GetPropertyWithDefault("constrain", true).AsBool;
-        var param = new ScripterFloatParamDeclaration(name, start, min, max, constrain);
+        var param = new FloatParamDeclaration(name, start, min, max, constrain);
         context.GetModuleContext().RegisterDisposable(param);
         var fn = config.GetProperty("onChange");
         if (!fn.IsUndefined)
@@ -93,7 +93,7 @@ public class ScripterPluginReference : ObjectReference
         var config = args[0].AsObject;
         var name = config.GetProperty("name").AsString;
         var start = config.GetPropertyWithDefault("default", "").AsString;
-        var param = new ScripterStringParamDeclaration(name, start);
+        var param = new StringParamDeclaration(name, start);
         context.GetModuleContext().RegisterDisposable(param);
         var fn = config.GetProperty("onChange");
         if (!fn.IsUndefined)
@@ -109,7 +109,7 @@ public class ScripterPluginReference : ObjectReference
         var config = args[0].AsObject;
         var name = config.GetProperty("name").AsString;
         var start = config.GetPropertyWithDefault("default", false).AsBool;
-        var param = new ScripterBoolParamDeclaration(name, start);
+        var param = new BoolParamDeclaration(name, start);
         context.GetModuleContext().RegisterDisposable(param);
         var fn = config.GetProperty("onChange");
         if (!fn.IsUndefined)
@@ -124,7 +124,7 @@ public class ScripterPluginReference : ObjectReference
         ValidateArgumentsLength(nameof(DeclareAction), args, 2);
         var name = args[0].AsString;
         var fn = args[1].AsFunction;
-        var param = new ScripterActionDeclaration(name);
+        var param = new ActionDeclaration(name);
         param.OnTrigger(context, fn);
         context.GetModuleContext().RegisterDisposable(param);
         return param;

@@ -16,9 +16,3 @@ export class Keybindings {
     declareCommand(commandName, callback) {}
 }
 
-/**
- * A Keybindings listener
- */
-export class KeybindingsDeclaration {
-
-}

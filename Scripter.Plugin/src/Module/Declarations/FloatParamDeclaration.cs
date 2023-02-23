@@ -3,13 +3,13 @@ using System.Globalization;
 using ScripterLang;
 using SimpleJSON;
 
-public class ScripterFloatParamDeclaration : ScripterParamDeclarationBase, IDisposable
+public class FloatParamDeclaration : ParamDeclarationBase, IDisposable
 {
     public const string Type = "FloatParam";
 
     private readonly JSONStorableFloat _valueJSON;
 
-    public ScripterFloatParamDeclaration(string name, float startingValue, float minValue, float maxValue, bool constrain)
+    public FloatParamDeclaration(string name, float startingValue, float minValue, float maxValue, bool constrain)
     {
         var scripter = Scripter.singleton;
         var existing = scripter.GetFloatJSONParam(name);
@@ -28,9 +28,9 @@ public class ScripterFloatParamDeclaration : ScripterParamDeclarationBase, IDisp
         }
     }
 
-    public static ScripterParamDeclarationBase FromJSONImpl(JSONNode json)
+    public static ParamDeclarationBase FromJSONImpl(JSONNode json)
     {
-        var trigger = new ScripterFloatParamDeclaration(
+        var trigger = new FloatParamDeclaration(
             json["Name"],
             json["StartingValue"].AsFloat,
             json["MinValue"].AsFloat,

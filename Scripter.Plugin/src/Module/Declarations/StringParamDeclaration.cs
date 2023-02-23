@@ -3,13 +3,13 @@ using System.Globalization;
 using ScripterLang;
 using SimpleJSON;
 
-public class ScripterStringParamDeclaration : ScripterParamDeclarationBase, IDisposable
+public class StringParamDeclaration : ParamDeclarationBase, IDisposable
 {
     public const string Type = "StringParam";
 
     private readonly JSONStorableString _valueJSON;
 
-    public ScripterStringParamDeclaration(string name, string startingValue)
+    public StringParamDeclaration(string name, string startingValue)
     {
         var scripter = Scripter.singleton;
         var existing = scripter.GetStringJSONParam(name);
@@ -25,9 +25,9 @@ public class ScripterStringParamDeclaration : ScripterParamDeclarationBase, IDis
         }
     }
 
-    public static ScripterParamDeclarationBase FromJSONImpl(JSONNode json)
+    public static ParamDeclarationBase FromJSONImpl(JSONNode json)
     {
-        var trigger = new ScripterStringParamDeclaration(
+        var trigger = new StringParamDeclaration(
             json["Name"],
             json["StartingValue"].Value
         );

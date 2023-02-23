@@ -29,7 +29,7 @@ public class KeybindingsReference : ObjectReference
         ValidateArgumentsLength(nameof(DeclareCommand), args, 2);
         var name = args[0].AsString;
         var fn = args[1].AsFunction;
-        var param = new ScripterKeybindingDeclaration(name);
+        var param = new KeybindingDeclaration(name);
         context.GetModuleContext().RegisterDisposable(param);
         param.OnTrigger(context, fn);
         return param;

@@ -13,44 +13,44 @@ export class Storable {
    invokeAction(name) { }
 
    /**
+    * Gets a storable audio action
+    * @param {string} name
+    * @returns {AudioActionParamReference}
+    */
+   getAudioClipAction(name) { }
+
+   /**
     * Gets a storable float
     * @param {string} name
     * @returns {FloatParamReference}
     */
-   getFloat(name) { }
+   getFloatParam(name) { }
 
    /**
     * Gets a storable bool
     * @param {string} name
     * @returns {BoolParamReference}
     */
-   getBool(name) { }
+   getBoolParam(name) { }
 
    /**
     * Gets a storable string
     * @param {string} name
     * @returns {StringParamReference}
     */
-   getString(name) { }
+   getStringParam(name) { }
 
    /**
     * Gets a storable string chooser (drop down)
     * @param {string} name
     * @returns {StringChooserParamReference}
     */
-   getStringChooser(name) { }
+   getStringChooserParam(name) { }
 
    /**
     * Gets a storable url
     * @param {string} name
     * @returns {UrlParamReference}
     */
-   getUrl(name) { }
-
-   /**
-    * Gets a storable audio action
-    * @param {string} name
-    * @returns {AudioActionParamReference}
-    */
-   getAudioAction(name) { }
+   getUrlParam(name) { }
 }

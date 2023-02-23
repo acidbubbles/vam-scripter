@@ -3,13 +3,13 @@ using System.Globalization;
 using ScripterLang;
 using SimpleJSON;
 
-public class ScripterBoolParamDeclaration : ScripterParamDeclarationBase, IDisposable
+public class BoolParamDeclaration : ParamDeclarationBase, IDisposable
 {
     public const string Type = "BoolParam";
 
     private readonly JSONStorableBool _valueJSON;
 
-    public ScripterBoolParamDeclaration(string name, bool startingValue)
+    public BoolParamDeclaration(string name, bool startingValue)
     {
         var scripter = Scripter.singleton;
         var existing = scripter.GetBoolJSONParam(name);
@@ -25,9 +25,9 @@ public class ScripterBoolParamDeclaration : ScripterParamDeclarationBase, IDispo
         }
     }
 
-    public static ScripterParamDeclarationBase FromJSONImpl(JSONNode json)
+    public static ParamDeclarationBase FromJSONImpl(JSONNode json)
     {
-        var trigger = new ScripterBoolParamDeclaration(
+        var trigger = new BoolParamDeclaration(
             json["Name"],
             json["StartingValue"].AsBool
         );

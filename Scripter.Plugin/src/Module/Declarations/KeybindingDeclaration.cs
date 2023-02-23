@@ -2,11 +2,11 @@
 using ScripterLang;
 using SimpleJSON;
 
-public class ScripterKeybindingDeclaration : ScripterParamDeclarationBase, IDisposable
+public class KeybindingDeclaration : ParamDeclarationBase, IDisposable
 {
     public readonly JSONStorableAction actionJSON;
 
-    public ScripterKeybindingDeclaration(string name)
+    public KeybindingDeclaration(string name)
     {
         actionJSON = new JSONStorableAction(name, null);
         var scripter = Scripter.singleton;

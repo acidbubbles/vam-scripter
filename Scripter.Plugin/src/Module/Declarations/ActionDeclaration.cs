@@ -2,13 +2,13 @@
 using ScripterLang;
 using SimpleJSON;
 
-public class ScripterActionDeclaration : ScripterParamDeclarationBase, IDisposable
+public class ActionDeclaration : ParamDeclarationBase, IDisposable
 {
     public const string Type = "Action";
 
     private readonly JSONStorableAction _valueJSON;
 
-    public ScripterActionDeclaration(string name)
+    public ActionDeclaration(string name)
     {
         var scripter = Scripter.singleton;
         var existing = scripter.GetAction(name);
@@ -24,9 +24,9 @@ public class ScripterActionDeclaration : ScripterParamDeclarationBase, IDisposab
         }
     }
 
-    public static ScripterParamDeclarationBase FromJSONImpl(JSONNode json)
+    public static ParamDeclarationBase FromJSONImpl(JSONNode json)
     {
-        var trigger = new ScripterActionDeclaration(
+        var trigger = new ActionDeclaration(
             json["Name"]
         );
         return trigger;
