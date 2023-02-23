@@ -4,14 +4,8 @@
 
 export class FloatParamReference {
    /**
-    * Updates the value and invoke the callback
+    * Updates the value
     * @type {number}
     */
    val;
-
-   /**
-    * Updates the value without invoking the callback
-    * @type {number}
-    */
-   valNoCallback;
 }

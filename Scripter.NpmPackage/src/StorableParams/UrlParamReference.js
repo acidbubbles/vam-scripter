@@ -1,17 +1,11 @@
 /**
-* Represents a JSONStorableString in the Scripter plugin
+* Represents a JSONStorableUrl in the Scripter plugin
 */
 
 export class UrlParamReference {
    /**
-    * Updates the value and invoke the callback
+    * Updates the value
     * @type {string}
     */
    val;
-
-   /**
-    * Updates the value without invoking the callback
-    * @type {string}
-    */
-   valNoCallback;
 }

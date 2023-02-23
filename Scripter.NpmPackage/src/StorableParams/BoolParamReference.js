@@ -4,14 +4,8 @@
 
 export class BoolParamReference {
    /**
-    * Updates the value and invoke the callback
+    * Updates the value
     * @type {boolean}
     */
    val;
-
-   /**
-    * Updates the value without invoking the callback
-    * @type {boolean}
-    */
-   valNoCallback;
 }

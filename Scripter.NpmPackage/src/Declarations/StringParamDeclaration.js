@@ -4,6 +4,7 @@
 
 export class StringParamDeclaration {
     /**
+    * Updates the value
      * @type {string}
      */
     val;

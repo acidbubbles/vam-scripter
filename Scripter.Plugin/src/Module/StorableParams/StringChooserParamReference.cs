@@ -1,4 +1,5 @@
-﻿using ScripterLang;
+﻿using System.Collections.Generic;
+using ScripterLang;
 
 public class StringChooserParamReference : ObjectReference
 {
@@ -11,11 +12,19 @@ public class StringChooserParamReference : ObjectReference
 
     public override Value GetProperty(string name)
     {
-        // TODO: Choices
         switch (name)
         {
             case "val":
                 return _param.val;
+            case "choices":
+                var raw = _param.choices;
+                var values = new List<Value>(raw.Count);
+                for (var i = 0; i < raw.Count; i++)
+                {
+                    var choice = raw[i];
+                    values.Add(choice);
+                }
+                return new ListReference(values);
             default:
                 return base.GetProperty(name);
         }

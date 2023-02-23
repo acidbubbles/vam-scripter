@@ -4,6 +4,7 @@
 
 export class BoolParamDeclaration {
     /**
+    * Updates the value
      * @type {boolean}
      */
     val;

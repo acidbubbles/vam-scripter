@@ -4,6 +4,7 @@
 
 export class FloatParamDeclaration {
     /**
+    * Updates the value
      * @type {number}
      */
     val;
