@@ -6,6 +6,7 @@ public static class GlobalFunctions
     public static void Register(GlobalLexicalContext lexicalContext)
     {
         lexicalContext.DeclareGlobal("console", new ConsoleReference());
+        lexicalContext.DeclareGlobal("Math", new MathReference());
         lexicalContext.DeclareGlobal("setTimeout", Value.CreateFunction(SetTimeout));
         lexicalContext.DeclareGlobal("clearTimeout", Value.CreateFunction(ClearTimeout));
         lexicalContext.DeclareModule(new ScripterModule());

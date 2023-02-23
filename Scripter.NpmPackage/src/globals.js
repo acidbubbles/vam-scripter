@@ -1,9 +1,15 @@
 import { Console } from "./Console";
+import { Math } from "./Math";
 
 /**
  * @global
  */
 export const console = new Console();
+
+/**
+ * @global
+ */
+export const Math = new Math();
 
 /**
  * Equivalent of {@link https://docs.unity3d.com/ScriptReference/MonoBehaviour.Invoke.html|Unity: Invoke}
