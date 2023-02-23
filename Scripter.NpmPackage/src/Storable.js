@@ -41,6 +41,13 @@ export class Storable {
    getStringChooser(name) { }
 
    /**
+    * Gets a storable url
+    * @param {string} name
+    * @returns {UrlParamReference}
+    */
+   getUrl(name) { }
+
+   /**
     * Gets a storable audio action
     * @param {string} name
     * @returns {AudioActionParamReference}

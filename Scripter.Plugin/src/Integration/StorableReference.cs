@@ -26,6 +26,8 @@ public class StorableReference : ObjectReference
                 return Func(GetString);
             case "getStringChooser":
                 return Func(GetStringChooser);
+            case "getUrl":
+                return Func(GetUrl);
             case "getBool":
                 return Func(GetBool);
             default:
@@ -87,6 +89,15 @@ public class StorableReference : ObjectReference
         var param = _storable.GetStringChooserJSONParam(paramName);
         if (param == null) throw new ScripterPluginException($"Could not find a string chooser param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
         return new StringChooserParamReference(param);
+    }
+
+    public Value GetUrl(LexicalContext context, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(GetStringChooser), args, 1);
+        var paramName = args[0].AsString;
+        var param = _storable.GetUrlJSONParam(paramName);
+        if (param == null) throw new ScripterPluginException($"Could not find a url param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
+        return new UrlParamReference(param);
     }
 
     public Value GetBool(LexicalContext context, Value[] args)

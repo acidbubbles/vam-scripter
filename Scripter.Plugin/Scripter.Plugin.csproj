@@ -95,6 +95,7 @@
     <Compile Include="src\Integration\StringParamReference.cs" />
     <Compile Include="src\Integration\TimeReference.cs" />
     <Compile Include="src\Integration\TransformReference.cs" />
+    <Compile Include="src\Integration\UrlParamReference.cs" />
     <Compile Include="src\Lib\Expressions\ArrayDeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\AssignmentExpression.cs" />
     <Compile Include="src\Lib\Expressions\AssignmentOperatorExpression.cs" />

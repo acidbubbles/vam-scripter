@@ -2,7 +2,7 @@
 * Represents a JSONStorableString in the Scripter plugin
 */
 
-export class StringParamReference {
+export class UrlParamReference {
    /**
     * @type {string}
     */

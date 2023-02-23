@@ -22,6 +22,7 @@ src\Integration\StringChooserParamReference.cs
 src\Integration\StringParamReference.cs
 src\Integration\TimeReference.cs
 src\Integration\TransformReference.cs
+src\Integration\UrlParamReference.cs
 src\Lib\Expressions\ArrayDeclarationExpression.cs
 src\Lib\Expressions\AssignmentExpression.cs
 src\Lib\Expressions\AssignmentOperatorExpression.cs

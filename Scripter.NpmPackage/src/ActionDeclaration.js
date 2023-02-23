@@ -3,4 +3,9 @@
  */
 
 export class ActionDeclaration {
+    /**
+     * Called when the action is triggered
+     * @param {function(): void} callback
+     */
+    onTrigger(callback) { }
 }

@@ -33,6 +33,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\StringParamReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\TimeReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\TransformReference.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Integration\\UrlParamReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\ArrayDeclarationExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\AssignmentExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\AssignmentOperatorExpression.cs",
