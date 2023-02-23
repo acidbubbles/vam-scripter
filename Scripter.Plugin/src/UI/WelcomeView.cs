@@ -64,7 +64,7 @@ Press the + button to create a file, or check out these templates to get started
                 Scripter.singleton.programFiles.DeleteAll();
                 Scripter.singleton.programFiles.Create(
                     "index.js",
-                    @"import { self, scene } from ""vam-scripter"";
+                    @"import { scripter, scene } from ""vam-scripter"";
 
 // Get triggers from another atom
 const timeline = scene
@@ -75,13 +75,13 @@ const timeline = scene
 timeline.invokeAction(""Play Anim 1"");
 
 // Get a float param
-var speed = timeline.getFloat(""Speed"");
+var speed = timeline.getFloatParam(""Speed"");
 
 // Get and set the value
 speed.val = speed.val + 0.1;
 
 // Create a float trigger and react to events
-let valueParam = self.declareFloatParam({
+let valueParam = scripter.declareFloatParam({
     name: ""Value"",
     min: 0,
     max: 1,
@@ -116,17 +116,17 @@ keybindings.declareCommand(""HelloWorld"", () => {
                 Scripter.singleton.programFiles.DeleteAll();
                 Scripter.singleton.programFiles.Create(
                     "index.js",
-                    @"import { self, scene, time } from ""vam-scripter"";
+                    @"import { scripter, scene, time, player } from ""vam-scripter"";
 
 var person = scene.getAtom(""Person"");
 var head = person.getController(""headControl"");
 var hand = person.getController(""lHandControl"");
 
-self.onFixedUpdate(() => {
-    head.lookAt(hand, time.fixedDeltaTime * 30);
+scripter.onFixedUpdate(() => {
+    head.lookAt(player.head, time.fixedDeltaTime * 30);
 });
 
-self.onUpdate(() => {
+scripter.onUpdate(() => {
     console.log(""Update: "" + time.time);
 });
 ");
@@ -138,7 +138,7 @@ self.onUpdate(() => {
                     @"import { scene } from ""vam-scripter"";
 
 // You can also use your own sounds with ""URL"", ""web"", ""yoursound.wav""
-var music = scene.getAudioClip(""Embedded"", ""Music"", ""CyberPetrifiedFull"");
+var music = scene.getAudioClipAction(""Embedded"", ""Music"", ""CyberPetrifiedFull"");
 
 // Create an AudioSource atom that will play the music
 var speaker = scene.getAtom(""AudioSource"").getStorable(""AudioSource"").getAudioAction(""PlayNow"");
@@ -147,9 +147,9 @@ var speaker = scene.getAtom(""AudioSource"").getStorable(""AudioSource"").getAud
 speaker.play(music);
 ");
             });
-            AddTemplateButton(templates.transform, "Open the documentation\n(web browser)",
-                () => Application.OpenURL("https://github.com/acidbubbles/vam-scripter/blob/master/README.md"));
-            AddTemplateButton(templates.transform, "Support this plugin\n(web browser)",
+            AddTemplateButton(templates.transform, "Documentation (web)\n<color=#6666cc>acidbubbles.github.io</color>",
+                () => Application.OpenURL("https://acidbubbles.github.io/vam-scripter/"));
+            AddTemplateButton(templates.transform, "Support me (web)\n<color=#6666cc>www.patreon.com</color>",
                 () => Application.OpenURL("https://www.patreon.com/acidbubbles"));
         }
 
