@@ -1,4 +1,6 @@
-import { DateTime } from "./src/DateTime";
+// @ts-check
+
+import { DateTimeClass } from "./src/DateTime";
 import { Keybindings } from "./src/Keybindings";
 import { Player } from "./src/Player";
 import { Random } from "./src/Random";
@@ -48,6 +50,6 @@ export const keybindings = new Keybindings();
 
 /**
  * Export for accessing .NET DateTime
- * @type {DateTime}
+ * @type {DateTimeClass}
  */
 export const datetime = new DateTimeClass();

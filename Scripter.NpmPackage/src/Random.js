@@ -1,17 +1,20 @@
+// @ts-check
+
 /**
  * The Unity Random class (see {@link https://docs.unity3d.com/ScriptReference/Random.html|Unity Documentation: Random})
  */
 export class Random {
     /**
      * See {@link https://docs.unity3d.com/ScriptReference/Random-value.html|Unity: Random.value}
-     * @type {number}
+     * @returns {number}
      */
-    value;
+    get value() { return 0; }
 
     /**
      * See {@link https://docs.unity3d.com/ScriptReference/Random-Range.html|Unity: Random.Range}
      * @param {number} minInclusive - The minimum value
      * @param {number} maxInclusive - The maximum value
+     * @returns {number}
      */
-    range(minInclusive, maxInclusive) {}
+    range(minInclusive, maxInclusive) { return 0; }
 }

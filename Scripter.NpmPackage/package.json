@@ -2,7 +2,7 @@
   "name": "vam-scripter",
   "version": "0.0.3",
   "description": "A Virt-A-Mate scripting language that allows automating triggers, keybindings and more.",
-  "main": "index",
+  "main": "index.js",
   "typings": "index",
   "scripts": {
     "doc": "npx jsdoc -c jsdoc.json --verbose",

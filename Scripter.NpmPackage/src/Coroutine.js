@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * Represents a Unity coroutine
  */
@@ -8,17 +10,20 @@ export class Coroutine {
 export class CoroutineIterator {
     /**
      * Stop calling the function
+     * @returns {number} - Instruction internal code for the Coroutine
      */
-    stop;
+    get stop() { return 0; }
 
     /**
      * Call the function next frame
+     * @returns {number} - Instruction internal code for the Coroutine
      */
-    nextFrame;
+    get nextFrame() { return 0; }
 
     /**
      * Call the function again in N seconds
      * @param {number} seconds 
+     * @returns {number} - Instruction internal code for the Coroutine
      */
-    waitForSeconds(seconds) {}
+    waitForSeconds(seconds) { return 0; }
 }
