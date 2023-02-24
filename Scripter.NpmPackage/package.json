@@ -1,6 +1,6 @@
 {
   "name": "vam-scripter",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A Virt-A-Mate scripting language that allows automating triggers, keybindings and more.",
   "main": "index",
   "typings": "index",
