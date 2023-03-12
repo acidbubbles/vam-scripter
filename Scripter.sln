@@ -7,6 +7,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{8F309CCB-DCC3-41C7-8D09-AD733DEFED6E}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\package.yml = .github\workflows\package.yml
+		.github\workflows\doc.yml = .github\workflows\doc.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripter.Tests", "Scripter.Tests\Scripter.Tests.csproj", "{B8049E97-A885-4F64-9EE3-EC4A9C7D7F7B}"
