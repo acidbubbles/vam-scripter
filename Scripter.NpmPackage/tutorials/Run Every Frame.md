@@ -1,7 +1,7 @@
 ```js
-import { self, time } from "vam-scripter";
+import { self, Time } from "vam-scripter";
 
 self.onUpdate(function() {
-    console.log(time.time, "ding");
+    console.log(Time.time, "ding");
 });
 ```

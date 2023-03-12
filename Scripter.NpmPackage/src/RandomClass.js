@@ -3,7 +3,7 @@
 /**
  * The Unity Random class (see {@link https://docs.unity3d.com/ScriptReference/Random.html|Unity Documentation: Random})
  */
-export class Random {
+export class RandomClass {
     /**
      * See {@link https://docs.unity3d.com/ScriptReference/Random-value.html|Unity: Random.value}
      * @returns {number}

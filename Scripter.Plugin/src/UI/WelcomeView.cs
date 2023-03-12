@@ -116,18 +116,18 @@ keybindings.declareCommand(""HelloWorld"", () => {
                 Scripter.singleton.programFiles.DeleteAll();
                 Scripter.singleton.programFiles.Create(
                     "index.js",
-                    @"import { scripter, scene, time, player } from ""vam-scripter"";
+                    @"import { scripter, scene, Time, player } from ""vam-scripter"";
 
 var person = scene.getAtom(""Person"");
 var head = person.getController(""headControl"");
 var hand = person.getController(""lHandControl"");
 
 scripter.onFixedUpdate(() => {
-    head.lookAt(player.head, time.fixedDeltaTime * 30);
+    head.lookAt(player.head, Time.fixedDeltaTime * 30);
 });
 
 scripter.onUpdate(() => {
-    console.log(""Update: "" + time.time);
+    console.log(""Update: "" + Time.time);
 });
 ");
             });

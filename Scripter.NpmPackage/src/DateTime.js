@@ -5,9 +5,9 @@
  */
 export class DateTimeClass {
     /**
-     * @type {DateTime}
+     * @returns {DateTime}
      */
-    now;
+    get now() { return new DateTime(); }
 }
 
 export class DateTime {

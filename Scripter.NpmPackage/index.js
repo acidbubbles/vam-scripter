@@ -3,10 +3,10 @@
 import { DateTimeClass } from "./src/DateTime";
 import { Keybindings } from "./src/Keybindings";
 import { Player } from "./src/Player";
-import { Random } from "./src/Random";
+import { RandomClass } from "./src/RandomClass";
 import { Scene } from "./src/Scene";
 import { Scripter } from "./src/Scripter";
-import { Time } from "./src/Time";
+import { TimeClass } from "./src/TimeClass";
 
 /**
  * @module vam-scripter
@@ -20,15 +20,15 @@ export const scripter = new Scripter();
 
 /**
  * Export for accessing Unity's Time
- * @type {Time}
+ * @type {TimeClass}
  */
-export const time = new Time();
+export const Time = new TimeClass();
 
 /**
  * Export for accessing Unity's Random
- * @type {Random}
+ * @type {RandomClass}
  */
-export const random = new Random();
+export const Random = new RandomClass();
 
 /**
  * Export for accessing the Virt-A-Mate scene information
@@ -52,4 +52,4 @@ export const keybindings = new Keybindings();
  * Export for accessing .NET DateTime
  * @type {DateTimeClass}
  */
-export const datetime = new DateTimeClass();
+export const DateTime = new DateTimeClass();

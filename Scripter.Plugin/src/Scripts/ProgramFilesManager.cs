@@ -15,7 +15,7 @@ public class ProgramFilesManager
     {
         _plugin = plugin;
         _program = new Program();
-        GlobalFunctions.Register(_program.globalContext);
+        Globals.Register(_program.globalContext);
     }
 
     public string NewName()

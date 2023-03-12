@@ -19,9 +19,9 @@ public class ScripterModule : IModule
         var module = new ModuleNamespace();
         module.exports.Add("scripter", _pluginReference);
         module.exports.Add("scene", _sceneReference);
-        module.exports.Add("time", _timeReference);
-        module.exports.Add("random", _randomReference);
-        module.exports.Add("datetime", _dateTimeClassReference);
+        module.exports.Add("Time", _timeReference);
+        module.exports.Add("Random", _randomReference);
+        module.exports.Add("DateTime", _dateTimeClassReference);
         module.exports.Add("player", _playerReference);
         module.exports.Add("keybindings", _keybindingsReference);
         return module;

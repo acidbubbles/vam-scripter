@@ -1,7 +1,6 @@
 ﻿using ScripterLang;
 
-
-public static class GlobalFunctions
+public static class Globals
 {
     public static void Register(GlobalLexicalContext lexicalContext)
     {

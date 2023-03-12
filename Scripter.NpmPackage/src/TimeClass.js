@@ -3,7 +3,7 @@
 /**
  * The Unity time class (see {@link https://docs.unity3d.com/ScriptReference/Time.html|Unity Documentation: Time})
  */
-export class Time {
+export class TimeClass {
     /**
      * (See {@link https://docs.unity3d.com/ScriptReference/Time-time.html|Unity: Time.time})
      * @returns {number}
