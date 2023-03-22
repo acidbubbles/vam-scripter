@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class CodeInputField : InputField
 {
+    public bool enhancementsEnabled = true;
+
     private int _prevCaretPosition;
     private bool _lastSelected;
     private int _lastSelectedPosition;
@@ -123,7 +125,7 @@ public class CodeInputField : InputField
     private char OnDirectValidateInput(string inputText, int pos, char input)
     {
         // TODO: CTRL+Left, CTRL+Right, CTRL+SHIFT+Left, etc.
-        if (_ignoreOnValidateInput) return input;
+        if (_ignoreOnValidateInput || !enhancementsEnabled) return input;
         if (input == '\t')
         {
             if (selectionAnchorPosition != selectionFocusPosition)

@@ -47,9 +47,9 @@ public class ProgramFilesManager
         {
             var script = Script.FromJSON(scriptJSON, _plugin);
             files.Add(script);
-            script.Tab = _plugin.ui.AddScriptTab(script);
+            script.tab = _plugin.ui.AddScriptTab(script);
             if(script.nameJSON.val == "index.js")
-                _plugin.ui.SelectTab(script.Tab);
+                _plugin.ui.SelectTab(script.tab);
         }
     }
 
@@ -57,15 +57,15 @@ public class ProgramFilesManager
     {
         var script = new Script(filename, code, _plugin);
         files.Add(script);
-        script.Tab = _plugin.ui.AddScriptTab(script);
-        _plugin.ui.SelectTab(script.Tab);
+        script.tab = _plugin.ui.AddScriptTab(script);
+        _plugin.ui.SelectTab(script.tab);
     }
 
     private void Delete(Script script)
     {
         Unregister(script);
         files.Remove(script);
-        _plugin.ui.RemoveTab(script.Tab);
+        _plugin.ui.RemoveTab(script.tab);
     }
 
     public void DeleteAll()

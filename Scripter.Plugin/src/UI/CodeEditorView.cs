@@ -26,7 +26,7 @@ public class CodeEditorView : MonoBehaviour
         bg.color = new Color(30 / 255f, 30 / 255f, 30 / 255f);
 
         var screen = go.AddComponent<CodeEditorView>();
-        screen.CreateMultilineInput(script.sourceJSON);
+        screen.CreateMultilineInput(script);
 
         var toolbar = UIUtils.MakeToolbar(screen.transform, 270);
         script.history.undoButton = UIUtils.CreateToolbarButton(toolbar, "\u21BA", 40, true, script.history.Undo);
@@ -39,12 +39,12 @@ public class CodeEditorView : MonoBehaviour
 
     private static CodeInputField _input;
 
-    private void CreateMultilineInput(JSONStorableString jss)
+    private void CreateMultilineInput(Script script)
     {
         var textfield = Instantiate(Scripter.singleton.manager.configurableTextFieldPrefab, transform).GetComponent<UIDynamicTextField>();
         textfield.backgroundColor = new Color(30 / 255f, 30 / 255f, 30 / 255f);
         textfield.textColor = new Color(156 / 255f, 220 / 255f, 254 / 255f);
-        jss.dynamicText = textfield;
+        script.sourceJSON.dynamicText = textfield;
 
         Destroy(textfield.GetComponent<LayoutElement>());
 
@@ -59,9 +59,10 @@ public class CodeEditorView : MonoBehaviour
         var text = textfield.GetComponentInChildren<Text>(true);
 
         var input = text.gameObject.AddComponent<CodeInputField>();
+        script.input = input;
         input.textComponent = textfield.UItext;
         input.lineType = InputField.LineType.MultiLineNewline;
-        jss.inputField = input;
+        script.sourceJSON.inputField = input;
         _input = input;
 
         textfield.gameObject.AddComponent<Clickable>().onClick.AddListener(OnClick);

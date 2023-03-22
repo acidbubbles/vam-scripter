@@ -10,7 +10,7 @@ public class KeybindingDeclaration : ParamDeclarationBase, IDisposable
     {
         actionJSON = new JSONStorableAction(name, null);
         var scripter = Scripter.singleton;
-        scripter.KeybindingsTriggers.Add(this);
+        scripter.keybindingsTriggers.Add(this);
         Scripter.singleton.UpdateKeybindings();
     }
 
@@ -46,7 +46,7 @@ public class KeybindingDeclaration : ParamDeclarationBase, IDisposable
     public void Dispose()
     {
         actionJSON.actionCallback = null;
-        Scripter.singleton.KeybindingsTriggers.Remove(this);
+        Scripter.singleton.keybindingsTriggers.Remove(this);
         Scripter.singleton.UpdateKeybindings();
     }
 }

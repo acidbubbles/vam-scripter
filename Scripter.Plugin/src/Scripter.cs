@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using MVR.FileManagementSecure;
 using ScripterLang;
 using SimpleJSON;
 using UnityEngine;
@@ -15,12 +17,13 @@ public class Scripter : MVRScript
     public ScripterUI ui;
     public bool isLoading;
 
-    private bool _restored;
-    private readonly List<ParamDeclarationBase> _triggers = new List<ParamDeclarationBase>();
-
-    public List<KeybindingDeclaration> KeybindingsTriggers { get; } = new List<KeybindingDeclaration>();
+    public readonly List<KeybindingDeclaration> keybindingsTriggers = new List<KeybindingDeclaration>();
     public readonly List<FunctionLink> onUpdateFunctions = new List<FunctionLink>();
     public readonly List<FunctionLink> onFixedUpdateFunctions = new List<FunctionLink>();
+
+    private bool _restored;
+    private string _syncFolder;
+    private readonly List<ParamDeclarationBase> _triggers = new List<ParamDeclarationBase>();
 
     public Scripter()
     {
@@ -39,8 +42,16 @@ public class Scripter : MVRScript
     {
         yield return new WaitForEndOfFrame();
         if (this == null) yield break;
-        if (!_restored)
+
+        if (containingAtom.type == "SessionPluginManager")
+        {
+            _syncFolder = $"Saves\\PluginData\\Scripter\\Session\\{name}";
+            LoadFromDisk(false);
+        }
+        else if (!_restored)
+        {
             containingAtom.RestoreFromLast(this);
+        }
 
         if (programFiles.files.Count == 0)
         {
@@ -64,12 +75,13 @@ public class Scripter : MVRScript
     public override JSONClass GetJSON(bool includePhysical = true, bool includeAppearance = true, bool forceStore = false)
     {
         var json = base.GetJSON(includePhysical, includeAppearance, forceStore);
-        var json1 = new JSONClass();
+        if (containingAtom.type == "SessionPluginManager") return json;
+        var triggersJSON = new JSONClass();
         foreach (var trigger in _triggers)
         {
-            json1.Add(trigger.GetJSON());
+            triggersJSON.Add(trigger.GetJSON());
         }
-        json["Triggers"] = json1;
+        json["Triggers"] = triggersJSON;
         json["Scripts"] = programFiles.GetJSON();
         needsStore = true;
         return json;
@@ -78,6 +90,7 @@ public class Scripter : MVRScript
     public override void RestoreFromJSON(JSONClass jc, bool restorePhysical = true, bool restoreAppearance = true, JSONArray presetAtoms = null, bool setMissingToDefault = true)
     {
         base.RestoreFromJSON(jc, restorePhysical, restoreAppearance, presetAtoms, setMissingToDefault);
+        if (containingAtom.type == "SessionPluginManager") return;
         isLoading = true;
         var array = jc["Triggers"].AsArray;
         if (array == null)
@@ -131,7 +144,7 @@ public class Scripter : MVRScript
 
         bindings.Add(new JSONStorableAction("OpenUI", SelectAndOpenUI));
 
-        foreach (var trigger in KeybindingsTriggers)
+        foreach (var trigger in keybindingsTriggers)
         {
             if (trigger.actionJSON == null) throw new NullReferenceException("Null keybindings action JSON");
             bindings.Add(trigger.actionJSON);
@@ -209,4 +222,60 @@ public class Scripter : MVRScript
     {
         SuperController.singleton.BroadcastMessage("OnActionsProviderDestroyed", this, SendMessageOptions.DontRequireReceiver);
     }
+
+    #region Sync
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        LoadFromDisk(true);
+    }
+
+    private void LoadFromDisk(bool tryRun)
+    {
+        if(!FileManagerSecure.DirectoryExists(_syncFolder))
+            FileManagerSecure.CreateDirectory(_syncFolder);
+        var paths = FileManagerSecure.GetFiles(_syncFolder);
+        var changed = false;
+        foreach (var path in paths)
+        {
+            var localName = path.Split('\\').Last();
+            var script = programFiles.files.FirstOrDefault(f => f.nameJSON.val == localName);
+            var contents = FileManagerSecure.ReadAllText(path);
+            if (script != null)
+            {
+                if (contents == script.sourceJSON.val) continue;
+                if (script.input != null) script.input.enhancementsEnabled = false;
+                try
+                {
+                    script.sourceJSON.val = contents;
+                    script.Parse();
+                }
+                finally
+                {
+                    if (script.input != null) script.input.enhancementsEnabled = true;
+                }
+
+                changed = true;
+            }
+            else
+            {
+                programFiles.Create(localName, contents);
+                changed = true;
+            }
+        }
+
+        if (tryRun && changed && programFiles.CanRun())
+            programFiles.Run();
+    }
+
+    public void SaveToDisk(Script script)
+    {
+        if (containingAtom.type != "SessionPluginManager") return;
+        var localName = script.nameJSON.val;
+        if (localName.Contains("/") || localName.Contains("\\")) throw new InvalidOperationException("Unexpected script name: " + script.nameJSON.val);
+        FileManagerSecure.WriteAllText($"{_syncFolder}\\{localName}", script.sourceJSON.val);
+    }
+
+    #endregion
+
 }

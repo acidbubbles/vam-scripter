@@ -6,7 +6,9 @@ public class Script
 {
     private readonly Scripter _scripter;
 
-    public ScripterTab Tab { get; set; }
+    public CodeInputField input;
+    public ScripterTab tab;
+
     public readonly HistoryManager history;
     public readonly JSONStorableString nameJSON = new JSONStorableString("Module", "");
     public readonly JSONStorableString sourceJSON = new JSONStorableString("Source", "");
@@ -34,11 +36,13 @@ public class Script
     }
 
     private int _lastParsed;
+
     public void Parse()
     {
         // To prevent clicking on Validate running the script twice
         if (_lastParsed == Time.frameCount) return;
         _lastParsed = Time.frameCount;
+        Scripter.singleton.SaveToDisk(this);
         Parse(sourceJSON.val);
     }
 
