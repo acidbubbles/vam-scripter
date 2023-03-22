@@ -180,6 +180,7 @@ public class Scripter : MVRScript
             var selector = containingAtom.gameObject.GetComponentInChildren<UITabSelector>();
             if (selector == null) continue;
             selector.SetActiveTab("Plugins");
+            // ReSharper disable once RedundantJumpStatement
             if (UITransform == null) continue;
         }
 
