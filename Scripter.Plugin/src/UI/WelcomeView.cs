@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public class WelcomeView : MonoBehaviour
 {
-    private const string _welcomeText = @"Welcome to Scripter! Ff you have some basic understanding of JavaScript, you'll be able to use this plugin in no time.
+    private const string _welcomeText = @"Welcome to Scripter! If you have some basic understanding of JavaScript, you'll be able to use this plugin in no time.
 
 Press the + button to create a file, or check out these templates to get started.";
 
@@ -99,7 +99,7 @@ let valueParam = scripter.declareFloatParam({
                 Scripter.singleton.programFiles.DeleteAll();
                 Scripter.singleton.programFiles.Create(
                     "index.js",
-                    @"import { keybindings } from ""vam-scripter"";
+                    @"import { keybindings, Input } from ""vam-scripter"";
 
 // Creates a Keybindings named ""Scripter.HelloWorld""
 keybindings.declareCommand(""HelloWorld"", () => {
@@ -107,7 +107,13 @@ keybindings.declareCommand(""HelloWorld"", () => {
 
     // You can also call other commands
     keybindings.invokeCommand(""Scripter.OpenUI"");
-});");
+});
+
+// If you prefer you can bind to a key directly
+Input.onKeyDown(""Space"", () => {{
+    console.log(""You pressed Space!"");
+}});
+");
             });
 
             // TODO: Use RotateTowards and MoveTo

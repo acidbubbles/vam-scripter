@@ -70,11 +70,11 @@ src\Module\StorableParams\UrlParamReference.cs
 src\Module\AtomReference.cs
 src\Module\ConsoleReference.cs
 src\Module\ControllerReference.cs
-src\Module\CoroutineReference.cs
 src\Module\DateTimeClassReference.cs
 src\Module\DateTimeReference.cs
 src\Module\FunctionLink.cs
-src\Module\GlobalFunctions.cs
+src\Module\Globals.cs
+src\Module\InputReference.cs
 src\Module\KeybindingsReference.cs
 src\Module\MathReference.cs
 src\Module\NamedAudioClipReference.cs

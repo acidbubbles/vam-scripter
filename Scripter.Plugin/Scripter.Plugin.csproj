@@ -147,6 +147,7 @@
     <Compile Include="src\Module\DateTimeReference.cs" />
     <Compile Include="src\Module\FunctionLink.cs" />
     <Compile Include="src\Module\Globals.cs" />
+    <Compile Include="src\Module\InputReference.cs" />
     <Compile Include="src\Module\KeybindingsReference.cs" />
     <Compile Include="src\Module\MathReference.cs" />
     <Compile Include="src\Module\NamedAudioClipReference.cs" />

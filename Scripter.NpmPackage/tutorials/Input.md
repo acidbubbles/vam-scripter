@@ -1,9 +1,7 @@
-You can declare float, bool and string params, which can be called from other triggers.
-
-For example, this will create the `Intensity` float param:
+You can listen to key presses.
 
 ```js
-let intensity = scripter.declareFloatParam({
+scripter.declareFloatParam({
     name: "Intensity",
     min: 0,
     max: 1,

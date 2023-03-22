@@ -1,8 +1,8 @@
 ```js
-import { self } from "vam-scripter";
+import { scripter} from "vam-scripter";
 
 // Available as Scripter.MyCommand
-self.declareKeybinding("MyCommand", () => {
+scripter.declareKeybinding("MyCommand", () => {
     console.log("Hello, world!");
 });
 ```

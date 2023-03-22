@@ -1,7 +1,7 @@
 ```js
-import { self } from "vam-scripter";
+import { scripter } from "vam-scripter";
 
-self.declareAction("Click", () => {
+scripter.declareAction("Click", () => {
     console.log("Hello, world!");
 });
 ```
