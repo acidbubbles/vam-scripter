@@ -29,7 +29,7 @@ public static class Globals
             throw new ScripterRuntimeException($"{nameof(ClearTimeout)} requires 1 argument");
         var coRef = args[0].AsObject as SetTimeoutToken;
         if(coRef == null)
-            throw new ScripterRuntimeException($"{nameof(ClearTimeout)} requires a CoroutineReference as argument");
+            throw new ScripterRuntimeException($"{nameof(ClearTimeout)} requires a SetTimeoutToken as argument");
         coRef.Dispose();
         context.GetModuleContext().UnregisterDisposable(coRef);
         return Value.Void;

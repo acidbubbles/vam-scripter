@@ -1,7 +1,5 @@
 // @ts-check
 
-import { Coroutine, CoroutineIterator } from "./coroutine";
-
 import { ActionDeclaration } from "./Declarations/ActionDeclaration";
 import { BoolParamDeclaration } from "./Declarations/BoolParamDeclaration";
 import { FloatParamDeclaration } from "./Declarations/FloatParamDeclaration";
@@ -59,18 +57,4 @@ export class Scripter {
      * @returns {void}
      */
     onFixedUpdate() {};
-
-    /**
-     * Starts a Unity coroutine
-     * @param {function(CoroutineIterator): Coroutine} fn
-     * @returns {Coroutine}
-     */
-    startCoroutine(fn) { return new Coroutine(); }
-
-    /**
-     * Stops an existing coroutine
-     * @param {Coroutine} co
-     * @returns {void}
-     */
-    stopCoroutine(co) {}
 }

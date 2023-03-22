@@ -143,7 +143,6 @@
     <Compile Include="src\Module\AtomReference.cs" />
     <Compile Include="src\Module\ConsoleReference.cs" />
     <Compile Include="src\Module\ControllerReference.cs" />
-    <Compile Include="src\Module\CoroutineReference.cs" />
     <Compile Include="src\Module\DateTimeClassReference.cs" />
     <Compile Include="src\Module\DateTimeReference.cs" />
     <Compile Include="src\Module\FunctionLink.cs" />
