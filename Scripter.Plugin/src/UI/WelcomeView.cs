@@ -6,9 +6,14 @@ using UnityEngine.UI;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public class WelcomeView : MonoBehaviour
 {
-    private const string _welcomeText = @"Welcome to Scripter! If you have some basic understanding of JavaScript, you'll be able to use this plugin in no time.
+    private const string _welcomeTextAtom = @"Welcome to Scripter! If you have some basic understanding of JavaScript, you'll be able to use this plugin in no time.
 
 Press the + button to create a file, or check out these templates to get started.";
+
+    private const string _welcomeTextSession = @"Welcome to Scripter! If you have some basic understanding of JavaScript, you'll be able to use this plugin in no time.
+
+All files will be saved in (VaM)\PluginData\Scripter\Session\plugin#0_Scripter (or whatever you named the plugin). You can edit them directly in your favorite text editor, too!";
+
 
     public static WelcomeView Create(Transform parent)
     {
@@ -174,7 +179,7 @@ speaker.play(music);
         var text = welcomeText.AddComponent<Text>();
         text.font = SuperController.singleton.dynamicButtonPrefab.GetComponentInChildren<Text>(true).font;
         text.fontSize = 28;
-        text.text = _welcomeText;
+        text.text = Scripter.singleton.IsSessionPlugin() ? _welcomeTextSession : _welcomeTextAtom;
         text.alignment = TextAnchor.MiddleCenter;
         text.raycastTarget = false;
         text.color = Color.white;

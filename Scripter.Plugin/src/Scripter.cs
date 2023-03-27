@@ -43,7 +43,7 @@ public class Scripter : MVRScript
         yield return new WaitForEndOfFrame();
         if (this == null) yield break;
 
-        if (containingAtom.type == "SessionPluginManager")
+        if (IsSessionPlugin())
         {
             _syncFolder = $"Saves\\PluginData\\Scripter\\Session\\{name}";
             LoadFromDisk(false);
@@ -75,7 +75,7 @@ public class Scripter : MVRScript
     public override JSONClass GetJSON(bool includePhysical = true, bool includeAppearance = true, bool forceStore = false)
     {
         var json = base.GetJSON(includePhysical, includeAppearance, forceStore);
-        if (containingAtom.type == "SessionPluginManager") return json;
+        if (IsSessionPlugin() || _syncFolder != null) return json;
         var triggersJSON = new JSONClass();
         foreach (var trigger in _triggers)
         {
@@ -90,7 +90,7 @@ public class Scripter : MVRScript
     public override void RestoreFromJSON(JSONClass jc, bool restorePhysical = true, bool restoreAppearance = true, JSONArray presetAtoms = null, bool setMissingToDefault = true)
     {
         base.RestoreFromJSON(jc, restorePhysical, restoreAppearance, presetAtoms, setMissingToDefault);
-        if (containingAtom.type == "SessionPluginManager") return;
+        if (IsSessionPlugin() || _syncFolder != null) return;
         isLoading = true;
         var array = jc["Triggers"].AsArray;
         if (array == null)
@@ -109,6 +109,11 @@ public class Scripter : MVRScript
         isLoading = false;
         _restored = true;
         UpdateKeybindings();
+    }
+
+    public bool IsSessionPlugin()
+    {
+        return containingAtom.type == "SessionPluginManager";
     }
 
     private void Update()
@@ -160,7 +165,7 @@ public class Scripter : MVRScript
         if (SuperController.singleton.gameMode != SuperController.GameMode.Edit)
             SuperController.singleton.gameMode = SuperController.GameMode.Edit;
 
-        if (containingAtom.type == "SessionPluginManager")
+        if (IsSessionPlugin())
         {
             SuperController.singleton.activeUI = SuperController.ActiveUI.MainMenu;
             SuperController.singleton.SetMainMenuTab("TabSessionPlugins");
@@ -232,6 +237,7 @@ public class Scripter : MVRScript
 
     private void LoadFromDisk(bool tryRun)
     {
+        if (_syncFolder == null) return;
         if(!FileManagerSecure.DirectoryExists(_syncFolder))
             FileManagerSecure.CreateDirectory(_syncFolder);
         var paths = FileManagerSecure.GetFiles(_syncFolder);
