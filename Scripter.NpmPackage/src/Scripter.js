@@ -48,13 +48,15 @@ export class Scripter {
 
     /**
      * Called every frame
+     * @param {function(function(): void): void} fn
      * @returns {void}
      */
-    onUpdate() {};
+    onUpdate(fn) {};
 
     /**
      * Called every physics frame
+     * @param {function(function(): void): void} fn
      * @returns {void}
      */
-    onFixedUpdate() {};
+    onFixedUpdate(fn) {};
 }

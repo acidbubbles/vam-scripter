@@ -7,6 +7,7 @@ import { RandomClass } from "./src/RandomClass";
 import { Scene } from "./src/Scene";
 import { Scripter } from "./src/Scripter";
 import { TimeClass } from "./src/TimeClass";
+import { InputClass } from "./src/InputClass";
 
 /**
  * @module vam-scripter
@@ -47,6 +48,12 @@ export const player = new Player();
  * @type {Keybindings}
  */
 export const keybindings = new Keybindings();
+
+/**
+ * The Unity Input class
+ * @type {InputClass}
+ */
+export const Input = new InputClass();
 
 /**
  * Export for accessing .NET DateTime
