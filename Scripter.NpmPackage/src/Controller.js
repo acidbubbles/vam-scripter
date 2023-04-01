@@ -19,5 +19,5 @@ export class Controller extends Transform {
     * @param {number} maxDegreesDelta
     * @returns {void}
     */
-   rotateTowards(target, maxDegreesDelta) { }
+   lookAt(target, maxDegreesDelta) { }
 }
