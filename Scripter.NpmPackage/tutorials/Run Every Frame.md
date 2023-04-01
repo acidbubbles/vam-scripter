@@ -1,3 +1,5 @@
+You can run code every frame using `onUpdate` method.
+
 ```js
 import { scripter, Time } from "vam-scripter";
 

@@ -1,3 +1,5 @@
+You can find the distance between two controls using the `distance` method.
+
 ```js
 import { scene } from "vam-scripter";
 

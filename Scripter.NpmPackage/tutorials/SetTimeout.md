@@ -1,3 +1,5 @@
+You can use `setTimeout` to call a function after a delay.
+
 ```js
 // Calls the function later
 var timeout = setTimeout(() => {

@@ -1,3 +1,5 @@
+You can define functions using `function name() {}` or `const name = () => {}` syntax.
+
 ```js
 import { scene } from "vam-scripter";
 

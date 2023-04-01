@@ -3,6 +3,8 @@ You can declare float, bool and string params, which can be called from other tr
 For example, this will create the `Intensity` float param:
 
 ```js
+import { scripter } from "vam-scripter";
+
 let intensity = scripter.declareFloatParam({
     name: "Intensity",
     min: 0,
@@ -16,6 +18,8 @@ let intensity = scripter.declareFloatParam({
 If you need to update the value, you can declare the param and listen to the event separately:
 
 ```js
+import { scripter } from "vam-scripter";
+
 let intensity = scripter.declareFloatParam({
     name: "Intensity",
     default: 0,

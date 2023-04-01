@@ -1,3 +1,5 @@
+You can refer to audio clips by name, and play them using the `play` method on the atom of your choice.
+
 ```js
 import { scene } from "vam-scripter";
 

@@ -1,3 +1,5 @@
+You can access storable values from other atoms.
+
 ```js
 import { scene } from "vam-scripter";
 
