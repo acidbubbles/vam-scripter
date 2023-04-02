@@ -9,8 +9,16 @@ public class ScripterPluginReference : ObjectReference
         {
             case "onUpdate":
                 return Func(OnUpdate);
+            case "onLateUpdate":
+                return Func(OnLateUpdate);
             case "onFixedUpdate":
                 return Func(OnFixedUpdate);
+            case "onEnable":
+                return Func(OnEnable);
+            case "onDisable":
+                return Func(OnDisable);
+            case "onDestroy":
+                return Func(OnDestroy);
             case "declareFloatParam":
                 return Func(DeclareFloatParam);
             case "declareStringParam":
@@ -33,11 +41,47 @@ public class ScripterPluginReference : ObjectReference
         return Value.Void;
     }
 
+    private Value OnLateUpdate(LexicalContext context, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(OnLateUpdate), args, 1);
+        var fn = args[0].AsFunction;
+        var link = new FunctionLink(Scripter.singleton.onLateUpdateFunctions, context, fn);
+        context.GetModuleContext().RegisterDisposable(link);
+        return Value.Void;
+    }
+
     private Value OnFixedUpdate(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(OnFixedUpdate), args, 1);
         var fn = args[0].AsFunction;
         var link = new FunctionLink(Scripter.singleton.onFixedUpdateFunctions, context, fn);
+        context.GetModuleContext().RegisterDisposable(link);
+        return Value.Void;
+    }
+
+    private Value OnEnable(LexicalContext context, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(OnEnable), args, 1);
+        var fn = args[0].AsFunction;
+        var link = new FunctionLink(Scripter.singleton.onEnableFunctions, context, fn);
+        context.GetModuleContext().RegisterDisposable(link);
+        return Value.Void;
+    }
+
+    private Value OnDisable(LexicalContext context, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(OnDisable), args, 1);
+        var fn = args[0].AsFunction;
+        var link = new FunctionLink(Scripter.singleton.onDisableFunctions, context, fn);
+        context.GetModuleContext().RegisterDisposable(link);
+        return Value.Void;
+    }
+
+    private Value OnDestroy(LexicalContext context, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(OnDestroy), args, 1);
+        var fn = args[0].AsFunction;
+        var link = new FunctionLink(Scripter.singleton.onDestroyFunctions, context, fn);
         context.GetModuleContext().RegisterDisposable(link);
         return Value.Void;
     }

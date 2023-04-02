@@ -19,7 +19,11 @@ public class Scripter : MVRScript
 
     public readonly List<KeybindingDeclaration> keybindingsTriggers = new List<KeybindingDeclaration>();
     public readonly List<FunctionLink> onUpdateFunctions = new List<FunctionLink>();
+    public readonly List<FunctionLink> onLateUpdateFunctions = new List<FunctionLink>();
     public readonly List<FunctionLink> onFixedUpdateFunctions = new List<FunctionLink>();
+    public readonly List<FunctionLink> onEnableFunctions = new List<FunctionLink>();
+    public readonly List<FunctionLink> onDisableFunctions = new List<FunctionLink>();
+    public readonly List<FunctionLink> onDestroyFunctions = new List<FunctionLink>();
 
     private bool _restored;
     private string _syncFolder;
@@ -125,6 +129,15 @@ public class Scripter : MVRScript
         }
     }
 
+    private void LateUpdate()
+    {
+        for (var i = 0; i < onLateUpdateFunctions.Count; i++)
+        {
+            var fn = onLateUpdateFunctions[i];
+            fn.fn.Invoke(fn.context, Value.EmptyValues);
+        }
+    }
+
     private void FixedUpdate()
     {
         for (var i = 0; i < onFixedUpdateFunctions.Count; i++)
@@ -223,9 +236,32 @@ public class Scripter : MVRScript
 
     #endregion
 
+    public void OnEnable()
+    {
+        for (var i = 0; i < onEnableFunctions.Count; i++)
+        {
+            var fn = onEnableFunctions[i];
+            fn.fn.Invoke(fn.context, Value.EmptyValues);
+        }
+    }
+
+    public void OnDisable()
+    {
+        for (var i = 0; i < onDisableFunctions.Count; i++)
+        {
+            var fn = onDisableFunctions[i];
+            fn.fn.Invoke(fn.context, Value.EmptyValues);
+        }
+    }
+
     public void OnDestroy()
     {
         SuperController.singleton.BroadcastMessage("OnActionsProviderDestroyed", this, SendMessageOptions.DontRequireReceiver);
+        for (var i = 0; i < onDestroyFunctions.Count; i++)
+        {
+            var fn = onDestroyFunctions[i];
+            fn.fn.Invoke(fn.context, Value.EmptyValues);
+        }
     }
 
     #region Sync
