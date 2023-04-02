@@ -30,6 +30,7 @@ public class ControllerReference : TransformReference
 
     private Value LookAt(LexicalContext context, Value[] args)
     {
+        if (Frozen()) return Value.Void;
         if (_controller.isGrabbing) return Value.Void;
         var other = args[0].AsObject as TransformReference;
         if (ReferenceEquals(other, null)) throw new ScripterRuntimeException($"Expected a ControllerReference as argument to {nameof(LookAt)}");
@@ -46,6 +47,7 @@ public class ControllerReference : TransformReference
 
     private Value MoveTowards(LexicalContext context, Value[] args)
     {
+        if (Frozen()) return Value.Void;
         if (_controller.isGrabbing) return Value.Void;
         var other = args[0].AsObject as TransformReference;
         if (ReferenceEquals(other, null)) throw new ScripterRuntimeException($"Expected a ControllerReference as argument to {nameof(MoveTowards)}");
@@ -57,5 +59,10 @@ public class ControllerReference : TransformReference
         }
         _controller.control.position = targetPosition;
         return Value.Void;
+    }
+
+    private bool Frozen()
+    {
+        return !SuperController.singleton.freezeAnimation;
     }
 }
