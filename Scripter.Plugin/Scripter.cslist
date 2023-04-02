@@ -6,6 +6,7 @@ src\Lib\Expressions\CodeBlockExpression.cs
 src\Lib\Expressions\DeclarationExpression.cs
 src\Lib\Expressions\ExportExpression.cs
 src\Lib\Expressions\Expression.cs
+src\Lib\Expressions\ExpressionAccessor.cs
 src\Lib\Expressions\ForExpression.cs
 src\Lib\Expressions\FunctionCallExpression.cs
 src\Lib\Expressions\FunctionDeclarationExpression.cs

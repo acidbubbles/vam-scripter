@@ -332,6 +332,19 @@ public class LanguageTests
     }
 
     [Test]
+    public void AssignToObjectRef()
+    {
+        var thing = new MyThing { value = 0 };
+        _program.globalContext.DeclareGlobal("fn", Value.CreateFunction((context, args) => thing));
+        _program.Register("index.js", """
+            fn().self().value = 1;
+            """);
+        _program.Run();
+
+        Assert.That(thing.value, Is.EqualTo(1));
+    }
+
+    [Test]
     public void Deep()
     {
         var thing = new MyThing
@@ -447,8 +460,14 @@ public class LanguageTests
                 case "deep": return deep;
                 case "increment": return Func(Increment);
                 case "createAndAdd": return Func(CreateAndAdd);
+                case "self": return Func(Self);
                 default: return base.GetProperty(name);
             }
+        }
+
+        private Value Self(LexicalContext context, Value[] args)
+        {
+            return this;
         }
 
         public override void SetProperty(string name, Value value)

@@ -17,6 +17,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\DeclarationExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\ExportExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\Expression.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\ExpressionAccessor.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\ForExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\FunctionCallExpression.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Lib\\Expressions\\FunctionDeclarationExpression.cs",

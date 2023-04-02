@@ -214,7 +214,12 @@ namespace ScripterLang
                         MoveNext();
                         var arguments = ParseArgumentList(lexicalContext, TokenType.RightParenthesis);
                         Consume().Expect(TokenType.RightParenthesis);
-                        return new FunctionCallExpression(accessor, arguments, lexicalContext);
+                        var call = new FunctionCallExpression(accessor, arguments, lexicalContext);
+                        if (!Peek().Match(TokenType.SemiColon))
+                        {
+                            return ParseVariableExpression(lexicalContext, new ExpressionAccessor(call));
+                        }
+                        return call;
                     }
                     case TokenType.Assignment:
                     {

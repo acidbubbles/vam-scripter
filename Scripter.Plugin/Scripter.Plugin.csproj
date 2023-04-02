@@ -79,6 +79,7 @@
     <Compile Include="src\Lib\Expressions\DeclarationExpression.cs" />
     <Compile Include="src\Lib\Expressions\ExportExpression.cs" />
     <Compile Include="src\Lib\Expressions\Expression.cs" />
+    <Compile Include="src\Lib\Expressions\ExpressionAccessor.cs" />
     <Compile Include="src\Lib\Expressions\ForExpression.cs" />
     <Compile Include="src\Lib\Expressions\FunctionCallExpression.cs" />
     <Compile Include="src\Lib\Expressions\FunctionDeclarationExpression.cs" />
