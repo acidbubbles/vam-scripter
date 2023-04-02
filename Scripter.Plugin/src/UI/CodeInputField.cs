@@ -125,9 +125,9 @@ public class CodeInputField : InputField
     private char OnDirectValidateInput(string inputText, int pos, char input)
     {
         // TODO: CTRL+Left, CTRL+Right, CTRL+SHIFT+Left, etc.
-        if (_ignoreOnValidateInput || !enhancementsEnabled) return input;
         if (input == '\t')
         {
+            if (FormattingDisabled()) return input;
             if (selectionAnchorPosition != selectionFocusPosition)
             {
                 // Change indentation
@@ -155,6 +155,7 @@ public class CodeInputField : InputField
         }
         if (input == '\n')
         {
+            if (FormattingDisabled()) return input;
             if (pos <= 0) return input;
             var startOfLine = FindStartOfLine(pos);
             var line = inputText.Substring(startOfLine, pos - startOfLine);
@@ -174,6 +175,7 @@ public class CodeInputField : InputField
         }
         if (input == '}')
         {
+            if (FormattingDisabled()) return input;
             // De-indent
             if (pos == 0) return input;
             var startOfLine = FindStartOfLine(pos);
@@ -196,6 +198,15 @@ public class CodeInputField : InputField
             }
         }
         return input;
+    }
+
+    private bool FormattingDisabled()
+    {
+        if (_ignoreOnValidateInput) return true;
+        if (!enhancementsEnabled) return true;
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V)) return true;
+        if (Input.GetKey(KeyCode.RightShift) && Input.GetKeyDown(KeyCode.Insert)) return true;
+        return false;
     }
 
     private int FindStartOfLine(int startIndex)
