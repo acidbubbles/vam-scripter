@@ -50,7 +50,7 @@ public class Script
     {
         try
         {
-            _scripter.programFiles.Register(nameJSON.val, val);
+            _scripter.programFiles.RegisterFile(nameJSON.val, val);
             if (_scripter.isLoading) return;
             var canRun = _scripter.programFiles.CanRun();
             _scripter.console.Log($"<color=green>Parsed `{nameJSON.val}` successfully; {(canRun ? "Running" : "Waiting for index.js")}.</color>");

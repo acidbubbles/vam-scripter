@@ -12,17 +12,18 @@ namespace ScripterLang
 
         private IModule _index;
 
-        public IModule Register(string moduleName, string source)
+        public IModule RegisterFile(string fileName, string source)
         {
+            var localModuleName = "./" + fileName;
+            globalContext.RemoveModule(localModuleName);
             var tokens = new List<Token>(Tokenizer.Tokenize(source));
-            var module = new Parser(tokens).Parse(globalContext, "./" + moduleName);
+            var module = new Parser(tokens).Parse(globalContext, localModuleName);
             Register(module);
             return module;
         }
 
         private void Register(IModule module)
         {
-            globalContext.RemoveModule(module.ModuleName);
             globalContext.DeclareModule(module);
             if (module.ModuleName == _indexModuleName)
                 _index = module;

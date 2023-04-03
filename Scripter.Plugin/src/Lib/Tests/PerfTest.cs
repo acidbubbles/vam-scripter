@@ -70,7 +70,7 @@ export function run(obj) {
             SuperController.singleton.ClearMessages();
 
             var program = new Program();
-            var module = program.Register("index.js", code);
+            var module = program.RegisterFile("index.js", code);
             var ns = module.Import();
             var run = ns.exports["run"].AsFunction;
             var jsObj = new PerfObject();

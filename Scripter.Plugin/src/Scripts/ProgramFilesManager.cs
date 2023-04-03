@@ -93,9 +93,9 @@ public class ProgramFilesManager
         }
     }
 
-    public void Register(string name, string val)
+    public void RegisterFile(string name, string val)
     {
-        _program.Register(name, val);
+        _program.RegisterFile(name, val);
     }
 
     public void Unregister(Script script)
