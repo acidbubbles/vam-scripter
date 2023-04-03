@@ -26,7 +26,7 @@ public class TransformReference : ObjectReference
     private Value Distance(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(Distance), args, 1);
-        var other = args[0].AsObject as ControllerReference;
+        var other = args[0].AsObject as TransformReference;
         if (ReferenceEquals(other, null)) throw new ScripterRuntimeException($"Expected a ControllerReference as argument to {nameof(Distance)}");
         return Vector3.Distance(transform.position, other.transform.position);
     }
