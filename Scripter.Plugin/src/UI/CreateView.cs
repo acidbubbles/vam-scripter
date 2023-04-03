@@ -36,13 +36,13 @@ public class CreateView : MonoBehaviour
 
         view._createIndex = AddButton(go.transform, "Create index (main) script", () =>
         {
-            Scripter.singleton.programFiles.Create("index.js", "import { self } from \"scripter\";\n\n// Write your code here!");
+            Scripter.singleton.programFiles.Create("index.js", "import { scene, scripter } from \"vam-scripter\";\n\n// Write your code here!");
         });
 
         AddButton(go.transform, "Create new library script", () =>
         {
             var name = Scripter.singleton.programFiles.NewName();
-            Scripter.singleton.programFiles.Create(name, "export function myFunction() {\n  // Write your code here!\n}");
+            Scripter.singleton.programFiles.Create(name, "import { scene, scripter } from \"vam-scripter\";\n\nexport function myFunction() {\n  // Write your code here!\n}");
         });
 
         return view;
