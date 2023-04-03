@@ -500,9 +500,9 @@ namespace ScripterLang
                     return new NegateExpression(ParsePureValueExpression(lexicalContext));
                 case TokenType.Operator:
                     var op = Consume();
-                    if(op.value != "-")
-                        throw new ScripterParsingException($"Unexpected unary operator token '{token.value}'", token.location);
-                    return new UnaryOperatorExpression(op.value, ParsePureValueExpression(lexicalContext));
+                    if (op.value == "-")
+                        return new UnaryOperatorExpression(op.value, ParsePureValueExpression(lexicalContext));
+                    throw new ScripterParsingException($"Unexpected unary operator token '{token.value}'", token.location);
                 case TokenType.IncrementDecrement:
                     return ParseIncrementDecrementExpression(lexicalContext, Consume());
                 case TokenType.LeftParenthesis:

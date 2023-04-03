@@ -232,7 +232,8 @@ namespace ScripterLang
 
                         break;
                     case '"':
-                        var end = Array.IndexOf(_input, '"', _position + 1);
+                    case '\'':
+                        var end = Array.IndexOf(_input, Current, _position + 1);
                         if (end == -1)
                             throw new ScripterParsingException("Unterminated string");
 

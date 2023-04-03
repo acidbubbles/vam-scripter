@@ -1,4 +1,6 @@
-﻿namespace ScripterLang
+﻿using System.Text.RegularExpressions;
+
+namespace ScripterLang
 {
     public class PropertyAccessor : VariableAccessor
     {
@@ -19,17 +21,36 @@
 
         public override Value Evaluate()
         {
-            return _left.Evaluate().AsObject.GetProperty(_property);
+            var value = _left.Evaluate();
+            if (value.IsString)
+            {
+                switch (_property)
+                {
+                    case "length":
+                        return value.AsString.Length;
+                    case "startsWith":
+                        return new FunctionReference(((context, args) => value.AsString.StartsWith(args[0].AsString)));
+                    case "endsWith":
+                        return new FunctionReference(((context, args) => value.AsString.EndsWith(args[0].AsString)));
+                    case "contains":
+                        return new FunctionReference(((context, args) => value.AsString.Contains(args[0].AsString)));
+                    default:
+                        throw new ScripterRuntimeException("There is no property or function named " + _property + " on type string.");
+                }
+            }
+            return value.AsObject.GetProperty(_property);
         }
 
-        public override void SetVariableValue(Value value)
+        public override void SetVariableValue(Value setValue)
         {
-            _left.Evaluate().AsObject.SetProperty(_property, value);
+            var value = _left.Evaluate();
+            value.AsObject.SetProperty(_property, setValue);
         }
 
         public override Value GetAndHold()
         {
-            _object = _left.Evaluate().AsObject;
+            var value = _left.Evaluate();
+            _object = value.AsObject;
             return _object.GetProperty(_property);
         }
 

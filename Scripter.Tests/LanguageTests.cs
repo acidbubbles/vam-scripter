@@ -165,11 +165,24 @@ public class LanguageTests
     public void Strings()
     {
         _program.RegisterFile("index.js", """
-            return "a" + 2 + true;
+            return "a" + 2 + true + 'b';
             """);
         var result = _program.Run();
 
-        Assert.That(result.ToString(), Is.EqualTo("a2true"));
+        // ReSharper disable once StringLiteralTypo
+        Assert.That(result.ToString(), Is.EqualTo("a2trueb"));
+    }
+
+    [Test]
+    public void StringMethods()
+    {
+        _program.RegisterFile("index.js", """
+            return "!" + "abc".length + "def".startsWith("de") + "ghi".contains("h");
+            """);
+        var result = _program.Run();
+
+        // ReSharper disable once StringLiteralTypo
+        Assert.That(result.ToString(), Is.EqualTo("!3truetrue"));
     }
 
     [Test]
