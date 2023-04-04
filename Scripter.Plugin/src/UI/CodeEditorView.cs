@@ -32,7 +32,7 @@ public class CodeEditorView : MonoBehaviour
         script.history.undoButton = UIUtils.CreateToolbarButton(toolbar, "\u21BA", 40, true, script.history.Undo);
         script.history.redoButton = UIUtils.CreateToolbarButton(toolbar, "\u21BB", 40, true, script.history.Redo);
         script.history.UpdateButtons();
-        UIUtils.CreateToolbarButton(toolbar, "Validate", 120, false, script.Parse);
+        UIUtils.CreateToolbarButton(toolbar, "Validate", 120, false, () => Scripter.singleton.programFiles.Run());
 
         return screen;
     }

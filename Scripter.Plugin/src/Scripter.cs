@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MVR.FileManagementSecure;
+using MVR.Hub;
 using ScripterLang;
 using SimpleJSON;
 using UnityEngine;
@@ -62,7 +63,7 @@ public class Scripter : MVRScript
             ui.SelectTab(ui.AddWelcomeTab());
             console.Log("> <color=cyan>Welcome to Scripter!</color>");
         }
-        else if (programFiles.CanRun())
+        else
         {
             programFiles.Run();
         }
@@ -94,13 +95,11 @@ public class Scripter : MVRScript
     public override void RestoreFromJSON(JSONClass jc, bool restorePhysical = true, bool restoreAppearance = true, JSONArray presetAtoms = null, bool setMissingToDefault = true)
     {
         base.RestoreFromJSON(jc, restorePhysical, restoreAppearance, presetAtoms, setMissingToDefault);
+
         if (IsSessionPlugin() || _syncFolder != null) return;
         isLoading = true;
         var array = jc["Triggers"].AsArray;
-        if (array == null)
-        {
-        }
-        else
+        if (array != null)
         {
             foreach (JSONNode triggerJSON in array)
             {
@@ -110,6 +109,7 @@ public class Scripter : MVRScript
         }
 
         programFiles.RestoreFromJSON(jc["Scripts"]);
+
         isLoading = false;
         _restored = true;
         UpdateKeybindings();
@@ -290,7 +290,6 @@ public class Scripter : MVRScript
                 try
                 {
                     script.sourceJSON.val = contents;
-                    script.Parse();
                 }
                 finally
                 {
@@ -306,7 +305,7 @@ public class Scripter : MVRScript
             }
         }
 
-        if (tryRun && changed && programFiles.CanRun())
+        if (tryRun && changed)
             programFiles.Run();
     }
 

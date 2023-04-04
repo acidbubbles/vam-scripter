@@ -119,6 +119,7 @@ Input.onKeyDown(""Space"", () => {{
     console.log(""You pressed Space!"");
 }});
 ");
+                Scripter.singleton.programFiles.Run();
             });
 
             // TODO: Use RotateTowards and MoveTo
@@ -141,6 +142,7 @@ scripter.onUpdate(() => {
     console.log(""Update: "" + Time.time);
 });
 ");
+                Scripter.singleton.programFiles.Run();
             });
             AddTemplateButton(templates.transform, "Play sounds", () =>
             {
@@ -157,6 +159,7 @@ var speaker = scene.getAtom(""AudioSource"").getStorable(""AudioSource"").getAud
 // Play the music
 speaker.play(music);
 ");
+                Scripter.singleton.programFiles.Run();
             });
             AddTemplateButton(templates.transform, "Documentation (web)\n<color=#6666cc>acidbubbles.github.io</color>",
                 () => Application.OpenURL("https://acidbubbles.github.io/vam-scripter/"));

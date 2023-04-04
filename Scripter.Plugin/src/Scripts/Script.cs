@@ -9,6 +9,8 @@ public class Script
     public CodeInputField input;
     public ScripterTab tab;
 
+    public bool dirty;
+
     public readonly HistoryManager history;
     public readonly JSONStorableString nameJSON = new JSONStorableString("Module", "");
     public readonly JSONStorableString sourceJSON = new JSONStorableString("Source", "");
@@ -28,11 +30,12 @@ public class Script
 
         sourceJSON.setCallbackFunction = val =>
         {
+            dirty = true;
             history.Update(val);
         };
         sourceJSON.valNoCallback = source;
         if (!string.IsNullOrEmpty(source))
-            Parse();
+            dirty = true;
     }
 
     private int _lastParsed;
@@ -51,11 +54,9 @@ public class Script
         try
         {
             _scripter.programFiles.RegisterFile(nameJSON.val, val);
+            dirty = false;
             if (_scripter.isLoading) return;
-            var canRun = _scripter.programFiles.CanRun();
-            _scripter.console.Log($"<color=green>Parsed `{nameJSON.val}` successfully; {(canRun ? "Running" : "Waiting for index.js")}.</color>");
-            if (canRun)
-                _scripter.programFiles.Run();
+            _scripter.console.Log($"<color=green>Parsed `{nameJSON.val}` successfully</color>");
         }
         catch (Exception exc)
         {

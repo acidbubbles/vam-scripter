@@ -70,7 +70,7 @@ public class AtomReference : ObjectReference
         ValidateArgumentsLength(nameof(GetStorable), args, 1);
         var controllerName = args[0].AsString;
         var controller = _atom.freeControllers.FirstOrDefault(fc => fc.name == controllerName);
-        if (controller == null) throw new ScripterPluginException($"Could not find an storable named '{controllerName}' in atom '{_atom.name}'");
+        if (controller == null) throw new ScripterPluginException($"Could not find a controller named '{controllerName}' in atom '{_atom.name}'");
         return new ControllerReference(controller);
     }
 }

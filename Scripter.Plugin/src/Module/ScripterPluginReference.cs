@@ -3,13 +3,6 @@
 
 public class ScripterPluginReference : ObjectReference
 {
-    private readonly Value _containingAtom;
-
-    public ScripterPluginReference()
-    {
-        _containingAtom = Value.CreateObject(new AtomReference(Scripter.singleton.containingAtom));
-    }
-
     public override Value GetProperty(string name)
     {
         switch (name)
@@ -35,7 +28,7 @@ public class ScripterPluginReference : ObjectReference
             case "declareAction":
                 return Func(DeclareAction);
             case "containingAtom":
-                return _containingAtom;
+                return Value.CreateObject(new AtomReference(Scripter.singleton.containingAtom));
             default:
                 return base.GetProperty(name);
         }

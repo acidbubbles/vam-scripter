@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using ScripterLang;
 using SimpleJSON;
@@ -78,13 +79,19 @@ public class ProgramFilesManager
 
     public void Run()
     {
-        if (!_program.CanRun())
-        {
-            return;
-        }
-
         try
         {
+            foreach (var file in files)
+            {
+                if(file.dirty)
+                    file.Parse();
+            }
+
+            if (!_program.CanRun())
+            {
+                return;
+            }
+
             _program.Run();
         }
         catch (Exception exc)
@@ -106,5 +113,14 @@ public class ProgramFilesManager
     public bool CanRun()
     {
         return _program.CanRun();
+    }
+
+    public void ParseAll()
+    {
+        foreach (var script in files)
+        {
+            if (!script.dirty) continue;
+            script.Parse();
+        }
     }
 }
