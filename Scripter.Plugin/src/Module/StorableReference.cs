@@ -93,7 +93,7 @@ public class StorableReference : ObjectReference
 
     private Value GetUrlParam(LexicalContext context, Value[] args)
     {
-        ValidateArgumentsLength(nameof(GetStringChooserParam), args, 1);
+        ValidateArgumentsLength(nameof(GetUrlParam), args, 1);
         var paramName = args[0].AsString;
         var param = _storable.GetUrlJSONParam(paramName);
         if (param == null) throw new ScripterPluginException($"Could not find a url param named {paramName} in storable '{_storable.storeId}' in atom '{_storable.containingAtom.storeId}'");
