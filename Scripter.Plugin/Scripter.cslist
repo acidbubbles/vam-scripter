@@ -87,7 +87,9 @@ src\Module\ScripterPluginReference.cs
 src\Module\SetTimeoutToken.cs
 src\Module\StorableReference.cs
 src\Module\TimeReference.cs
+src\Module\TransformPositionReference.cs
 src\Module\TransformReference.cs
+src\Module\Vector3Reference.cs
 src\Scripts\ConsoleBuffer.cs
 src\Scripts\ProgramFilesManager.cs
 src\Scripts\Script.cs

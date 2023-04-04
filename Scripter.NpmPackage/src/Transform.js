@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Controller } from "./Controller";
+import { Vector3 } from "./Vector3";
 
 /**
  * An object in 3D space that have a position and rotation
@@ -8,8 +8,32 @@ import { Controller } from "./Controller";
 
 export class Transform {
    /**
-    * The distance between two controllers
-    * @param {Controller} other
+    * The world position
+    * @type {Vector3}
+    */
+   position;
+
+   /**
+    * The local position
+    * @type {Vector3}
+    */
+   localPosition;
+
+   /**
+    * The world eulerAngles
+    * @type {Vector3}
+    */
+   eulerAngles;
+
+   /**
+    * The local eulerAngles
+    * @type {Vector3}
+    */
+   localEulerAngles;
+
+   /**
+    * The distance between two transforms
+    * @param {Transform} other
     * @return number
     */
    distance(other) { return 0; }

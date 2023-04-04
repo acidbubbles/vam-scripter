@@ -63,6 +63,6 @@ public class ControllerReference : TransformReference
 
     private bool Frozen()
     {
-        return !SuperController.singleton.freezeAnimation;
+        return SuperController.singleton.freezeAnimation;
     }
 }

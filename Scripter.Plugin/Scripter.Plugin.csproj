@@ -160,7 +160,9 @@
     <Compile Include="src\Module\SetTimeoutToken.cs" />
     <Compile Include="src\Module\StorableReference.cs" />
     <Compile Include="src\Module\TimeReference.cs" />
+    <Compile Include="src\Module\TransformPositionReference.cs" />
     <Compile Include="src\Module\TransformReference.cs" />
+    <Compile Include="src\Module\Vector3Reference.cs" />
     <Compile Include="src\Scripts\ConsoleBuffer.cs" />
     <Compile Include="src\Scripts\ProgramFilesManager.cs" />
     <Compile Include="src\Scripts\Script.cs" />
