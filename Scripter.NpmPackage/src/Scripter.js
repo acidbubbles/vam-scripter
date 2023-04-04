@@ -1,5 +1,6 @@
 // @ts-check
 
+import { Atom } from "./Atom";
 import { ActionDeclaration } from "./Declarations/ActionDeclaration";
 import { BoolParamDeclaration } from "./Declarations/BoolParamDeclaration";
 import { FloatParamDeclaration } from "./Declarations/FloatParamDeclaration";
@@ -9,6 +10,12 @@ import { StringParamDeclaration } from "./Declarations/StringParamDeclaration";
  * The Scripter plugin
  */
 export class Scripter {
+    /**
+     * The atom that contains this script
+     * @type {Atom}
+     */
+    get containingAtom() { return new Atom(); }
+
     /**
      * @param {Object} args
      * @param {string} args.name - The name of the JSON Storable Param
