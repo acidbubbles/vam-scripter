@@ -43,6 +43,24 @@ public class Scripter : MVRScript
         SuperController.singleton.StartCoroutine(DeferredInit());
     }
 
+    private void CallbackFunctions(List<FunctionLink> funcs) {
+        try { 
+        for (var i = 0; i < funcs.Count; i++)
+        {
+            var fn = funcs[i];
+            fn.fn.Invoke(fn.context, Value.EmptyValues);
+        }
+        } catch (Exception exc) {
+            onUpdateFunctions.Clear();
+            onLateUpdateFunctions.Clear();
+            onFixedUpdateFunctions.Clear();
+            onEnableFunctions.Clear();
+            onDisableFunctions.Clear();
+            onDestroyFunctions.Clear();
+            console.LogError($"Failed to run code: {exc.Message}");
+        }
+    }
+
     private IEnumerator DeferredInit()
     {
         yield return new WaitForEndOfFrame();
@@ -122,29 +140,17 @@ public class Scripter : MVRScript
 
     private void Update()
     {
-        for (var i = 0; i < onUpdateFunctions.Count; i++)
-        {
-            var fn = onUpdateFunctions[i];
-            fn.fn.Invoke(fn.context, Value.EmptyValues);
-        }
+       CallbackFunctions(onUpdateFunctions); 
     }
 
     private void LateUpdate()
     {
-        for (var i = 0; i < onLateUpdateFunctions.Count; i++)
-        {
-            var fn = onLateUpdateFunctions[i];
-            fn.fn.Invoke(fn.context, Value.EmptyValues);
-        }
+        CallbackFunctions(onLateUpdateFunctions);
     }
 
     private void FixedUpdate()
     {
-        for (var i = 0; i < onFixedUpdateFunctions.Count; i++)
-        {
-            var fn = onFixedUpdateFunctions[i];
-            fn.fn.Invoke(fn.context, Value.EmptyValues);
-        }
+        CallbackFunctions(onFixedUpdateFunctions);
     }
 
     public void UpdateKeybindings()
@@ -238,30 +244,18 @@ public class Scripter : MVRScript
 
     public void OnEnable()
     {
-        for (var i = 0; i < onEnableFunctions.Count; i++)
-        {
-            var fn = onEnableFunctions[i];
-            fn.fn.Invoke(fn.context, Value.EmptyValues);
-        }
+        CallbackFunctions(onEnableFunctions);
     }
 
     public void OnDisable()
     {
-        for (var i = 0; i < onDisableFunctions.Count; i++)
-        {
-            var fn = onDisableFunctions[i];
-            fn.fn.Invoke(fn.context, Value.EmptyValues);
-        }
+        CallbackFunctions(onDisableFunctions);
     }
 
     public void OnDestroy()
     {
         SuperController.singleton.BroadcastMessage("OnActionsProviderDestroyed", this, SendMessageOptions.DontRequireReceiver);
-        for (var i = 0; i < onDestroyFunctions.Count; i++)
-        {
-            var fn = onDestroyFunctions[i];
-            fn.fn.Invoke(fn.context, Value.EmptyValues);
-        }
+        CallbackFunctions(onDestroyFunctions);
     }
 
     #region Sync
