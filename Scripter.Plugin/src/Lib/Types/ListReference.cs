@@ -5,11 +5,11 @@ namespace ScripterLang
 {
     public class ListReference : ObjectReference
     {
-        private readonly List<Value> _values;
+        public readonly List<Value> values;
 
         public ListReference(List<Value> values)
         {
-            _values = values;
+            this.values = values;
         }
 
         public override Value GetProperty(string name)
@@ -19,7 +19,7 @@ namespace ScripterLang
                 case "add":
                     return Func(Add);
                 case "length":
-                    return _values.Count;
+                    return values.Count;
                 case "indexOf":
                     return Func(IndexOf);
                 default:
@@ -29,18 +29,18 @@ namespace ScripterLang
 
         public override Value GetIndex(Value index)
         {
-            return _values[index.AsInt];
+            return values[index.AsInt];
         }
 
         public override void SetIndex(Value index, Value value)
         {
-            _values[index.AsInt] = value;
+            values[index.AsInt] = value;
         }
 
         private Value Add(LexicalContext context, Value[] args)
         {
             ValidateArgumentsLength(nameof(Add), args, 1);
-            _values.Add(args[0]);
+            values.Add(args[0]);
             return Value.Void;
         }
 
@@ -48,9 +48,9 @@ namespace ScripterLang
         {
             ValidateArgumentsLength(nameof(IndexOf), args, 1);
             var expected = args[0];
-            for(var i = 0; i < _values.Count; i++)
+            for(var i = 0; i < values.Count; i++)
             {
-                if (_values[i].Equals(expected))
+                if (values[i].Equals(expected))
                     return i;
             }
             return -1;
@@ -58,7 +58,7 @@ namespace ScripterLang
 
         public override string ToString()
         {
-            return "[" + string.Join(", ", _values.Select(x => x.ToCodeString()).ToArray()) + "]";
+            return "[" + string.Join(", ", values.Select(x => x.ToCodeString()).ToArray()) + "]";
         }
     }
 }

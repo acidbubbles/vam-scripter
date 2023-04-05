@@ -48,14 +48,14 @@ public abstract class Vector3Reference : ObjectReference
             case "y":
             {
                 var current = Vector;
-                current.x = value.AsFloat;
+                current.y = value.AsFloat;
                 Vector = current;
                 break;
             }
             case "z":
             {
                 var current = Vector;
-                current.x = value.AsFloat;
+                current.z = value.AsFloat;
                 Vector = current;
                 break;
             }

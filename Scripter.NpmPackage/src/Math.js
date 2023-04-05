@@ -48,14 +48,14 @@ export class Mathf {
      * @param {number} max
      * @returns {number}
      */
-    clamp(value,min,max) { return Number(); }
+    clamp(value, min, max) { return 0; }
 
     /**
      * Clamps the given value between 0 and 1. Returns the given value if it is between 0 and 1.
      * @param {number} value
      * @returns {number}
      */
-    clamp01(value) { return Number(); }
+    clamp01(value) { return 0; }
 
     /**
      * @param {number} value
@@ -82,7 +82,7 @@ export class Mathf {
      * @param {number} b
      * @returns {number} t
      */
-    inverseLerp(a,b,value) { return Number(); }
+    inverseLerp(a, b, value) { return 0; }
 
     /**
      * Linearly interpolates between a and b by t.
@@ -91,7 +91,7 @@ export class Mathf {
      * @param {number} t
      * @returns {number}
      */
-     lerp(a,b,t) { return Number(); }
+     lerp(a, b, t) { return 0; }
 
      /**
      * Same as Lerp but makes sure the values interpolate correctly when they wrap around 360 degrees.
@@ -100,7 +100,7 @@ export class Mathf {
      * @param {number} t
      * @returns {number}
      */
-     lerpAngle(a,b,t) { return Number(); }
+     lerpAngle(a, b, t) { return 0; }
 
      /**
      * 	Linearly interpolates between a and b by t with no limit to t.
@@ -109,7 +109,7 @@ export class Mathf {
      * @param {number} t
      * @returns {number}
      */
-     lerpUnclamped(a,b,t) { return Number(); }
+     lerpUnclamped(a, b, t) { return 0; }
 
     /**
      * @param {number} value
@@ -124,16 +124,16 @@ export class Mathf {
     log10(value) { return Math.log10(value); }
 
     /**
-     * @param {number} value
+     * @param {...number[]} values
      * @returns {number}
      */
-    max(value) { return Math.max(value); }
+    max(values) { return 0; }
 
     /**
-     * @param {number} value
+     * @param {...number[]} values
      * @returns {number}
      */
-    min(value) { return Math.min(value); }
+    min(values) { return 0; }
 
     /**
      * PingPongs the value t, so that it is never larger than length and never smaller than 0.
@@ -141,7 +141,7 @@ export class Mathf {
      * @param {number} length
      * @returns {number}
      */
-    pingPong(t, length) { return Number(); }
+    pingPong(t, length) { return 0; }
 
     /**
      * @param {number} x
@@ -181,7 +181,7 @@ export class Mathf {
      * @param {number} t
      * @returns {number}
      */
-    smoothStep(min,max,t) { return Number(); }
+    smoothStep(min,max,t) { return 0; }
 
     /**
      * @param {number} value
