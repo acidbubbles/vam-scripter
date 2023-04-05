@@ -314,14 +314,16 @@ public class LanguageTests
         _program.RegisterFile("index.js", """
             var x = {};
             var y = { key1: 1, key2: "2", key3: x };
+            var z = { "a#1": -1};
             y.key1 = y.key1 + 1;
             y["key2"] = y["key2"] + "!";
             y.key3.test = "ok";
+            y.key4 = z["a#1"];
             return y;
             """);
         var result = _program.Run();
 
-        Assert.That(result.ToString(), Is.EqualTo("{ key1: 2, key2: \"2!\", key3: { test: \"ok\" } }"));
+        Assert.That(result.ToString(), Is.EqualTo("{ key1: 2, key2: \"2!\", key3: { test: \"ok\" }, key4: -1 }"));
     }
 
     [Test]
