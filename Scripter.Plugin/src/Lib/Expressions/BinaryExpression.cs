@@ -52,6 +52,12 @@
                     if (left.IsNumber && right.IsNumber)
                         return Value.CreateFloat(left.AsNumber / right.AsNumber);
                     throw MakeUnsupportedOperandsException(left, right);
+                case "%":
+                    if (left.IsInt && right.IsInt)
+                        return Value.CreateInteger(left.RawInt % right.RawInt);
+                    if (left.IsNumber && right.IsNumber)
+                        return Value.CreateFloat(left.AsNumber % right.AsNumber);
+                    throw MakeUnsupportedOperandsException(left, right);
                 case "<":
                     if (left.IsInt && right.IsInt)
                         return Value.CreateBoolean(left.RawInt < right.RawInt);

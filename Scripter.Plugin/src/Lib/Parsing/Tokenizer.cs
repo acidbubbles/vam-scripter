@@ -150,6 +150,9 @@ namespace ScripterLang
                         }
                         break;
                     case '%':
+                        yield return new Token(TokenType.Operator, Current.ToString(), Location);
+                        MoveNext();
+                        break;
                     case '^':
                         yield return new Token(TokenType.Operator, Current.ToString(), Location);
                         MoveNext();
