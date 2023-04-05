@@ -144,11 +144,12 @@ public class LanguageTests
             var y = ++x;
             x = (x + y) * 2;
             x += 1;
+            x += 5 % 3;
             return x++;
             """);
         var result = _program.Run();
 
-        Assert.That(result.ToString(), Is.EqualTo("9"));
+        Assert.That(result.ToString(), Is.EqualTo("11"));
     }
 
     [Test]

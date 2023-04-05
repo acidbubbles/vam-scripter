@@ -9,16 +9,15 @@ public class MathReference : ObjectReference
     private readonly Value _atan = Func((ctx, args) => Mathf.Atan(args[0].AsNumber));
     private readonly Value _atan2 = Func((ctx, args) => Mathf.Atan2(args[0].AsNumber, args[1].AsNumber));
     private readonly Value _ceil = Func((ctx, args) => Mathf.Ceil(args[0].AsNumber));
-    private readonly Value _clamp = Func((ctx, args) => Mathf.Clamp(args[0].AsNumber,args[1].AsNumber,args[2].AsNumber));
+    private readonly Value _clamp = Func((ctx, args) => Mathf.Clamp(args[0].AsNumber, args[1].AsNumber, args[2].AsNumber));
     private readonly Value _clamp01 = Func((ctx, args) => Mathf.Clamp01(args[0].AsNumber));
-    
     private readonly Value _cos = Func((ctx, args) => Mathf.Cos(args[0].AsNumber));
     private readonly Value _exp = Func((ctx, args) => Mathf.Exp(args[0].AsNumber));
     private readonly Value _floor = Func((ctx, args) => Mathf.Floor(args[0].AsNumber));
-    private readonly Value _inverseLerp = Func((ctx, args) => Mathf.InverseLerp(args[0].AsNumber,args[1].AsNumber,args[2].AsNumber));
-    private readonly Value _lerp = Func((ctx, args) => Mathf.Lerp(args[0].AsNumber,args[1].AsNumber,args[2].AsNumber));
-    private readonly Value _lerpAngle = Func((ctx, args) => Mathf.LerpAngle(args[0].AsNumber,args[1].AsNumber,args[2].AsNumber));
-    private readonly Value _lerpUnclamped = Func((ctx, args) => Mathf.LerpUnclamped(args[0].AsNumber,args[1].AsNumber,args[2].AsNumber));
+    private readonly Value _inverseLerp = Func((ctx, args) => Mathf.InverseLerp(args[0].AsNumber, args[1].AsNumber, args[2].AsNumber));
+    private readonly Value _lerp = Func((ctx, args) => Mathf.Lerp(args[0].AsNumber, args[1].AsNumber, args[2].AsNumber));
+    private readonly Value _lerpAngle = Func((ctx, args) => Mathf.LerpAngle(args[0].AsNumber, args[1].AsNumber, args[2].AsNumber));
+    private readonly Value _lerpUnclamped = Func((ctx, args) => Mathf.LerpUnclamped(args[0].AsNumber, args[1].AsNumber, args[2].AsNumber));
     private readonly Value _log = Func((ctx, args) => Mathf.Log(args[0].AsNumber));
     private readonly Value _log10 = Func((ctx, args) => Mathf.Log10(args[0].AsNumber));
     private readonly Value _max = Func((ctx, args) => Mathf.Max(args[0].AsNumber));
@@ -29,7 +28,7 @@ public class MathReference : ObjectReference
     private readonly Value _round = Func((ctx, args) => Mathf.Round(args[0].AsNumber));
     private readonly Value _sign = Func((ctx, args) => Mathf.Sign(args[0].AsNumber));
     private readonly Value _sin = Func((ctx, args) => Mathf.Sin(args[0].AsNumber));
-    private readonly Value _smoothStep = Func((ctx, args) => Mathf.SmoothStep(args[0].AsNumber,args[1].AsNumber,args[2].AsNumber));
+    private readonly Value _smoothStep = Func((ctx, args) => Mathf.SmoothStep(args[0].AsNumber, args[1].AsNumber, args[2].AsNumber));
     private readonly Value _sqrt = Func((ctx, args) => Mathf.Sqrt(args[0].AsNumber));
     private readonly Value _tan = Func((ctx, args) => Mathf.Tan(args[0].AsNumber));
 
