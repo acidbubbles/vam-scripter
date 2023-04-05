@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using MVR.FileManagementSecure;
-using MVR.Hub;
 using ScripterLang;
 using SimpleJSON;
 using UnityEngine;
@@ -43,21 +43,22 @@ public class Scripter : MVRScript
         SuperController.singleton.StartCoroutine(DeferredInit());
     }
 
-    private void CallbackFunctions(List<FunctionLink> funcs) {
-        try { 
+    [MethodImpl(0x0100)]
+    private void InvokeCallback(IList<FunctionLink> funcs)
+    {
         for (var i = 0; i < funcs.Count; i++)
         {
             var fn = funcs[i];
-            fn.fn.Invoke(fn.context, Value.EmptyValues);
-        }
-        } catch (Exception exc) {
-            onUpdateFunctions.Clear();
-            onLateUpdateFunctions.Clear();
-            onFixedUpdateFunctions.Clear();
-            onEnableFunctions.Clear();
-            onDisableFunctions.Clear();
-            onDestroyFunctions.Clear();
-            console.LogError($"Failed to run code: {exc.Message}");
+            try
+            {
+                fn.fn.Invoke(fn.context, Value.EmptyValues);
+            }
+            catch (Exception exc)
+            {
+                console.LogError($"Failed to run {fn.name} callback (will be disabled): {exc.Message}");
+                fn.Dispose();
+                return;
+            }
         }
     }
 
@@ -140,17 +141,17 @@ public class Scripter : MVRScript
 
     private void Update()
     {
-       CallbackFunctions(onUpdateFunctions); 
+       InvokeCallback(onUpdateFunctions);
     }
 
     private void LateUpdate()
     {
-        CallbackFunctions(onLateUpdateFunctions);
+        InvokeCallback(onLateUpdateFunctions);
     }
 
     private void FixedUpdate()
     {
-        CallbackFunctions(onFixedUpdateFunctions);
+        InvokeCallback(onFixedUpdateFunctions);
     }
 
     public void UpdateKeybindings()
@@ -244,18 +245,18 @@ public class Scripter : MVRScript
 
     public void OnEnable()
     {
-        CallbackFunctions(onEnableFunctions);
+        InvokeCallback(onEnableFunctions);
     }
 
     public void OnDisable()
     {
-        CallbackFunctions(onDisableFunctions);
+        InvokeCallback(onDisableFunctions);
     }
 
     public void OnDestroy()
     {
         SuperController.singleton.BroadcastMessage("OnActionsProviderDestroyed", this, SendMessageOptions.DontRequireReceiver);
-        CallbackFunctions(onDestroyFunctions);
+        InvokeCallback(onDestroyFunctions);
     }
 
     #region Sync

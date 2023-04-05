@@ -38,7 +38,7 @@ public class ScripterPluginReference : ObjectReference
     {
         ValidateArgumentsLength(nameof(OnUpdate), args, 1);
         var fn = args[0].AsFunction;
-        var link = new FunctionLink(Scripter.singleton.onUpdateFunctions, context, fn);
+        var link = new FunctionLink(Scripter.singleton.onUpdateFunctions, context, fn, "onUpdate");
         context.GetModuleContext().RegisterDisposable(link);
         return Value.Void;
     }
@@ -47,7 +47,7 @@ public class ScripterPluginReference : ObjectReference
     {
         ValidateArgumentsLength(nameof(OnLateUpdate), args, 1);
         var fn = args[0].AsFunction;
-        var link = new FunctionLink(Scripter.singleton.onLateUpdateFunctions, context, fn);
+        var link = new FunctionLink(Scripter.singleton.onLateUpdateFunctions, context, fn, "onLateUpdate");
         context.GetModuleContext().RegisterDisposable(link);
         return Value.Void;
     }
@@ -56,7 +56,7 @@ public class ScripterPluginReference : ObjectReference
     {
         ValidateArgumentsLength(nameof(OnFixedUpdate), args, 1);
         var fn = args[0].AsFunction;
-        var link = new FunctionLink(Scripter.singleton.onFixedUpdateFunctions, context, fn);
+        var link = new FunctionLink(Scripter.singleton.onFixedUpdateFunctions, context, fn, "onFixedUpdate");
         context.GetModuleContext().RegisterDisposable(link);
         return Value.Void;
     }
@@ -65,7 +65,7 @@ public class ScripterPluginReference : ObjectReference
     {
         ValidateArgumentsLength(nameof(OnEnable), args, 1);
         var fn = args[0].AsFunction;
-        var link = new FunctionLink(Scripter.singleton.onEnableFunctions, context, fn);
+        var link = new FunctionLink(Scripter.singleton.onEnableFunctions, context, fn, "onEnable");
         context.GetModuleContext().RegisterDisposable(link);
         return Value.Void;
     }
@@ -74,7 +74,7 @@ public class ScripterPluginReference : ObjectReference
     {
         ValidateArgumentsLength(nameof(OnDisable), args, 1);
         var fn = args[0].AsFunction;
-        var link = new FunctionLink(Scripter.singleton.onDisableFunctions, context, fn);
+        var link = new FunctionLink(Scripter.singleton.onDisableFunctions, context, fn, "onDisable");
         context.GetModuleContext().RegisterDisposable(link);
         return Value.Void;
     }
@@ -83,7 +83,7 @@ public class ScripterPluginReference : ObjectReference
     {
         ValidateArgumentsLength(nameof(OnDestroy), args, 1);
         var fn = args[0].AsFunction;
-        var link = new FunctionLink(Scripter.singleton.onDestroyFunctions, context, fn);
+        var link = new FunctionLink(Scripter.singleton.onDestroyFunctions, context, fn, "onDestroy");
         context.GetModuleContext().RegisterDisposable(link);
         return Value.Void;
     }

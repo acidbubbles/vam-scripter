@@ -28,7 +28,7 @@ public class InputReference : ObjectReference
             if (!Input.GetKeyDown(key)) return Value.Void;
             fn(lexicalContext, Value.EmptyValues);
             return Value.Void;
-        });
+        }, "onKeyDown");
         context.GetModuleContext().RegisterDisposable(link);
         return Value.Void;
     }
@@ -44,7 +44,7 @@ public class InputReference : ObjectReference
             if (!Input.GetKeyUp(key)) return Value.Void;
             fn(lexicalContext, Value.EmptyValues);
             return Value.Void;
-        });
+        }, "onKeyUp");
         context.GetModuleContext().RegisterDisposable(link);
         return Value.Void;
     }
