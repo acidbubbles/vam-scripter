@@ -40,7 +40,17 @@ public class KeybindingDeclaration : ParamDeclarationBase, IDisposable
 
     public void OnTrigger(LexicalContext context, FunctionReference fn)
     {
-        actionJSON.actionCallback = () => { fn(context, Value.EmptyValues); };
+        actionJSON.actionCallback = () =>
+        {
+            try
+            {
+                fn(context, Value.EmptyValues);
+            }
+            catch (Exception e)
+            {
+                Scripter.singleton.console.LogError($"Exception in keybindings {actionJSON.name} callback: {e.Message}");
+            }
+        };
     }
 
     public void Dispose()

@@ -63,7 +63,17 @@ public class ActionDeclaration : ParamDeclarationBase, IDisposable
 
     public void OnTrigger(LexicalContext context, FunctionReference fn)
     {
-        _valueJSON.actionCallback = () => { fn(context, Value.EmptyValues); };
+        _valueJSON.actionCallback = () =>
+        {
+            try
+            {
+                fn(context, Value.EmptyValues);
+            }
+            catch (Exception e)
+            {
+                Scripter.singleton.console.LogError($"Exception in action {_valueJSON.name} callback: {e.Message}");
+            }
+        };
     }
 
     public void Dispose()

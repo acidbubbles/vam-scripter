@@ -95,8 +95,15 @@ public class FloatParamDeclaration : ParamDeclarationBase, IDisposable
     {
         _valueJSON.setCallbackFunction = val =>
         {
-            _callbackArgs[0] = val;
-            fn(context, _callbackArgs);
+            try
+            {
+                _callbackArgs[0] = val;
+                fn(context, _callbackArgs);
+            }
+            catch (Exception e)
+            {
+                Scripter.singleton.console.LogError($"Exception in {_valueJSON.name} callback: {e.Message}");
+            }
         };
     }
 
