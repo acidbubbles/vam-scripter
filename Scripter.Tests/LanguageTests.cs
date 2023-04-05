@@ -17,8 +17,8 @@ public class LanguageTests
     {
         _program.RegisterFile("index.js", """
             var x = 1;
-            const y = 2;
-            return x + y;
+            const y_V2 = 2;
+            return x + y_V2;
             """);
         var result = _program.Run();
 

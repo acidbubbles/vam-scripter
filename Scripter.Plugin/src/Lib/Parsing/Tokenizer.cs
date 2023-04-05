@@ -296,7 +296,7 @@ namespace ScripterLang
                         if (char.IsLetter(Current))
                         {
                             var nameStart = _position;
-                            while (!IsAtEnd() && char.IsLetterOrDigit(Current))
+                            while (!IsAtEnd() && (char.IsLetterOrDigit(Current) || Current == '_'))
                             {
                                 MoveNext();
                             }
