@@ -25,14 +25,10 @@ export class Vector3 {
 
    /**
     * Changes the x, y, z components of this vector to the given values.
-    * @param {Vector3} other
-    */
-   set(other) {}
-
-   /**
-    * Changes the x, y, z components of this vector to the given values.
-    * @param {number} x
-    */
+   * @param {number | Vector3} [x] - The x coordinate or another Vector3.
+   * @param {number} [y] - The y coordinate. Only used if 'x' and 'z' are also provided.
+   * @param {number} [z] - The z coordinate. Only used if 'x' and 'y' are also provided.
+   */
    set(x, y, z) {}
 
    /**
