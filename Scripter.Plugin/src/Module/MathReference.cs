@@ -20,8 +20,8 @@ public class MathReference : ObjectReference
     private readonly Value _lerpUnclamped = Func((ctx, args) => Mathf.LerpUnclamped(args[0].AsNumber, args[1].AsNumber, args[2].AsNumber));
     private readonly Value _log = Func((ctx, args) => Mathf.Log(args[0].AsNumber));
     private readonly Value _log10 = Func((ctx, args) => Mathf.Log10(args[0].AsNumber));
-    private readonly Value _max = Func((ctx, args) => Mathf.Max(args[0].AsNumber));
-    private readonly Value _min = Func((ctx, args) => Mathf.Min(args[0].AsNumber));
+    private readonly Value _max = Func(Max);
+    private readonly Value _min = Func(Min);
     private readonly Value _pingPong = Func((ctx, args) => Mathf.PingPong(args[0].AsNumber, args[1].AsNumber));
     private readonly Value _pow = Func((ctx, args) => Mathf.Pow(args[0].AsNumber, args[1].AsNumber));
     private readonly Value _random = Func((ctx, args) => Random.value);
@@ -31,6 +31,46 @@ public class MathReference : ObjectReference
     private readonly Value _smoothStep = Func((ctx, args) => Mathf.SmoothStep(args[0].AsNumber, args[1].AsNumber, args[2].AsNumber));
     private readonly Value _sqrt = Func((ctx, args) => Mathf.Sqrt(args[0].AsNumber));
     private readonly Value _tan = Func((ctx, args) => Mathf.Tan(args[0].AsNumber));
+
+    private static Value Max(LexicalContext context, Value[] args)
+    {
+        var first = args[0];
+        if (first.IsObject)
+        {
+            var list = (ListReference)first.AsObject;
+            var floats = new float[list.values.Count];
+            for(var i = 0; i < floats.Length; i++)
+                floats[i] = list.values[i].AsNumber;
+            return Mathf.Max(floats);
+        }
+        else
+        {
+            var floats = new float[args.Length];
+            for(var i = 0; i < floats.Length; i++)
+                floats[i] = args[i].AsNumber;
+            return Mathf.Max(floats);
+        }
+    }
+
+    private static Value Min(LexicalContext context, Value[] args)
+    {
+        var first = args[0];
+        if (first.IsObject)
+        {
+            var list = (ListReference)first.AsObject;
+            var floats = new float[list.values.Count];
+            for(var i = 0; i < floats.Length; i++)
+                floats[i] = list.values[i].AsNumber;
+            return Mathf.Min(floats);
+        }
+        else
+        {
+            var floats = new float[args.Length];
+            for(var i = 0; i < floats.Length; i++)
+                floats[i] = args[i].AsNumber;
+            return Mathf.Min(floats);
+        }
+    }
 
     public override Value GetProperty(string name)
     {

@@ -124,16 +124,16 @@ export class Mathf {
     log10(value) { return Math.log10(value); }
 
     /**
-     * @param {number} value
+     * @param {...number[]} values
      * @returns {number}
      */
-    max(value) { return Math.max(value); }
+    max(values) { return 0; }
 
     /**
-     * @param {number} value
+     * @param {...number[]} values
      * @returns {number}
      */
-    min(value) { return Math.min(value); }
+    min(values) { return 0; }
 
     /**
      * PingPongs the value t, so that it is never larger than length and never smaller than 0.
