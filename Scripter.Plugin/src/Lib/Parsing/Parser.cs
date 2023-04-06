@@ -542,17 +542,10 @@ namespace ScripterLang
             var values = new Dictionary<string, Expression>();
             while (!Peek().Match(TokenType.RightBrace))
             {
-                string key;
-                var token = Peek();
-                switch (token.type) {
-                    case TokenType.Identifier:
-                    case TokenType.String:
-                    key = token.value;
-                    MoveNext();
-                    break;
-                    default:
-                    throw new ScripterParsingException($"Unexpected token '{token.value}' in value expression", token.location);
-                }
+                var token = Consume();
+                if (!token.Match(TokenType.Identifier) && !token.Match(TokenType.String))
+                    throw new ScripterParsingException($"Unexpected token '{token.value}' in object declaration key", token.location);
+                var key = token.value;
                 Consume().Expect(TokenType.Colon);
                 var value = ParseValueStatementExpression(lexicalContext);
                 values.Add(key, value);

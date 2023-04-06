@@ -314,7 +314,7 @@ public class LanguageTests
         _program.RegisterFile("index.js", """
             var x = {};
             var y = { key1: 1, key2: "2", key3: x };
-            var z = { "a#1": -1};
+            var z = { "a#1": -1 };
             y.key1 = y.key1 + 1;
             y["key2"] = y["key2"] + "!";
             y.key3.test = "ok";
