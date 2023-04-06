@@ -20,16 +20,16 @@ public class ConsoleBuffer
             _lines.RemoveAt(0);
             consoleJSON.valNoCallback = consoleJSON.val.Substring(first);
         }
-        consoleJSON.val += message + "\n";
+        consoleJSON.val += $"{message}\n";
         _lines.Add(message.Length + 1);
     }
 
     public void LogError(string message)
     {
-        Log("<color=red>" + message + "</color>");
+        Log($"<color=red>{message}</color>");
         if (!consoleJSON.text.isActiveAndEnabled)
         {
-            SuperController.LogError("Scripter: " + message);
+            SuperController.LogError($"Scripter: {message}");
         }
     }
 

@@ -60,7 +60,7 @@ public class Script
         }
         catch (Exception exc)
         {
-            _scripter.console.Log($"<color=red>{nameJSON.val} failed to compile: {exc.Message}</color>");
+            _scripter.console.LogError($"{nameJSON.val} failed to compile: {exc.Message}");
         }
     }
 
