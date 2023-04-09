@@ -293,10 +293,10 @@ namespace ScripterLang
                         MoveNext();
                         break;
                     default:
-                        if (char.IsLetter(Current))
+                        if (char.IsLetter(Current) || Current == '$' || Current == '_')
                         {
                             var nameStart = _position;
-                            while (!IsAtEnd() && (char.IsLetterOrDigit(Current) || Current == '_'))
+                            while (!IsAtEnd() && (char.IsLetterOrDigit(Current) || Current == '_' || Current == '$'))
                             {
                                 MoveNext();
                             }

@@ -18,11 +18,15 @@ public class LanguageTests
         _program.RegisterFile("index.js", """
             var x = 1;
             const y_V2 = 2;
-            return x + y_V2;
+            var å = 3;
+            var _ = 4;
+            var $ = 5;
+            var _å$$_ = 6;
+            return x + y_V2 + å + _ + $ + _å$$_;
             """);
         var result = _program.Run();
 
-        Assert.That(result.ToString(), Is.EqualTo("3"));
+        Assert.That(result.ToString(), Is.EqualTo("21"));
     }
 
     [Test]
