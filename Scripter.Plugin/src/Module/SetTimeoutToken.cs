@@ -28,7 +28,7 @@ internal class SetTimeoutToken : ObjectReference, IDisposable
         if (delay == 0)
             yield return 0;
         else
-            yield return new WaitForSeconds(delay);
+            yield return new WaitForSeconds(delay / 1000);
         fn(context, Value.EmptyValues);
         context.GetModuleContext().UnregisterDisposable(this);
     }
