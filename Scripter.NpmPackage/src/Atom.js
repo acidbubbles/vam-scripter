@@ -40,7 +40,7 @@ export class Atom {
 
    /**
     * Returns a free controller (the node you can select and move around in 3D)
-    * @param {string} name - The controller name (e.g. "control" or "head")
+    * @param {string} name - The controller name (e.g. "control" or "headControl")
     * @returns {Controller}
     */
    getController(name) { return new Controller(); }
