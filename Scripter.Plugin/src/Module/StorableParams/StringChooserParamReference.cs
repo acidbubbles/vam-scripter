@@ -21,8 +21,7 @@ public class StringChooserParamReference : ObjectReference
                 var values = new List<Value>(raw.Count);
                 for (var i = 0; i < raw.Count; i++)
                 {
-                    var choice = raw[i];
-                    values.Add(choice);
+                    values.Add(raw[i]);
                 }
                 return new ListReference(values);
             default:

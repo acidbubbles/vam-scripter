@@ -42,7 +42,7 @@ public class StorableReference : ObjectReference
         var values = new List<Value>(raw.Count);
         for (var i = 0; i < raw.Count; i++)
         {
-            values[i] = raw[i];
+            values.Add(raw[i]);
         }
         return new ListReference(values);
     }

@@ -211,6 +211,7 @@ public class CodeInputField : InputField
 
     private int FindStartOfLine(int startIndex)
     {
+        if (startIndex == -1) return 0;
         var index = text.LastIndexOf('\n', startIndex - 1);
         if (index == -1) return text.Length;
         return index + 1;
