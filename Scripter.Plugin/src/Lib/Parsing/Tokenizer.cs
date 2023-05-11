@@ -237,6 +237,8 @@ namespace ScripterLang
                         break;
                     case '"':
                     case '\'':
+                    case '`':
+                        var template = Current == '`';
                         var searchPosition = _position + 1;
                         while (true)
                         {
@@ -250,7 +252,7 @@ namespace ScripterLang
                             searchPosition = end + 1;
                         }
 
-                        yield return new Token(TokenType.String, Substr(_position + 1, end - _position - 1), Location);
+                        yield return new Token(template ? TokenType.Template : TokenType.String, Substr(_position + 1, end - _position - 1), Location);
                         _position = end + 1;
                         break;
                     case '(':

@@ -492,6 +492,8 @@ namespace ScripterLang
                     return new ValueExpression(int.Parse(Consume().value));
                 case TokenType.String:
                     return new ValueExpression(ParseString(Consume()));
+                case TokenType.Template:
+                    throw new ScripterParsingException("Template strings are not supported", Consume().location);
                 case TokenType.Boolean:
                     return new ValueExpression(bool.Parse(Consume().value));
                 case TokenType.Undefined:

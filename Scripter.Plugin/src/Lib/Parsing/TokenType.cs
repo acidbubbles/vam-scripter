@@ -9,6 +9,7 @@
         public const int Float = 12;
         public const int String = 13;
         public const int Boolean = 14;
+        public const int Template = 15;
         public const int Identifier = 19;
 
         public const int Comma = 20;
