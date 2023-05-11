@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace ScripterLang
 {
     public class Parser
     {
+        private static readonly StringBuilder _stringBuilder = new StringBuilder();
         private readonly IList<Token> _tokens;
         private int _position;
 
@@ -489,7 +491,7 @@ namespace ScripterLang
                 case TokenType.Integer:
                     return new ValueExpression(int.Parse(Consume().value));
                 case TokenType.String:
-                    return new ValueExpression(Consume().value);
+                    return new ValueExpression(ParseString(Consume()));
                 case TokenType.Boolean:
                     return new ValueExpression(bool.Parse(Consume().value));
                 case TokenType.Undefined:
@@ -534,6 +536,52 @@ namespace ScripterLang
                 default:
                     throw new ScripterParsingException($"Unexpected token '{token.value}' in value expression", token.location);
             }
+        }
+
+        private static string ParseString(Token token)
+        {
+            _stringBuilder.Length = 0;
+            var value = token.value;
+            for (var i = 0; i < value.Length; i++)
+            {
+                var c = value[i];
+                if (c == '\\')
+                {
+                    if (i + 1 >= value.Length)
+                        throw new ScripterParsingException("Unexpected end of string", token.location);
+                    var next = value[i + 1];
+                    switch (next)
+                    {
+                        case 'n':
+                            _stringBuilder.Append('\n');
+                            break;
+                        case 'r':
+                            break;
+                        case 't':
+                            _stringBuilder.Append('\t');
+                            break;
+                        case '\\':
+                            _stringBuilder.Append('\\');
+                            break;
+                        case '\'':
+                            _stringBuilder.Append('\'');
+                            break;
+                        case '"':
+                            _stringBuilder.Append('"');
+                            break;
+                        default:
+                            throw new ScripterParsingException($"Unexpected escape sequence '\\{next}'", token.location);
+                    }
+                    i++;
+                }
+                else
+                {
+                    _stringBuilder.Append(c);
+                }
+            }
+            var result = _stringBuilder.ToString();
+            _stringBuilder.Length = 0;
+            return result;
         }
 
         private Expression ParseObjectDeclarationExpression(ScopeLexicalContext lexicalContext)

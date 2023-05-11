@@ -47,6 +47,7 @@ namespace ScripterLang
         {
             while (!IsAtEnd())
             {
+                int end;
                 switch (Current)
                 {
                     case '0':
@@ -236,9 +237,18 @@ namespace ScripterLang
                         break;
                     case '"':
                     case '\'':
-                        var end = Array.IndexOf(_input, Current, _position + 1);
-                        if (end == -1)
-                            throw new ScripterParsingException("Unterminated string");
+                        var searchPosition = _position + 1;
+                        while (true)
+                        {
+                            end = Array.IndexOf(_input, Current, searchPosition);
+                            if (end == -1)
+                                throw new ScripterParsingException("Unterminated string");
+
+                            if (_input[end - 1] != '\\')
+                                break;
+
+                            searchPosition = end + 1;
+                        }
 
                         yield return new Token(TokenType.String, Substr(_position + 1, end - _position - 1), Location);
                         _position = end + 1;

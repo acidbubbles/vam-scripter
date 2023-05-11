@@ -170,12 +170,12 @@ public class LanguageTests
     public void Strings()
     {
         _program.RegisterFile("index.js", """
-            return "a" + 2 + true + 'b';
+            return "a" + 2 + true + 'b' + "\n\\\"";
             """);
         var result = _program.Run();
 
         // ReSharper disable once StringLiteralTypo
-        Assert.That(result.ToString(), Is.EqualTo("a2trueb"));
+        Assert.That(result.ToString(), Is.EqualTo("a2trueb\n\\\""));
     }
 
     [Test]
