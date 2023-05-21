@@ -130,6 +130,12 @@ public class CodeInputField : InputField
             if (FormattingDisabled()) return input;
             if (selectionAnchorPosition != selectionFocusPosition)
             {
+                if (selectionAnchorPosition > selectionFocusPosition)
+                {
+                    var tmp = selectionAnchorPosition;
+                    selectionAnchorPosition = selectionFocusPosition;
+                    selectionFocusPosition = tmp;
+                }
                 // Change indentation
                 var before = inputText.Substring(0, selectionAnchorPosition);
                 var selected = inputText.Substring(selectionAnchorPosition, selectionFocusPosition - selectionAnchorPosition);
