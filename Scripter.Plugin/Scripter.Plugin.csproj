@@ -181,6 +181,10 @@
     <!-- /ScripterSource -->
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="meta.json" />
+  </ItemGroup>
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 
