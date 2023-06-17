@@ -60,9 +60,7 @@ public class AtomReference : ObjectReference
     {
         ValidateArgumentsLength(nameof(GetStorable), args, 1);
         var storableName = args[0].AsString;
-        var storable = _atom.GetStorableByID(storableName);
-        if (storable == null) throw new ScripterPluginException($"Could not find an storable named '{storableName}' in atom '{_atom.name}'");
-        return new StorableReference(storable);
+        return new StorableReference(_atom, storableName);
     }
 
     private Value GetController(LexicalContext context, Value[] args)

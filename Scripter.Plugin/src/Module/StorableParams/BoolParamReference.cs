@@ -2,22 +2,32 @@
 
 public class BoolParamReference : ObjectReference
 {
-    private readonly JSONStorableBool _param;
+    private readonly StorableReference _storableRef;
+    private readonly string _paramName;
 
-    public BoolParamReference(JSONStorableBool param)
+    public BoolParamReference(StorableReference storableRef, string paramName)
     {
-        _param = param;
+        _storableRef = storableRef;
+        _paramName = paramName;
+    }
+
+    private JSONStorableBool GetParam()
+    {
+        var storable = _storableRef.GetStorable();
+        var param = storable.GetBoolJSONParam(_paramName);
+        if (param == null) throw new ScripterRuntimeException($"Bool param {_paramName} not found in {storable.name} of atom {storable.containingAtom.storeId}");
+        return param;
     }
 
     public override Value GetProperty(string name)
     {
-        if (name == "val") return _param.val;
+        if (name == "val") return GetParam().val;
         return base.GetProperty(name);
     }
 
     public override void SetProperty(string name, Value value)
     {
-        if (name == "val") _param.val = value.AsBool;
+        if (name == "val") GetParam().val = value.AsBool;
         else base.GetProperty(name);
     }
 }

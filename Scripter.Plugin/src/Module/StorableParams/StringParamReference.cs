@@ -2,11 +2,21 @@
 
 public class StringParamReference : ObjectReference
 {
-    private readonly JSONStorableString _param;
+    private readonly StorableReference _storableRef;
+    private readonly string _paramName;
 
-    public StringParamReference(JSONStorableString param)
+    public StringParamReference(StorableReference storableRef, string paramName)
     {
-        _param = param;
+        _storableRef = storableRef;
+        _paramName = paramName;
+    }
+
+    private JSONStorableString GetParam()
+    {
+        var storable = _storableRef.GetStorable();
+        var param = storable.GetStringJSONParam(_paramName);
+        if (param == null) throw new ScripterRuntimeException($"Bool param {_paramName} not found in {storable.name} of atom {storable.containingAtom.storeId}");
+        return param;
     }
 
     public override Value GetProperty(string name)
@@ -14,7 +24,7 @@ public class StringParamReference : ObjectReference
         switch (name)
         {
             case "val":
-                return _param.val;
+                return GetParam().val;
             default:
                 return base.GetProperty(name);
         }
@@ -25,7 +35,7 @@ public class StringParamReference : ObjectReference
         switch (name)
         {
             case "val":
-                _param.val = value.AsString;
+                GetParam().val = value.AsString;
                 break;
             default:
                 base.GetProperty(name);

@@ -2,11 +2,21 @@
 
 public class AudioActionReference : ObjectReference
 {
-    private readonly JSONStorableActionAudioClip _param;
+    private readonly StorableReference _storableRef;
+    private readonly string _paramName;
 
-    public AudioActionReference(JSONStorableActionAudioClip param)
+    public AudioActionReference(StorableReference storableRef, string paramName)
     {
-        _param = param;
+        _storableRef = storableRef;
+        _paramName = paramName;
+    }
+
+    private JSONStorableActionAudioClip GetParam()
+    {
+        var storable = _storableRef.GetStorable();
+        var param = storable.GetAudioClipAction(_paramName);
+        if (param == null) throw new ScripterRuntimeException($"Bool param {_paramName} not found in {storable.name} of atom {storable.containingAtom.storeId}");
+        return param;
     }
 
     public override Value GetProperty(string name)
@@ -25,7 +35,7 @@ public class AudioActionReference : ObjectReference
         ValidateArgumentsLength(nameof(Play), args, 1);
         var nac = args[0].AsObject as NamedAudioClipReference;
         if(nac == null) throw new ScripterRuntimeException($"Expected a NamedAudioClip in {nameof(Play)}");
-        _param.actionCallback(nac.nac);
+        GetParam().actionCallback(nac.nac);
         return Value.Void;
     }
 }

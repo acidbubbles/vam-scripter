@@ -3,11 +3,21 @@ using ScripterLang;
 
 public class StringChooserParamReference : ObjectReference
 {
-    private readonly JSONStorableStringChooser _param;
+    private readonly StorableReference _storableRef;
+    private readonly string _paramName;
 
-    public StringChooserParamReference(JSONStorableStringChooser param)
+    public StringChooserParamReference(StorableReference storableRef, string paramName)
     {
-        _param = param;
+        _storableRef = storableRef;
+        _paramName = paramName;
+    }
+
+    private JSONStorableStringChooser GetParam()
+    {
+        var storable = _storableRef.GetStorable();
+        var param = storable.GetStringChooserJSONParam(_paramName);
+        if (param == null) throw new ScripterRuntimeException($"Bool param {_paramName} not found in {storable.name} of atom {storable.containingAtom.storeId}");
+        return param;
     }
 
     public override Value GetProperty(string name)
@@ -15,9 +25,9 @@ public class StringChooserParamReference : ObjectReference
         switch (name)
         {
             case "val":
-                return _param.val;
+                return GetParam().val;
             case "choices":
-                var raw = _param.choices;
+                var raw = GetParam().choices;
                 var values = new List<Value>(raw.Count);
                 for (var i = 0; i < raw.Count; i++)
                 {
@@ -34,7 +44,7 @@ public class StringChooserParamReference : ObjectReference
         switch (name)
         {
             case "val":
-                _param.val = value.AsString;
+                GetParam().val = value.AsString;
                 break;
             default:
                 base.GetProperty(name);
