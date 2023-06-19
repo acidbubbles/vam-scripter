@@ -33,7 +33,7 @@ public class JSON : ObjectReference
         return new MapReference(dict);
     }
 
-    private Value Stringify(LexicalContext context, Value[] args)
+    private static Value Stringify(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(Parse), args, 1);
         var value = args[0].AsObject as MapReference;
@@ -42,7 +42,7 @@ public class JSON : ObjectReference
         foreach (var field in value.GetPropertyNames())
         {
             var fieldValue = value.GetProperty(field);
-            if (fieldValue.IsObject) throw new ScripterRuntimeException("Deep object serialization not supported");
+            if (!fieldValue.IsString) throw new ScripterRuntimeException("Serialization only supports strings");
             jc[field] = fieldValue.ToString();
         }
         return jc.ToString();

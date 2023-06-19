@@ -3,9 +3,9 @@ You can read and write files that will only be available for the current scene, 
 ```js
 import { fs } from "vam-scripter";
 
-var content = fs.readSceneFileAsync('counter.txt');
+var content = fs.readSceneFileSync('counter.txt');
 if(!content) content = '0';
 content = parseInt(content) + 1;
-console.log('File loaded ' + content + ' times')
-fs.writeSceneFileAsync('counter.txt', content.toString());
+console.log('File loaded ' + content + ' times');
+fs.writeSceneFileSync('counter.txt', content.toString());
 ```

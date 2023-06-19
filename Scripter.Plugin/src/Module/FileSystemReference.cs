@@ -26,7 +26,7 @@ public class FileSystemReference : ObjectReference
     {
         ValidateArgumentsLength(nameof(WriteSceneFileSync), args, 2);
         var path = GetScenePath(args[0].AsString);
-        var content = args[1].AsString;
+        var content = args[1].ToString();
         FileManagerSecure.WriteAllText(path, content);
         return Value.Void;
     }
@@ -35,6 +35,7 @@ public class FileSystemReference : ObjectReference
     {
         ValidateArgumentsLength(nameof(ReadSceneFileSync), args, 1);
         var path = GetScenePath(args[0].AsString);
+        if (!FileManagerSecure.FileExists(path)) return Value.Undefined;
         return FileManagerSecure.ReadAllText(path);
     }
 
@@ -50,9 +51,9 @@ public class FileSystemReference : ObjectReference
     {
         if(path.Contains("/") || path.Contains("\\") || path.Contains(".."))
             throw new ScripterRuntimeException("Invalid path: " + path);
-        if(!path.EndsWith(".txt") || !path.EndsWith(".json"))
+        if(!path.EndsWith(".txt") && !path.EndsWith(".json"))
             throw new ScripterRuntimeException("Invalid path extension: " + path);
-        var sceneDirectory = _scripterDirectory + "\\" + GetSceneIdentifier();
+        var sceneDirectory = _scripterDirectory + "\\Scenes\\" + GetSceneIdentifier();
         FileManagerSecure.CreateDirectory(sceneDirectory);
         return sceneDirectory + "\\" + path;
     }
@@ -70,6 +71,7 @@ public class FileSystemReference : ObjectReference
         var rng = new RNGCryptoServiceProvider();
         var key = new byte[16];
         rng.GetBytes(key);
-        return Convert.ToBase64String(key);
+        var guid = new Guid(key);
+        return guid.ToString();
     }
 }

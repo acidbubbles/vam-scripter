@@ -96,7 +96,7 @@ public class ProgramFilesManager
         }
         catch (Exception exc)
         {
-            _plugin.console.LogError($"Failed to run code: {exc.Message}");
+            _plugin.console.LogError($"Failed to run code: {exc}");
         }
     }
 
