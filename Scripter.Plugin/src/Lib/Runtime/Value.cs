@@ -177,7 +177,7 @@ namespace ScripterLang
                     case ValueTypes.IntegerType:
                         return RawInt > 0;
                     case ValueTypes.FloatType:
-                        return RawFloat > Epsilon;
+                        return RawFloat == 0;
                     case ValueTypes.ObjectType:
                     case ValueTypes.FunctionType:
                         return RawObject != null;

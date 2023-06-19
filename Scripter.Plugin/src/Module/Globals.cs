@@ -12,6 +12,7 @@ public static class Globals
         lexicalContext.DeclareGlobal("clearTimeout", Value.CreateFunction(ClearTimeout));
         lexicalContext.DeclareGlobal("parseInt", Value.CreateFunction(ParseInt));
         lexicalContext.DeclareGlobal("parseFloat", Value.CreateFunction(ParseFloat));
+        lexicalContext.DeclareGlobal("isNaN", Value.CreateFunction(IsNaN));
         lexicalContext.DeclareModule(new ScripterModule());
     }
 
@@ -43,6 +44,7 @@ public static class Globals
     {
         if(args.Length != 1)
             throw new ScripterRuntimeException($"{nameof(ParseInt)} requires 1 argument");
+        if (args[0].IsUndefined) return float.NaN;
         var value = args[0].AsString;
         return int.Parse(value, CultureInfo.InvariantCulture);
     }
@@ -51,7 +53,15 @@ public static class Globals
     {
         if(args.Length != 1)
             throw new ScripterRuntimeException($"{nameof(ParseInt)} requires 1 argument");
+        if (args[0].IsUndefined) return float.NaN;
         var value = args[0].AsString;
         return float.Parse(value, CultureInfo.InvariantCulture);
+    }
+
+    private static Value IsNaN(LexicalContext context, Value[] args)
+    {
+        if(args.Length != 1)
+            throw new ScripterRuntimeException($"{nameof(ParseInt)} requires 1 argument");
+        return float.IsNaN(args[0].AsFloat);
     }
 }
