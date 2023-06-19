@@ -10,6 +10,12 @@ export class BoolParamDeclaration {
     val;
 
     /**
+    * Updates the value without invoking onChange
+     * @type {boolean}
+     */
+    valNoCallback;
+
+    /**
      * Called when the value is changed
      * @param {function(boolean): void} callback
      */

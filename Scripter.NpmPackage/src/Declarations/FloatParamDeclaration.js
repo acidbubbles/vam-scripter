@@ -10,6 +10,12 @@ export class FloatParamDeclaration {
     val;
 
     /**
+    * Updates the value without invoking onChange
+     * @type {number}
+     */
+    valNoCallback;
+
+    /**
      * Called when the value is changed
      * @param {function(number): void} callback
      */

@@ -53,6 +53,8 @@ public class BoolParamDeclaration : ParamDeclarationBase, IDisposable
         {
             case "val":
                 return _valueJSON.val;
+            case "valNoCallback":
+                return _valueJSON.valNoCallback;
             case "onChange":
                 return Func(OnChange);
             default:
@@ -65,6 +67,9 @@ public class BoolParamDeclaration : ParamDeclarationBase, IDisposable
         switch (name)
         {
             case "val":
+                _valueJSON.val = value.AsBool;
+                break;
+            case "valNoCallback":
                 _valueJSON.valNoCallback = value.AsBool;
                 break;
             default:

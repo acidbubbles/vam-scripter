@@ -53,6 +53,8 @@ public class StringParamDeclaration : ParamDeclarationBase, IDisposable
         {
             case "val":
                 return _valueJSON.val;
+            case "valNoCallback":
+                return _valueJSON.valNoCallback;
             case "onChange":
                 return Func(OnChange);
             default:
@@ -65,6 +67,9 @@ public class StringParamDeclaration : ParamDeclarationBase, IDisposable
         switch (name)
         {
             case "val":
+                _valueJSON.val = value.AsString;
+                break;
+            case "valNoCallback":
                 _valueJSON.valNoCallback = value.AsString;
                 break;
             default:

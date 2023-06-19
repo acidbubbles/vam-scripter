@@ -9,6 +9,12 @@ export class StringChooserParamReference {
     */
    val;
 
+    /**
+    * Updates the value without invoking onChange
+     * @type {string}
+     */
+    valNoCallback;
+
    /**
     * The available choices for val
     * @returns {string[]}

@@ -8,4 +8,10 @@ export class FloatParamReference {
     * @type {number}
     */
    val;
+
+    /**
+    * Updates the value without invoking onChange
+     * @type {number}
+     */
+    valNoCallback;
 }

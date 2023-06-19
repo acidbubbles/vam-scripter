@@ -25,6 +25,8 @@ public class StringParamReference : ObjectReference
         {
             case "val":
                 return GetParam().val;
+            case "valNoCallback":
+                return GetParam().valNoCallback;
             default:
                 return base.GetProperty(name);
         }
@@ -36,6 +38,9 @@ public class StringParamReference : ObjectReference
         {
             case "val":
                 GetParam().val = value.AsString;
+                break;
+            case "valNoCallback":
+                GetParam().valNoCallback = value.AsString;
                 break;
             default:
                 base.GetProperty(name);

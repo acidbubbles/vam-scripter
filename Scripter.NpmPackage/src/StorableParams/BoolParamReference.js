@@ -8,4 +8,10 @@ export class BoolParamReference {
     * @type {boolean}
     */
    val;
+
+    /**
+    * Updates the value without invoking onChange
+     * @type {boolean}
+     */
+    valNoCallback;
 }

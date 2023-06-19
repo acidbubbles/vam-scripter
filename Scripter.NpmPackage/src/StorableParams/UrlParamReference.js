@@ -8,4 +8,10 @@ export class UrlParamReference {
     * @type {string}
     */
    val;
+
+    /**
+    * Updates the value without invoking onChange
+     * @type {string}
+     */
+    valNoCallback;
 }

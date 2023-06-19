@@ -62,6 +62,8 @@ public class FloatParamDeclaration : ParamDeclarationBase, IDisposable
         {
             case "val":
                 return _valueJSON.val;
+            case "valNoCallback":
+                return _valueJSON.valNoCallback;
             case "onChange":
                 return Func(OnChange);
             default:
@@ -74,6 +76,9 @@ public class FloatParamDeclaration : ParamDeclarationBase, IDisposable
         switch (name)
         {
             case "val":
+                _valueJSON.val = value.AsNumber;
+                break;
+            case "valNoCallback":
                 _valueJSON.valNoCallback = value.AsNumber;
                 break;
             default:

@@ -26,6 +26,8 @@ public class StringChooserParamReference : ObjectReference
         {
             case "val":
                 return GetParam().val;
+            case "valNoCallback":
+                return GetParam().valNoCallback;
             case "choices":
                 var raw = GetParam().choices;
                 var values = new List<Value>(raw.Count);
@@ -45,6 +47,9 @@ public class StringChooserParamReference : ObjectReference
         {
             case "val":
                 GetParam().val = value.AsString;
+                break;
+            case "valNoCallback":
+                GetParam().valNoCallback = value.AsString;
                 break;
             default:
                 base.GetProperty(name);

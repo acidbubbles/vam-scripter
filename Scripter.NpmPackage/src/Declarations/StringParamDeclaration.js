@@ -10,6 +10,12 @@ export class StringParamDeclaration {
     val;
 
     /**
+    * Updates the value without invoking onChange
+     * @type {string}
+     */
+    valNoCallback;
+
+    /**
      * Called when the value is changed
      * @param {function(boolean): void} callback
      */

@@ -21,13 +21,30 @@ public class BoolParamReference : ObjectReference
 
     public override Value GetProperty(string name)
     {
-        if (name == "val") return GetParam().val;
-        return base.GetProperty(name);
+        switch (name)
+        {
+            case "val":
+                return GetParam().val;
+            case "valNoCallback":
+                return GetParam().valNoCallback;
+            default:
+                return base.GetProperty(name);
+        }
     }
 
     public override void SetProperty(string name, Value value)
     {
-        if (name == "val") GetParam().val = value.AsBool;
-        else base.GetProperty(name);
+        switch (name)
+        {
+            case "val":
+                GetParam().val = value.AsBool;
+                break;
+            case "valNoCallback":
+                GetParam().valNoCallback = value.AsBool;
+                break;
+            default:
+                base.GetProperty(name);
+                break;
+        }
     }
 }
