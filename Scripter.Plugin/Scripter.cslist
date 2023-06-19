@@ -77,6 +77,7 @@ src\Module\FileSystemReference.cs
 src\Module\FunctionLink.cs
 src\Module\Globals.cs
 src\Module\InputReference.cs
+src\Module\JSON.cs
 src\Module\KeybindingsReference.cs
 src\Module\MathReference.cs
 src\Module\NamedAudioClipReference.cs

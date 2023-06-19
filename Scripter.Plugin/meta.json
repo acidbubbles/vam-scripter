@@ -88,6 +88,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\FunctionLink.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\Globals.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\InputReference.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\JSON.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\KeybindingsReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\MathReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\NamedAudioClipReference.cs",

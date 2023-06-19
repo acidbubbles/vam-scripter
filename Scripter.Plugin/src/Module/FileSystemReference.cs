@@ -5,7 +5,6 @@ using ScripterLang;
 
 public class FileSystemReference : ObjectReference
 {
-
     private const string _scripterDirectory = "Saves\\PluginData\\Scripter";
 
     public override Value GetProperty(string name)

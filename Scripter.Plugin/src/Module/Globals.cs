@@ -1,4 +1,5 @@
-﻿using ScripterLang;
+﻿using System.Globalization;
+using ScripterLang;
 
 public static class Globals
 {
@@ -6,8 +7,11 @@ public static class Globals
     {
         lexicalContext.DeclareGlobal("console", new ConsoleReference());
         lexicalContext.DeclareGlobal("Math", new MathReference());
+        lexicalContext.DeclareGlobal("JSON", new JSON());
         lexicalContext.DeclareGlobal("setTimeout", Value.CreateFunction(SetTimeout));
         lexicalContext.DeclareGlobal("clearTimeout", Value.CreateFunction(ClearTimeout));
+        lexicalContext.DeclareGlobal("parseInt", Value.CreateFunction(ParseInt));
+        lexicalContext.DeclareGlobal("parseFloat", Value.CreateFunction(ParseFloat));
         lexicalContext.DeclareModule(new ScripterModule());
     }
 
@@ -33,5 +37,21 @@ public static class Globals
         coRef.Dispose();
         context.GetModuleContext().UnregisterDisposable(coRef);
         return Value.Void;
+    }
+
+    private static Value ParseInt(LexicalContext context, Value[] args)
+    {
+        if(args.Length != 1)
+            throw new ScripterRuntimeException($"{nameof(ParseInt)} requires 1 argument");
+        var value = args[0].AsString;
+        return int.Parse(value, CultureInfo.InvariantCulture);
+    }
+
+    private static Value ParseFloat(LexicalContext context, Value[] args)
+    {
+        if(args.Length != 1)
+            throw new ScripterRuntimeException($"{nameof(ParseInt)} requires 1 argument");
+        var value = args[0].AsString;
+        return float.Parse(value, CultureInfo.InvariantCulture);
     }
 }

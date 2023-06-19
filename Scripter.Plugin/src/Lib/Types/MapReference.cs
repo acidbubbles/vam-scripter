@@ -35,6 +35,11 @@ namespace ScripterLang
             SetProperty(index.AsString, value);
         }
 
+        public string[] GetPropertyNames()
+        {
+            return _values.Keys.ToArray();
+        }
+
         public override string ToString()
         {
             return "{ " + string.Join(", ", _values.Select(x => $"{x.Key}: {x.Value.ToCodeString()}").ToArray()) + " }";
