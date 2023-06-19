@@ -17,9 +17,7 @@
         public override Value Evaluate()
         {
             var value = _expression.Evaluate();
-            if (value.Type != ValueTypes.BooleanType)
-                throw new ScripterRuntimeException("Operator ! must be followed by a boolean value");
-            return !value.RawBool;
+            return !value.Boolify;
         }
 
         public override string ToString()

@@ -97,7 +97,7 @@ namespace ScripterLang
                 return UndefinedExpression.Instance;
             }
 
-            throw new ScripterParsingException($"Unexpected token: '{token.value}'", token.location);
+            return ParsePureValueExpression(lexicalContext);
         }
 
         private Expression TryCatchDeclaration(ScopeLexicalContext lexicalContext)
@@ -241,6 +241,9 @@ namespace ScripterLang
                     case TokenType.Dot:
                         MoveNext();
                         return ParseDotRightExpression(lexicalContext, accessor);
+                    case TokenType.Ternary:
+                        MoveNext();
+                        return ParseTernaryRightExpression(lexicalContext, accessor);
                     default:
                         return accessor;
                 }
@@ -384,6 +387,11 @@ namespace ScripterLang
             {
                 MoveNext();
                 var initialValue = ParseValueStatementExpression(lexicalContext);
+                if (Peek().Match(TokenType.Ternary))
+                {
+                    MoveNext();
+                    initialValue = ParseTernaryRightExpression(lexicalContext, initialValue);
+                }
                 Consume().Expect(TokenType.SemiColon);
                 return new VariableDeclarationExpression(nameToken.value, initialValue, lexicalContext);
             }
@@ -421,6 +429,14 @@ namespace ScripterLang
             var property = Consume().Expect(TokenType.Identifier);
             var accessor = new PropertyAccessor(left, property.value);
             return ParseVariableExpression(lexicalContext, accessor);
+        }
+
+        private Expression ParseTernaryRightExpression(ScopeLexicalContext lexicalContext, Expression condition)
+        {
+            var thenBlock = ParseCodeBlock(new ScopeLexicalContext(lexicalContext));
+            Consume().Expect(TokenType.Colon);
+            var elseBlock = ParseCodeBlock(new ScopeLexicalContext(lexicalContext));
+            return new IfExpression(condition, thenBlock, elseBlock);
         }
 
         private static int GetOperatorPrecedence(string op)

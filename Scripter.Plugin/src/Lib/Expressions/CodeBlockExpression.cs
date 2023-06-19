@@ -28,10 +28,11 @@ namespace ScripterLang
         {
             try
             {
+                var result = Value.Undefined;
                 for (var i = 0; i < _expressions.Count; i++)
                 {
                     var expression = _expressions[i];
-                    var result = expression.Evaluate();
+                    result = expression.Evaluate();
                     if (_functionContext.isReturn)
                         return result;
                     if (_loopContext != null)
@@ -41,7 +42,7 @@ namespace ScripterLang
                     }
                 }
 
-                return Value.Void;
+                return result;
             }
             finally
             {

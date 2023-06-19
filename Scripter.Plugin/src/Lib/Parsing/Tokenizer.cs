@@ -267,6 +267,10 @@ namespace ScripterLang
                         yield return new Token(TokenType.Comma, ",", Location);
                         MoveNext();
                         break;
+                    case '?':
+                        yield return new Token(TokenType.Ternary, "?", Location);
+                        MoveNext();
+                        break;
                     case ':':
                         yield return new Token(TokenType.Colon, ":", Location);
                         MoveNext();

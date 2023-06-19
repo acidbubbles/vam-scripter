@@ -16,6 +16,7 @@
         public const int Colon = 21;
         public const int SemiColon = 22;
         public const int Arrow = 23;
+        public const int Ternary = 24;
 
         public const int Operator = 30;
         public const int Assignment = 31;

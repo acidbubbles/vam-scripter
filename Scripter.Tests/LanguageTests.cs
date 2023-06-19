@@ -204,6 +204,19 @@ public class LanguageTests
     }
 
     [Test]
+    public void Ternary()
+    {
+        _program.RegisterFile("index.js", """
+            var value = "true";
+            var first = value ? 'first' : 'error';
+            var second = (!value) ? 'error' : 'second';
+            return first + ' ' + second;
+            """);
+        var result = _program.Run();
+        Assert.That(result.ToString(), Is.EqualTo("first second"));
+    }
+
+    [Test]
     public void Loops()
     {
         _program.RegisterFile("index.js", """
