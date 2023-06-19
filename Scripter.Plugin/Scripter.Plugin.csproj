@@ -146,6 +146,7 @@
     <Compile Include="src\Module\ControllerReference.cs" />
     <Compile Include="src\Module\DateTimeClassReference.cs" />
     <Compile Include="src\Module\DateTimeReference.cs" />
+    <Compile Include="src\Module\FileSystemReference.cs" />
     <Compile Include="src\Module\FunctionLink.cs" />
     <Compile Include="src\Module\Globals.cs" />
     <Compile Include="src\Module\InputReference.cs" />

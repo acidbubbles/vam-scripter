@@ -84,6 +84,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\ControllerReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\DateTimeClassReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\DateTimeReference.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\FileSystemReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\FunctionLink.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\Globals.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\InputReference.cs",

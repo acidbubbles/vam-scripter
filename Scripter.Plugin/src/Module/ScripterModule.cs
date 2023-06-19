@@ -12,6 +12,7 @@ public class ScripterModule : IModule
     private static readonly PlayerReference _playerReference = new PlayerReference();
     private static readonly KeybindingsReference _keybindingsReference = new KeybindingsReference();
     private static readonly InputReference _inputReference = new InputReference();
+    private static readonly FileSystemReference _fsReference = new FileSystemReference();
 
     private static readonly ModuleNamespace _ns = Initialize();
 
@@ -26,6 +27,7 @@ public class ScripterModule : IModule
         module.exports.Add("player", _playerReference);
         module.exports.Add("keybindings", _keybindingsReference);
         module.exports.Add("Input", _inputReference);
+        module.exports.Add("fs", _fsReference);
         return module;
     }
 

@@ -18,6 +18,8 @@ public class Scripter : MVRScript
     public ScripterUI ui;
     public bool isLoading;
 
+    public string sceneIdentifier;
+
     public readonly List<KeybindingDeclaration> keybindingsTriggers = new List<KeybindingDeclaration>();
     public readonly List<FunctionLink> onUpdateFunctions = new List<FunctionLink>();
     public readonly List<FunctionLink> onLateUpdateFunctions = new List<FunctionLink>();
@@ -100,6 +102,10 @@ public class Scripter : MVRScript
     {
         var json = base.GetJSON(includePhysical, includeAppearance, forceStore);
         if (IsSessionPlugin() || _syncFolder != null) return json;
+        if (sceneIdentifier != null)
+        {
+            json["MachineId"] = sceneIdentifier;
+        }
         var triggersJSON = new JSONClass();
         foreach (var trigger in _triggers)
         {
@@ -117,6 +123,9 @@ public class Scripter : MVRScript
 
         if (IsSessionPlugin() || _syncFolder != null) return;
         isLoading = true;
+
+        sceneIdentifier = jc.HasKey("MachineId") ? jc["MachineId"].Value : null;
+
         var array = jc["Triggers"].AsArray;
         if (array != null)
         {

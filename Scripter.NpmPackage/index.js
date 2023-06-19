@@ -60,3 +60,9 @@ export const Input = new InputClass();
  * @type {DateTimeClass}
  */
 export const DateTime = new DateTimeClass();
+
+/**
+ * Export for accessing files and folder
+ * @type {FileSystem}
+ */
+export const fs = new FileSystem();

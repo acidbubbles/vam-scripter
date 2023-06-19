@@ -73,6 +73,7 @@ src\Module\ConsoleReference.cs
 src\Module\ControllerReference.cs
 src\Module\DateTimeClassReference.cs
 src\Module\DateTimeReference.cs
+src\Module\FileSystemReference.cs
 src\Module\FunctionLink.cs
 src\Module\Globals.cs
 src\Module\InputReference.cs
