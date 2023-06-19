@@ -208,8 +208,8 @@ public class LanguageTests
     {
         _program.RegisterFile("index.js", """
             var value = "true";
-            var first = value ? 'first' : 'error';
-            var second = (!value) ? 'error' : 'second';
+            var first = value ? 'first' + '' : 'error';
+            var second = (!value) ? 'error' : ('second');
             return first + ' ' + second;
             """);
         var result = _program.Run();

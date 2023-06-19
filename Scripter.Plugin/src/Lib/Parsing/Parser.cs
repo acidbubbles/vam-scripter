@@ -433,9 +433,9 @@ namespace ScripterLang
 
         private Expression ParseTernaryRightExpression(ScopeLexicalContext lexicalContext, Expression condition)
         {
-            var thenBlock = ParseCodeBlock(new ScopeLexicalContext(lexicalContext));
+            var thenBlock = ParseValueStatementExpression(lexicalContext);
             Consume().Expect(TokenType.Colon);
-            var elseBlock = ParseCodeBlock(new ScopeLexicalContext(lexicalContext));
+            var elseBlock = ParseValueStatementExpression(lexicalContext);
             return new IfExpression(condition, thenBlock, elseBlock);
         }
 
