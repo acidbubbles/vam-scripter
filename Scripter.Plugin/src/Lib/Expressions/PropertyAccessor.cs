@@ -34,10 +34,18 @@ namespace ScripterLang
                         return new FunctionReference(((context, args) => value.AsString.EndsWith(args[0].AsString)));
                     case "contains":
                         return new FunctionReference(((context, args) => value.AsString.Contains(args[0].AsString)));
+                    case "toString":
+                        return new FunctionReference(((context, args) => value));
                     default:
                         throw new ScripterRuntimeException("There is no property or function named " + _property + " on type string.");
                 }
             }
+
+            if (_property == "toString")
+            {
+                return new FunctionReference(((context, args) => value.ToString()));
+            }
+
             return value.AsObject.GetProperty(_property);
         }
 
