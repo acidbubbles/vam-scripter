@@ -20,6 +20,7 @@ public class JSON : ObjectReference
     private Value Parse(LexicalContext context, Value[] args)
     {
         ValidateArgumentsLength(nameof(Parse), args, 1);
+        if (args[0].IsUndefined) return Value.Undefined;
         var value = args[0].AsString;
         var jc = JSONNode.Parse(value).AsObject;
         var dict = new Dictionary<string, Value>();
