@@ -8,6 +8,7 @@
 - Assignment operators (`++`, `--`, `+=`, `-=`, `*=`, `/=`)
 - Comments (`//`, `/* */`)
 - Keywords (`if`, `else`, `for`, `while`, `throw`, `break`, `continue`)
+- Ternary operators (`condition ? true : false`)
 - Functions (`function`, `return`)
 - Arrow functions (`(x) => { code; }`, `x => code`)
 - Arrays (`var x = []`, `var x = [values]`, `x.add`, `x[index]`, `x.length`)
@@ -15,6 +16,8 @@
 - Code blocks and lexical scopes (`{`, `}`)
 - Try blocks (`try`, `catch`, `finally`)
 - Export and import values (`import { x } from "Script Name"`, `export var x = 0;`)
+- Built in functions (`JSON.parse()`, `JSON.stringify()`, `parseFloat()`, `parseInt()`)
+- Base prototype functions (`.toString()`)
 
 ### Notable Omissions
 
@@ -25,6 +28,7 @@
 - No iterators
 - No promises
 - No prototypes system
+- `JSON` only supports flat, strings-only JSON objects
 
 ### Arrays
 
@@ -35,6 +39,11 @@
 | `indexOf` | `function(*) => number` | Returns the index in the list, or -1 if not found |
 | `[]`      | `[number] => any`       | Get or set a value in the array                   |
 
-### Objects
+### Strings
 
-- Objects (or maps) only support `[]` indexers.
+| Property       | Type                          | Notes                                                 |
+| -------------- | ----------------------------- | ----------------------------------------------------- |
+| `length`       | `number`                      | How many characters in string                         |
+| `startsWith`   | `function(string) => boolean` | Whether the string starts with the provided substring |
+| `endsWith`     | `function(string) => boolean` | Whether the string ends with the provided substring   |
+| `contains`     | `function(string) => boolean` | Whether the string contains the provided substring    |
