@@ -84,7 +84,18 @@ namespace ScripterLang
         public int AsInt
         {
             [MethodImpl(0x0100)]
-            get { return IsInt ? RawInt : ThrowInvalidType<int>(ValueTypes.IntegerType); }
+            get
+            {
+                switch (Type)
+                {
+                    case ValueTypes.FloatType:
+                        return (int)Math.Round(_floatValue);
+                    case ValueTypes.IntegerType:
+                        return RawInt;
+                    default:
+                        return ThrowInvalidType<int>(ValueTypes.IntegerType);
+                }
+            }
         }
 
         public bool IsFloat
