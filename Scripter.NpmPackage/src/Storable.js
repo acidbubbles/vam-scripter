@@ -6,6 +6,7 @@ import { FloatParamReference } from "./StorableParams/FloatParamReference";
 import { StringChooserParamReference } from "./StorableParams/StringChooserParamReference";
 import { StringParamReference } from "./StorableParams/StringParamReference";
 import { UrlParamReference } from "./StorableParams/UrlParamReference";
+import { ColorParamReference } from "./StorableParams/ColorParamReference";
 
 /**
  * A storable, e.g. a plugin, audio source, geometry, etc.
@@ -65,4 +66,11 @@ export class Storable {
     * @returns {UrlParamReference}
     */
    getUrlParam(name) { return new UrlParamReference(); }
+
+   /**
+    * Gets a storable color
+    * @param {string} name
+    * @returns {ColorParamReference}
+    */
+   getColorParam(name) { return new ColorParamReference(); }
 }

@@ -137,6 +137,7 @@
     <Compile Include="src\Module\Declarations\StringParamDeclaration.cs" />
     <Compile Include="src\Module\StorableParams\AudioActionReference.cs" />
     <Compile Include="src\Module\StorableParams\BoolParamReference.cs" />
+    <Compile Include="src\Module\StorableParams\ColorParamReference.cs" />
     <Compile Include="src\Module\StorableParams\FloatParamReference.cs" />
     <Compile Include="src\Module\StorableParams\StringChooserParamReference.cs" />
     <Compile Include="src\Module\StorableParams\StringParamReference.cs" />

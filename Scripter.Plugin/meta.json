@@ -75,6 +75,7 @@
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\Declarations\\StringParamDeclaration.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\StorableParams\\AudioActionReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\StorableParams\\BoolParamReference.cs",
+    "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\StorableParams\\ColorParamReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\StorableParams\\FloatParamReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\StorableParams\\StringChooserParamReference.cs",
     "Custom\\Scripts\\AcidBubbles\\Scripter\\src\\Module\\StorableParams\\StringParamReference.cs",

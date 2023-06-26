@@ -64,6 +64,7 @@ src\Module\Declarations\ParamDeclarationBase.cs
 src\Module\Declarations\StringParamDeclaration.cs
 src\Module\StorableParams\AudioActionReference.cs
 src\Module\StorableParams\BoolParamReference.cs
+src\Module\StorableParams\ColorParamReference.cs
 src\Module\StorableParams\FloatParamReference.cs
 src\Module\StorableParams\StringChooserParamReference.cs
 src\Module\StorableParams\StringParamReference.cs

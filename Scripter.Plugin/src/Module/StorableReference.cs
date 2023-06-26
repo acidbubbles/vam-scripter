@@ -39,6 +39,8 @@ public class StorableReference : ObjectReference
                 return Func(GetUrlParam);
             case "getBoolParam":
                 return Func(GetBoolParam);
+            case "getColorParam":
+                return Func(GetColorParam);
             default:
                 return base.GetProperty(name);
         }
@@ -116,5 +118,14 @@ public class StorableReference : ObjectReference
         var param = GetStorable().GetBoolJSONParam(paramName);
         if (param == null) throw new ScripterPluginException($"Could not find a bool param named {paramName} in storable '{_storableName}' in atom '{_atom.storeId}'");
         return new BoolParamReference(this, paramName);
+    }
+
+    private Value GetColorParam(LexicalContext context, Value[] args)
+    {
+        ValidateArgumentsLength(nameof(GetColorParam), args, 1);
+        var paramName = args[0].AsString;
+        var param = GetStorable().GetColorJSONParam(paramName);
+        if (param == null) throw new ScripterPluginException($"Could not find a color param named {paramName} in storable '{_storableName}' in atom '{_atom.storeId}'");
+        return new ColorParamReference(this, paramName);
     }
 }
