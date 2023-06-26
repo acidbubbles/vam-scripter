@@ -47,7 +47,6 @@ namespace ScripterLang
         {
             while (!IsAtEnd())
             {
-                int end;
                 switch (Current)
                 {
                     case '0':
@@ -240,6 +239,7 @@ namespace ScripterLang
                     case '`':
                         var template = Current == '`';
                         var searchPosition = _position + 1;
+                        int end;
                         while (true)
                         {
                             end = Array.IndexOf(_input, Current, searchPosition);

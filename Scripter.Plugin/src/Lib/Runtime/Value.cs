@@ -245,8 +245,6 @@ namespace ScripterLang
         [MethodImpl(0x0100)]
         public bool Equals(Value other)
         {
-            if (Type != other.Type) return false;
-            // throw new Exception( (ObjectValue == null) + " " + (ObjectValue == null));
             switch (Type)
             {
                 case ValueTypes.FloatType:
@@ -254,13 +252,17 @@ namespace ScripterLang
                 case ValueTypes.IntegerType:
                     return other.Type == ValueTypes.IntegerType ? RawInt == other.RawInt : Math.Abs(AsNumber - other.AsNumber) < Epsilon;
                 case ValueTypes.BooleanType:
+                    if (Type != other.Type) return false;
                     return RawBool == other.RawBool;
                 case ValueTypes.ObjectType:
                 case ValueTypes.FunctionType:
+                    if (Type != other.Type) return false;
                     return AsObject == other.RawObject;
                 case ValueTypes.StringType:
+                    if (Type != other.Type) return false;
                     return AsString == other.Stringify;
                 case ValueTypes.UndefinedType:
+                    if (Type != other.Type) return false;
                     return other.Type == ValueTypes.UndefinedType;
                 case ValueTypes.Uninitialized:
                     throw new ScripterRuntimeException("Variable was not initialized");

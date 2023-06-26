@@ -204,6 +204,20 @@ public class LanguageTests
     }
 
     [Test]
+    public void EqualityAndThrow()
+    {
+        _program.RegisterFile("index.js", """
+            if(1 != 1) { throw "int"; }
+            if(0.5 != 0.5) { throw "float"; }
+            if(0.5 * 2.0 != 1) { throw "float-int"; }
+            if(1 != 0.5 * 2.0) { throw "int-float"; }
+            if(true) throw "success";
+            """);
+        var exc = Assert.Throws<ScripterRuntimeException>(() => _program.Run());
+        Assert.That(exc?.Message, Is.EqualTo("success"));
+    }
+
+    [Test]
     public void Ternary()
     {
         _program.RegisterFile("index.js", """
@@ -318,7 +332,7 @@ public class LanguageTests
             x[0]++;
             x[0] += 1;
             x[0] = ++x[0];
-            return [x[0], x.length, x.indexOf(5), x.indexOf(3)];
+            return [x[0.5-0.5], x.length, x.indexOf(5), x.indexOf(3)];
             """);
         var result = _program.Run();
 
