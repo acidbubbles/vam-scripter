@@ -23,5 +23,10 @@ namespace ScripterLang
                     return Value.Undefined;
             }
         }
+
+        public override string ToString()
+        {
+            return _exception.ToString();
+        }
     }
 }
