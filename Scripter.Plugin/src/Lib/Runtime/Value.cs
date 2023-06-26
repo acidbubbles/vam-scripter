@@ -250,7 +250,7 @@ namespace ScripterLang
             switch (Type)
             {
                 case ValueTypes.FloatType:
-                    return other.Type == ValueTypes.FloatType && Math.Abs(RawFloat - other.AsNumber) < Epsilon;
+                    return Math.Abs(RawFloat - other.AsNumber) < Epsilon;
                 case ValueTypes.IntegerType:
                     return other.Type == ValueTypes.IntegerType ? RawInt == other.RawInt : Math.Abs(AsNumber - other.AsNumber) < Epsilon;
                 case ValueTypes.BooleanType:
