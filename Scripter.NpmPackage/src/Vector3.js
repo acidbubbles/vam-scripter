@@ -7,28 +7,28 @@
 export class Vector3 {
    /**
     * 
-    * @type number - Vector3.x
+    * @type {number}
     */
    x;
 
    /**
     * 
-    * @type number - Vector3.y
+    * @type {number}
     */
    y;
 
    /**
     * 
-    * @type number - Vector3.z
+    * @type {number}
     */
    z;
 
    /**
     * Changes the x, y, z components of this vector to the given values.
-   * @param {number | Vector3} [x] - The x coordinate or another Vector3.
-   * @param {number} [y] - The y coordinate. Only used if 'x' and 'z' are also provided.
-   * @param {number} [z] - The z coordinate. Only used if 'x' and 'y' are also provided.
-   */
+    * @param {number | Vector3} [x] - The x coordinate or another Vector3.
+    * @param {number} [y] - The y coordinate. Only used if 'x' and 'z' are also provided.
+    * @param {number} [z] - The z coordinate. Only used if 'x' and 'y' are also provided.
+    */
    set(x, y, z) {}
 
    /**
