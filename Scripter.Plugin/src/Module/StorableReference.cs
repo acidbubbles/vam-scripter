@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ScripterLang;
 
 public class StorableReference : ObjectReference
 {
     private readonly Atom _atom;
-    private readonly string _storableName;
+    private string _storableName;
 
     public StorableReference(Atom atom, string storableName)
     {
@@ -15,7 +16,16 @@ public class StorableReference : ObjectReference
     public JSONStorable GetStorable()
     {
         var storable = _atom.GetStorableByID(_storableName);
-        if (storable == null) throw new ScripterPluginException($"Could not find an storable named '{_storableName}' in atom '{_atom.name}'");
+        if (storable == null)
+        {
+            var completeStorableName = _atom.GetStorableIDs().FirstOrDefault(s => s.EndsWith(_storableName));
+            if (completeStorableName == null)
+                throw new ScripterPluginException($"Could not find an storable named or ending with '{_storableName}' in atom '{_atom.name}'");
+            storable = _atom.GetStorableByID(completeStorableName);
+            if (storable == null)
+                throw new ScripterPluginException($"Found but unable to get storable '{completeStorableName}' (from '{_storableName}') in atom '{_atom.name}'");
+            _storableName = completeStorableName;
+        }
         return storable;
     }
 
