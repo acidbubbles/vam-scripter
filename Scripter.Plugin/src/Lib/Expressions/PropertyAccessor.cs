@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
 
 namespace ScripterLang
 {
@@ -34,6 +34,14 @@ namespace ScripterLang
                         return new FunctionReference(((context, args) => value.AsString.EndsWith(args[0].AsString)));
                     case "contains":
                         return new FunctionReference(((context, args) => value.AsString.Contains(args[0].AsString)));
+                    case "split":
+                        return new FunctionReference(((context, args) =>
+                        {
+                            var splitChars = args.Length > 0 ? args[0].AsString.ToCharArray() : new[] { '\r', '\n' };
+                            return new ListReference(value.AsString.Split(splitChars).Select(Value.CreateString).ToList());
+                        }));
+                    case "trim":
+                        return new FunctionReference(((context, args) => value.AsString.Trim()));
                     case "toString":
                         return new FunctionReference(((context, args) => value));
                     default:
