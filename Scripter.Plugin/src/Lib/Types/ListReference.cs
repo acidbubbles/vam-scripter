@@ -17,11 +17,18 @@ namespace ScripterLang
             switch (name)
             {
                 case "add":
+                case "push":
                     return Func(Add);
                 case "length":
                     return values.Count;
                 case "indexOf":
                     return Func(IndexOf);
+                case "splice":
+                    return Func(Splice);
+                case "pop":
+                    return Func(Pop);
+                case "remove":
+                    return Func(Remove);
                 default:
                     return base.GetProperty(name);
             }
@@ -54,6 +61,38 @@ namespace ScripterLang
                     return i;
             }
             return -1;
+        }
+
+        private Value Insert(LexicalContext context, Value[] args)
+        {
+            ValidateArgumentsLength(nameof(Insert), args, 2);
+            values.Insert(args[0].AsInt, args[1]);
+            return Value.Void;
+        }
+
+        private Value Splice(LexicalContext context, Value[] args)
+        {
+            ValidateArgumentsLength(nameof(Splice), args, 2);
+            var start = args[0].AsInt;
+            var count = args[1].AsInt;
+            var removedItems = values.GetRange(start, count);
+            values.RemoveRange(start, count);
+            return new ListReference(removedItems);
+        }
+
+        private Value Pop(LexicalContext context, Value[] args)
+        {
+            if (values.Count <= 0) return Value.Undefined;
+            var last = values.Last();
+            values.RemoveAt(values.Count - 1);
+            return last;
+        }
+
+        private Value Remove(LexicalContext context, Value[] args)
+        {
+            ValidateArgumentsLength(nameof(Remove), args, 1);
+            values.Remove(args[0]);
+            return Value.Void;
         }
 
         public override string ToString()

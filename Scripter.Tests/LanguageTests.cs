@@ -332,11 +332,16 @@ public class LanguageTests
             x[0]++;
             x[0] += 1;
             x[0] = ++x[0];
-            return [x[0.5-0.5], x.length, x.indexOf(5), x.indexOf(3)];
+            var y = [1, 2, 3, 4, 5];
+            if(y.pop() !== 5) throw "pop failed";
+            y.remove(2);
+            const z = y.splice(1, 1);
+            if(z.length !== 1 || z[0] !== 3) throw "pop failed";
+            return [x[0.5-0.5], x.length, x.indexOf(5), x.indexOf(3), y];
             """);
         var result = _program.Run();
 
-        Assert.That(result.ToString(), Is.EqualTo("[5, 1, 0, -1]"));
+        Assert.That(result.ToString(), Is.EqualTo("[5, 1, 0, -1, [1, 4]]"));
     }
 
     [Test]
