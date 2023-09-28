@@ -29,6 +29,8 @@ namespace ScripterLang
                     return Func(Pop);
                 case "remove":
                     return Func(Remove);
+                case "join":
+                    return Func(Join);
                 default:
                     return base.GetProperty(name);
             }
@@ -86,6 +88,12 @@ namespace ScripterLang
             var last = values.Last();
             values.RemoveAt(values.Count - 1);
             return last;
+        }
+
+        private Value Join(LexicalContext context, Value[] args)
+        {
+            var separator = args.Length > 0 ? args[0].AsString : ",";
+            return string.Join(separator, values.Select(x => x.ToString()).ToArray());
         }
 
         private Value Remove(LexicalContext context, Value[] args)

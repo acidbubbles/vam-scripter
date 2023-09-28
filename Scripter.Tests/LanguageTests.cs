@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using ScripterLang;
 
 namespace Scripter.Tests;
@@ -343,6 +344,37 @@ public class LanguageTests
         var result = _program.Run();
 
         Assert.That(result.ToString(), Is.EqualTo("[5, 1, 0, -1, [1, 4]]"));
+    }
+
+    [Test]
+    [SuppressMessage("ReSharper", "StringLiteralTypo")]
+    public void StringFunctions()
+    {
+        _program.globalContext.DeclareGlobal("getThing", Value.CreateFunction((context, args) => new MyThing { value = args[0].AsInt }));
+        _program.RegisterFile("index.js", """
+              const assert = (name, actual, expected) => {
+                  if(actual !== expected) throw name + " failed. Expected '" + expected + "', received '" + actual + "'";
+              };
+              assert("indexOf", "abc".indexOf("b"), 1);
+              assert("length", "abc".length, 3);
+              assert("startsWith", "abc".startsWith("ab"), true);
+              assert("!startsWith", "abc".startsWith("bc"), false);
+              assert("endsWith", "abc".endsWith("ab"), false);
+              assert("!endsWith", "abc".endsWith("bc"), true);
+              assert("contains", "abc".contains("b"), true);
+              assert("!contains", "abc".contains("d"), false);
+              assert("trim", " abc ".trim(), "abc");
+              assert("substring", "abcd".substring(2), "cd");
+              assert("substring", "abcd".substring(1, 3), "bc");
+              assert("substr", "abcd".substr(2), "cd");
+              assert("substr", "abcd".substr(1, 3), "bcd");
+              assert("split,join", "a|b|c".split('|').join(), "a,b,c");
+              assert("split,join(-)", "a|b|c".split('|').join('-'), "a-b-c");
+              return "o" + 'k';
+              """);
+        var result = _program.Run();
+
+        Assert.That(result.ToString(), Is.EqualTo("ok"));
     }
 
     [Test]
