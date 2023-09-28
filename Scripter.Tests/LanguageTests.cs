@@ -301,13 +301,14 @@ public class LanguageTests
     public void ArrowFunctions()
     {
         _program.RegisterFile("index.js", """
-            var x = (i) => { return i + 1; };
-            var y = i => i + 1;
-            return x(2) + y(10);
+            var x = i => i + 1;
+            var y = (i) => { return i + 1; };
+            var z = (i, j) => { return i + j; };
+            return x(10) + y(2) + z(50, 60);
             """);
         var result = _program.Run();
 
-        Assert.That(result.ToString(), Is.EqualTo("14"));
+        Assert.That(result.ToString(), Is.EqualTo("124"));
     }
 
     [Test]

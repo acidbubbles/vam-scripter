@@ -485,7 +485,12 @@ namespace ScripterLang
             if (next.Match(TokenType.LeftParenthesis))
             {
                 var i = _position + 1;
-                while (_tokens[++i].Match(TokenType.RightParenthesis)) {}
+                while (i < _tokens.Count && _tokens[i].type != TokenType.RightParenthesis)
+                {
+                    i++;
+                }
+                if (i == _tokens.Count - 1) return false;
+                i++;
                 return _tokens[i].Match(TokenType.Arrow);
             }
 
