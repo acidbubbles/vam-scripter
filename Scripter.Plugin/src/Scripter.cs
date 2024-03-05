@@ -69,6 +69,19 @@ public class Scripter : MVRScript
         yield return new WaitForEndOfFrame();
         if (this == null) yield break;
 
+        while (SuperController.singleton.isLoading)
+        {
+            yield return 0;
+            if (this == null) yield break;
+        }
+
+        var confirmPanel = SuperController.singleton.errorLogPanel.parent.Find("UserConfirmCanvas");
+        while (confirmPanel != null && confirmPanel.childCount > 0)
+        {
+            yield return 0;
+            if (this == null) yield break;
+        }
+
         if (IsSessionPlugin())
         {
             _syncFolder = $"Saves\\PluginData\\Scripter\\Session\\{name}";
