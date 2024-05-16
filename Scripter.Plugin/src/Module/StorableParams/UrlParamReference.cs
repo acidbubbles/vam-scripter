@@ -2,10 +2,10 @@
 
 public class UrlParamReference : ObjectReference
 {
-    private readonly StorableReference _storableRef;
+    private readonly StorableProxy _storableRef;
     private readonly string _paramName;
 
-    public UrlParamReference(StorableReference storableRef, string paramName)
+    public UrlParamReference(StorableProxy storableRef, string paramName)
     {
         _storableRef = storableRef;
         _paramName = paramName;

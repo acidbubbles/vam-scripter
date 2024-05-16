@@ -4,10 +4,10 @@ using UnityEngine.UI.Extensions.ColorPicker;
 
 public class ColorParamReference : ObjectReference
 {
-    private readonly StorableReference _storableRef;
+    private readonly StorableProxy _storableRef;
     private readonly string _paramName;
 
-    public ColorParamReference(StorableReference storableRef, string paramName)
+    public ColorParamReference(StorableProxy storableRef, string paramName)
     {
         _storableRef = storableRef;
         _paramName = paramName;

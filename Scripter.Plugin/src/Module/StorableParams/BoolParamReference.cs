@@ -2,10 +2,10 @@
 
 public class BoolParamReference : ObjectReference
 {
-    private readonly StorableReference _storableRef;
+    private readonly StorableProxy _storableRef;
     private readonly string _paramName;
 
-    public BoolParamReference(StorableReference storableRef, string paramName)
+    public BoolParamReference(StorableProxy storableRef, string paramName)
     {
         _storableRef = storableRef;
         _paramName = paramName;

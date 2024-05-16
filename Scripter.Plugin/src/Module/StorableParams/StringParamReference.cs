@@ -2,10 +2,10 @@
 
 public class StringParamReference : ObjectReference
 {
-    private readonly StorableReference _storableRef;
+    private readonly StorableProxy _storableRef;
     private readonly string _paramName;
 
-    public StringParamReference(StorableReference storableRef, string paramName)
+    public StringParamReference(StorableProxy storableRef, string paramName)
     {
         _storableRef = storableRef;
         _paramName = paramName;

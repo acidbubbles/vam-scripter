@@ -3,10 +3,10 @@ using ScripterLang;
 
 public class StringChooserParamReference : ObjectReference
 {
-    private readonly StorableReference _storableRef;
+    private readonly StorableProxy _storableRef;
     private readonly string _paramName;
 
-    public StringChooserParamReference(StorableReference storableRef, string paramName)
+    public StringChooserParamReference(StorableProxy storableRef, string paramName)
     {
         _storableRef = storableRef;
         _paramName = paramName;
