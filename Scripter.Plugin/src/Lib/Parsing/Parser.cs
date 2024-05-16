@@ -346,6 +346,7 @@ namespace ScripterLang
                 initializer = ParseVariableDeclaration(loopLexicalContext, false);
             else
                 initializer = ParseValueStatementExpression(loopLexicalContext);
+            Consume().Expect(TokenType.SemiColon);
             var condition = ParseValueStatementExpression(loopLexicalContext);
             Consume().Expect(TokenType.SemiColon);
             var increment = ParseValueStatementExpression(loopLexicalContext);
@@ -370,7 +371,9 @@ namespace ScripterLang
         private Expression ParseReturnStatement(ScopeLexicalContext lexicalContext)
         {
             MoveNext();
-            var value = !Peek().Match(TokenType.SemiColon) ? ParseValueStatementExpression(lexicalContext) : UndefinedExpression.Instance;
+            var value = !Peek().Match(TokenType.SemiColon)
+                ? ParseValueOrTernaryExpression(lexicalContext)
+                : UndefinedExpression.Instance;
             Consume().Expect(TokenType.SemiColon);
             return new ReturnExpression(value, lexicalContext);
         }
@@ -386,18 +389,24 @@ namespace ScripterLang
             if (next.Match(TokenType.Assignment))
             {
                 MoveNext();
-                var initialValue = ParseValueStatementExpression(lexicalContext);
-                if (Peek().Match(TokenType.Ternary))
-                {
-                    MoveNext();
-                    initialValue = ParseTernaryRightExpression(lexicalContext, initialValue);
-                }
-                Consume().Expect(TokenType.SemiColon);
+                var initialValue = ParseValueOrTernaryExpression(lexicalContext);
                 return new VariableDeclarationExpression(nameToken.value, initialValue, lexicalContext);
             }
 
             Consume().Expect(TokenType.SemiColon);
             return new VariableDeclarationExpression(nameToken.value, UndefinedExpression.Instance, lexicalContext);
+        }
+
+        private Expression ParseValueOrTernaryExpression(ScopeLexicalContext lexicalContext)
+        {
+            // TODO: This whole function is workaround for bad parsing of return a ? b : c
+            var initialValue = ParseValueStatementExpression(lexicalContext);
+            if (Peek().Match(TokenType.Ternary))
+            {
+                MoveNext();
+                initialValue = ParseTernaryRightExpression(lexicalContext, initialValue);
+            }
+            return initialValue;
         }
 
         private Expression ParseValueStatementExpression(ScopeLexicalContext lexicalContext, int precedence = 0)
@@ -649,7 +658,7 @@ namespace ScripterLang
             if (Peek().Match(TokenType.LeftBrace))
                 body = ParseFunctionBody(functionLexicalContext);
             else
-                body = new CodeBlockExpression(new List<Expression> { ParseValueStatementExpression(functionLexicalContext) }, lexicalContext);
+                body = new CodeBlockExpression(new List<Expression> { ParseValueOrTernaryExpression(functionLexicalContext) }, lexicalContext);
             var function = new FunctionDeclarationExpression(name, arguments, body, functionLexicalContext);
             return function;
         }

@@ -225,10 +225,12 @@ public class LanguageTests
             var value = "true";
             var first = value ? 'first' + '' : 'error';
             var second = (!value) ? 'error' : ('second');
-            return first + ' ' + second;
+            function third() { return true ? 'third' : 'error'; }
+            const fourth = () => true ? 'fourth' : 'error';
+            return first + ' ' + second + ' ' + third() + ' ' + fourth();
             """);
         var result = _program.Run();
-        Assert.That(result.ToString(), Is.EqualTo("first second"));
+        Assert.That(result.ToString(), Is.EqualTo("first second third fourth"));
     }
 
     [Test]
