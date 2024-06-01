@@ -96,7 +96,7 @@ namespace ScripterLang
                         if (next == '*')
                         {
                             MoveNext();
-                            while (MoveNext() && Current != '*' && Peek() != '/')
+                            while (MoveNext() && (Current != '*' || Peek() != '/'))
                             {
                             }
 

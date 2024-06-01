@@ -60,6 +60,15 @@ public class TokenizerTests
             /*
             x = x + 1;
             */
+            /**
+              * x = x + 1;
+              */
+            /**/
+            /*comment*/
+            /* comment */
+            /*/*/
+            /***/
+
             return x;
             """);
 
